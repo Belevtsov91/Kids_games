@@ -1,0 +1,28 @@
+/* Верхняя панель с профилем ребёнка */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto 8px;
+  font-weight: 600;
+}
+
+.topbar-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px 4px 4px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 0 #f0d78c;
+  color: inherit;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.topbar-avatar {
+  font-size: 32px;
+}

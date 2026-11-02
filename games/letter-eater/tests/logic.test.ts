@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildBubbles, isUnlocked, layoutBubbles, pickDistractors, pickWords, Round, starsFor } from '../src/logic';
-import { ALPHABET, LETTER_NAMES, LEVELS } from '../src/words';
+import { buildBubbles, isUnlocked, layoutBubbles, pickDistractors, pickWords, Round, starsFor } from '../src/game/logic';
+import { ALPHABET, LETTER_NAMES, LEVELS } from '../src/game/words';
 import { LEVEL_COUNT } from '../server/repository';
 
 /** Детерминированный генератор, чтобы тесты не зависели от случайности. */

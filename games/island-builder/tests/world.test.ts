@@ -20,7 +20,7 @@ import {
   serialize,
   worldToCell,
   type World,
-} from '../src/world';
+} from '../src/game/world';
 
 const build = (world: World, ...cells: [number, number, number][]) =>
   cells.reduce((w, [x, y, z]) => applyChanges(w, placeBlock(w, { x, y, z }, 'grass')), world);

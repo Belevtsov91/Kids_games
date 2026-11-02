@@ -1,9 +1,12 @@
 {
   "name": "@ig/game-moon-valley",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
-  "scripts": { "typecheck": "tsc --noEmit", "test": "vitest run" },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
   "dependencies": {
     "@ig/sdk": "workspace:*",
     "@react-three/drei": "^10.7.9",

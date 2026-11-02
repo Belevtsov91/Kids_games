@@ -1,0 +1,114 @@
+/* Верхняя панель */
+
+.ib-top {
+  position: absolute;
+  z-index: 5;
+  /* Слева место под кнопку «назад» оболочки. */
+  top: max(12px, env(safe-area-inset-top));
+  left: calc(max(12px, env(safe-area-inset-left)) + 64px);
+  right: max(12px, env(safe-area-inset-right));
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ib-top > * {
+  pointer-events: auto;
+}
+
+.ib-chip,
+.ib-card,
+.ib-round,
+.ib-dock,
+.ib-hint,
+.ib-toast {
+  background: var(--ib-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--ib-shadow);
+}
+
+.ib-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 16px 0 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.ib-title-emoji {
+  font-size: 24px;
+}
+
+.ib-status {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(11 159 184 / 0.12);
+  color: var(--ib-accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ib-status-offline {
+  background: rgb(229 72 77 / 0.12);
+  color: #d33a40;
+}
+
+.ib-status-saving,
+.ib-status-loading {
+  color: var(--ib-muted);
+  background: var(--ib-line);
+}
+
+.ib-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ib-round {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 50%;
+  font-size: 24px;
+  transition: transform 0.12s, opacity 0.2s;
+}
+
+.ib-undo {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.ib-round:active {
+  transform: scale(0.9);
+}
+
+.ib-round:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ib-round.ib-on {
+  box-shadow: 0 0 0 3px var(--ib-sun), var(--ib-shadow);
+}
+
+.ib-badge {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--ib-sun);
+  color: #3d2a00;
+  font-size: 11px;
+  font-weight: 800;
+}

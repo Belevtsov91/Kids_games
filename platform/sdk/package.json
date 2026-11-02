@@ -5,7 +5,11 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./manifest": "./src/manifest.ts"
+    "./manifest": "./src/manifest.ts",
+    "./server": "./src/server.ts",
+    "./assets": {
+      "types": "./src/assets.d.ts"
+    }
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

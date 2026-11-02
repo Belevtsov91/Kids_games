@@ -5,7 +5,6 @@ export const env = {
   port: Number(process.env.PORT ?? 3000),
   corsOrigin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
   logLevel: process.env.LOG_LEVEL ?? 'info',
-  databaseUrl: process.env.DATABASE_URL,
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
   /** 32 байта в hex: шифрует cookie сессии. */

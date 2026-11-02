@@ -20,9 +20,9 @@ describe('сервер с настоящей папкой games/', async () => {
   });
 
   it('API игры подключено под /api/games/<id>', async () => {
+    // Маршрут игры существует (не 404) и закрыт без выбранного ребёнка.
     const res = await app.inject('/api/games/drawing/drawings');
-    expect(res.statusCode).toBe(200);
-    expect(res.json()).toEqual([]);
+    expect(res.statusCode).toBe(401);
   });
 });
 

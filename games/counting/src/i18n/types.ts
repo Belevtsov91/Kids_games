@@ -1,0 +1,41 @@
+/** Все тексты интерфейса на одном языке. */
+export interface Words {
+  title: string;
+  subtitle: string;
+  back: string;
+  home: string;
+  settings: string;
+  language: string;
+  speech: string;
+  range: string;
+  farm: string;
+  forest: string;
+  sea: string;
+  adventure: string;
+  modes: readonly string[];
+  descriptions: readonly string[];
+  count: string;
+  feed: string;
+  digit: string;
+  sequence: string;
+  compare: string;
+  calculate: string;
+  correct: string;
+  retry: string;
+  next: string;
+  repeat: string;
+  check: string;
+  clear: string;
+  finish: string;
+  again: string;
+  stars: string;
+  round: string;
+  voiceMissing: string;
+  saveFailed: string;
+  tap: string;
+  enough: string;
+  left: string;
+  equal: string;
+  right: string;
+  collected: string;
+}

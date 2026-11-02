@@ -1,19 +1,6 @@
-import type { FastifyPluginAsync, FastifyRequest } from 'fastify';
+import type { FastifyPluginAsync } from 'fastify';
+import { playerKeyOf, requirePlayer } from '@ig/sdk/server';
 import { LEVEL_COUNT, progressRepository } from './repository.js';
-
-// Сессию кладёт платформа (httpOnly-cookie → req.session). Игра описывает только нужные ей поля,
-// не импортируя сервер платформы.
-interface SessionLike {
-  parentId: string;
-  activeChildId: string | null;
-}
-
-/** Чей прогресс: выбранного ребёнка, а если ребёнок не выбран — родителя. Id приходит только с сервера, не из запроса. */
-function ownerOf(req: FastifyRequest): string | null {
-  const session = (req as FastifyRequest & { session?: SessionLike | null }).session;
-  if (!session?.parentId) return null;
-  return session.activeChildId ? `child:${session.activeChildId}` : `parent:${session.parentId}`;
-}
 
 const saveBody = {
   type: 'object',
@@ -25,16 +12,13 @@ const saveBody = {
   additionalProperties: false,
 } as const;
 
+// Чей прогресс: выбранного ребёнка, а если ребёнок не выбран — родителя. Id приходит только из сессии.
 export const progressRoutes: FastifyPluginAsync = async (app) => {
-  app.get('/', async (req, reply) => {
-    const owner = ownerOf(req);
-    if (!owner) return reply.code(401).send({ error: 'Нужно войти' });
-    return { stars: await progressRepository.get(owner) };
-  });
+  app.addHook('preHandler', requirePlayer);
 
-  app.post<{ Body: { level: number; stars: number } }>('/', { schema: { body: saveBody } }, async (req, reply) => {
-    const owner = ownerOf(req);
-    if (!owner) return reply.code(401).send({ error: 'Нужно войти' });
-    return { stars: await progressRepository.saveBest(owner, req.body.level, req.body.stars) };
-  });
+  app.get('/', async (req) => ({ stars: await progressRepository.get(playerKeyOf(req)!) }));
+
+  app.post<{ Body: { level: number; stars: number } }>('/', { schema: { body: saveBody } }, async (req) => ({
+    stars: await progressRepository.saveBest(playerKeyOf(req)!, req.body.level, req.body.stars),
+  }));
 };

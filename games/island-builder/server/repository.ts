@@ -1,4 +1,4 @@
-import type { SaveData } from '../src/world.js';
+import type { SaveData } from '../src/game/world/index.js';
 
 export interface SavedIsland {
   childId: string;

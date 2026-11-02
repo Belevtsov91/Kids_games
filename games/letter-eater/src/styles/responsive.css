@@ -1,0 +1,29 @@
+/* Широкий и низкий экран (телефон лёжа, ноутбук): монстрик слева, поле справа */
+@media (min-aspect-ratio: 4/3) {
+  .le-play {
+    grid-template-columns: minmax(150px, 28%) 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: 'top top' 'stage card' 'stage field';
+  }
+  .le-stage { align-items: flex-end; margin: 0; }
+  .le-stage .le-monster { width: min(100%, 300px, 42vh); }
+  .le-slots { --slot: min(calc((72vw - 220px) / var(--n) - 8px), clamp(40px, 9vh, 76px)); }
+}
+@media (max-width: 640px) {
+  .le-levels-body { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); align-items: start; }
+  .le-hero { flex-direction: row-reverse; justify-content: center; }
+  .le-hero .le-monster { width: 110px; flex: none; }
+  .le-speech { font-size: 15px; }
+  .le-speech::after { left: -10px; top: 50%; bottom: auto; border: 10px solid transparent; border-right-color: #fff; border-left: 0; transform: translateY(-50%); }
+  .le-level-grid { grid-template-columns: repeat(2, 1fr); }
+  .le-level { padding: 14px 6px 10px; }
+  .le-level-title { font-size: 15px; }
+  .le-btn--round { width: 46px; height: 46px; font-size: 20px; }
+  .le-card { gap: 8px; padding: 8px; }
+  .le-slots { --slot: min(calc((100vw - 130px) / var(--n) - 6px), 56px); gap: 5px; }
+}
+@media (max-height: 460px) {
+  .le-picture { width: 56px; font-size: 38px; }
+  .le-slots { --slot: min(calc((72vw - 200px) / var(--n) - 6px), 44px); }
+  .le-btn--round { width: 42px; height: 42px; }
+}

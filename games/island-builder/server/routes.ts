@@ -1,5 +1,6 @@
-import type { FastifyPluginAsync, FastifyRequest } from 'fastify';
-import { BLOCK_TYPES, GRID, MAX_HEIGHT, MAX_TREES, STAT_KEYS, TREE_KINDS, type SaveData } from '../src/world.js';
+import type { FastifyPluginAsync } from 'fastify';
+import { childIdOf, requireChild } from '@ig/sdk/server';
+import { BLOCK_TYPES, GRID, MAX_HEIGHT, MAX_TREES, STAT_KEYS, TREE_KINDS, type SaveData } from '../src/game/world/index.js';
 import { islandsRepository } from './repository.js';
 
 const cell = (types: number) =>
@@ -35,13 +36,11 @@ const saveBody = {
 } as const;
 
 // Остров привязан к ребёнку из серверной сессии: клиенту не доверяем, чей он.
-const childOf = (req: FastifyRequest) => (req as { session?: { activeChildId?: string | null } | null }).session?.activeChildId ?? null;
-const NO_CHILD = { error: 'Нужно выбрать ребёнка' };
-
 export const islandsRoutes: FastifyPluginAsync = async (app) => {
-  app.get('/', async (req, reply) => {
-    const childId = childOf(req);
-    if (!childId) return reply.code(401).send(NO_CHILD);
+  app.addHook('preHandler', requireChild);
+
+  app.get('/', async (req) => {
+    const childId = childIdOf(req)!;
     const saved = await islandsRepository.get(childId);
     return { island: saved?.island ?? null, updatedAt: saved?.updatedAt ?? null };
   });
@@ -50,17 +49,15 @@ export const islandsRoutes: FastifyPluginAsync = async (app) => {
     '/',
     // Полный остров 20×20×12 в JSON — до ~70 КБ, с запасом.
     { schema: { body: saveBody }, bodyLimit: 512 * 1024 },
-    async (req, reply) => {
-      const childId = childOf(req);
-      if (!childId) return reply.code(401).send(NO_CHILD);
+    async (req) => {
+      const childId = childIdOf(req)!;
       const saved = await islandsRepository.save(childId, req.body);
       return { updatedAt: saved.updatedAt };
     },
   );
 
   app.delete('/', async (req, reply) => {
-    const childId = childOf(req);
-    if (!childId) return reply.code(401).send(NO_CHILD);
+    const childId = childIdOf(req)!;
     await islandsRepository.remove(childId);
     return reply.code(204).send();
   });

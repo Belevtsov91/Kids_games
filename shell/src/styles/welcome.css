@@ -1,0 +1,82 @@
+/* Приветствие */
+
+.welcome {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 24px 16px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #fff3c4, #ffd36e 60%, #ffb347);
+  text-align: center;
+}
+
+.welcome-hero {
+  position: relative;
+  max-width: 520px;
+}
+
+.welcome-hero h1 {
+  margin: 8px 0;
+  font-size: clamp(32px, 7vw, 56px);
+  line-height: 1.1;
+}
+
+.welcome-hero p {
+  margin: 0 0 24px;
+  font-size: clamp(18px, 3.5vw, 22px);
+}
+
+.welcome-mascot {
+  font-size: clamp(96px, 22vw, 160px);
+  animation: bounce 2.4s ease-in-out infinite;
+}
+
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.welcome-actions .btn {
+  min-width: 200px;
+}
+
+.welcome-hero .welcome-note {
+  margin: 24px 0 0;
+  font-size: 15px;
+  opacity: 0.75;
+}
+
+.welcome-floaters span {
+  position: absolute;
+  top: calc(8% + var(--i) * 15%);
+  left: calc(var(--i) * 17% + 2%);
+  font-size: clamp(32px, 6vw, 56px);
+  opacity: 0.55;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -1s);
+}
+
+.welcome-floaters span:nth-child(even) {
+  left: auto;
+  right: calc(var(--i) * 6% + 2%);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-16px) rotate(3deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-mascot,
+  .welcome-floaters span {
+    animation: none;
+  }
+}

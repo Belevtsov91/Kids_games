@@ -1,0 +1,34 @@
+/* Стартовый экран */
+
+.wlw-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vmin, 36px);
+  min-height: 100%;
+  padding: 16px 16px max(24px, env(safe-area-inset-bottom));
+  text-align: center;
+}
+
+.wlw-parade {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(4px, 2vmin, 16px);
+  font-size: clamp(44px, 11vmin, 96px);
+}
+
+.wlw-parade span {
+  display: inline-block;
+  animation: wlw-hop 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 6px 4px rgb(0 0 0 / 0.15));
+}
+
+.wlw-lead {
+  max-width: 22em;
+  margin: 0;
+  font-size: clamp(20px, 4.4vmin, 32px);
+  font-weight: 700;
+  color: var(--wlw-soft);
+}

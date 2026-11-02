@@ -1,0 +1,7 @@
+/* Стили «Считай и играй». Порядок важен: адаптив в конце, чтобы перекрывать базовые правила. */
+@import './base.css';
+@import './home.css';
+@import './board.css';
+@import './modes.css';
+@import './result.css';
+@import './responsive.css';

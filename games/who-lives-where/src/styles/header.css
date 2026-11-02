@@ -1,0 +1,40 @@
+/* Шапка: слева место под кнопку «В меню» оболочки */
+
+.wlw-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.wlw-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.wlw-badge:empty {
+  display: none;
+}
+
+.wlw-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.wlw-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}

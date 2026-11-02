@@ -1,0 +1,99 @@
+/* Буквоед. Все классы с префиксом le-, чтобы не пересекаться с оболочкой. */
+
+.le-root {
+  --ink: #2a1f57;
+  --violet: #6a45e8;
+  --violet-dark: #4b2ec0;
+  --sun: #ffb84d;
+  --card: #ffffffee;
+  --bubble: clamp(52px, min(11vw, 10vh), 92px);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: ui-rounded, 'Segoe UI Rounded', 'Arial Rounded MT Bold', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, #fff6c2 0, transparent 30%),
+    radial-gradient(circle at 92% 90%, #ffd6ec 0, transparent 35%),
+    linear-gradient(160deg, #c9f1ff 0%, #e3dcff 55%, #ffe3f3 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.le-root *, .le-root *::before, .le-root *::after { box-sizing: border-box; }
+.le-root.is-paused *, .le-root.is-paused *::before, .le-root.is-paused *::after { animation-play-state: paused !important; }
+
+/* Плывущие значки на фоне */
+.le-sky span {
+  position: absolute;
+  left: calc(6% + var(--i) * 17%);
+  top: calc(10% + var(--i) * 14%);
+  font-size: clamp(22px, 4vw, 40px);
+  opacity: .22;
+  animation: le-float calc(7s + var(--i) * 1.3s) ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes le-float { from { transform: translateY(-14px) rotate(-8deg); } to { transform: translateY(14px) rotate(8deg); } }
+
+.le-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  animation: le-fade .35s ease-out;
+}
+@keyframes le-fade { from { opacity: 0; transform: scale(.98); } }
+
+/* Кнопки */
+.le-btn {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 18px;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 4px 0 #c4b8ec;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+}
+.le-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #c4b8ec; }
+.le-btn:focus-visible, .le-level:focus-visible, .le-bubble:focus-visible, .le-picture:focus-visible { outline: 4px solid var(--sun); outline-offset: 3px; }
+.le-btn--round { width: 52px; height: 52px; padding: 0; border-radius: 50%; font-size: 22px; }
+.le-btn--main { color: #fff; background: linear-gradient(180deg, #8a6bff, var(--violet)); box-shadow: 0 4px 0 var(--violet-dark); }
+.le-btn--main:active { box-shadow: 0 1px 0 var(--violet-dark); }
+.le-btn--soft { background: #fff4d6; box-shadow: 0 4px 0 #f0c873; }
+.le-btn--link { background: none; box-shadow: none; color: var(--violet); text-decoration: underline; min-height: 40px; }
+
+.le-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+.le-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(28px, 6vw, 52px);
+  font-weight: 900;
+  letter-spacing: .02em;
+  color: var(--violet);
+  text-shadow: 0 3px 0 #fff, 0 6px 0 #c9b8ff;
+}
+.le-total {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #f0c873;
+  color: #e08a00;
+  font-weight: 900;
+  font-size: 18px;
+}
+.le-note { margin: 8px 0 0; text-align: center; font-weight: 700; opacity: .7; }

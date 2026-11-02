@@ -1,0 +1,34 @@
+/* Звериный оркестр. Все селекторы под .ao-root: стили не протекают в оболочку и другие игры. */
+
+.ao-root {
+  --ink: #2a1f4d;
+  --panel: rgb(255 255 255 / 0.92);
+  --accent: #ff5a7a;
+  --gold: #ffc93c;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  font-family: 'Nunito', 'Trebuchet MS', system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, #6d4fd6 0%, transparent 70%),
+    linear-gradient(180deg, #3b2a85 0%, #251a5c 55%, #1b1342 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.ao-root button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ao-root button:focus-visible {
+  outline: 4px solid var(--gold);
+  outline-offset: 3px;
+}

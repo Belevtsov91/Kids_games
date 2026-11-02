@@ -1,0 +1,115 @@
+import type { GameSdk } from '@ig/sdk';
+import { ProgressSync } from '../api/progress';
+import { Sound } from '../audio/Sound';
+import { allAnimals } from '../game/data';
+import { buildRound } from '../game/rounds';
+import { Confetti } from '../ui/Confetti';
+import { el } from '../ui/dom';
+import { albumScreen, startScreen, winOverlay } from '../ui/screens';
+import { RoundPlay } from './RoundPlay';
+import { Timers } from './Timers';
+
+/** Вся игра: стартовый экран, раунд с перетаскиванием, альбом найденных зверей. */
+export class WhoLivesWhere {
+  private readonly root = el('div', 'wlw');
+  private readonly title = el('h1', 'wlw-title');
+  private readonly badge = el('div', 'wlw-badge');
+  private readonly stage = el('main', 'wlw-stage');
+  private readonly confetti: Confetti;
+  private readonly sound: Sound;
+  private readonly progress: ProgressSync;
+  private readonly timers = new Timers();
+  private readonly offMute: () => void;
+  private round: RoundPlay | null = null;
+
+  constructor(
+    container: HTMLElement,
+    private readonly sdk: GameSdk,
+  ) {
+    const top = el('header', 'wlw-top');
+    top.append(this.title, this.badge);
+    this.root.append(top, this.stage);
+    container.appendChild(this.root);
+    this.confetti = new Confetti(this.root);
+    this.sound = new Sound(sdk.audio.muted);
+    this.progress = new ProgressSync(sdk.api);
+    this.offMute = sdk.audio.onMuteChange((muted) => this.sound.setMuted(muted));
+    this.root.addEventListener('pointerdown', this.unlockAudio, { capture: true });
+    this.showStart();
+  }
+
+  pause() {
+    this.sound.pause();
+  }
+
+  resume() {
+    this.sound.resume();
+  }
+
+  dispose() {
+    this.round?.dispose();
+    this.timers.clear();
+    this.offMute();
+    this.sound.dispose();
+    this.confetti.dispose();
+    this.root.remove();
+  }
+
+  private showStart() {
+    this.reset('Кто где живёт?', '');
+    this.stage.append(startScreen(this.sdk.profile?.name, () => void this.startRound(), () => void this.showAlbum()));
+  }
+
+  private async startRound() {
+    await this.progress.load();
+    const round = buildRound(this.progress.progress.level, this.progress.progress.found);
+    this.reset('Отведи зверят домой!', `Уровень ${round.level}`);
+    this.round = new RoundPlay(round, {
+      root: this.root,
+      stage: this.stage,
+      sound: this.sound,
+      confetti: this.confetti,
+      timers: this.timers,
+      onWin: (mistakes) => this.showWin(mistakes),
+    });
+  }
+
+  private async showAlbum() {
+    await this.progress.load();
+    const found = new Set(this.progress.progress.found);
+    this.reset('Альбом зверят', `${found.size} из ${allAnimals.length}`);
+    this.stage.append(
+      albumScreen(found, () => this.showStart(), (card, animal, home, known) => {
+        if (!known) return this.sound.say('Этого зверька ты ещё не встречал. Играй, и он найдётся!');
+        this.sound.pick();
+        this.timers.replayClass(card, 'is-bounce');
+        this.sound.say(`${animal.name} живёт ${home.where}`);
+      }),
+    );
+  }
+
+  private showWin(mistakes: number) {
+    const round = this.round!.round;
+    void this.progress.completeRound(round.level, round.animals.map((a) => a.id));
+    this.confetti.burst();
+    this.sound.win();
+    this.sound.say('Ура! Все зверята дома! Молодец!');
+    const win = winOverlay(mistakes <= 2 ? 3 : 2, () => void this.startRound(), () => this.showStart());
+    this.stage.append(win.overlay);
+    win.focus();
+  }
+
+  /** Новый экран: всё от прошлого (зверь в руке, подсказки, таймеры, конфетти) убирается. */
+  private reset(title: string, badge: string) {
+    this.round?.dispose();
+    this.round = null;
+    this.timers.clear();
+    this.confetti.clear();
+    this.title.textContent = title;
+    this.badge.textContent = badge;
+    this.stage.replaceChildren();
+    this.stage.scrollTop = 0;
+  }
+
+  private unlockAudio = () => this.sound.unlock();
+}

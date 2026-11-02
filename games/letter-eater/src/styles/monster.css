@@ -1,0 +1,22 @@
+/* Монстрик */
+
+.le-monster { position: relative; width: 100%; aspect-ratio: 220 / 200; }
+.le-monster-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.le-m-body { transform-origin: 110px 190px; transform-box: view-box; animation: le-breathe 2.6s ease-in-out infinite; }
+@keyframes le-breathe { 50% { transform: scale(1.03, .97); } }
+.le-m-pupil { transition: transform .12s ease-out; }
+.le-m-lid { transition: height .08s; }
+.le-monster--blink .le-m-lid { height: 48px; }
+.le-m-mouth { transform-origin: 110px 128px; transform-box: view-box; transform: scale(.75, .3); transition: transform .18s cubic-bezier(.3, 1.5, .5, 1); }
+.le-monster[data-mood='open'] .le-m-mouth { transform: scale(1, 1.1); }
+.le-monster[data-mood='happy'] .le-m-mouth { transform: scale(.95, .7); }
+.le-monster[data-mood='sad'] .le-m-mouth { transform: scale(.45, .15); }
+.le-monster[data-mood='chomp'].le-monster--pulse .le-m-mouth { animation: le-chomp .45s ease-in-out; }
+.le-monster[data-mood='chomp'].le-monster--pulse .le-m-body { animation: le-gulp .45s ease-in-out; }
+.le-monster[data-mood='sad'].le-monster--pulse .le-monster-svg { animation: le-shake .5s ease-in-out; }
+.le-monster[data-mood='happy'].le-monster--pulse .le-monster-svg { animation: le-jump .6s ease-in-out 2; }
+.le-monster[data-mood='sad'] .le-m-lid { height: 18px; }
+@keyframes le-chomp { 0%, 50%, 100% { transform: scale(.85, .2); } 25%, 75% { transform: scale(.95, .8); } }
+@keyframes le-gulp { 50% { transform: scale(1.08, .92); } }
+@keyframes le-shake { 20% { transform: translateX(-10px) rotate(-4deg); } 40% { transform: translateX(9px) rotate(3deg); } 60% { transform: translateX(-6px); } 80% { transform: translateX(4px); } }
+@keyframes le-jump { 40% { transform: translateY(-18%) rotate(-4deg); } 60% { transform: translateY(-18%) rotate(4deg); } }

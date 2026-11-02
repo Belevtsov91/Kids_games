@@ -1,18 +1,9 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "types": ["node"],
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-    "noEmit": true
-  },
-  "include": ["manifest.ts", "src", "server", "tests"]
+  "extends": "../../tsconfig.base.json",
+  "include": [
+    "manifest.ts",
+    "src",
+    "server",
+    "tests"
+  ]
 }

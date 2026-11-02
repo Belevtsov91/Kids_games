@@ -1,0 +1,9 @@
+/* Стили оболочки: общие и по экранам. Порядок как в исходном файле: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './menu.css';
+@import './game-screen.css';
+@import './controls.css';
+@import './topbar.css';
+@import './welcome.css';
+@import './auth.css';
+@import './children.css';

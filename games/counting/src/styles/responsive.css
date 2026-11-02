@@ -1,0 +1,107 @@
+/* Узкие экраны и уменьшенная анимация */
+
+@media (max-width: 650px) {
+  .cg-shell {
+    padding: 14px 15px 30px;
+  }
+  .cg-header {
+    gap: 7px;
+    margin-bottom: 20px;
+  }
+  .cg-brand {
+    display: none;
+  }
+  .cg-hero {
+    padding: 20px;
+    min-height: 190px;
+    gap: 0;
+  }
+  .cg-hero-art {
+    width: 115px;
+    height: 135px;
+  }
+  .cg-hero-art > span {
+    font-size: 75px;
+  }
+  .cg-hero-art i {
+    width: 30px;
+    height: 30px;
+    font-size: 19px;
+  }
+  .cg-hero h1 {
+    font-size: 31px;
+  }
+  .cg-hero p {
+    font-size: 13px;
+  }
+  .cg-eyebrow {
+    letter-spacing: 4px;
+  }
+  .cg-modes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .cg-mode {
+    padding: 16px 12px;
+    min-height: 195px;
+  }
+  .cg-mode b {
+    font-size: 16px;
+  }
+  .cg-mode small {
+    font-size: 12px;
+  }
+  .cg-settings-row {
+    gap: 10px;
+  }
+  .cg-settings label {
+    min-width: 115px;
+  }
+  .cg-themes button {
+    padding: 10px 13px;
+    font-size: 14px;
+  }
+  .cg-board {
+    padding: 20px 12px;
+  }
+  .cg-answer {
+    min-width: 56px;
+    padding: 10px;
+    font-size: 24px;
+  }
+  .cg-answers {
+    gap: 9px;
+  }
+  .cg-sequence {
+    gap: 6px;
+  }
+  .cg-sequence span {
+    width: 47px;
+    height: 60px;
+    font-size: 25px;
+  }
+  .cg-listen span {
+    display: none;
+  }
+  .cg-compare {
+    gap: 7px;
+  }
+  .cg-compare > div {
+    max-width: 48%;
+    padding: 4px;
+  }
+  .cg-compare .cg-objects {
+    gap: 5px;
+  }
+  .cg-compare .cg-object {
+    width: 30px;
+    height: 35px;
+    min-width: 25px;
+    font-size: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .counting-game * {
+    transition: none !important;
+  }
+}

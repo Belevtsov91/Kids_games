@@ -1,6 +1,6 @@
 import { defineGame } from '@ig/sdk';
-import { OrchestraApp } from './ui/OrchestraApp';
-import './ui/orchestra.css';
+import { OrchestraApp } from './app/OrchestraApp';
+import './styles/index.css';
 
 // Звериный оркестр: зверята на сцене играют ноты и голоса, мелодию можно записать
 // и сохранить на сервере игры, а в «Повтори» — повторить фразу за оркестром.

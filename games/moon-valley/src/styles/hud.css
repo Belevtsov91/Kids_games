@@ -1,0 +1,168 @@
+/* Верхняя панель, опыт, боковая панель, подсказка */
+
+.mv-top {
+  position: absolute;
+  z-index: 2;
+  inset: max(14px, env(safe-area-inset-top)) 16px auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.mv-top > * {
+  pointer-events: auto;
+}
+.mv-top button,
+.mv-top span {
+  display: grid;
+  place-items: center;
+  min-width: 46px;
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid rgb(255 255 255 / 0.32);
+  border-radius: 15px;
+  color: inherit;
+  background: rgb(17 37 76 / 0.65);
+  box-shadow: 0 5px 18px rgb(9 20 48 / 0.2);
+  font: inherit;
+  font-weight: 800;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+.mv-top > div {
+  width: min(200px, 36vw);
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgb(17 37 76 / 0.65);
+  font-size: 12px;
+  backdrop-filter: blur(12px);
+}
+.mv-xp {
+  height: 7px;
+  margin-top: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgb(255 255 255 / 0.22);
+}
+.mv-xp i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #78e4e5, #fff0a8);
+}
+.mv-panel {
+  position: absolute;
+  z-index: 2;
+  top: 84px;
+  right: 16px;
+  width: min(280px, calc(100vw - 32px));
+  padding: 17px;
+  border: 1px solid rgb(255 255 255 / 0.32);
+  border-radius: 24px;
+  background: rgb(17 37 76 / 0.68);
+  box-shadow: 0 18px 45px rgb(9 20 48 / 0.25);
+  backdrop-filter: blur(16px);
+}
+.mv-panel h2 {
+  margin: 0;
+  font-size: 21px;
+}
+.mv-panel p {
+  min-height: 38px;
+  margin: 5px 0 12px;
+  color: #dceaff;
+  font-size: 13px;
+}
+.mv-panel h3 {
+  margin: 15px 0 7px;
+  color: #a8ddeb;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.mv-resources {
+  display: flex;
+  gap: 8px;
+}
+.mv-resources span {
+  flex: 1;
+  padding: 7px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.11);
+  text-align: center;
+  font-size: 13px;
+}
+.mv-action {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px;
+  border: 0;
+  border-radius: 12px;
+  color: #25405b;
+  background: linear-gradient(135deg, #caffbb, #76e4d8);
+  box-shadow: 0 3px 0 #46bcae;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+.mv-pet {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  width: 100%;
+  margin-top: 6px;
+  padding: 7px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: inherit;
+  background: rgb(255 255 255 / 0.1);
+  text-align: left;
+  cursor: pointer;
+}
+.mv-pet span {
+  grid-row: span 2;
+  align-self: center;
+  font-size: 23px;
+}
+.mv-pet small {
+  color: #b9e8ee;
+}
+.mv-pet.locked,
+.mv-zones .locked {
+  opacity: 0.42;
+  filter: grayscale(1);
+}
+.mv-zones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+.mv-zones span {
+  padding: 7px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.12);
+  text-align: center;
+  font-size: 20px;
+}
+.mv-quests {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgb(96 80 190 / 0.38);
+  font-size: 12px;
+}
+.mv-hint {
+  position: absolute;
+  z-index: 2;
+  bottom: max(15px, env(safe-area-inset-bottom));
+  left: 50%;
+  max-width: calc(100vw - 32px);
+  padding: 9px 15px;
+  border-radius: 99px;
+  background: rgb(17 37 76 / 0.67);
+  font-size: 13px;
+  text-align: center;
+  transform: translateX(-50%);
+  backdrop-filter: blur(12px);
+}
