@@ -1,4 +1,7 @@
-export interface Grid { cols: number; rows: number }
+export interface Grid {
+  cols: number;
+  rows: number;
+}
 
 export function recommendedGrid(width: number, height: number): Grid {
   const megapixels = (width * height) / 1_000_000;

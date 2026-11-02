@@ -8,7 +8,19 @@ import './puzzles.css';
 type Puzzle = PuzzleImage | SavedPuzzleImage;
 type Board = Array<number | null>;
 
-function Piece({ piece, puzzle, grid, selected, onClick }: { piece: number; puzzle: Puzzle; grid: Grid; selected: boolean; onClick: () => void }) {
+function Piece({
+  piece,
+  puzzle,
+  grid,
+  selected,
+  onClick,
+}: {
+  piece: number;
+  puzzle: Puzzle;
+  grid: Grid;
+  selected: boolean;
+  onClick: () => void;
+}) {
   const col = piece % grid.cols;
   const row = Math.floor(piece / grid.cols);
   return (
@@ -34,7 +46,11 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
   const [selected, setSelected] = useState<number | null>(null);
   const [message, setMessage] = useState('Выбери картинку — и начнём!');
 
-  useEffect(() => { listSavedImages().then(setSaved).catch(() => setMessage('Не удалось открыть сохранённые картинки')); }, []);
+  useEffect(() => {
+    listSavedImages()
+      .then(setSaved)
+      .catch(() => setMessage('Не удалось открыть сохранённые картинки'));
+  }, []);
 
   const total = grid.cols * grid.rows;
   const complete = board.length === total && board.every((piece, index) => piece === index);
@@ -66,13 +82,20 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
       const imageUrl = await readFileAsDataUrl(file);
       const { width, height } = await getImageSize(imageUrl);
       const image: SavedPuzzleImage = {
-        id: crypto.randomUUID(), title: file.name.replace(/\.[^.]+$/, '') || 'Мой пазл', imageUrl, width, height, createdAt: new Date().toISOString(),
+        id: crypto.randomUUID(),
+        title: file.name.replace(/\.[^.]+$/, '') || 'Мой пазл',
+        imageUrl,
+        width,
+        height,
+        createdAt: new Date().toISOString(),
       };
       await saveImage(image);
       setSaved((current) => [image, ...current]);
       const nextGrid = recommendedGrid(width, height);
       start(image, nextGrid);
-      setMessage(`Картинка ${width} × ${height}. Рекомендуем ${nextGrid.cols} × ${nextGrid.rows} = ${nextGrid.cols * nextGrid.rows} деталей.`);
+      setMessage(
+        `Картинка ${width} × ${height}. Рекомендуем ${nextGrid.cols} × ${nextGrid.rows} = ${nextGrid.cols * nextGrid.rows} деталей.`,
+      );
     } catch {
       setMessage('Эту картинку не получилось сохранить. Попробуй другую.');
     }
@@ -85,22 +108,66 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
   return (
     <main className="puzzles">
       <header className="puzzles-header">
-        <button className="exit-button" onClick={sdk.exit}>← В меню</button>
-        <div><h1>Пазлы</h1><p>{message}</p></div>
-        <label className="upload-button">＋ Своя картинка<input type="file" accept="image/png,image/jpeg,image/webp" onChange={chooseFile} /></label>
+        <button className="exit-button" onClick={sdk.exit}>
+          ← В меню
+        </button>
+        <div>
+          <h1>Пазлы</h1>
+          <p>{message}</p>
+        </div>
+        <label className="upload-button">
+          ＋ Своя картинка
+          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={chooseFile} />
+        </label>
       </header>
 
       {!puzzle ? (
         <section className="puzzle-catalog" aria-label="Выбор пазла">
-          {allPuzzles.map((item) => <button key={item.id} className="puzzle-card" onClick={() => start(item)}><img src={item.imageUrl} alt="" /><span>{item.title}</span><small>{item.width} × {item.height}</small></button>)}
+          {allPuzzles.map((item) => (
+            <button key={item.id} className="puzzle-card" onClick={() => start(item)}>
+              <img src={item.imageUrl} alt="" />
+              <span>{item.title}</span>
+              <small>
+                {item.width} × {item.height}
+              </small>
+            </button>
+          ))}
         </section>
       ) : (
         <section className="game-area">
-          <div className="game-topbar"><button onClick={() => setPuzzle(null)}>‹ К выбору</button><button onClick={() => start(puzzle, grid)}>↻ Заново</button><span>{pieces.length} деталей осталось</span></div>
-          <div className="puzzle-board" style={{ gridTemplateColumns: `repeat(${grid.cols}, 1fr)` }}>
-            {board.map((piece, cell) => piece === null ? <button key={cell} className="puzzle-slot" onClick={() => place(cell)} aria-label={`Место ${cell + 1}`} /> : <Piece key={cell} piece={piece} puzzle={puzzle} grid={grid} selected={false} onClick={() => undefined} />)}
+          <div className="game-topbar">
+            <button onClick={() => setPuzzle(null)}>‹ К выбору</button>
+            <button onClick={() => start(puzzle, grid)}>↻ Заново</button>
+            <span>{pieces.length} деталей осталось</span>
           </div>
-          {complete ? <div className="win-card"><strong>Готово!</strong><button onClick={() => start(puzzle, grid)}>Ещё раз</button></div> : <div className="piece-tray" aria-label="Детали пазла">{pieces.map((piece) => <Piece key={piece} piece={piece} puzzle={puzzle} grid={grid} selected={selected === piece} onClick={() => setSelected(piece)} />)}</div>}
+          <div className="puzzle-board" style={{ gridTemplateColumns: `repeat(${grid.cols}, 1fr)` }}>
+            {board.map((piece, cell) =>
+              piece === null ? (
+                <button key={cell} className="puzzle-slot" onClick={() => place(cell)} aria-label={`Место ${cell + 1}`} />
+              ) : (
+                <Piece key={cell} piece={piece} puzzle={puzzle} grid={grid} selected={false} onClick={() => undefined} />
+              ),
+            )}
+          </div>
+          {complete ? (
+            <div className="win-card">
+              <strong>Готово!</strong>
+              <button onClick={() => start(puzzle, grid)}>Ещё раз</button>
+            </div>
+          ) : (
+            <div className="piece-tray" aria-label="Детали пазла">
+              {pieces.map((piece) => (
+                <Piece
+                  key={piece}
+                  piece={piece}
+                  puzzle={puzzle}
+                  grid={grid}
+                  selected={selected === piece}
+                  onClick={() => setSelected(piece)}
+                />
+              ))}
+            </div>
+          )}
         </section>
       )}
     </main>
