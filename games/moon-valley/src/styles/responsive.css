@@ -1,0 +1,34 @@
+/* Узкие экраны */
+
+@media (max-width: 690px) {
+  .mv-panel {
+    top: auto;
+    bottom: max(58px, env(safe-area-inset-bottom));
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-width: none;
+    padding: 11px 13px;
+  }
+  .mv-panel p,
+  .mv-panel h3,
+  .mv-zones,
+  .mv-quests {
+    display: none;
+  }
+  .mv-panel h2 {
+    font-size: 17px;
+  }
+  .mv-pet {
+    display: none;
+  }
+  .mv-pet:first-of-type {
+    display: grid;
+  }
+  .mv-resources {
+    margin-top: 6px;
+  }
+  .mv-hint {
+    display: none;
+  }
+}

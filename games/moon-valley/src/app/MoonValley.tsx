@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { GameSdk } from '@ig/sdk';
-import cover from '../assets/moon-valley-cover.png';
-import { addXp, befriend, initialState, tendPlot, type PetKind, type ValleyState, xpForNext } from './game';
-import { valleySound } from './sound';
-import { ValleyScene } from './ValleyScene';
-import './moon-valley.css';
+import cover from '../../assets/moon-valley-cover.png';
+import { addXp, befriend, initialState, tendPlot, type PetKind, type ValleyState, xpForNext } from '../game/valley';
+import { valleySound } from '../audio/sound';
+import { ValleyScene } from '../scene/ValleyScene';
+import '../styles/index.css';
 
 const ZONES = [
   { id: 'home', icon: '🏡', title: 'Сад у дома', level: 1 },

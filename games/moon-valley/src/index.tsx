@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { defineGame } from '@ig/sdk';
-import { MoonValley } from './MoonValley';
+import { MoonValley } from './app/MoonValley';
 
 export default defineGame({
   mount(container, sdk) {

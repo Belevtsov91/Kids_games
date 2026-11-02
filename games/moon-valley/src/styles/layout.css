@@ -1,0 +1,14 @@
+/* Корень игры и сцена */
+
+.moon-valley {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: #f7fbff;
+  font-family: Inter, ui-rounded, system-ui, sans-serif;
+  background: #8fd6ee;
+}
+.mv-scene {
+  position: absolute;
+  inset: 0;
+}

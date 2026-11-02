@@ -1,15 +1,5 @@
-.moon-valley {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  color: #f7fbff;
-  font-family: Inter, ui-rounded, system-ui, sans-serif;
-  background: #8fd6ee;
-}
-.mv-scene {
-  position: absolute;
-  inset: 0;
-}
+/* Верхняя панель, опыт, боковая панель, подсказка */
+
 .mv-top {
   position: absolute;
   z-index: 2;
@@ -175,81 +165,4 @@
   text-align: center;
   transform: translateX(-50%);
   backdrop-filter: blur(12px);
-}
-.mv-intro {
-  display: grid;
-  min-height: 100%;
-  background-position: center;
-  background-size: cover;
-}
-.mv-intro section {
-  align-self: end;
-  max-width: 570px;
-  padding: clamp(28px, 6vw, 86px);
-  text-shadow: 0 3px 16px #10152f;
-}
-.mv-intro h1 {
-  margin: 0;
-  font-size: clamp(42px, 7vw, 78px);
-  line-height: 0.94;
-}
-.mv-intro p {
-  max-width: 430px;
-  font-size: clamp(15px, 2vw, 20px);
-}
-.mv-moon {
-  color: #e6f4ff;
-  font-size: 42px;
-}
-.mv-intro button {
-  display: block;
-  margin-top: 18px;
-  padding: 15px 22px;
-  border: 0;
-  border-radius: 16px;
-  color: #173454;
-  background: #f7e7a7;
-  box-shadow: 0 5px 0 #c79c47;
-  font: inherit;
-  font-weight: 900;
-  cursor: pointer;
-}
-.mv-intro .mv-link {
-  margin-top: 14px;
-  color: #fff;
-  background: transparent;
-  box-shadow: none;
-  text-decoration: underline;
-}
-@media (max-width: 690px) {
-  .mv-panel {
-    top: auto;
-    bottom: max(58px, env(safe-area-inset-bottom));
-    right: 10px;
-    left: 10px;
-    width: auto;
-    max-width: none;
-    padding: 11px 13px;
-  }
-  .mv-panel p,
-  .mv-panel h3,
-  .mv-zones,
-  .mv-quests {
-    display: none;
-  }
-  .mv-panel h2 {
-    font-size: 17px;
-  }
-  .mv-pet {
-    display: none;
-  }
-  .mv-pet:first-of-type {
-    display: grid;
-  }
-  .mv-resources {
-    margin-top: 6px;
-  }
-  .mv-hint {
-    display: none;
-  }
 }
