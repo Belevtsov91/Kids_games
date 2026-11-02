@@ -15,20 +15,24 @@ export type DrawingSummary = Omit<Drawing, 'image'>;
 const drawings = new Map<string, Drawing>();
 
 export const drawingsRepository = {
-  async list(profileId?: string): Promise<DrawingSummary[]> {
+  async list(profileId: string): Promise<DrawingSummary[]> {
     return [...drawings.values()]
-      .filter((d) => !profileId || d.profileId === profileId)
+      .filter((d) => d.profileId === profileId)
       .map(({ image: _image, ...summary }) => summary);
   },
-  async get(id: string) {
-    return drawings.get(id) ?? null;
+  /** Отдаёт рисунок, только если он принадлежит этому профилю. */
+  async get(id: string, profileId: string) {
+    const drawing = drawings.get(id);
+    return drawing?.profileId === profileId ? drawing : null;
   },
   async create(data: Pick<Drawing, 'profileId' | 'title' | 'image'>) {
     const drawing: Drawing = { id: randomUUID(), createdAt: new Date().toISOString(), ...data };
     drawings.set(drawing.id, drawing);
     return drawing;
   },
-  async remove(id: string) {
+  /** Удаляет, только если рисунок принадлежит этому профилю. */
+  async remove(id: string, profileId: string) {
+    if (drawings.get(id)?.profileId !== profileId) return false;
     return drawings.delete(id);
   },
 };

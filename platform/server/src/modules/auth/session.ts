@@ -1,5 +1,6 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { PlayerSession } from '@ig/sdk/server';
 import { env } from '../../config/env.js';
 import { supabase } from '../../db/index.js';
 
@@ -9,10 +10,8 @@ import { supabase } from '../../db/index.js';
 export const SESSION_COOKIE = 'ig_session';
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
-export interface Session {
-  parentId: string;
-  activeChildId: string | null;
-}
+/** Форма сессии — общий контракт с играми (`@ig/sdk/server`). */
+export type Session = PlayerSession;
 
 declare module 'fastify' {
   interface FastifyRequest {

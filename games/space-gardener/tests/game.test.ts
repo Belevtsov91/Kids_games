@@ -109,11 +109,11 @@ describe('прогресс', () => {
     const api = fakeApi();
     const progress = createProgress({ api: api as unknown as GameSdk['api'], profile: { id: 'kid', name: 'Аня', avatar: '🦊' } });
     await progress.load();
-    expect(api.get).toHaveBeenCalledWith('/progress?profileId=kid');
+    expect(api.get).toHaveBeenCalledWith('/progress');
     expect(progress.stars('sprout')).toBe(2);
 
     await progress.record('rock', 3);
-    expect(api.post).toHaveBeenCalledWith('/progress', { profileId: 'kid', levelId: 'rock', stars: 3 });
+    expect(api.post).toHaveBeenCalledWith('/progress', { levelId: 'rock', stars: 3 });
     expect(progress.stars('rock')).toBe(3);
 
     await progress.record('sprout', 1);

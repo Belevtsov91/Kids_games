@@ -1,11 +1,10 @@
-import type { FastifyPluginAsync, FastifyRequest } from 'fastify';
+import type { FastifyPluginAsync } from 'fastify';
+import { childIdOf, requireChild } from '@ig/sdk/server';
 import { MAX_LEVEL } from '../src/rounds.js';
 import { progressRepository } from './repository.js';
 
 // Серверная часть «Кто где живёт». Платформа подключает её под /api/games/who-lives-where.
 // Прогресс привязан к ребёнку из серверной сессии: клиенту не доверяем, чей он.
-
-const childOf = (req: FastifyRequest) => (req as { session?: { activeChildId?: string | null } | null }).session?.activeChildId ?? null;
 
 const saveBody = {
   type: 'object',
@@ -17,17 +16,13 @@ const saveBody = {
 } as const;
 
 const server: FastifyPluginAsync = async (app) => {
-  app.get('/progress', async (req, reply) => {
-    const childId = childOf(req);
-    if (!childId) return reply.code(401).send({ error: 'Нужно выбрать ребёнка' });
-    return progressRepository.get(childId);
-  });
+  app.addHook('preHandler', requireChild);
 
-  app.post<{ Body: { level?: number; found?: string[] } }>('/progress', { schema: { body: saveBody } }, async (req, reply) => {
-    const childId = childOf(req);
-    if (!childId) return reply.code(401).send({ error: 'Нужно выбрать ребёнка' });
-    return progressRepository.save(childId, req.body);
-  });
+  app.get('/progress', async (req) => progressRepository.get(childIdOf(req)!));
+
+  app.post<{ Body: { level?: number; found?: string[] } }>('/progress', { schema: { body: saveBody } }, async (req) =>
+    progressRepository.save(childIdOf(req)!, req.body),
+  );
 };
 
 export default server;

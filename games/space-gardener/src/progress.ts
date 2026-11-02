@@ -17,15 +17,16 @@ export interface ProgressStore {
 
 export function createProgress(sdk: Pick<GameSdk, 'api' | 'profile'>): ProgressStore {
   let levels: Record<string, number> = {};
-  const profileId = sdk.profile?.id;
+  // Чей прогресс, решает сервер по сессии; профиль нужен только чтобы понять, есть ли кому сохранять.
+  const hasProfile = Boolean(sdk.profile);
 
   return {
     stars: (levelId) => levels[levelId] ?? 0,
 
     async load() {
-      if (!profileId) return;
+      if (!hasProfile) return;
       try {
-        const res = await sdk.api.get<ProgressResponse>(`/progress?profileId=${encodeURIComponent(profileId)}`);
+        const res = await sdk.api.get<ProgressResponse>('/progress');
         levels = { ...res.levels, ...pickBetter(levels, res.levels) };
       } catch (err) {
         console.warn('space-gardener: не удалось загрузить прогресс', err);
@@ -35,9 +36,9 @@ export function createProgress(sdk: Pick<GameSdk, 'api' | 'profile'>): ProgressS
     async record(levelId, stars) {
       if (stars <= (levels[levelId] ?? 0)) return;
       levels = { ...levels, [levelId]: stars };
-      if (!profileId) return;
+      if (!hasProfile) return;
       try {
-        const res = await sdk.api.post<ProgressResponse>('/progress', { profileId, levelId, stars });
+        const res = await sdk.api.post<ProgressResponse>('/progress', { levelId, stars });
         levels = { ...res.levels, ...pickBetter(levels, res.levels) };
       } catch (err) {
         console.warn('space-gardener: не удалось сохранить прогресс', err);
