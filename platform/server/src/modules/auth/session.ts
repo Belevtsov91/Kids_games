@@ -2,7 +2,7 @@ import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { PlayerSession } from '@ig/sdk/server';
 import { env } from '../../config/env.js';
-import { supabase } from '../../db/index.js';
+import { db, supabase } from '../../db/index.js';
 
 // Серверная сессия. Браузер получает одну httpOnly-cookie: зашифрованный случайный токен,
 // без данных о пользователе. В БД (ig_sessions) лежит только SHA-256 токена.
@@ -58,12 +58,12 @@ const cookieOptions = {
 export async function createSession(reply: FastifyReply, parentId: string) {
   const token = randomBytes(32);
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
-  const { error } = await supabase!
+  const { error } = await db()
     .from('ig_sessions')
     .insert({ token_hash: hashToken(token), parent_id: parentId, expires_at: expiresAt.toISOString() });
   if (error) throw error;
   // Заодно чистим просроченные сессии этого родителя.
-  await supabase!.from('ig_sessions').delete().eq('parent_id', parentId).lt('expires_at', new Date().toISOString());
+  await db().from('ig_sessions').delete().eq('parent_id', parentId).lt('expires_at', new Date().toISOString());
   reply.setCookie(SESSION_COOKIE, encrypt(token), { ...cookieOptions, expires: expiresAt });
 }
 
@@ -77,7 +77,7 @@ function tokenHashFrom(req: FastifyRequest) {
 export async function loadSession(req: FastifyRequest): Promise<Session | null> {
   const tokenHash = sessionsEnabled ? tokenHashFrom(req) : null;
   if (!tokenHash) return null;
-  const { data, error } = await supabase!
+  const { data, error } = await db()
     .from('ig_sessions')
     .select('parent_id, active_child_id, expires_at')
     .eq('token_hash', tokenHash)
@@ -90,13 +90,13 @@ export async function loadSession(req: FastifyRequest): Promise<Session | null> 
 export async function setActiveChild(req: FastifyRequest, childId: string | null) {
   const tokenHash = tokenHashFrom(req);
   if (!tokenHash) return;
-  const { error } = await supabase!.from('ig_sessions').update({ active_child_id: childId }).eq('token_hash', tokenHash);
+  const { error } = await db().from('ig_sessions').update({ active_child_id: childId }).eq('token_hash', tokenHash);
   if (error) throw error;
 }
 
 export async function destroySession(req: FastifyRequest, reply: FastifyReply) {
   const tokenHash = tokenHashFrom(req);
-  if (tokenHash) await supabase!.from('ig_sessions').delete().eq('token_hash', tokenHash);
+  if (tokenHash) await db().from('ig_sessions').delete().eq('token_hash', tokenHash);
   reply.clearCookie(SESSION_COOKIE, cookieOptions);
 }
 

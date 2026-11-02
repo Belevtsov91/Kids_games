@@ -1,5 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { supabase } from '../../db/index.js';
+import { db } from '../../db/index.js';
 import { requireSession, setActiveChild } from '../auth/session.js';
 
 // Профили детей. Родитель видит и меняет только своих: parent_id всегда берётся из сессии, не из запроса.
@@ -32,14 +32,14 @@ export const childrenRoutes: FastifyPluginAsync = async (app) => {
     { schema: { body: createBody } },
     async (req, reply) => {
       const parentId = req.session!.parentId;
-      const { count, error: countError } = await supabase!
+      const { count, error: countError } = await db()
         .from('ig_children')
         .select('id', { count: 'exact', head: true })
         .eq('parent_id', parentId);
       if (countError) throw countError;
       if ((count ?? 0) >= MAX_CHILDREN) return reply.code(409).send({ error: `Не больше ${MAX_CHILDREN} профилей` });
 
-      const { data, error } = await supabase!
+      const { data, error } = await db()
         .from('ig_children')
         .insert({ parent_id: parentId, name: req.body.name.trim(), age: req.body.age, avatar: req.body.avatar })
         .select('id, name, age, avatar')
@@ -51,7 +51,7 @@ export const childrenRoutes: FastifyPluginAsync = async (app) => {
 
   /** Какой ребёнок сейчас играет. Хранится в серверной сессии, не в браузере. */
   app.put<{ Body: { childId: string } }>('/active', { schema: { body: activeBody } }, async (req, reply) => {
-    const { data, error } = await supabase!
+    const { data, error } = await db()
       .from('ig_children')
       .select('id')
       .eq('id', req.body.childId)

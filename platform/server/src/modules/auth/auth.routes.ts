@@ -1,5 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { supabase } from '../../db/index.js';
+import { db } from '../../db/index.js';
 import { DUMMY_HASH, hashPassword, verifyPassword } from './password.js';
 import { createSession, destroySession, sessionsEnabled } from './session.js';
 
@@ -39,7 +39,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     '/register',
     { schema: { body: registerBody }, config: strictLimit },
     async (req, reply) => {
-      const { data, error } = await supabase!
+      const { data, error } = await db()
         .from('ig_parents')
         .insert({
           email: normalizeEmail(req.body.email),
@@ -62,7 +62,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     '/login',
     { schema: { body: loginBody }, config: strictLimit },
     async (req, reply) => {
-      const { data: parent, error } = await supabase!
+      const { data: parent, error } = await db()
         .from('ig_parents')
         .select('id, password_hash')
         .eq('email', normalizeEmail(req.body.email))
@@ -85,8 +85,8 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   app.get('/me', async (req, reply) => {
     if (!req.session) return reply.code(401).send({ error: 'Нужно войти' });
     const [{ data: parent, error: parentError }, { data: children, error: childrenError }] = await Promise.all([
-      supabase!.from('ig_parents').select('id, display_name').eq('id', req.session.parentId).single(),
-      supabase!
+      db().from('ig_parents').select('id, display_name').eq('id', req.session.parentId).single(),
+      db()
         .from('ig_children')
         .select('id, name, age, avatar')
         .eq('parent_id', req.session.parentId)

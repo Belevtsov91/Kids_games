@@ -11,3 +11,11 @@ export const supabase: SupabaseClient | null =
       })
     : null;
 
+/**
+ * Клиент БД для кода, который работает только при настроенной БД (за входом / сессией).
+ * Если БД всё же не настроена — понятная ошибка в логе вместо падения на `null`.
+ */
+export function db(): SupabaseClient {
+  if (!supabase) throw new Error('БД не настроена: задайте SUPABASE_URL и SUPABASE_SERVICE_ROLE_KEY');
+  return supabase;
+}
