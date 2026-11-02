@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { defineGame } from '@ig/sdk';
-import Playground3D from './Playground3D';
+import Playground3D from './scene/Playground3D';
 
 export default defineGame({
   mount(container) {

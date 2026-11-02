@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import type { GameSdk } from '@ig/sdk';
-import { starterPuzzles, type PuzzleImage } from './catalog';
-import { getImageSize, listSavedImages, readFileAsDataUrl, saveImage, type SavedPuzzleImage } from './imageLibrary';
-import { recommendedGrid, shuffled, type Grid } from './puzzleMath';
-import './puzzles.css';
+import { starterPuzzles, type PuzzleImage } from '../game/catalog';
+import { getImageSize, listSavedImages, readFileAsDataUrl, saveImage, type SavedPuzzleImage } from '../storage/imageLibrary';
+import { recommendedGrid, shuffled, type Grid } from '../game/puzzleMath';
+import '../styles/puzzles.css';
 
 type Puzzle = PuzzleImage | SavedPuzzleImage;
 type Board = Array<number | null>;

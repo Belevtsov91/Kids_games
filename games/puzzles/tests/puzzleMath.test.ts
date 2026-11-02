@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { recommendedGrid } from '../src/puzzleMath';
+import { recommendedGrid } from '../src/game/puzzleMath';
 
 describe('recommendedGrid', () => {
   it('keeps the recommendation playable', () => {

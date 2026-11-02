@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { defineGame } from '@ig/sdk';
-import DrawingGame from './DrawingGame';
-import { sound } from './sound';
+import DrawingGame from './ui/DrawingGame';
+import { sound } from './audio/sound';
 
 export default defineGame({
   mount(container, sdk) {

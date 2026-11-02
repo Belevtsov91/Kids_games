@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { DrawingEngine } from './engine/DrawingEngine';
-import { palette, tools, type BrushTool } from './tools';
-import { sound } from './sound';
-import './drawing.css';
+import { DrawingEngine } from '../engine/DrawingEngine';
+import { palette, tools, type BrushTool } from '../tools';
+import { sound } from '../audio/sound';
+import '../styles/drawing.css';
 
 export default function DrawingGame() {
   const hostRef = useRef<HTMLDivElement>(null);

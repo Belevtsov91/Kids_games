@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { defineGame } from '@ig/sdk';
-import { PuzzlesGame } from './PuzzlesGame';
+import { PuzzlesGame } from './ui/PuzzlesGame';
 
 export default defineGame({
   mount(container, sdk) {
