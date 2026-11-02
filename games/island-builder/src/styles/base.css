@@ -1,0 +1,59 @@
+/* Корень игры, общие кнопки и анимации. Всё под .ib-root, чтобы не задеть оболочку. */
+
+.ib-root {
+  --ib-ink: #17324d;
+  --ib-muted: #5d7590;
+  --ib-card: rgb(255 255 255 / 0.86);
+  --ib-line: rgb(23 50 77 / 0.1);
+  --ib-accent: #0b9fb8;
+  --ib-sun: #ffb703;
+  --ib-shadow: 0 6px 18px rgb(10 40 70 / 0.18);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--ib-ink);
+  font-family: 'Nunito', 'Segoe UI Rounded', 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ib-root.ib-night {
+  --ib-card: rgb(22 34 66 / 0.84);
+  --ib-ink: #eaf1ff;
+  --ib-muted: #a9b9d8;
+  --ib-line: rgb(255 255 255 / 0.12);
+}
+
+.ib-root :where(button) {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+@keyframes ib-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes ib-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes ib-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ib-bob {
+  50% {
+    transform: translateY(-10px) rotate(-4deg);
+  }
+}

@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import Fastify from 'fastify';
 import islandServer from '../server';
-import { emptyStats, generateIsland, serialize } from '../src/world';
+import { emptyStats, generateIsland, serialize } from '../src/game/world';
 
 // Сессию в проде вешает платформа; здесь — тестовый хук по заголовку.
 const app = Fastify();

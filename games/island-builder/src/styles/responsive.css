@@ -1,0 +1,57 @@
+/* Телефон */
+
+@media (max-width: 560px) {
+  .ib-title-text {
+    display: none;
+  }
+
+  .ib-title {
+    padding: 0 10px;
+  }
+
+  .ib-actions {
+    gap: 6px;
+  }
+
+  .ib-round {
+    width: 46px;
+    height: 46px;
+    font-size: 21px;
+  }
+
+  .ib-tool {
+    min-width: 56px;
+    height: 56px;
+  }
+
+  .ib-swatch {
+    min-width: 52px;
+    height: 52px;
+  }
+
+  .ib-emoji {
+    font-size: 22px;
+  }
+
+  .ib-label {
+    font-size: 11px;
+  }
+
+  .ib-hint {
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 160px);
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .ib-status {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ib-root * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

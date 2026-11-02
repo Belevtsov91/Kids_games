@@ -1,0 +1,52 @@
+/* Тосты и подсказки */
+
+.ib-toasts {
+  position: absolute;
+  z-index: 7;
+  top: calc(max(12px, env(safe-area-inset-top)) + 70px);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.ib-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 20px;
+  box-shadow: 0 0 0 3px var(--ib-sun), var(--ib-shadow);
+  animation: ib-pop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+  white-space: nowrap;
+}
+
+.ib-toast div {
+  display: grid;
+  font-size: 14px;
+}
+
+.ib-toast strong {
+  font-size: 16px;
+}
+
+.ib-toast-emoji {
+  font-size: 34px;
+}
+
+.ib-hint {
+  position: absolute;
+  z-index: 4;
+  /* left+right+fit-content: с left:50% ширина ужалась бы до половины экрана. */
+  left: 16px;
+  right: 16px;
+  width: fit-content;
+  margin-inline: auto;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 176px);
+  padding: 10px 16px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  animation: ib-fade 0.25s ease-out;
+  pointer-events: none;
+}

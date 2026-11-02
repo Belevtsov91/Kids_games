@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { QUESTS, newlyDone, questState } from '../src/quests';
-import { applyChanges, emptyStats, emptyWorld, generateIsland, placeBlock, type World } from '../src/world';
+import { QUESTS, newlyDone, questState } from '../src/game/quests';
+import { applyChanges, emptyStats, emptyWorld, generateIsland, placeBlock, type World } from '../src/game/world';
 
 describe('задания', () => {
   it('у всех заданий уникальные id', () => {

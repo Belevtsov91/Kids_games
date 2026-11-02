@@ -1,8 +1,8 @@
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { defineGame } from '@ig/sdk';
-import App from './App';
-import { sound } from './sound';
+import App from './app/App';
+import { sound } from './audio/sound';
 
 // Остров-конструктор: 3D-песочница на React Three Fiber + Rapier.
 export default defineGame({

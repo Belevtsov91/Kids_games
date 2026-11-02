@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { childIdOf, requireChild } from '@ig/sdk/server';
-import { BLOCK_TYPES, GRID, MAX_HEIGHT, MAX_TREES, STAT_KEYS, TREE_KINDS, type SaveData } from '../src/world.js';
+import { BLOCK_TYPES, GRID, MAX_HEIGHT, MAX_TREES, STAT_KEYS, TREE_KINDS, type SaveData } from '../src/game/world/index.js';
 import { islandsRepository } from './repository.js';
 
 const cell = (types: number) =>
