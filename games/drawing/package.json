@@ -1,0 +1,26 @@
+{
+  "name": "@ig/game-drawing",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ig/sdk": "workspace:*",
+    "howler": "^2.2.4",
+    "pixi.js": "^8.22.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/howler": "^2.2.13",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "fastify": "^5.12.7",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

@@ -1,0 +1,566 @@
+/* Стили только этой игры: всё под .ib-root, чтобы не задеть оболочку. */
+
+.ib-root {
+  --ib-ink: #17324d;
+  --ib-muted: #5d7590;
+  --ib-card: rgb(255 255 255 / 0.86);
+  --ib-line: rgb(23 50 77 / 0.1);
+  --ib-accent: #0b9fb8;
+  --ib-sun: #ffb703;
+  --ib-shadow: 0 6px 18px rgb(10 40 70 / 0.18);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--ib-ink);
+  font-family: 'Nunito', 'Segoe UI Rounded', 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ib-root.ib-night {
+  --ib-card: rgb(22 34 66 / 0.84);
+  --ib-ink: #eaf1ff;
+  --ib-muted: #a9b9d8;
+  --ib-line: rgb(255 255 255 / 0.12);
+}
+
+.ib-root :where(button) {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* ---------- Верхняя панель ---------- */
+
+.ib-top {
+  position: absolute;
+  z-index: 5;
+  /* Слева место под кнопку «назад» оболочки. */
+  top: max(12px, env(safe-area-inset-top));
+  left: calc(max(12px, env(safe-area-inset-left)) + 64px);
+  right: max(12px, env(safe-area-inset-right));
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ib-top > * {
+  pointer-events: auto;
+}
+
+.ib-chip,
+.ib-card,
+.ib-round,
+.ib-dock,
+.ib-hint,
+.ib-toast {
+  background: var(--ib-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--ib-shadow);
+}
+
+.ib-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 16px 0 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.ib-title-emoji {
+  font-size: 24px;
+}
+
+.ib-status {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(11 159 184 / 0.12);
+  color: var(--ib-accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ib-status-offline {
+  background: rgb(229 72 77 / 0.12);
+  color: #d33a40;
+}
+
+.ib-status-saving,
+.ib-status-loading {
+  color: var(--ib-muted);
+  background: var(--ib-line);
+}
+
+.ib-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ib-round {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 50%;
+  font-size: 24px;
+  transition: transform 0.12s, opacity 0.2s;
+}
+
+.ib-undo {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.ib-round:active {
+  transform: scale(0.9);
+}
+
+.ib-round:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ib-round.ib-on {
+  box-shadow: 0 0 0 3px var(--ib-sun), var(--ib-shadow);
+}
+
+.ib-badge {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--ib-sun);
+  color: #3d2a00;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ---------- Задания ---------- */
+
+.ib-quests {
+  position: absolute;
+  z-index: 6;
+  top: calc(max(12px, env(safe-area-inset-top)) + 64px);
+  right: max(12px, env(safe-area-inset-right));
+  width: min(340px, calc(100% - 24px));
+  max-height: calc(100% - 260px);
+  overflow-y: auto;
+  padding: 16px;
+  border-radius: 22px;
+  animation: ib-drop 0.22s ease-out;
+}
+
+.ib-card h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.ib-quests ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ib-quests li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ib-quests li.ib-done {
+  color: var(--ib-muted);
+}
+
+.ib-quest-emoji {
+  font-size: 22px;
+}
+
+.ib-quest-body {
+  flex: 1;
+  display: grid;
+  gap: 4px;
+}
+
+.ib-quest-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--ib-muted);
+  font-size: 13px;
+}
+
+.ib-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ib-line);
+  overflow: hidden;
+}
+
+.ib-bar > div {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2bd17e, var(--ib-accent));
+  transition: width 0.4s ease;
+}
+
+/* ---------- Тосты и подсказки ---------- */
+
+.ib-toasts {
+  position: absolute;
+  z-index: 7;
+  top: calc(max(12px, env(safe-area-inset-top)) + 70px);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.ib-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 20px;
+  box-shadow: 0 0 0 3px var(--ib-sun), var(--ib-shadow);
+  animation: ib-pop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+  white-space: nowrap;
+}
+
+.ib-toast div {
+  display: grid;
+  font-size: 14px;
+}
+
+.ib-toast strong {
+  font-size: 16px;
+}
+
+.ib-toast-emoji {
+  font-size: 34px;
+}
+
+.ib-hint {
+  position: absolute;
+  z-index: 4;
+  /* left+right+fit-content: с left:50% ширина ужалась бы до половины экрана. */
+  left: 16px;
+  right: 16px;
+  width: fit-content;
+  margin-inline: auto;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 176px);
+  padding: 10px 16px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  animation: ib-fade 0.25s ease-out;
+  pointer-events: none;
+}
+
+/* ---------- Нижняя панель инструментов ---------- */
+
+.ib-dock {
+  position: absolute;
+  z-index: 5;
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin-inline: auto;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 26px;
+}
+
+.ib-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.ib-row::-webkit-scrollbar {
+  display: none;
+}
+
+.ib-palette {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ib-line);
+}
+
+.ib-tool,
+.ib-swatch {
+  flex: 0 0 auto;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-width: 64px;
+  height: 62px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  scroll-snap-align: start;
+  transition: transform 0.12s, background 0.15s;
+}
+
+.ib-swatch {
+  min-width: 58px;
+  height: 56px;
+}
+
+.ib-tool:active,
+.ib-swatch:active {
+  transform: scale(0.92);
+}
+
+.ib-tool.ib-on {
+  background: var(--ib-accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgb(11 159 184 / 0.4);
+}
+
+.ib-swatch.ib-on {
+  background: rgb(255 183 3 / 0.22);
+  box-shadow: inset 0 0 0 2px var(--ib-sun);
+}
+
+.ib-emoji {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.ib-label {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Мини-кубик материала: верх и бок своих цветов. */
+.ib-cube {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--top) 0 38%, var(--side) 38% 100%);
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.12), 0 1px 2px rgb(0 0 0 / 0.2);
+}
+
+/* ---------- Окна ---------- */
+
+.ib-modal {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(8 24 44 / 0.45);
+  animation: ib-fade 0.2s ease-out;
+}
+
+.ib-dialog {
+  width: min(420px, 100%);
+  padding: 24px;
+  border-radius: 28px;
+  text-align: center;
+  animation: ib-pop 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.ib-dialog h2 {
+  font-size: 26px;
+}
+
+.ib-dialog p {
+  margin: 0 0 16px;
+  color: var(--ib-muted);
+}
+
+.ib-choices {
+  display: grid;
+  gap: 10px;
+}
+
+.ib-choice,
+.ib-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  border: 0;
+  border-radius: 18px;
+  background: rgb(11 159 184 / 0.12);
+  font-size: 18px;
+  font-weight: 800;
+  transition: transform 0.12s;
+}
+
+.ib-choice span {
+  font-size: 24px;
+}
+
+.ib-choice:active,
+.ib-start:active {
+  transform: scale(0.96);
+}
+
+.ib-start {
+  width: 100%;
+  margin-top: 8px;
+  background: linear-gradient(180deg, #ffc93c, var(--ib-sun));
+  color: #3d2a00;
+  font-size: 22px;
+  box-shadow: 0 6px 0 #d99a00;
+}
+
+.ib-cancel {
+  margin-top: 12px;
+  border: 0;
+  background: none;
+  color: var(--ib-muted);
+  font-size: 16px;
+  font-weight: 700;
+  min-height: 44px;
+}
+
+.ib-howto {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.ib-howto li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ib-howto span {
+  font-size: 26px;
+}
+
+.ib-loading {
+  position: absolute;
+  z-index: 15;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #9ad8ff, #1fa2d6);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.ib-loading span {
+  display: block;
+  font-size: 64px;
+  text-align: center;
+  animation: ib-bob 1.4s ease-in-out infinite;
+}
+
+@keyframes ib-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes ib-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes ib-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ib-bob {
+  50% {
+    transform: translateY(-10px) rotate(-4deg);
+  }
+}
+
+/* ---------- Телефон ---------- */
+
+@media (max-width: 560px) {
+  .ib-title-text {
+    display: none;
+  }
+
+  .ib-title {
+    padding: 0 10px;
+  }
+
+  .ib-actions {
+    gap: 6px;
+  }
+
+  .ib-round {
+    width: 46px;
+    height: 46px;
+    font-size: 21px;
+  }
+
+  .ib-tool {
+    min-width: 56px;
+    height: 56px;
+  }
+
+  .ib-swatch {
+    min-width: 52px;
+    height: 52px;
+  }
+
+  .ib-emoji {
+    font-size: 22px;
+  }
+
+  .ib-label {
+    font-size: 11px;
+  }
+
+  .ib-hint {
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 160px);
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .ib-status {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ib-root * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

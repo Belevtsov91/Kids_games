@@ -1,7 +1,40 @@
+# Зависимости (во всех пакетах: shell, games/*, platform/*)
 node_modules/
+.pnpm-store/
+
+# Сборка
 dist/
 dev-dist/
+build/
+*.tsbuildinfo
+.vite/
+
+# Тесты
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Переменные окружения (шаблоны .env.example коммитим)
 .env
-.env.local
+.env.*
+!.env.example
+
+# Логи
 *.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Редакторы и ОС
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Локальные настройки Claude Code
+.claude/settings.local.json

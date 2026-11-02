@@ -1,0 +1,464 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #fff8e7;
+  color: #1c1c1c;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.menu {
+  min-height: 100%;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 12px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 6px 0 #f0d78c;
+  color: inherit;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu-card-emoji {
+  font-size: 56px;
+}
+
+.game-screen {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.back-button {
+  position: absolute;
+  z-index: 10;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
+  color: inherit;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 24px;
+}
+
+.game-container {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- Общие кнопки и формы ---------- */
+
+input {
+  user-select: text;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn:active {
+  transform: translateY(3px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-primary {
+  background: #ff7a45;
+  box-shadow: 0 5px 0 #d4561f;
+  color: #fff;
+}
+
+.btn-primary:active {
+  box-shadow: 0 2px 0 #d4561f;
+}
+
+.btn-secondary {
+  background: #fff;
+  box-shadow: 0 5px 0 #f0d78c;
+  color: #1c1c1c;
+}
+
+.btn-small {
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 16px;
+  background: #fff;
+  box-shadow: 0 3px 0 #f0d78c;
+  color: inherit;
+}
+
+.form-error {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffe3e0;
+  color: #b3261e;
+  font-weight: 600;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  text-align: left;
+}
+
+label input {
+  min-height: 52px;
+  padding: 0 16px;
+  border: 3px solid #f0d78c;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 18px;
+  background: #fff;
+}
+
+label input:focus {
+  outline: none;
+  border-color: #ff7a45;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto 8px;
+  font-weight: 600;
+}
+
+.topbar-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px 4px 4px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 0 #f0d78c;
+  color: inherit;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.topbar-avatar {
+  font-size: 32px;
+}
+
+/* ---------- Приветствие ---------- */
+
+.welcome {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 24px 16px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #fff3c4, #ffd36e 60%, #ffb347);
+  text-align: center;
+}
+
+.welcome-hero {
+  position: relative;
+  max-width: 520px;
+}
+
+.welcome-hero h1 {
+  margin: 8px 0;
+  font-size: clamp(32px, 7vw, 56px);
+  line-height: 1.1;
+}
+
+.welcome-hero p {
+  margin: 0 0 24px;
+  font-size: clamp(18px, 3.5vw, 22px);
+}
+
+.welcome-mascot {
+  font-size: clamp(96px, 22vw, 160px);
+  animation: bounce 2.4s ease-in-out infinite;
+}
+
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.welcome-actions .btn {
+  min-width: 200px;
+}
+
+.welcome-hero .welcome-note {
+  margin: 24px 0 0;
+  font-size: 15px;
+  opacity: 0.75;
+}
+
+.welcome-floaters span {
+  position: absolute;
+  top: calc(8% + var(--i) * 15%);
+  left: calc(var(--i) * 17% + 2%);
+  font-size: clamp(32px, 6vw, 56px);
+  opacity: 0.55;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -1s);
+}
+
+.welcome-floaters span:nth-child(even) {
+  left: auto;
+  right: calc(var(--i) * 6% + 2%);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-16px) rotate(3deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-mascot,
+  .welcome-floaters span {
+    animation: none;
+  }
+}
+
+/* ---------- Вход и регистрация ---------- */
+
+.auth {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 72px 16px 24px;
+}
+
+.auth-back {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 12px;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
+  color: inherit;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 8px 0 #f0d78c;
+  text-align: center;
+}
+
+.auth-card h1 {
+  margin: 0 0 16px;
+  font-size: 28px;
+}
+
+.auth-mascot {
+  font-size: 64px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form .btn {
+  margin-top: 6px;
+}
+
+.auth-footer {
+  margin: 18px 0 0;
+}
+
+.auth-footer a {
+  color: #d4561f;
+  font-weight: 700;
+}
+
+/* ---------- Профили детей ---------- */
+
+.children {
+  min-height: 100%;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.child-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto 24px;
+}
+
+.child-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 12px;
+  border: 0;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 6px 0 #f0d78c;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.child-card-add {
+  background: #fff8e7;
+  border: 3px dashed #f0d78c;
+  box-shadow: none;
+}
+
+.child-avatar {
+  font-size: 56px;
+}
+
+.child-age {
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.child-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 8px 0 #f0d78c;
+}
+
+.child-form h2 {
+  margin: 0;
+}
+
+.child-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-align: left;
+}
+
+.child-form legend {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.age-picker,
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.age-picker button,
+.avatar-picker button {
+  min-width: 48px;
+  height: 48px;
+  border: 3px solid #f0d78c;
+  border-radius: 14px;
+  background: #fff;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.avatar-picker button {
+  font-size: 28px;
+}
+
+.age-picker button[aria-pressed='true'],
+.avatar-picker button[aria-pressed='true'] {
+  border-color: #ff7a45;
+  background: #fff0e8;
+}
+
+.child-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}

@@ -1,5 +1,7 @@
 packages:
-  - front
-  - back
+  - shell
+  - platform/*
+  - games/*
+
 allowBuilds:
   esbuild: true
