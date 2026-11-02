@@ -1,0 +1,88 @@
+/* Корень игры, темы и общие кнопки */
+
+.counting-game {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  background: #faf6ed;
+  color: #293f37;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  --cg-accent: #b76c30;
+  --cg-light: #f5dfbd;
+  --cg-dark: #315e4c;
+  color-scheme: light;
+}
+.counting-game[data-theme='forest'] {
+  --cg-accent: #45816b;
+  --cg-light: #d8e8cd;
+}
+.counting-game[data-theme='sea'] {
+  --cg-accent: #437fba;
+  --cg-light: #d8ecf3;
+}
+.counting-game * {
+  box-sizing: border-box;
+}
+.counting-game button,
+.counting-game select {
+  font: inherit;
+}
+.counting-game button {
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.counting-game button:hover {
+  transform: translateY(-2px);
+}
+.counting-game button:active {
+  transform: translateY(1px);
+}
+.counting-game :focus-visible {
+  outline: 3px solid #a45427;
+  outline-offset: 4px;
+}
+.counting-game button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.cg-shell {
+  max-width: 1060px;
+  margin: auto;
+  padding: 22px max(22px, env(safe-area-inset-right)) 40px max(22px, env(safe-area-inset-left));
+}
+.cg-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 34px;
+  flex-wrap: wrap;
+}
+.cg-back,
+.cg-text {
+  border: 0;
+  background: transparent;
+  color: #315e4c;
+  padding: 12px;
+  font-weight: 650;
+  min-height: 46px;
+}
+.cg-brand {
+  font-size: 16px;
+  font-weight: 750;
+}
+.cg-language {
+  font-size: 13px;
+  border: 1px solid #deded2;
+  border-radius: 99px;
+  padding: 8px 13px;
+}
+.cg-note {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 24px 0 0;
+  color: #596950;
+  max-width: 680px;
+}

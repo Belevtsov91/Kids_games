@@ -1,4 +1,4 @@
-import { locales, type Language } from './i18n';
+import { locales, type Language } from '../i18n';
 export class CountingAudio {
   muted = false;
   paused = false;

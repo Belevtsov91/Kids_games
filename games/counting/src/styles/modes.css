@@ -1,0 +1,89 @@
+/* Сцены режимов: кормление, ряд чисел, сравнение, пример */
+
+.cg-feeding {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin: 24px auto;
+}
+.cg-friend {
+  font-size: 85px;
+}
+.cg-target {
+  font-size: 50px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 24px;
+  background: var(--cg-light);
+}
+.cg-feed-controls {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+.cg-feed-controls button {
+  width: 62px;
+  height: 54px;
+  border-radius: 14px;
+  border: 1px solid #b5c7ae;
+  font-size: 30px;
+  background: white;
+  color: #315e4c;
+}
+.cg-sequence {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 45px auto;
+}
+.cg-sequence span {
+  width: 64px;
+  height: 70px;
+  border-radius: 17px;
+  display: grid;
+  place-items: center;
+  background: var(--cg-light);
+  font-size: 32px;
+  font-weight: 750;
+}
+.cg-sequence .cg-gap {
+  border: 2px dashed var(--cg-accent);
+  background: white;
+  color: var(--cg-accent);
+}
+.cg-compare {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+.cg-compare > div {
+  flex: 1;
+  max-width: 45%;
+  background: #f5f3e9;
+  border-radius: 20px;
+  padding: 8px;
+}
+.cg-compare .cg-object {
+  min-width: 30px;
+  width: 39px;
+  height: 45px;
+  font-size: 25px;
+}
+.cg-equation {
+  font-size: clamp(35px, 7vw, 60px);
+  font-weight: 750;
+  margin: 30px 0;
+}
+.cg-equation span {
+  color: var(--cg-accent);
+}
+.cg-zero {
+  font-size: 40px;
+}
