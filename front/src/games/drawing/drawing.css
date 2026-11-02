@@ -1,0 +1,48 @@
+.drawing {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawing-canvas {
+  flex: 1;
+  min-height: 0;
+  touch-action: none;
+}
+
+.drawing-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px max(12px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-bottom));
+  background: #fff3c4;
+}
+
+.drawing-toolbar button {
+  width: 52px;
+  height: 52px;
+  border: 3px solid transparent;
+  border-radius: 14px;
+  background: #fff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.drawing-toolbar button.active {
+  border-color: #f76b15;
+}
+
+.drawing-toolbar .swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.drawing-divider {
+  width: 2px;
+  height: 36px;
+  background: #e8d48a;
+}
