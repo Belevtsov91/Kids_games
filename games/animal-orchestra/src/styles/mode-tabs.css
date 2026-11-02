@@ -1,0 +1,49 @@
+/* Верхняя панель: режимы */
+
+.ao-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  /* Слева место под кнопку «В меню» оболочки. */
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 8px max(76px, calc(env(safe-area-inset-left) + 76px));
+}
+
+.ao-modes {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.14);
+  backdrop-filter: blur(6px);
+}
+
+.ao-mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff !important;
+  font-size: 19px;
+  font-weight: 800;
+  transition: background 0.2s, transform 0.12s, color 0.2s;
+}
+
+.ao-mode:active {
+  transform: scale(0.94);
+}
+
+.ao-mode[aria-pressed='true'] {
+  background: #fff;
+  color: var(--ink) !important;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
+}
+
+.ao-mode-emoji {
+  font-size: 24px;
+  line-height: 1;
+}

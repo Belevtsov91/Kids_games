@@ -1,0 +1,10 @@
+/* Стили оркестра. Порядок важен: адаптив в конце, чтобы перекрывать базовые правила. */
+@import './base.css';
+@import './mode-tabs.css';
+@import './stage.css';
+@import './animals.css';
+@import './bubble.css';
+@import './panel.css';
+@import './shelf.css';
+@import './effects.css';
+@import './responsive.css';

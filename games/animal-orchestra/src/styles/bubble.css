@@ -1,0 +1,51 @@
+/* Подсказка-облачко */
+
+.ao-bubble {
+  position: absolute;
+  z-index: 2;
+  top: 3cqh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 32px);
+  padding: 10px 22px 10px 12px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);
+  font-size: clamp(17px, 2.4cqw, 24px);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.ao-bubble[hidden] {
+  display: none;
+}
+
+.ao-bubble-icon {
+  font-size: 1.6em;
+  line-height: 1;
+}
+
+.ao-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.ao-dots:empty {
+  display: none;
+}
+
+.ao-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e0dcef;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.ao-dot.is-done {
+  background: #3fae4a;
+  transform: scale(1.2);
+}

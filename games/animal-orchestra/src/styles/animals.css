@@ -1,0 +1,126 @@
+/* Зверята */
+
+.ao-animals {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1.2cqw;
+  width: 100%;
+  padding: 0 clamp(28px, 7cqw, 110px) 11cqh;
+  /* Ландшафт: все семеро в ряд, дугой. */
+  --size: min(10.4cqw, 44cqh);
+}
+
+.ao-animal {
+  --y: calc(var(--lift) * -1.1cqh);
+  position: relative;
+  container-type: inline-size;
+  width: var(--size);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translateY(var(--y));
+  transition: opacity 0.3s, filter 0.3s;
+  touch-action: none;
+}
+
+.ao-body {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 100%;
+}
+
+.ao-spot {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 35%, #fff), var(--c) 70%);
+  box-shadow:
+    0 0.6cqi 0 4cqi rgb(255 255 255 / 0.12),
+    0 6cqi 10cqi rgb(0 0 0 / 0.35),
+    inset 0 -5cqi 0 rgb(0 0 0 / 0.15);
+  transition: box-shadow 0.2s;
+}
+
+.ao-emoji {
+  position: relative;
+  font-size: 56cqi;
+  line-height: 1;
+  filter: drop-shadow(0 2cqi 2cqi rgb(0 0 0 / 0.25));
+  transition: transform 0.18s ease-out;
+}
+
+.ao-badge {
+  position: absolute;
+  right: 0;
+  bottom: 2%;
+  display: grid;
+  place-items: center;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 19cqi;
+  box-shadow: 0 1.5cqi 3cqi rgb(0 0 0 / 0.3);
+}
+
+.ao-animal.is-lit .ao-spot {
+  animation: ao-glow 0.6s ease-out;
+}
+
+@keyframes ao-glow {
+  0% {
+    box-shadow:
+      0 0 0 4cqi #fff,
+      0 0 18cqi 10cqi var(--c),
+      inset 0 -5cqi 0 rgb(0 0 0 / 0.15);
+  }
+  100% {
+    box-shadow:
+      0 0.6cqi 0 4cqi rgb(255 255 255 / 0.12),
+      0 6cqi 10cqi rgb(0 0 0 / 0.35),
+      inset 0 -5cqi 0 rgb(0 0 0 / 0.15);
+  }
+}
+
+/* Покачивание под ритм. */
+.ao-root[data-beat='0'] .ao-emoji {
+  transform: rotate(-7deg) translateY(-3%);
+}
+
+.ao-root[data-beat='1'] .ao-emoji {
+  transform: rotate(7deg) translateY(-3%);
+}
+
+.ao-animal[data-resting] {
+  opacity: 0.3;
+  filter: grayscale(0.8);
+  pointer-events: none;
+}
+
+.ao-root[data-listening='true'] .ao-animal:not(.is-lit) {
+  filter: brightness(0.75);
+}
+
+/* Портрет и узкие экраны: 4 + 3 в два ряда, без дуги. */
+@container (aspect-ratio < 1.25) {
+  .ao-animals {
+    align-self: center;
+    --size: min(21cqw, 26cqh);
+    gap: 3cqw 2cqw;
+    padding-left: 16px;
+    padding-right: 16px;
+    align-content: center;
+    padding-bottom: 9cqh;
+  }
+
+  .ao-animal {
+    --y: 0px;
+  }
+}

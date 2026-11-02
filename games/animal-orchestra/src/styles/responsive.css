@@ -1,0 +1,63 @@
+/* Маленькие экраны */
+
+@media (max-width: 560px) {
+  .ao-mode {
+    flex-direction: column;
+    gap: 0;
+    min-height: 54px;
+    padding: 4px 14px;
+    font-size: 12px;
+  }
+
+  .ao-chip-label {
+    display: none;
+  }
+
+  .ao-chip {
+    padding: 0 16px;
+  }
+
+  .ao-panel {
+    gap: 8px;
+  }
+
+  .ao-big {
+    width: 56px;
+    height: 56px;
+    font-size: 26px;
+  }
+
+  .ao-rec,
+  .ao-again {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+@media (max-height: 480px) {
+  .ao-bar {
+    padding-top: 8px;
+    padding-bottom: 4px;
+  }
+
+  .ao-mode {
+    min-height: 44px;
+  }
+
+  .ao-panel {
+    padding: 6px 12px;
+    margin-bottom: 6px;
+  }
+
+  .ao-meter {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ao-root *,
+  .ao-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
