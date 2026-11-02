@@ -8,7 +8,7 @@ const gameIds = readdirSync(gamesDir).filter((id) => existsSync(`${gamesDir}/${i
 const minAge = (id: string) => Number(/min:\s*(\d+)/.exec(readFileSync(`${gamesDir}/${id}/manifest.ts`, 'utf8'))?.[1] ?? 3);
 
 // Сервер API здесь не запускается: вход подменяем ответом /api/auth/me.
-// Ребёнку 15 лет — ему подходят все игры (у всех max = 15).
+// Возраст ребёнка влияет на меню: игра видна, только если он в её диапазоне ages.
 async function signedIn(page: Page, age = 15) {
   await page.route('/api/auth/me', (route) =>
     route.fulfill({
@@ -21,11 +21,14 @@ async function signedIn(page: Page, age = 15) {
   );
 }
 
-test('в меню есть все игры', async ({ page }) => {
-  await signedIn(page);
-  await page.goto('/dashboard');
-  await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
-  for (const id of gameIds) await expect(page.locator(`a[href="/play/${id}"]`)).toBeVisible();
+test('каждая игра есть в меню для своего возраста', async ({ page }) => {
+  for (const id of gameIds) {
+    await page.unrouteAll();
+    await signedIn(page, minAge(id));
+    await page.goto('/dashboard');
+    await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
+    await expect(page.locator(`a[href="/play/${id}"]`)).toBeVisible();
+  }
 });
 
 test('меню показывает только игры по возрасту', async ({ page }) => {
@@ -41,16 +44,18 @@ for (const id of gameIds) {
   test(`меню → ${id} → выход`, async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (err) => errors.push(err.message));
-    page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+    // API-сервер в e2e не запущен: сетевые ошибки запросов к нему — не ошибки игры.
+    page.on('console', (msg) => msg.type() === 'error' && !msg.text().startsWith('Failed to load resource') && errors.push(msg.text()));
 
-    await signedIn(page);
+    await signedIn(page, minAge(id));
     await page.goto('/dashboard');
     await page.locator(`a[href="/play/${id}"]`).click();
     await expect(page).toHaveURL(`/play/${id}`);
 
     const container = page.getByTestId('game-container');
     await expect(container).toHaveAttribute('data-state', 'running', { timeout: 20_000 });
-    await expect(container.locator('canvas').first()).toBeVisible();
+    // Игра что-то нарисовала: холст или свой DOM (у части игр интерфейс без canvas).
+    await expect(container.locator(':scope > *').first()).toBeVisible();
 
     await page.getByRole('link', { name: 'В меню' }).click();
     await expect(page).toHaveURL('/dashboard');

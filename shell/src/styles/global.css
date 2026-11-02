@@ -86,6 +86,8 @@ body {
 .game-container {
   position: absolute;
   inset: 0;
+  /* Свой контекст наложения: z-index внутри игры не перекроет кнопку «В меню». */
+  isolation: isolate;
 }
 
 /* ---------- Общие кнопки и формы ---------- */
