@@ -1,0 +1,134 @@
+/* Карта уровней */
+
+.sg-map {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: max(20px, env(safe-area-inset-top)) var(--sg-gutter) 32px;
+  padding-top: max(84px, env(safe-area-inset-top));
+}
+
+.sg-map-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.sg-map h1 {
+  margin: 0;
+  font-size: clamp(30px, 6vw, 52px);
+  line-height: 1.05;
+  text-align: center;
+  text-shadow: 0 4px 18px rgba(120, 90, 255, 0.6);
+}
+
+.sg-map .sg-sub {
+  margin: 10px auto 22px;
+  max-width: 560px;
+  font-size: clamp(16px, 2.6vw, 20px);
+  line-height: 1.35;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.sg-total {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.sg-total span {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--sg-card);
+  border: 2px solid var(--sg-line);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.sg-levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.sg-level {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 10px 14px;
+  border: 2px solid var(--sg-line);
+  border-radius: 26px;
+  background: var(--sg-card);
+  color: var(--sg-text);
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.2s ease;
+  touch-action: manipulation;
+}
+
+.sg-level:hover:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: rgba(160, 230, 255, 0.7);
+}
+
+.sg-level:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.sg-level:focus-visible {
+  outline: 3px solid #ffe066;
+  outline-offset: 2px;
+}
+
+.sg-planet {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  box-shadow: inset -10px -10px 0 rgba(0, 0, 0, 0.18), 0 0 24px rgba(255, 255, 255, 0.15);
+}
+
+.sg-level-name {
+  min-height: 2.4em;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.sg-level-stars {
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.sg-level-stars .off {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+.sg-level:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.sg-level:disabled .sg-planet {
+  filter: grayscale(1);
+}
+
+.sg-level-current {
+  border-color: #ffe066;
+  animation: sg-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes sg-pulse {
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 224, 102, 0.18);
+  }
+}

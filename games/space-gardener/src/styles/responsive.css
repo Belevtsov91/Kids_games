@@ -1,0 +1,60 @@
+/* Телефон боком: кнопки уходят в колонку справа, чтобы поле было крупнее. */
+@media (orientation: landscape) and (max-height: 540px) {
+  .sg-hud-bottom {
+    left: auto;
+    top: calc(max(8px, env(safe-area-inset-top)) + 60px);
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .sg-hud-bottom .sg-btn {
+    min-width: 56px;
+    min-height: 50px;
+    padding: 0 10px;
+    font-size: 20px;
+  }
+
+  .sg-hud-bottom .sg-primary {
+    min-width: 56px;
+  }
+
+  .sg-primary .sg-label {
+    display: none;
+  }
+
+  .sg-hud-top {
+    top: max(8px, env(safe-area-inset-top));
+  }
+
+  .sg-tip {
+    bottom: max(10px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 560px) {
+  .sg-title {
+    display: none;
+  }
+
+  .sg-hud-top {
+    justify-content: flex-end;
+  }
+
+  .sg-hud-bottom {
+    gap: 8px;
+  }
+
+  .sg-hud-bottom .sg-btn {
+    min-width: 54px;
+    padding: 0 12px;
+  }
+
+  .sg-primary {
+    min-width: 0;
+    flex: 1 1 auto;
+    max-width: 200px;
+  }
+}

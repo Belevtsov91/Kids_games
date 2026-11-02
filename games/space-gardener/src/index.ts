@@ -1,5 +1,5 @@
 import { defineGame } from '@ig/sdk';
-import { SpaceGardener } from './SpaceGardener';
+import { SpaceGardener } from './app/SpaceGardener';
 
 // Космический садовник: 2D-головоломка с физикой. Рисуешь лианы — капли катятся к цветку.
 export default defineGame({

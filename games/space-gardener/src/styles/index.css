@@ -1,0 +1,7 @@
+/* Стили садовника. Порядок важен: адаптив идёт после правил, которые он перекрывает. */
+@import './base.css';
+@import './level-map.css';
+@import './hud.css';
+@import './responsive.css';
+@import './result-card.css';
+@import './motion.css';

@@ -1,0 +1,104 @@
+/* Все стили садовника живут внутри .sg-root, чтобы не задеть оболочку и другие игры. */
+
+.sg-root {
+  --sg-ink: #4fd47a;
+  --sg-text: #f4f1ff;
+  --sg-card: rgba(28, 22, 70, 0.82);
+  --sg-line: rgba(160, 190, 255, 0.28);
+  --sg-gutter: max(12px, env(safe-area-inset-left));
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0b0f2e;
+  color: var(--sg-text);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sg-root * {
+  box-sizing: border-box;
+}
+
+.sg-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.sg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 56px;
+  min-height: 56px;
+  padding: 0 18px;
+  border: 2px solid var(--sg-line);
+  border-radius: 20px;
+  background: var(--sg-card);
+  color: var(--sg-text);
+  font: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.12s ease, background 0.2s ease, opacity 0.2s ease;
+  touch-action: manipulation;
+}
+
+.sg-btn:hover {
+  background: rgba(50, 40, 110, 0.9);
+}
+
+.sg-btn:active {
+  transform: scale(0.92);
+}
+
+.sg-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+}
+
+.sg-btn:focus-visible {
+  outline: 3px solid #ffe066;
+  outline-offset: 2px;
+}
+
+.sg-icon {
+  padding: 0;
+  font-size: 26px;
+}
+
+.sg-primary {
+  min-width: 170px;
+  border-color: transparent;
+  background: linear-gradient(180deg, #5fd3ff, #2f8ef0);
+  box-shadow: 0 6px 0 #1d5fb0, 0 10px 24px rgba(47, 142, 240, 0.45);
+  color: #fff;
+}
+
+.sg-primary:hover {
+  background: linear-gradient(180deg, #78dcff, #3d9af5);
+}
+
+.sg-primary:active {
+  box-shadow: 0 2px 0 #1d5fb0;
+  transform: translateY(4px);
+}
+
+.sg-green {
+  border-color: transparent;
+  background: linear-gradient(180deg, #7ef09a, #2fb85b);
+  box-shadow: 0 6px 0 #1e7a3c;
+  color: #0c3318;
+}
+
+.sg-green:hover {
+  background: linear-gradient(180deg, #92f5aa, #3cc568);
+}

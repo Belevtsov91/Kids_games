@@ -1,0 +1,8 @@
+@media (prefers-reduced-motion: reduce) {
+  .sg-root *,
+  .sg-root *::before,
+  .sg-root *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

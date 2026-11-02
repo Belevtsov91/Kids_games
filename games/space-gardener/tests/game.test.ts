@@ -4,7 +4,7 @@ import { extendStroke, strokeLength, type Vec } from '../src/game/ink';
 import { levels, PLANK_TURN } from '../src/game/levels';
 import { isUnlocked, starsFor } from '../src/game/scoring';
 import { Simulation } from '../src/game/simulation';
-import { createProgress } from '../src/progress';
+import { createProgress } from '../src/api/progress';
 
 describe('лиана', () => {
   it('пропускает слишком близкие точки', () => {
