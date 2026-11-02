@@ -1,4 +1,4 @@
-import { emptyProgress, mergeProgress, type Progress } from '../src/rounds.js';
+import { emptyProgress, mergeProgress, type Progress } from '../src/game/rounds.js';
 
 // In-memory хранилище прогресса по ребёнку. Заменить на БД, сохранив сигнатуры.
 const progress = new Map<string, Progress>();

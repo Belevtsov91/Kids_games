@@ -1,0 +1,29 @@
+/* «Кто где живёт». Все классы с префиксом wlw-, чтобы не задеть оболочку и другие игры. */
+
+.wlw {
+  --wlw-ink: #2b2d42;
+  --wlw-soft: #5c6178;
+  --wlw-accent: #ff7a3d;
+  --wlw-accent-dark: #e85d1f;
+  --wlw-token: clamp(64px, 12vmin, 108px);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--wlw-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(120% 60% at 15% 115%, #a7e07a 0 40%, transparent 41%),
+    radial-gradient(110% 55% at 90% 120%, #8fd46a 0 42%, transparent 43%),
+    radial-gradient(circle at 85% 12%, #fff6b0 0 5%, transparent 5.5%),
+    linear-gradient(#bfe8ff, #e9f8ff 70%);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(.wlw) button {
+  font: inherit;
+  color: inherit;
+}

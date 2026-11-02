@@ -1,0 +1,8 @@
+/* Стили Буквоеда. Порядок важен: адаптив идёт после правил, которые он перекрывает. */
+@import './base.css';
+@import './levels.css';
+@import './monster.css';
+@import './play.css';
+@import './responsive.css';
+@import './win.css';
+@import './motion.css';

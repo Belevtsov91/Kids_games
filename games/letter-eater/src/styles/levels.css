@@ -1,0 +1,88 @@
+/* Экран уровней */
+
+.le-levels-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(180px, 34%) 1fr;
+  align-items: center;
+  gap: clamp(12px, 3vw, 40px);
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+.le-hero { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.le-hero .le-monster { width: min(100%, 300px, 42vh); cursor: pointer; }
+.le-speech {
+  position: relative;
+  padding: 12px 18px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 4px 0 #c4b8ec;
+  font-weight: 800;
+  font-size: clamp(16px, 2.2vw, 22px);
+  text-align: center;
+  animation: le-bob 2.4s ease-in-out infinite;
+}
+.le-speech::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  border: 12px solid transparent;
+  border-top-color: #fff;
+  border-bottom: 0;
+  transform: translateX(-50%);
+}
+@keyframes le-bob { 50% { transform: translateY(-6px); } }
+
+.le-level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(10px, 2vw, 18px);
+  overflow-y: auto;
+  max-height: 100%;
+  padding: 8px 4px 12px;
+}
+.le-level {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 10px 14px;
+  border: 0;
+  border-radius: 26px;
+  color: var(--ink);
+  background: var(--card);
+  box-shadow: 0 6px 0 #c4b8ec;
+  font: inherit;
+  cursor: pointer;
+  animation: le-pop-in .45s calc(var(--i) * 70ms) both cubic-bezier(.3, 1.6, .5, 1);
+  transition: transform .15s;
+}
+.le-level:not(:disabled):hover { transform: translateY(-4px) rotate(-1deg); }
+.le-level:not(:disabled):active { transform: translateY(3px); box-shadow: 0 2px 0 #c4b8ec; }
+.le-level.is-locked { cursor: default; background: #f1edfa; filter: grayscale(.7); }
+.le-level.is-locked > * { opacity: .6; }
+.le-sky { position: absolute; inset: 0; z-index: 0; }
+.le-level-num {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--violet);
+  font-weight: 900;
+}
+.le-level-emoji { font-size: clamp(40px, 6vw, 56px); line-height: 1.1; }
+.le-level-title { font-weight: 900; font-size: 18px; }
+.le-level-sample { font-size: 18px; opacity: .85; }
+.le-level-stars i, .le-win-stars i { font-style: normal; color: #ddd3f5; }
+.le-level-stars { font-size: 24px; letter-spacing: 2px; }
+.le-level-stars i.on, .le-win-stars i.on { color: #ffc22e; text-shadow: 0 2px 0 #e08a00; }
+@keyframes le-pop-in { from { opacity: 0; transform: scale(.6) translateY(20px); } }

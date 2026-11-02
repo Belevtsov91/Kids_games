@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { allAnimals, habitatOf, habitats } from '../src/data';
-import { buildRound, levelShape, mergeProgress } from '../src/rounds';
+import { allAnimals, habitatOf, habitats } from '../src/game/data';
+import { buildRound, levelShape, mergeProgress } from '../src/game/rounds';
 
 // Детерминированный генератор, чтобы раунды в тестах повторялись.
 function seeded(seed: number) {

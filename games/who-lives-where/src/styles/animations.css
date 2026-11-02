@@ -1,0 +1,54 @@
+/* Анимации */
+
+@keyframes wlw-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wlw-hop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-16%) rotate(-6deg); }
+  60% { transform: translateY(0) rotate(4deg); }
+}
+
+@keyframes wlw-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes wlw-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px) rotate(-4deg); }
+  40% { transform: translateX(10px) rotate(4deg); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+@keyframes wlw-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 217 61 / 0.9), 0 8px 18px rgb(0 0 0 / 0.14); }
+  50% { box-shadow: 0 0 0 12px rgb(255 217 61 / 0.35), 0 8px 18px rgb(0 0 0 / 0.14); }
+}
+
+@keyframes wlw-boing {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.06, 0.94); }
+  60% { transform: scale(0.97, 1.03); }
+}
+
+@keyframes wlw-land {
+  0% { transform: scale(0.4) translateY(-20px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes wlw-fade {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wlw-parade span,
+  .wlw-animal.is-selected,
+  .wlw-home.is-hint,
+  .wlw-animal.is-hint {
+    animation: none;
+  }
+}

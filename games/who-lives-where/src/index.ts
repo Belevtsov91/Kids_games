@@ -1,6 +1,6 @@
 import { defineGame } from '@ig/sdk';
-import { WhoLivesWhere } from './game';
-import './styles.css';
+import { WhoLivesWhere } from './app/WhoLivesWhere';
+import './styles/index.css';
 
 // «Кто где живёт»: ребёнок отводит зверят домой — перетаскиванием или касанием «зверь → дом».
 export default defineGame({

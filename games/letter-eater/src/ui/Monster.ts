@@ -92,4 +92,39 @@ export class Monster {
     clearTimeout(this.blinkTimer);
     this.el.remove();
   }
+
+  /** Буква `el` летит по дуге в открытый рот. Промис выполняется, когда она долетела. */
+  async swallow(el: HTMLElement) {
+    const from = el.getBoundingClientRect();
+    const cx = from.left + from.width / 2;
+    const cy = from.top + from.height / 2;
+    const to = this.mouthPoint();
+    const dx = to.x - cx;
+    const dy = to.y - cy;
+    this.mood('open');
+    this.lookAt(cx, cy);
+    const flight = el.animate(
+      [
+        { transform: 'translate(0, 0) scale(1.15)', offset: 0.12 },
+        { transform: `translate(${dx * 0.5}px, ${dy * 0.5 - 60}px) scale(.9)`, offset: 0.55 },
+        { transform: `translate(${dx}px, ${dy}px) scale(.25)`, opacity: 0.6 },
+      ],
+      { duration: 520, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'forwards' },
+    );
+    await flight.finished.catch(() => undefined);
+  }
+
+  /** Глаза следят за пальцем или мышью. Возвращает функцию, которая это выключает. */
+  followPointer(): () => void {
+    let frame = 0;
+    const onMove = (e: PointerEvent) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => this.lookAt(e.clientX, e.clientY));
+    };
+    window.addEventListener('pointermove', onMove);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('pointermove', onMove);
+    };
+  }
 }

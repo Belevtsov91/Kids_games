@@ -1,0 +1,11 @@
+/* Стили «Кто где живёт». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './header.css';
+@import './buttons.css';
+@import './start.css';
+@import './homes.css';
+@import './scenes.css';
+@import './tray.css';
+@import './win.css';
+@import './album.css';
+@import './animations.css';

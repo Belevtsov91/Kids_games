@@ -1,6 +1,6 @@
 import { defineGame } from '@ig/sdk';
-import { LetterEater } from './game';
-import './letter-eater.css';
+import { LetterEater } from './app/LetterEater';
+import './styles/index.css';
 
 export default defineGame({
   mount(container, sdk) {

@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { childIdOf, requireChild } from '@ig/sdk/server';
-import { MAX_LEVEL } from '../src/rounds.js';
+import { MAX_LEVEL } from '../src/game/rounds.js';
 import { progressRepository } from './repository.js';
 
 // Серверная часть «Кто где живёт». Платформа подключает её под /api/games/who-lives-where.
