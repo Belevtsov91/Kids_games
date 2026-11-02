@@ -1,0 +1,38 @@
+/* Экран игры: кнопка «В меню» и контейнер, куда монтируется игра */
+
+.game-screen {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.back-button {
+  position: absolute;
+  z-index: 10;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
+  color: inherit;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 24px;
+}
+
+.game-container {
+  position: absolute;
+  inset: 0;
+  /* Свой контекст наложения: z-index внутри игры не перекроет кнопку «В меню». */
+  isolation: isolate;
+}

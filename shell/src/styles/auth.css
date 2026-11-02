@@ -1,0 +1,63 @@
+/* Вход и регистрация */
+
+.auth {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 72px 16px 24px;
+}
+
+.auth-back {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 12px;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
+  color: inherit;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 8px 0 #f0d78c;
+  text-align: center;
+}
+
+.auth-card h1 {
+  margin: 0 0 16px;
+  font-size: 28px;
+}
+
+.auth-mascot {
+  font-size: 64px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form .btn {
+  margin-top: 6px;
+}
+
+.auth-footer {
+  margin: 18px 0 0;
+}
+
+.auth-footer a {
+  color: #d4561f;
+  font-weight: 700;
+}

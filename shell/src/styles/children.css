@@ -1,0 +1,112 @@
+/* Профили детей */
+
+.children {
+  min-height: 100%;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.child-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto 24px;
+}
+
+.child-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 12px;
+  border: 0;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 6px 0 #f0d78c;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.child-card-add {
+  background: #fff8e7;
+  border: 3px dashed #f0d78c;
+  box-shadow: none;
+}
+
+.child-avatar {
+  font-size: 56px;
+}
+
+.child-age {
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.child-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 8px 0 #f0d78c;
+}
+
+.child-form h2 {
+  margin: 0;
+}
+
+.child-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-align: left;
+}
+
+.child-form legend {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.age-picker,
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.age-picker button,
+.avatar-picker button {
+  min-width: 48px;
+  height: 48px;
+  border: 3px solid #f0d78c;
+  border-radius: 14px;
+  background: #fff;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.avatar-picker button {
+  font-size: 28px;
+}
+
+.age-picker button[aria-pressed='true'],
+.avatar-picker button[aria-pressed='true'] {
+  border-color: #ff7a45;
+  background: #fff0e8;
+}
+
+.child-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
