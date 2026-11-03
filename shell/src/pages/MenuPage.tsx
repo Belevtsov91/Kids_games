@@ -11,6 +11,7 @@ import { ProfileMenu } from '@/dashboard/ProfileMenu';
 import { lastGame } from '@/dashboard/lastPlayed';
 import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
+import { isToddler } from '@/kid/toddler';
 
 type Filter = 'all' | GameManifest['kind'];
 const FILTERS: Filter[] = ['all', '3d', '2d'];
@@ -26,6 +27,7 @@ export function MenuPage() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<Filter>('all');
   const m = t.menu;
+  const toddler = isToddler(activeChild);
 
   const { status } = useKidStatus();
   const access = status?.access ?? {};
@@ -50,12 +52,15 @@ export function MenuPage() {
           <span className="dash-logo-mark" aria-hidden="true">🐻</span>
           <span className="dash-logo-name">Interact Games</span>
         </Link>
-        <LanguageSwitch className="dash-lang" />
+        {/* Малышу не нужны кнопки, которые выкидывают из сайта: язык и выход — у взрослого в кабинете. */}
+        {!toddler && <LanguageSwitch className="dash-lang" />}
         <KidTimer />
         <ProfileMenu />
-        <button type="button" className="dash-chip dash-logout" onClick={() => void logout()}>
-          {t.common.logout}
-        </button>
+        {!toddler && (
+          <button type="button" className="dash-chip dash-logout" onClick={() => void logout()}>
+            {t.common.logout}
+          </button>
+        )}
       </header>
 
       <main>

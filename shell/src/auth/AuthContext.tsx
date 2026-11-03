@@ -14,6 +14,8 @@ export interface Child {
   /** Фото и язык игр задаёт взрослый в кабинете; null — эмодзи и язык сайта. */
   photo?: string | null;
   lang?: string | null;
+  /** «Режим малыша»: null — по возрасту (до 5 лет включён), true/false — так решил взрослый. */
+  toddler?: boolean | null;
 }
 
 export interface Me {

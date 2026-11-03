@@ -102,6 +102,7 @@ export const ro: Dict = {
     tooMany: 'Nu mai poți adăuga profiluri.',
     saving: 'Salvăm…',
     done: 'Gata',
+    locked: { limit: 'Timpul de azi s-a terminat. Doar un adult poate schimba profilul.', quiet: 'Acum sunt orele de liniște. Doar un adult poate schimba profilul.', adult: 'Sunt adult', back: 'Înapoi' },
   },
   menu: {
     changeProfile: 'Schimbă profilul',
@@ -121,7 +122,7 @@ export const ro: Dict = {
     kind: { '3d': 'Lume 3D', '2d': 'Imagini' },
     profiles: 'Cine se joacă?',
   },
-  game: { notFound: 'Jocul nu a fost găsit', toMenu: 'La meniu', failed: 'Jocul nu a pornit 😢' },
+  game: { notFound: 'Jocul nu a fost găsit', toMenu: 'La meniu', failed: 'Jocul nu a pornit 😢', hold: 'Ține apăsat ca să ieși', crashed: 'Ups! Jocul s-a împiedicat.', again: 'Încă o dată' },
   account: {
     mustLogin: 'Ca să ștergi contul, mai întâi intră în el.',
     loggedAs: 'Ai intrat ca',

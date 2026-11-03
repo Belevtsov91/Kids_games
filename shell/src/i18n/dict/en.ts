@@ -102,6 +102,7 @@ export const en: Dict = {
     tooMany: 'You cannot add more profiles.',
     saving: 'Saving…',
     done: 'Done',
+    locked: { limit: 'Time is up for today. Only a grown-up can switch profiles.', quiet: "It's quiet time now. Only a grown-up can switch profiles.", adult: "I'm a grown-up", back: 'Back' },
   },
   menu: {
     changeProfile: 'Switch profile',
@@ -121,7 +122,7 @@ export const en: Dict = {
     kind: { '3d': '3D world', '2d': 'Pictures' },
     profiles: 'Who is playing?',
   },
-  game: { notFound: 'Game not found', toMenu: 'To menu', failed: 'The game did not start 😢' },
+  game: { notFound: 'Game not found', toMenu: 'To menu', failed: 'The game did not start 😢', hold: 'Hold to leave', crashed: 'Oops! The game tripped.', again: 'Try again' },
   account: {
     mustLogin: 'To delete the account, log in to it first.',
     loggedAs: 'You are logged in as',

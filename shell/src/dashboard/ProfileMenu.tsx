@@ -5,6 +5,8 @@ import { useI18n } from '@/i18n/I18nProvider';
 import { age as ageText } from '@/i18n/plural';
 import { Face } from '@/parent/ui/Face';
 import { useKidText } from '@/kid/text';
+import { ApiError } from '@/api/client';
+import { AdultOverlay } from '@/account/AdultOverlay';
 
 /** Кто играет: аватарка в верхней панели, по нажатию — быстрый выбор другого профиля без ухода со страницы. */
 export function ProfileMenu() {
@@ -12,6 +14,7 @@ export function ProfileMenu() {
   const { t, locale } = useI18n();
   const k = useKidText();
   const [open, setOpen] = useState(false);
+  const [locked, setLocked] = useState<{ id: string; reason: 'limit' | 'quiet' } | null>(null);
   const box = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,7 +31,14 @@ export function ProfileMenu() {
 
   const pick = async (id: string) => {
     setOpen(false);
-    if (id !== activeChild?.id) await selectChild(id);
+    if (id === activeChild?.id) return;
+    try {
+      await selectChild(id);
+    } catch (err) {
+      // 423: у текущего ребёнка кончилось время — сменить профиль может только взрослый.
+      if (!(err instanceof ApiError) || err.status !== 423) throw err;
+      setLocked({ id, reason: err.data?.reason === 'quiet' ? 'quiet' : 'limit' });
+    }
   };
 
   return (
@@ -53,6 +63,16 @@ export function ProfileMenu() {
           <Link to="/children" className="dash-menu-link">{t.menu.changeProfile}</Link>
           <Link to="/parent" className="dash-menu-link" data-testid="to-parent">🔒 {k.me.parents}</Link>
         </div>
+      )}
+      {locked && (
+        <AdultOverlay
+          reason={locked.reason}
+          onClose={() => setLocked(null)}
+          onUnlocked={() => {
+            setLocked(null);
+            void pick(locked.id);
+          }}
+        />
       )}
     </div>
   );

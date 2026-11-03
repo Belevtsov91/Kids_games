@@ -8,6 +8,8 @@ import { rememberGame } from '@/dashboard/lastPlayed';
 import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
 import { usePlayClock } from '@/kid/usePlayClock';
+import { HoldButton } from '@/kid/HoldButton';
+import { isToddler } from '@/kid/toddler';
 import { ClosedGameScreen, PauseScreen, TimeUpScreen } from '@/kid/RestScreens';
 
 export function GamePage() {
@@ -39,9 +41,15 @@ export function GamePage() {
 
   return (
     <div className="game-screen">
-      <Link to="/dashboard" className="back-button" aria-label={t.game.toMenu}>
-        ⬅
-      </Link>
+      {isToddler(activeChild) ? (
+        <HoldButton className="back-button" label={t.game.hold} onDone={() => navigate('/dashboard')}>
+          ⬅
+        </HoldButton>
+      ) : (
+        <Link to="/dashboard" className="back-button" aria-label={t.game.toMenu}>
+          ⬅
+        </Link>
+      )}
       {!closed && !blocked && <KidTimer className="game-timer" />}
       {closed ? (
         <ClosedGameScreen />

@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { db } from '../../db/index.js';
 import { requireSession, setActiveChild } from '../auth/session.js';
+import { guardSwitch } from './switchGuard.js';
 
 // Профили детей. Родитель видит и меняет только своих: parent_id всегда берётся из сессии, не из запроса.
 
@@ -32,6 +33,7 @@ export const childrenRoutes: FastifyPluginAsync = async (app) => {
     { schema: { body: createBody } },
     async (req, reply) => {
       const parentId = req.session!.parentId;
+      if (!(await guardSwitch(req, reply, null))) return reply;
       const { count, error: countError } = await db()
         .from('ig_children')
         .select('id', { count: 'exact', head: true })
@@ -59,6 +61,7 @@ export const childrenRoutes: FastifyPluginAsync = async (app) => {
       .maybeSingle();
     if (error) throw error;
     if (!data) return reply.code(404).send({ error: 'Профиль не найден' });
+    if (!(await guardSwitch(req, reply, data.id))) return reply;
     await setActiveChild(req, data.id);
     return reply.code(204).send();
   });
