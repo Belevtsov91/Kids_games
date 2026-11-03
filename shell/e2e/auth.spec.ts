@@ -76,6 +76,7 @@ test('приветствие → регистрация → ребёнок → �
   await page.getByLabel('Почта').fill('mama@example.com');
   await page.getByLabel('Пароль (от 8 символов)').fill('super-secret-1');
   await page.getByLabel('Пароль ещё раз').fill('super-secret-1');
+  await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Создать аккаунт' }).click();
 
   await expect(page).toHaveURL('/children');

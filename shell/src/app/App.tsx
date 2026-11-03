@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { AuthProvider, useAuth } from '@/auth/AuthContext';
 import { I18nProvider, useI18n } from '@/i18n/I18nProvider';
 import { WelcomePage } from '@/pages/WelcomePage';
-import { LoginPage, RegisterPage } from '@/pages/AuthPages';
+import { AuthLayout, LoginPage, RegisterPage } from '@/pages/AuthPages';
 import { ChildrenPage } from '@/pages/ChildrenPage';
 import { MenuPage } from '@/pages/MenuPage';
 import { GamePage } from '@/pages/GamePage';
@@ -36,8 +36,11 @@ export function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<WelcomePage />} />
-            <Route path="/login" element={<GuestOnly><LoginPage /></GuestOnly>} />
-            <Route path="/register" element={<GuestOnly><RegisterPage /></GuestOnly>} />
+            {/* Одна 3D-сцена на обе страницы: вкладки переключают форму, а остров остаётся. */}
+            <Route element={<GuestOnly><AuthLayout /></GuestOnly>}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+            </Route>
             <Route path="/children" element={<Private><ChildrenPage /></Private>} />
             <Route path="/dashboard" element={<Private needChild><MenuPage /></Private>} />
             <Route path="/play/:gameId" element={<Private needChild><GamePage /></Private>} />

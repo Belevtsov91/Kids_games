@@ -21,8 +21,11 @@ interface AuthValue {
   /** undefined — ещё спрашиваем сервер, null — не вошёл. */
   me: Me | null | undefined;
   activeChild: Child | null;
-  register(data: { name: string; email: string; password: string }): Promise<void>;
-  login(data: { email: string; password: string }): Promise<void>;
+  /** silent — не обновлять «кто вошёл» сразу: страница сначала доиграет анимацию, потом вызовет refresh(). */
+  register(data: { name: string; email: string; password: string }, opts?: { silent?: boolean }): Promise<void>;
+  login(data: { email: string; password: string }, opts?: { silent?: boolean }): Promise<void>;
+  /** Заново спросить сервер, кто вошёл. */
+  refresh(): Promise<void>;
   logout(): Promise<void>;
   addChild(data: Omit<Child, 'id'>): Promise<Child>;
   selectChild(childId: string): Promise<void>;
@@ -54,14 +57,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       me,
       activeChild: me?.children.find((c) => c.id === me.activeChildId) ?? null,
-      async register(data) {
+      async register(data, opts) {
         await api.post('/auth/register', data);
-        await refresh();
+        if (!opts?.silent) await refresh();
       },
-      async login(data) {
+      async login(data, opts) {
         await api.post('/auth/login', data);
-        await refresh();
+        if (!opts?.silent) await refresh();
       },
+      refresh,
       async logout() {
         await api.post('/auth/logout', undefined).catch(() => undefined);
         setMe(null);

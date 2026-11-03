@@ -98,7 +98,8 @@ export function palm(): THREE.Group {
 }
 
 let glowTexture: THREE.CanvasTexture | null = null;
-function getGlowTexture() {
+/** Мягкое круглое пятно для свечений и частиц. */
+export function getGlowTexture() {
   if (glowTexture) return glowTexture;
   const c = document.createElement('canvas');
   c.width = c.height = 128;
