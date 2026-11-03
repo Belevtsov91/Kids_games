@@ -12,6 +12,7 @@ import { lastGame } from '@/dashboard/lastPlayed';
 import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
 import { isToddler } from '@/kid/toddler';
+import { useMoreText } from '@/more/text';
 
 type Filter = 'all' | GameManifest['kind'];
 const FILTERS: Filter[] = ['all', '3d', '2d'];
@@ -28,6 +29,7 @@ export function MenuPage() {
   const [filter, setFilter] = useState<Filter>('all');
   const m = t.menu;
   const toddler = isToddler(activeChild);
+  const more = useMoreText();
 
   const { status } = useKidStatus();
   const access = status?.access ?? {};
@@ -64,6 +66,7 @@ export function MenuPage() {
       </header>
 
       <main>
+        {activeChild?.birthday && <p className="dash-birthday">{more.birthday(activeChild.name)}</p>}
         <section className="dash-hero dash-wrap">
           <div className="dash-hero-copy">
             <span className="dash-eyebrow">{m.count(available.length)}</span>

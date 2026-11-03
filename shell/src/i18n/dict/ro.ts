@@ -57,7 +57,7 @@ export const ro: Dict = {
         title: 'Pentru părinți',
         links: ['Cum funcționează contul', 'Vârsta și folosul jocurilor', 'Confidențialitatea copiilor', 'Ajutor și întrebări', 'Șterge contul și datele'],
       },
-      { title: 'Despre proiect', links: ['Despre noi', 'Contacte', 'Autorii modelelor 3D'] },
+      { title: 'Despre proiect', links: ['Despre noi', 'Contacte', 'Autorii modelelor 3D', 'Toate jocurile', 'Ce e nou'] },
       { title: 'Documente', links: ['Politica de confidențialitate', 'Termeni de utilizare', 'Fișiere cookie'] },
     ],
     contactTitle: 'Scrie-ne',

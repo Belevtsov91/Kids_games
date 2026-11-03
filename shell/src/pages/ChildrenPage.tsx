@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, Navigate, useNavigate } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { ApiError } from '@/api/client';
 import { useI18n } from '@/i18n/I18nProvider';
@@ -57,6 +57,9 @@ export function ChildrenPage() {
       setError(status === 409 ? c.tooMany : status === -1 ? t.auth.offline : c.checkName);
     }
   };
+
+  // Новый аккаунт без детей — сразу в настройку за минуту: ребёнок, время, PIN.
+  if (me && children.length === 0 && !locked) return <Navigate to="/setup" replace />;
 
   return (
     <main className="children">

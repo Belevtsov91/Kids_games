@@ -20,6 +20,8 @@ export interface Child {
   comfort?: { musicVolume: number; effectsVolume: number; reduceMotion: boolean; bigButtons: boolean };
   /** Месяц рождения «YYYY-MM»; по нему сервер сам считает age. */
   birthMonth?: string | null;
+  /** Сейчас месяц рождения: на главной торт и поздравление. */
+  birthday?: boolean;
 }
 
 export interface Me {

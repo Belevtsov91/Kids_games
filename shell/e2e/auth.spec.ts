@@ -79,12 +79,16 @@ test('приветствие → регистрация → ребёнок → �
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Создать аккаунт' }).click();
 
-  await expect(page).toHaveURL('/children');
+  // Новый аккаунт: настройка за минуту — ребёнок, время, PIN (PIN можно позже).
+  await expect(page).toHaveURL('/setup');
   await expect(page.getByRole('heading', { name: 'Кто будет играть?' })).toBeVisible();
   await page.getByLabel('Имя ребёнка').fill('Петя');
   await page.getByRole('button', { name: '7', exact: true }).click();
   await page.getByRole('button', { name: '🦊' }).click();
-  await page.getByRole('button', { name: 'Готово' }).click();
+  await page.getByRole('button', { name: 'Дальше →' }).click();
+  await expect(page.getByRole('heading', { name: 'Сколько можно играть в день?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Дальше →' }).click();
+  await page.getByRole('button', { name: 'Позже' }).click();
 
   await expect(page).toHaveURL('/dashboard');
   await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();

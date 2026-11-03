@@ -57,7 +57,7 @@ export const en: Dict = {
         title: 'For parents',
         links: ['How the account works', 'Ages and benefits', 'Children’s privacy', 'Help and FAQ', 'Delete account and data'],
       },
-      { title: 'About', links: ['About us', 'Contact', '3D model credits'] },
+      { title: 'About', links: ['About us', 'Contact', '3D model credits', 'All games', 'What’s new'] },
       { title: 'Documents', links: ['Privacy policy', 'Terms of use', 'Cookies'] },
     ],
     contactTitle: 'Write to us',

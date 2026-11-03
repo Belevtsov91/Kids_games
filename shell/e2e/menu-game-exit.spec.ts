@@ -49,7 +49,8 @@ for (const id of gameIds) {
     // API-сервер в e2e не запущен: сетевые ошибки запросов к нему — не ошибки игры.
     page.on('console', (msg) => msg.type() === 'error' && !msg.text().startsWith('Failed to load resource') && errors.push(msg.text()));
 
-    await signedIn(page, minAge(id));
+    // С 5 лет: у малышей выход из игры — удержанием (отдельный тест ниже).
+    await signedIn(page, Math.max(5, minAge(id)));
     await page.goto('/dashboard');
     await page.locator(`a[href="/play/${id}"]`).click();
     await expect(page).toHaveURL(`/play/${id}`);
@@ -72,4 +73,25 @@ test('неизвестная игра → понятное сообщение', 
   await signedIn(page);
   await page.goto('/play/nope');
   await expect(page.getByRole('heading', { name: 'Игра не найдена' })).toBeVisible();
+});
+
+test('режим малыша: нет «Выйти» на главной, выход из игры — удержанием', async ({ page }) => {
+  await signedIn(page, 3);
+  await page.goto('/dashboard');
+  await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Выйти' })).toHaveCount(0);
+  await page.goto('/play/drawing');
+  const back = page.getByRole('button', { name: 'Подержи, чтобы выйти' });
+  await back.click();
+  await expect(page).toHaveURL('/play/drawing');
+  await back.hover();
+  await page.mouse.down();
+  await page.waitForTimeout(2300);
+  await page.mouse.up();
+  await expect(page).toHaveURL('/dashboard');
+});
+
+test('неизвестный адрес → страница «такой страницы нет»', async ({ page }) => {
+  await page.goto('/nowhere');
+  await expect(page.getByRole('heading', { name: 'Ой, такой страницы нет' })).toBeVisible();
 });

@@ -7,6 +7,7 @@ import { useKidStatus } from '../KidStatus';
 import { TimeRing } from '../TimeRing';
 import { useKidText } from '../text';
 import { KidFrame } from './KidFrame';
+import { useMoreText } from '@/more/text';
 
 /** «Мой профиль» ребёнка (/me): открыт без задачи для взрослых. Только смотреть, ничего не менять. */
 export function KidHomePage() {
@@ -14,6 +15,7 @@ export function KidHomePage() {
   const { status } = useKidStatus();
   const { locale } = useI18n();
   const k = useKidText();
+  const st = useMoreText().stickers.tile;
   if (!activeChild) return null;
   const time = status?.time;
 
@@ -48,6 +50,12 @@ export function KidHomePage() {
           <span className="kid-tile-icon" aria-hidden="true">🏆</span>
           <strong>{k.me.tiles.progress.title}</strong>
           <span>{k.me.tiles.progress.text}</span>
+          <span className="kid-tile-go" aria-hidden="true">→</span>
+        </Link>
+        <Link to="/me/stickers" className="kid-tile kid-tile-stickers">
+          <span className="kid-tile-icon" aria-hidden="true">⭐</span>
+          <strong>{st.title}</strong>
+          <span>{st.text}</span>
           <span className="kid-tile-go" aria-hidden="true">→</span>
         </Link>
         <Link to="/dashboard" className="kid-tile kid-tile-play">

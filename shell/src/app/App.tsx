@@ -14,12 +14,19 @@ import { KidHomePage } from '@/kid/pages/KidHomePage';
 import { KidTimePage } from '@/kid/pages/KidTimePage';
 import { KidProgressPage } from '@/kid/pages/KidProgressPage';
 import { ParentShell, parentRoutes } from '@/parent/routes';
+import { KidStickersPage } from '@/more/pages/KidStickersPage';
+import { AnswerPage } from '@/more/pages/AnswerPage';
+import { HelperPage } from '@/more/pages/HelperPage';
+import { LostPage, OfflineScreen } from '@/more/pages/LostPage';
+import { SetupPage } from '@/more/pages/SetupPage';
+import { GameCardPage, GamesPage } from '@/more/pages/GameCardPage';
+import { NewsPage } from '@/more/pages/NewsPage';
 
 /** Закрытые страницы: без входа — на /login; без профиля ребёнка — на /children. */
 function Private({ children, needChild = false }: { children: ReactNode; needChild?: boolean }) {
   const { me, activeChild } = useAuth();
   const { t } = useI18n();
-  if (me === undefined) return <div className="loading">{t.common.loading}</div>;
+  if (me === undefined) return typeof navigator !== 'undefined' && !navigator.onLine ? <OfflineScreen /> : <div className="loading">{t.common.loading}</div>;
   if (!me) return <Navigate to="/login" replace />;
   if (needChild && !activeChild) return <Navigate to="/children" replace />;
   return children;
@@ -50,6 +57,7 @@ export function App() {
               <Route path="/reset" element={<ResetPage />} />
             </Route>
             <Route path="/children" element={<Private><ChildrenPage /></Private>} />
+            <Route path="/setup" element={<Private><SetupPage /></Private>} />
             {/* Страницы ребёнка: одно время на всех (таймер, тихие часы, закрытые взрослым игры). */}
             <Route element={<Private needChild><KidStatusProvider><Outlet /></KidStatusProvider></Private>}>
               <Route path="/dashboard" element={<MenuPage />} />
@@ -57,6 +65,7 @@ export function App() {
               <Route path="/me" element={<KidHomePage />} />
               <Route path="/me/time" element={<KidTimePage />} />
               <Route path="/me/progress" element={<KidProgressPage />} />
+              <Route path="/me/stickers" element={<KidStickersPage />} />
             </Route>
             {/* Кабинет родителя: закрыт задачей для взрослых и PIN. */}
             <Route path="/parent" element={<Private><ParentShell /></Private>}>
@@ -66,7 +75,13 @@ export function App() {
             {INFO_SLUGS.map((slug) => (
               <Route key={slug} path={`/${slug}`} element={<InfoPage slug={slug} />} />
             ))}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Без входа: ответ на просьбу из письма, страница помощника, карточки игр и новости. */}
+            <Route path="/answer" element={<AnswerPage />} />
+            <Route path="/helper" element={<HelperPage />} />
+            <Route path="/games" element={<GamesPage />} />
+            <Route path="/games/:gameId" element={<GameCardPage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="*" element={<LostPage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

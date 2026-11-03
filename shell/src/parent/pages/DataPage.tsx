@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMoreText } from '@/more/text';
 import { DeleteAccountDialog } from '@/account/DeleteAccountDialog';
 import { useParentText } from '../text';
 import { PageHead, Panel } from '../ui/bits';
@@ -7,6 +8,7 @@ import { PageHead, Panel } from '../ui/bits';
 export function DataPage() {
   const p = useParentText();
   const d = p.data;
+  const x = useMoreText().exportData;
   const [deleting, setDeleting] = useState(false);
   return (
     <>
@@ -32,6 +34,10 @@ export function DataPage() {
             </tbody>
           </table>
         </div>
+      </Panel>
+      <Panel title={x.button} lead={x.lead}>
+        {/* Обычная ссылка: браузер сам скачает файл, cookie сессии уйдёт вместе с запросом. */}
+        <a className="dash-btn dash-btn-primary" href="/api/parent/export" download>⬇ {x.button}</a>
       </Panel>
       <Panel title={d.deleteTitle} lead={d.deleteLead} className="pa-danger">
         <button type="button" className="pa-btn pa-btn-danger" onClick={() => setDeleting(true)}>
