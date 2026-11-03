@@ -1,0 +1,113 @@
+/* Ситуация: герой, история, варианты */
+
+.eh-round {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 100%;
+  padding: 8px 16px 28px;
+  text-align: center;
+}
+
+.eh-hero {
+  position: relative;
+  font-size: clamp(90px, 22vmin, 150px);
+  line-height: 1;
+}
+
+.eh-hero.is-happy {
+  animation: eh-hop 0.6s ease 2;
+}
+
+.eh-hero-face {
+  position: absolute;
+  right: -0.35em;
+  top: -0.1em;
+  display: grid;
+  place-items: center;
+  width: 0.62em;
+  height: 0.62em;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 6px 14px rgb(0 0 0 / 0.15);
+  font-size: 0.42em;
+}
+
+.eh-hero-face.is-hidden {
+  color: var(--eh-soft);
+}
+
+.eh-hero-face.is-pop {
+  animation: eh-pop 0.4s cubic-bezier(.3,1.6,.5,1);
+}
+
+.eh-story {
+  max-width: 34ch;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.08);
+  font-size: clamp(18px, 3.6vmin, 24px);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.eh-question {
+  margin: 4px 0 0;
+  font-size: clamp(22px, 4.6vmin, 32px);
+}
+
+.eh-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 150px));
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+.eh-choices-wide {
+  grid-template-columns: repeat(3, minmax(0, 150px));
+}
+
+.eh-choice {
+  --eh-choice: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 6px;
+  border: 0;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--eh-choice) 35%, #fff);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--eh-choice) 55%, #c9cfdc), 0 10px 18px rgb(0 0 0 / 0.08);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.eh-choice:active {
+  transform: translateY(3px);
+}
+
+.eh-choice:disabled:not(.is-picked) {
+  opacity: 0.5;
+}
+
+.eh-choice.is-picked {
+  outline: 4px solid #3fbf6b;
+}
+
+.eh-choice.is-shake {
+  animation: eh-shake 0.45s ease;
+}
+
+.eh-choice-art {
+  font-size: clamp(44px, 10vmin, 64px);
+  line-height: 1;
+}
+
+.eh-choice-label {
+  font-weight: 800;
+  font-size: clamp(15px, 3vmin, 19px);
+}

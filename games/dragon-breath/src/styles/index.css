@@ -1,0 +1,8 @@
+/* Стили «Дыши с дракончиком». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './start.css';
+@import './session.css';
+@import './scenes.css';
+@import './done.css';
+@import './animations.css';

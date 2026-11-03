@@ -1,0 +1,81 @@
+/* Кухня: клетки на CSS-сетке, робот и продукты поверх по координатам --rc-x / --rc-y */
+
+.rc-play {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 28px;
+  min-height: 100%;
+  padding: 8px 16px 24px;
+}
+
+.rc-board {
+  --rc-cell: min(calc((100vw - 48px) / var(--rc-cols)), calc(46vh / var(--rc-rows)), 88px);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--rc-cols), var(--rc-cell));
+  grid-template-rows: repeat(var(--rc-rows), var(--rc-cell));
+  padding: 8px;
+  border-radius: 24px;
+  background: #c98a52;
+  box-shadow: inset 0 -6px 0 rgb(0 0 0 / 0.15), 0 12px 24px rgb(0 0 0 / 0.15);
+}
+
+.rc-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: var(--rc-tile);
+  font-size: calc(var(--rc-cell) * 0.62);
+}
+
+.rc-cell.is-alt {
+  background: var(--rc-tile-alt);
+}
+
+.rc-pot {
+  transition: transform 0.3s;
+}
+
+.rc-cell.is-done .rc-pot {
+  animation: rc-boing 0.6s ease 3;
+}
+
+.rc-food,
+.rc-robot {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: grid;
+  place-items: center;
+  width: var(--rc-cell);
+  height: var(--rc-cell);
+  font-size: calc(var(--rc-cell) * 0.56);
+  transform: translate(calc(var(--rc-x) * var(--rc-cell)), calc(var(--rc-y) * var(--rc-cell)));
+  pointer-events: none;
+}
+
+.rc-food {
+  transition: opacity 0.25s, scale 0.25s;
+}
+
+.rc-food.is-picked {
+  opacity: 0;
+  scale: 1.6;
+}
+
+.rc-robot {
+  z-index: 2;
+  font-size: calc(var(--rc-cell) * 0.7);
+  filter: drop-shadow(0 6px 4px rgb(0 0 0 / 0.25));
+  transition: transform 0.36s cubic-bezier(.4,1.4,.6,1);
+}
+
+.rc-robot.is-bump {
+  animation: rc-shake 0.45s ease;
+}
+
+.rc-robot.is-happy {
+  animation: rc-hop 0.6s ease 3;
+}

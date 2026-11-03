@@ -1,0 +1,79 @@
+/* Сеанс: цели сверху, дракончик в круге, подпись фазы и кнопка «держи» */
+
+.db-session {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 12px;
+  min-height: 100%;
+  padding: 8px 16px max(20px, env(safe-area-inset-bottom));
+}
+
+.db-centre {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(62vmin, 360px);
+  aspect-ratio: 1;
+}
+
+.db-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.9) 0 35%, rgb(140 170 255 / 0.55) 70%, rgb(140 170 255 / 0.2));
+  box-shadow: 0 0 40px rgb(140 170 255 / 0.6);
+  transform: scale(var(--db-scale, 0.6));
+}
+
+.db-centre .db-dragon {
+  position: relative;
+  animation: none;
+}
+
+.db-phase {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: clamp(22px, 4.6vmin, 32px);
+  font-weight: 900;
+}
+
+.db-hold {
+  width: min(420px, 100%);
+  min-height: 96px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(#ffa36b, var(--db-accent));
+  color: #fff;
+  box-shadow: 0 8px 0 var(--db-accent-dark), 0 14px 24px rgb(232 93 31 / 0.35);
+  font-size: clamp(22px, 4.6vmin, 30px);
+  font-weight: 900;
+  touch-action: none;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.db-hold.is-down {
+  transform: translateY(6px) scale(0.98);
+  box-shadow: 0 2px 0 var(--db-accent-dark), 0 6px 12px rgb(232 93 31 / 0.3);
+}
+
+.db-targets {
+  display: flex;
+  gap: clamp(6px, 2vmin, 16px);
+}
+
+.db-target {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(48px, 11vmin, 76px);
+  height: clamp(64px, 14vmin, 96px);
+}
+
+.db-target-art {
+  font-size: clamp(34px, 8vmin, 56px);
+  line-height: 1;
+  transition: transform 0.2s, opacity 0.4s;
+}

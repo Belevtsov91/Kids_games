@@ -1,0 +1,118 @@
+/* Программа: выложенные стрелки, пустые ячейки, палитра и кнопки */
+
+.rc-program {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(460px, 100%);
+  padding: 14px;
+  border-radius: 28px;
+  background: rgb(255 255 255 / 0.85);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.1);
+}
+
+.rc-program-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.rc-counter {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.rc-tip {
+  color: var(--rc-soft);
+  font-size: 14px;
+}
+
+.rc-commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 56px;
+}
+
+.rc-chip,
+.rc-slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 28px;
+}
+
+.rc-chip {
+  border: 0;
+  background: #fff;
+  box-shadow: 0 4px 0 #cfd6e6;
+  cursor: pointer;
+}
+
+.rc-chip.is-active {
+  background: #ffe27a;
+  transform: translateY(-4px);
+}
+
+.rc-slot {
+  border: 3px dashed #cfd6e6;
+}
+
+.rc-chip.is-hint,
+.rc-slot.is-hint,
+.rc-arrow.is-hint {
+  animation: rc-pulse 1s ease-in-out infinite;
+}
+
+.rc-times {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--rc-accent);
+  color: #fff;
+  font-size: 14px;
+}
+
+.rc-palette {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.rc-arrow {
+  min-height: 68px;
+  border: 0;
+  border-radius: 20px;
+  background: #e7f3ff;
+  box-shadow: 0 5px 0 #b9d6f5;
+  font-size: 36px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.rc-arrow:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #b9d6f5;
+}
+
+.rc-tools {
+  display: flex;
+  gap: 10px;
+}
+
+.rc-tools .rc-btn-play {
+  flex: 1;
+}
+
+.rc-program.is-busy .rc-arrow,
+.rc-program.is-busy .rc-chip,
+.rc-program.is-busy .rc-btn-soft {
+  opacity: 0.5;
+  pointer-events: none;
+}

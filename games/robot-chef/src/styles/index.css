@@ -1,0 +1,8 @@
+/* Стили «Робота-поварёнка». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './start.css';
+@import './board.css';
+@import './program.css';
+@import './win.css';
+@import './animations.css';
