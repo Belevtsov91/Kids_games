@@ -1,0 +1,55 @@
+/* Большие пазлы (больше 16 деталей): шире поле, подсветка клетки при перетаскивании, фильтр лотка, подтверждение «Заново». */
+/* Поле шире обычного, чтобы клетки оставались крупными. Числа совпадают с game/boardFit.ts. */
+.puzzle-board.is-big {
+  width: min(100%, 760px, calc((100dvh - 330px) * var(--board-aspect, 1)));
+}
+@media (orientation: landscape) and (min-width: 640px) {
+  .puzzle-board.is-big {
+    width: min(64vw, 760px, calc((100dvh - 150px) * var(--board-aspect, 1)));
+  }
+}
+/* Клетка под перетаскиваемой деталью; «near» — своё место рядом (видно только с подсказкой). */
+.puzzle-slot[data-drop='over'] {
+  background: rgb(113 101 232 / 0.22);
+}
+.puzzle-slot[data-drop='near'] {
+  background: rgb(31 157 97 / 0.3);
+  box-shadow: inset 0 0 0 3px #1f9d61;
+}
+.drag-ghost {
+  border-radius: 6px;
+  transition: width 0.1s, height 0.1s;
+}
+/* Фильтр лотка занимает всю строку сетки лотка. */
+.tray-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  grid-column: 1 / -1;
+}
+.tray-filter button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 2px 0 #c6d4ed;
+  font-weight: 800;
+  cursor: pointer;
+}
+.tray-filter button.is-active {
+  color: #fff;
+  background: #ff9e46;
+  box-shadow: 0 2px 0 #cc6d1b;
+}
+.tray-filter button:disabled,
+.puzzle-levels button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.game-topbar button.is-warning {
+  color: #fff;
+  background: #ff5c5c;
+  box-shadow: 0 3px 0 #c43c3c;
+}
