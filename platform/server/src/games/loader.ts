@@ -3,11 +3,12 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { FastifyPluginAsync } from 'fastify';
 import { buildCatalog, type GameManifest } from '@ig/sdk/manifest';
+import type { GameServerOptions } from '@ig/sdk/server';
 
 export interface LoadedGame {
   manifest: GameManifest;
   /** Серверная часть игры (`games/<id>/server/index.ts`), если она есть. */
-  plugin: FastifyPluginAsync | null;
+  plugin: FastifyPluginAsync<GameServerOptions> | null;
 }
 
 const importDefault = async (file: string) => (await import(pathToFileURL(file).href)).default;

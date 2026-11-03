@@ -1,5 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
-import { NO_CHILD_ERROR, childIdOf, playerKeyOf, requireChild, requirePlayer, sessionOf } from '../src/server';
+import {
+  NO_CHILD_ERROR,
+  childIdOf,
+  gameTablePrefix,
+  playerKeyOf,
+  requireChild,
+  requirePlayer,
+  scopeGameDb,
+  sessionOf,
+  type GameDb,
+} from '../src/server';
 
 const req = (session: unknown) => ({ session });
 const reply = () => {
@@ -39,5 +49,21 @@ describe('@ig/sdk/server', () => {
     const denied = reply();
     await requirePlayer(req(null), denied);
     expect(denied.code).toHaveBeenCalledWith(401);
+  });
+});
+
+describe('БД игры', () => {
+  it('префикс таблиц из id игры', () => {
+    expect(gameTablePrefix('who-lives-where')).toBe('ig_game_who_lives_where_');
+  });
+
+  it('пускает только в свои таблицы', () => {
+    const from = vi.fn((table: string) => ({ table }));
+    const db = scopeGameDb({ from } as unknown as GameDb, 'letter-eater');
+    expect(db.from('ig_game_letter_eater_progress')).toEqual({ table: 'ig_game_letter_eater_progress' });
+    expect(() => db.from('ig_children')).toThrow();
+    expect(() => db.from('ig_game_drawing_drawings')).toThrow();
+    expect(() => db.from('ig_game_letter_eater')).toThrow();
+    expect(from).toHaveBeenCalledTimes(1);
   });
 });

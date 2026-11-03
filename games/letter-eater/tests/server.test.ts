@@ -43,3 +43,16 @@ describe('API Буквоеда', () => {
     }
   });
 });
+
+describe('Буквоед без выбранного ребёнка', () => {
+  it('родитель без профиля ребёнка получает 401', async () => {
+    const app = Fastify();
+    app.decorateRequest('session', null);
+    app.addHook('onRequest', async (req) => {
+      (req as unknown as { session: unknown }).session = { parentId: 'p1', activeChildId: null };
+    });
+    app.register(server);
+    expect((await app.inject('/progress')).statusCode).toBe(401);
+    await app.close();
+  });
+});

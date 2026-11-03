@@ -9,6 +9,7 @@ import { loadSession } from './modules/auth/session.js';
 import { childrenRoutes } from './modules/children/children.routes.js';
 import { catalogRoutes } from './games/catalog.routes.js';
 import { loadGames } from './games/loader.js';
+import { gameDb } from './games/gameDb.js';
 
 export async function buildApp(options: { gamesDir?: string; logger?: boolean } = {}) {
   const app = Fastify({ logger: options.logger === false ? false : { level: env.logLevel } });
@@ -47,8 +48,9 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean } 
       await api.register(catalogRoutes, { prefix: '/games', catalog: games.map((g) => g.manifest) });
 
       // Игры: каждая в своём префиксе и в своей инкапсуляции Fastify, друг друга не видят.
+      // БД игре даём только к её таблицам ig_game_<id>_*.
       for (const { manifest, plugin } of games) {
-        if (plugin) await api.register(plugin, { prefix: `/games/${manifest.id}` });
+        if (plugin) await api.register(plugin, { prefix: `/games/${manifest.id}`, db: gameDb(manifest.id) });
       }
     },
     { prefix: '/api' },
