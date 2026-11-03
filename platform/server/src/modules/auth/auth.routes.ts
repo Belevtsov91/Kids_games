@@ -2,6 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { db } from '../../db/index.js';
 import { DUMMY_HASH, hashPassword, verifyPassword } from './password.js';
 import { createSession, destroySession, sessionsEnabled } from './session.js';
+import { resetRoutes } from './reset/reset.routes.js';
 
 // Вход родителя. Пароль приходит только в теле запроса, хешируется здесь и нигде не логируется.
 
@@ -34,6 +35,9 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   app.addHook('onRequest', async (_req, reply) => {
     if (!sessionsEnabled) return reply.code(503).send({ error: 'Вход временно недоступен' });
   });
+
+  // «Забыли пароль?»: письмо со ссылкой и новый пароль.
+  await app.register(resetRoutes);
 
   app.post<{ Body: { email: string; password: string; name: string } }>(
     '/register',

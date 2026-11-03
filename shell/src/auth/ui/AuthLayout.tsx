@@ -17,10 +17,14 @@ const replay = (el: HTMLElement | null, cls: string) => {
   el.classList.add(cls);
 };
 
+type Page = 'login' | 'register' | 'forgot' | 'reset';
+const pageOf = (path: string): Page => (['register', 'forgot', 'reset'] as const).find((p) => path.startsWith(`/${p}`)) ?? 'login';
+
 export function AuthLayout() {
   const { t } = useI18n();
   const text = useAuthText();
-  const mode: AuthMode = useLocation().pathname.startsWith('/register') ? 'register' : 'login';
+  const page = pageOf(useLocation().pathname);
+  const mode: AuthMode = page === 'register' ? 'register' : 'login';
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
@@ -84,10 +88,11 @@ export function AuthLayout() {
   useEffect(() => {
     fx.set({ mode, focus: null, peek: false });
     if (!first.current) replay(cardRef.current, 'is-flipping');
-    const hello = setTimeout(() => fx.say(mode === 'login' ? text.say.helloLogin : text.say.helloRegister, 3400), first.current ? 1900 : 300);
+    const line = { login: text.say.helloLogin, register: text.say.helloRegister, forgot: text.forgot.say.hello, reset: text.forgot.say.reset }[page];
+    const hello = setTimeout(() => fx.say(line, 3400), first.current ? 1900 : 300);
     first.current = false;
     return () => clearTimeout(hello);
-  }, [mode, fx, text]);
+  }, [page, mode, fx, text]);
 
   return (
     <AuthFxContext.Provider value={fx}>
@@ -110,11 +115,15 @@ export function AuthLayout() {
         <main className="au-layout">
           <div className="au-card-wrap">
             <div className="au-card" ref={cardRef} onAnimationEnd={(e) => e.currentTarget.classList.remove('is-shaking', 'is-flipping')}>
-              <nav className="au-tabs" data-mode={mode} aria-label={t.common.login}>
-                <span className="au-tabs-pill" aria-hidden="true" />
-                <NavLink to="/login" replace>{t.common.login}</NavLink>
-                <NavLink to="/register" replace>{t.common.register}</NavLink>
-              </nav>
+              {page === 'login' || page === 'register' ? (
+                <nav className="au-tabs" data-mode={mode} aria-label={t.common.login}>
+                  <span className="au-tabs-pill" aria-hidden="true" />
+                  <NavLink to="/login" replace>{t.common.login}</NavLink>
+                  <NavLink to="/register" replace>{t.common.register}</NavLink>
+                </nav>
+              ) : (
+                <Link to="/login" replace className="au-back">← {text.forgot.back}</Link>
+              )}
               <Outlet />
             </div>
           </div>

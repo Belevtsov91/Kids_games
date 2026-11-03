@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Link } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
 import { useAuthText } from '../text';
@@ -151,6 +152,9 @@ export function LoginForm() {
           onBlur={focus.blur}
           onPeek={focus.peek}
         />
+        <Link to="/forgot" state={{ email: email.trim() }} className="au-forgot">
+          {text.forgot.link}
+        </Link>
         {tries < MAX_TRIES && (
           <div className="au-tries" aria-live="polite">
             {Array.from({ length: MAX_TRIES }, (_, i) => (

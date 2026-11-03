@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { AuthProvider, useAuth } from '@/auth/AuthContext';
 import { I18nProvider, useI18n } from '@/i18n/I18nProvider';
 import { WelcomePage } from '@/pages/WelcomePage';
-import { AuthLayout, LoginPage, RegisterPage } from '@/pages/AuthPages';
+import { AuthLayout, ForgotPage, LoginPage, RegisterPage, ResetPage } from '@/pages/AuthPages';
 import { ChildrenPage } from '@/pages/ChildrenPage';
 import { MenuPage } from '@/pages/MenuPage';
 import { GamePage } from '@/pages/GamePage';
@@ -40,6 +40,9 @@ export function App() {
             <Route element={<GuestOnly><AuthLayout /></GuestOnly>}>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              {/* «Забыли пароль?» и страница из письма /reset#<токен> */}
+              <Route path="/forgot" element={<ForgotPage />} />
+              <Route path="/reset" element={<ResetPage />} />
             </Route>
             <Route path="/children" element={<Private><ChildrenPage /></Private>} />
             <Route path="/dashboard" element={<Private needChild><MenuPage /></Private>} />
