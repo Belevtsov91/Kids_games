@@ -16,6 +16,15 @@ export interface ChildCard {
   week: { day: string; minutes: number }[];
   lastGame: string | null;
   playingNow: boolean;
+  toddler: boolean | null;
+  birthMonth: string | null;
+  comfort: { musicVolume: number; effectsVolume: number; reduceMotion: boolean; bigButtons: boolean };
+}
+
+export interface SkillsReport {
+  skills: { skill: string; total: number; right: number; recent: number; games: string[]; level: 'good' | 'learning' | 'new' }[];
+  levels: Record<string, number>;
+  stickers: { gameId: string; sticker: string; earnedAt: string }[];
 }
 
 export interface ChildDetail extends ChildCard {

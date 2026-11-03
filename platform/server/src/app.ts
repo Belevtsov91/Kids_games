@@ -6,14 +6,20 @@ import { env } from './config/env.js';
 import { healthRoutes } from './modules/health/health.routes.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { loadSession } from './modules/auth/session.js';
+import { ownsChild, parentStatus } from './modules/parent/parentSession.js';
 import { childrenRoutes } from './modules/children/children.routes.js';
 import { parentRoutes } from './modules/parent/index.js';
 import { kidRoutes } from './modules/kid/kid.routes.js';
+import { progressRoutes } from './modules/progress/progress.routes.js';
+import { errorsRoutes } from './modules/progress/errors.routes.js';
+import { publicNotifyRoutes } from './modules/notify/public.routes.js';
 import { catalogRoutes } from './games/catalog.routes.js';
 import { loadGames } from './games/loader.js';
 import { gameDb } from './games/gameDb.js';
+import { supabase } from './db/index.js';
+import { startWeeklyReports } from './modules/notify/weekly.js';
 
-export async function buildApp(options: { gamesDir?: string; logger?: boolean } = {}) {
+export async function buildApp(options: { gamesDir?: string; logger?: boolean; jobs?: boolean } = {}) {
   const app = Fastify({ logger: options.logger === false ? false : { level: env.logLevel } });
 
   await app.register(cors, { origin: env.corsOrigin, credentials: true });
@@ -29,6 +35,8 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean } 
   });
 
   app.decorateRequest('session', null);
+  // Для игр (@ig/sdk/server → parentCanView): взрослый с открытым кабинетом смотрит данные своего ребёнка.
+  app.decorateRequest('canParentView', null);
   app.addHook('onRequest', async (req, reply) => {
     // Защита от CSRF поверх SameSite: изменяющие запросы принимаем только со своего сайта.
     const origin = req.headers.origin;
@@ -36,6 +44,8 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean } 
       return reply.code(403).send({ error: 'Запрос с чужого сайта' });
     }
     req.session = await loadSession(req);
+    req.canParentView = async (childId: string) =>
+      Boolean(req.session && /^[0-9a-f-]{36}$/i.test(childId) && (await parentStatus(req)) && (await ownsChild(req.session.parentId, childId)));
   });
 
   const games = await loadGames(options.gamesDir ?? env.gamesDir, (message) => app.log.error(message));
@@ -49,6 +59,9 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean } 
       await api.register(childrenRoutes, { prefix: '/children' });
       await api.register(parentRoutes, { prefix: '/parent' });
       await api.register(kidRoutes, { prefix: '/kid' });
+      await api.register(progressRoutes, { prefix: '/kid', catalog: games.map((g) => g.manifest) });
+      await api.register(errorsRoutes);
+      await api.register(publicNotifyRoutes);
       await api.register(catalogRoutes, { prefix: '/games', catalog: games.map((g) => g.manifest) });
 
       // Игры: каждая в своём префиксе и в своей инкапсуляции Fastify, друг друга не видят.
@@ -59,6 +72,12 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean } 
     },
     { prefix: '/api' },
   );
+
+  // Фоновые задачи (отчёт за неделю) — только в настоящем сервере и только с БД.
+  if (options.jobs && supabase) {
+    const stop = startWeeklyReports(games.map((g) => g.manifest), app.log);
+    app.addHook('onClose', async () => stop());
+  }
 
   return app;
 }

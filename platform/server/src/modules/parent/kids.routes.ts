@@ -3,6 +3,7 @@ import { db } from '../../db/index.js';
 import { zoneOf } from '../kid/childData.js';
 import { localNow } from '../kid/timeRules.js';
 import { PHOTO } from './account.routes.js';
+import { effectiveAge } from '../children/childView.js';
 import { ownsChild, requireParent } from './parentSession.js';
 
 // Кабинет: изменить профиль ребёнка, правила времени и доступ к играм, дать время, удалить профиль.
@@ -30,6 +31,12 @@ const patchBody = {
     quietTo: clock,
     breakEvery: { type: 'integer', minimum: 0, maximum: 120 },
     canAsk: { type: 'boolean' },
+    toddler: { type: ['boolean', 'null'] },
+    birthMonth: { type: ['string', 'null'], pattern: '^20\\d\\d-(0[1-9]|1[0-2])$' },
+    musicVolume: { type: 'integer', minimum: 0, maximum: 100 },
+    effectsVolume: { type: 'integer', minimum: 0, maximum: 100 },
+    reduceMotion: { type: 'boolean' },
+    bigButtons: { type: 'boolean' },
   },
   additionalProperties: false,
 } as const;
@@ -46,6 +53,12 @@ interface PatchBody {
   quietTo?: string | null;
   breakEvery?: number;
   canAsk?: boolean;
+  toddler?: boolean | null;
+  birthMonth?: string | null;
+  musicVolume?: number;
+  effectsVolume?: number;
+  reduceMotion?: boolean;
+  bigButtons?: boolean;
 }
 
 /** Поле запроса → колонка ig_child_settings. */
@@ -58,6 +71,11 @@ const SETTINGS_FIELDS: [keyof PatchBody, string][] = [
   ['quietTo', 'quiet_to'],
   ['breakEvery', 'break_every'],
   ['canAsk', 'can_ask'],
+  ['toddler', 'toddler'],
+  ['musicVolume', 'music_volume'],
+  ['effectsVolume', 'effects_volume'],
+  ['reduceMotion', 'reduce_motion'],
+  ['bigButtons', 'big_buttons'],
 ];
 
 const gameParams = {
@@ -93,7 +111,9 @@ export const kidsRoutes: FastifyPluginAsync = async (app) => {
     '/children/:id',
     { schema: { params: idParams, body: patchBody } },
     async (req, reply) => {
-      const { name, age, avatar } = req.body;
+      const { name, avatar, birthMonth } = req.body;
+      // Месяц рождения задаёт и возраст: дальше он растёт сам (см. childView).
+      const age = birthMonth ? effectiveAge(req.body.age ?? 3, `${birthMonth}-01`) : req.body.age;
       const base = Object.fromEntries(
         Object.entries({ name: name?.trim(), age, avatar }).filter(([, v]) => v !== undefined),
       );
@@ -103,6 +123,7 @@ export const kidsRoutes: FastifyPluginAsync = async (app) => {
       }
       const settings: Record<string, unknown> = {};
       for (const [field, column] of SETTINGS_FIELDS) if (req.body[field] !== undefined) settings[column] = req.body[field];
+      if (birthMonth !== undefined) settings.birth_month = birthMonth && `${birthMonth}-01`;
       if (Object.keys(settings).length) {
         const { error } = await db()
           .from('ig_child_settings')

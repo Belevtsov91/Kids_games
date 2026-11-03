@@ -2,6 +2,7 @@ import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 import { db } from '../../db/index.js';
 import { accessOf, rulesOf, settingsOf, statsOf, timeOf, zoneOf } from './childData.js';
 import { beatSeconds, localNow } from './timeRules.js';
+import { notifyRequest } from '../notify/notify.js';
 
 // Страницы ребёнка: сколько осталось играть, «пульс» игры, просьба о времени, своя статистика.
 // Ребёнок берётся только из сессии; родительский кабинет для этого не нужен.
@@ -111,6 +112,8 @@ export const kidRoutes: FastifyPluginAsync = async (app) => {
       .select('id, minutes, status')
       .single();
     if (error) throw error;
+    // Письмо взрослому — в фоне: ребёнок не ждёт почту.
+    void notifyRequest(childId, data.id, data.minutes, req.log).catch((err) => req.log.error({ err }, 'Не удалось отправить письмо о просьбе'));
     return reply.code(201).send(data);
   });
 

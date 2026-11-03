@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { createApiClient } from '@/api/client';
+import { timeBus } from './timeBus';
 
 // Время ребёнка: сколько осталось, тихие часы, просьба о времени, какие игры закрыл взрослый.
 // Считает и решает сервер; здесь только последний ответ и опрос раз в минуту.
@@ -61,6 +62,8 @@ export function KidStatusProvider({ children }: { children: ReactNode }) {
       // сервер недоступен или БД не настроена: играем без таймера
     }
   }, []);
+
+  useEffect(() => timeBus.update(status), [status]);
 
   const pending = status?.request?.status === 'pending';
   useEffect(() => {

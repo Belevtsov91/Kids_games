@@ -13,9 +13,16 @@ export interface SettingsRow {
   break_every: number;
   can_ask: boolean;
   last_beat_at: string | null;
+  toddler?: boolean | null;
+  birth_month?: string | null;
+  music_volume?: number;
+  effects_volume?: number;
+  reduce_motion?: boolean;
+  big_buttons?: boolean;
 }
 
-const SETTINGS_COLUMNS = 'lang, photo, limit_weekday, limit_weekend, quiet_from, quiet_to, break_every, can_ask, last_beat_at';
+const SETTINGS_COLUMNS =
+  'lang, photo, limit_weekday, limit_weekend, quiet_from, quiet_to, break_every, can_ask, last_beat_at, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons';
 
 export const rulesOf = (row: SettingsRow | null): TimeRules =>
   row

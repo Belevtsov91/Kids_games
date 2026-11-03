@@ -16,6 +16,7 @@ export type Session = PlayerSession;
 declare module 'fastify' {
   interface FastifyRequest {
     session: Session | null;
+    canParentView: ((childId: string) => Promise<boolean>) | null;
   }
 }
 

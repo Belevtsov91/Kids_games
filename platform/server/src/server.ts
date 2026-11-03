@@ -1,7 +1,7 @@
 import { buildApp } from './app.js';
 import { env } from './config/env.js';
 
-const app = await buildApp();
+const app = await buildApp({ jobs: true });
 
 try {
   await app.listen({ host: env.host, port: env.port });

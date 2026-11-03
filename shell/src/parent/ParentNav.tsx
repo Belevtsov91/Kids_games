@@ -28,6 +28,12 @@ export function ParentNav() {
           </NavLink>
         ))}
       </div>
+      <NavLink to="/parent/inbox" className="pa-nav-link">
+        <span aria-hidden="true">📬</span> {p.nav3.inbox}
+      </NavLink>
+      <NavLink to="/parent/family" className="pa-nav-link">
+        <span aria-hidden="true">👵</span> {p.nav3.family}
+      </NavLink>
       <NavLink to="/parent/account" className="pa-nav-link">
         <span aria-hidden="true">🔐</span> {p.nav.account}
       </NavLink>

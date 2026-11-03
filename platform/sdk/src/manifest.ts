@@ -1,4 +1,5 @@
 // Без DOM: этот файл импортирует и сервер (через @ig/sdk/manifest).
+import { isSkill, STICKER_ID_PATTERN, type Skill, type StickerDef } from './progress';
 
 /** Языки сайта и игр: русский, украинский, румынский, английский. */
 export const LOCALES = ['ru', 'uk', 'ro', 'en'] as const;
@@ -17,6 +18,13 @@ export interface GameManifest {
   kind: '2d' | '3d';
   /** Возраст, для которого игра подходит, включительно. */
   ages: { min: number; max: number };
+  /** Что тренирует игра: по этим навыкам родитель видит успехи. */
+  skills?: Skill[];
+  /** Наклейки, которые можно получить в игре. */
+  stickers?: StickerDef[];
+  /** Для родителя: что развивает игра, одна-две фразы. */
+  about?: string;
+  abouts?: Partial<Record<Locale, string>>;
 }
 
 export const GAME_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
@@ -37,6 +45,13 @@ export function validateManifest(manifest: unknown, folder: string): string[] {
   if (!ages || !Number.isInteger(ages.min) || !Number.isInteger(ages.max) || ages.min < 0 || ages.min > ages.max) {
     errors.push(`${folder}: ages должен быть { min, max }, min ≤ max`);
   }
+  if (m.skills !== undefined && (!Array.isArray(m.skills) || !m.skills.every(isSkill))) errors.push(`${folder}: неизвестный навык в skills`);
+  if (m.stickers !== undefined) {
+    const ids = Array.isArray(m.stickers) ? m.stickers.map((s) => s?.id) : null;
+    if (!ids || !ids.every((id) => typeof id === 'string' && STICKER_ID_PATTERN.test(id)) || new Set(ids).size !== ids.length) {
+      errors.push(`${folder}: у наклеек должны быть разные id из латиницы, цифр и дефиса`);
+    }
+  }
   return errors;
 }
 
@@ -56,3 +71,4 @@ export function buildCatalog(
   }
   return catalog.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
 }
+export * from './progress';

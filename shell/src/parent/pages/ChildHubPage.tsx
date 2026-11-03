@@ -42,6 +42,9 @@ export function ChildHubPage() {
         <Tile to={`${base}/time`} icon="⏳" title={p.child.tiles.time[0]} text={p.child.tiles.time[1]} />
         <Tile to={`${base}/games`} icon="🎮" title={p.child.tiles.games[0]} text={p.child.tiles.games[1]} extra={<em>{open} / {games.length}</em>} />
         <Tile to={`${base}/stats`} icon="📊" title={p.child.tiles.stats[0]} text={p.child.tiles.stats[1]} />
+        <Tile to={`${base}/skills`} icon="🌟" title={p.tiles3.skills[0]} text={p.tiles3.skills[1]} />
+        <Tile to={`${base}/comfort`} icon="🧸" title={p.tiles3.comfort[0]} text={p.tiles3.comfort[1]} />
+        <Tile to={`${base}/gallery`} icon="🖼️" title={p.tiles3.gallery[0]} text={p.tiles3.gallery[1]} />
       </div>
 
       <Panel title={p.overview.week} lead={p.overview.weekLead}>

@@ -3,6 +3,7 @@ import { db } from '../../db/index.js';
 import { accessOf, rulesOf, settingsOf, statsOf, timeOf, zoneOf, type SettingsRow } from '../kid/childData.js';
 import { localNow } from '../kid/timeRules.js';
 import { ownsChild, requireParent } from './parentSession.js';
+import { effectiveAge } from '../children/childView.js';
 
 // Кабинет: обзор семьи, страница ребёнка, статистика и ответы на просьбы о времени.
 
@@ -37,6 +38,15 @@ async function childCard(child: ChildRow, zone: string) {
   const [time, week] = await Promise.all([timeOf(child.id, settings, zone), statsOf(child.id, zone, 7)]);
   return {
     ...child,
+    age: effectiveAge(child.age, settings?.birth_month),
+    toddler: settings?.toddler ?? null,
+    birthMonth: settings?.birth_month?.slice(0, 7) ?? null,
+    comfort: {
+      musicVolume: settings?.music_volume ?? 80,
+      effectsVolume: settings?.effects_volume ?? 100,
+      reduceMotion: settings?.reduce_motion ?? false,
+      bigButtons: settings?.big_buttons ?? false,
+    },
     lang: settings?.lang ?? null,
     photo: settings?.photo ?? null,
     rules: rulesOf(settings),

@@ -16,6 +16,10 @@ export interface Child {
   lang?: string | null;
   /** «Режим малыша»: null — по возрасту (до 5 лет включён), true/false — так решил взрослый. */
   toddler?: boolean | null;
+  /** Громкость (0–100), меньше движения, крупные кнопки — из кабинета, раздел «Удобство». */
+  comfort?: { musicVolume: number; effectsVolume: number; reduceMotion: boolean; bigButtons: boolean };
+  /** Месяц рождения «YYYY-MM»; по нему сервер сам считает age. */
+  birthMonth?: string | null;
 }
 
 export interface Me {
