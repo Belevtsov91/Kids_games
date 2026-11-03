@@ -1,13 +1,14 @@
 import { Link } from 'react-router';
 import type { GameManifest } from '@ig/sdk';
 import { games } from '@/catalog/catalog';
+import { covers } from '@/catalog/covers';
 import { useAuth } from '@/auth/AuthContext';
 
 function GameCard({ game }: { game: GameManifest }) {
   return (
     <Link to={`/play/${game.id}`} className="menu-card" aria-label={game.title}>
-      <span className="menu-card-emoji">{game.emoji}</span>
-      <span>{game.title}</span>
+      {covers[game.id] ? <img className="menu-card-art" src={covers[game.id]} alt="" loading="lazy" decoding="async" width="960" height="640" /> : <span className="menu-card-emoji">{game.emoji}</span>}
+      <span className="menu-card-caption"><strong>{game.title}</strong><small>{game.ages.min}–{game.ages.max} лет <span aria-hidden="true">↗</span></small></span>
     </Link>
   );
 }

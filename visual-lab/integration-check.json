@@ -1,0 +1,271 @@
+{
+  "pages": [
+    {
+      "id": "counting",
+      "images": [
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/counting/assets/characters/bunny.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/counting/assets/characters/bunny.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/counting/assets/characters/squirrel.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/counting/assets/characters/dolphin.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "id": "animal-orchestra",
+      "images": [
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/bear.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/icons/drum.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/cow.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/frog.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/dog.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/cat.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/elephant.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/animal-orchestra/assets/characters/bird.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "id": "who-lives-where",
+      "images": [
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/who-lives-where/assets/characters/goat.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/who-lives-where/assets/characters/owl.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/who-lives-where/assets/characters/horse.svg",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/who-lives-where/assets/characters/hedgehog.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "id": "puzzles",
+      "images": [
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/puzzles/assets/turtle-bakery.webp",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/puzzles/assets/moon-garden.webp",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/puzzles/assets/forest-concert.webp",
+          "loaded": true
+        },
+        {
+          "src": "/@fs/C:/Disk.D/interact_games/games/puzzles/assets/comet-greenhouse.webp",
+          "loaded": true
+        },
+        {
+          "src": "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%201024'%20width='1024'%20height='1024'%3e%3cdefs%3e%3clinearGradient%20id='sky'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3e%3cstop%20offset='0'%20stop-color='%237cc8ff'/%3e%3cstop%20offset='1'%20stop-color='%23d8f1ff'/%3e%3c/linearGradient%3e%3clinearGradient%20id='hill'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3e%3cstop%20offset='0'%20stop-color='%237ad35a'/%3e%3cstop%20offset='1'%20stop-color='%233f9d3a'/%3e%3c/linearGradient%3e%3c/defs%3e%3crect%20width='1024'%20height='1024'%20fill='url(%23sky)'/%3e%3cg%20fill='none'%20stroke-width='44'%20stroke-linecap='round'%20opacity='.9'%3e%3cpath%20d='M90%20640a422%20422%200%200%201%20844%200'%20stroke='%23ff5d5d'/%3e%3cpath%20d='M134%20640a378%20378%200%200%201%20756%200'%20stroke='%23ffa53d'/%3e%3cpath%20d='M178%20640a334%20334%200%200%201%20668%200'%20stroke='%23ffe14d'/%3e%3cpath%20d='M222%20640a290%20290%200%200%201%20580%200'%20stroke='%235fd16b'/%3e%3cpath%20d='M266%20640a246%20246%200%200%201%20492%200'%20stroke='%234ea7ff'/%3e%3cpath%20d='M310%20640a202%20202%200%200%201%20404%200'%20stroke='%239a6bff'/%3e%3c/g%3e%3ccircle%20cx='860'%20cy='150'%20r='80'%20fill='%23ffd93b'/%3e%3cg%20fill='%23fff'%3e%3cellipse%20cx='200'%20cy='170'%20rx='110'%20ry='46'/%3e%3cellipse%20cx='270'%20cy='140'%20rx='70'%20ry='50'/%3e%3cellipse%20cx='640'%20cy='110'%20rx='90'%20ry='36'/%3e%3cellipse%20cx='700'%20cy='90'%20rx='56'%20ry='40'/%3e%3c/g%3e%3cpath%20d='M0%20700C200%20610%20360%20640%20520%20700S860%20760%201024%20680V1024H0Z'%20fill='url(%23hill)'/%3e%3cpath%20d='M0%20820C260%20760%20520%20800%20760%20860S960%20880%201024%20860V1024H0Z'%20fill='%2356b847'/%3e%3crect%20x='380'%20y='560'%20width='300'%20height='250'%20rx='12'%20fill='%23fff3d6'%20stroke='%238a4b2a'%20stroke-width='10'/%3e%3cpath%20d='M350%20575L530%20420%20710%20575Z'%20fill='%23ff6b5b'%20stroke='%238a4b2a'%20stroke-width='10'%20stroke-linejoin='round'/%3e%3crect%20x='490'%20y='660'%20width='80'%20height='150'%20rx='38'%20fill='%23b86a3c'%20stroke='%238a4b2a'%20stroke-width='8'/%3e%3ccircle%20cx='552'%20cy='740'%20r='8'%20fill='%23ffd93b'/%3e%3crect%20x='405'%20y='610'%20width='64'%20height='64'%20rx='10'%20fill='%239fe0ff'%20stroke='%238a4b2a'%20stroke-width='8'/%3e%3crect%20x='595'%20y='610'%20width='64'%20height='64'%20rx='10'%20fill='%239fe0ff'%20stroke='%238a4b2a'%20stroke-width='8'/%3e%3cg%20transform='translate(180%20790)'%3e%3crect%20x='-10'%20y='0'%20width='20'%20height='60'%20fill='%233f9d3a'/%3e%3cg%20fill='%23ff7ab8'%3e%3ccircle%20cx='0'%20cy='-18'%20r='18'/%3e%3ccircle%20cx='22'%20cy='0'%20r='18'/%3e%3ccircle%20cx='-22'%20cy='0'%20r='18'/%3e%3ccircle%20cx='0'%20cy='18'%20r='18'/%3e%3c/g%3e%3ccircle%20r='14'%20fill='%23ffd93b'/%3e%3c/g%3e%3cg%20transform='translate(840%20820)'%3e%3crect%20x='-10'%20y='0'%20width='20'%20height='60'%20fill='%233f9d3a'/%3e%3cg%20fill='%23ffffff'%3e%3ccircle%20cx='0'%20cy='-18'%20r='18'/%3e%3ccircle%20cx='22'%20cy='0'%20r='18'/%3e%3ccircle%20cx='-22'%20cy='0'%20r='18'/%3e%3ccircle%20cx='0'%20cy='18'%20r='18'/%3e%3c/g%3e%3ccircle%20r='14'%20fill='%23ffb02e'/%3e%3c/g%3e%3cg%20transform='translate(250%20930)'%3e%3cg%20fill='%23ffe14d'%3e%3ccircle%20cx='0'%20cy='-16'%20r='15'/%3e%3ccircle%20cx='18'%20cy='0'%20r='15'/%3e%3ccircle%20cx='-18'%20cy='0'%20r='15'/%3e%3ccircle%20cx='0'%20cy='16'%20r='15'/%3e%3c/g%3e%3ccircle%20r='12'%20fill='%23ff7a2e'/%3e%3c/g%3e%3cg%20transform='translate(720%20950)'%3e%3cg%20fill='%239a6bff'%3e%3ccircle%20cx='0'%20cy='-16'%20r='15'/%3e%3ccircle%20cx='18'%20cy='0'%20r='15'/%3e%3ccircle%20cx='-18'%20cy='0'%20r='15'/%3e%3ccircle%20cx='0'%20cy='16'%20r='15'/%3e%3c/g%3e%3ccircle%20r='12'%20fill='%23ffd93b'/%3e%3c/g%3e%3c/svg%3e",
+          "loaded": true
+        },
+        {
+          "src": "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%201024'%20width='1024'%20height='1024'%3e%3cdefs%3e%3clinearGradient%20id='sea'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3e%3cstop%20offset='0'%20stop-color='%233ec6e8'/%3e%3cstop%20offset='1'%20stop-color='%231166a8'/%3e%3c/linearGradient%3e%3clinearGradient%20id='fish'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3e%3cstop%20offset='0'%20stop-color='%23ffb22e'/%3e%3cstop%20offset='1'%20stop-color='%23ff6a2e'/%3e%3c/linearGradient%3e%3c/defs%3e%3crect%20width='1024'%20height='1024'%20fill='url(%23sea)'/%3e%3cg%20fill='%23fff'%20opacity='.18'%3e%3cpath%20d='M0%20120Q128%2080%20256%20120T512%20120T768%20120T1024%20120V160Q896%20120%20768%20160T512%20160T256%20160T0%20160Z'/%3e%3c/g%3e%3cpath%20d='M0%20880C180%20840%20300%20870%20480%20900S820%20880%201024%20850V1024H0Z'%20fill='%23f4d58d'/%3e%3cg%20fill='%232fae5f'%3e%3cpath%20d='M140%20900C110%20780%20180%20720%20140%20600%20200%20700%20160%20780%20190%20900Z'/%3e%3cpath%20d='M200%20905C210%20800%20270%20760%20250%20660%20300%20760%20260%20820%20250%20905Z'/%3e%3cpath%20d='M860%20880C830%20760%20900%20700%20860%20590%20920%20690%20880%20770%20910%20880Z'/%3e%3c/g%3e%3cg%20fill='%23ff7aa8'%3e%3ccircle%20cx='720'%20cy='900'%20r='34'/%3e%3ccircle%20cx='760'%20cy='880'%20r='26'/%3e%3ccircle%20cx='690'%20cy='870'%20r='22'/%3e%3c/g%3e%3cpath%20d='M640%20940l30-60%2030%2060%2060%2010-45%2040%2010%2060-55-30-55%2030%2010-60-45-40z'%20fill='%23ff5d7a'%20transform='translate(-240%20-60)%20scale(.9)'/%3e%3cg%20transform='translate(470%20470)'%3e%3cpath%20d='M190%200L330%20-110Q300%200%20330%20110Z'%20fill='%23ff8a2e'%20stroke='%23b44a16'%20stroke-width='10'%20stroke-linejoin='round'/%3e%3cellipse%20rx='230'%20ry='160'%20fill='url(%23fish)'%20stroke='%23b44a16'%20stroke-width='10'/%3e%3cpath%20d='M-40%20-150Q40%20-260%20120%20-140'%20fill='%23ff8a2e'%20stroke='%23b44a16'%20stroke-width='10'/%3e%3cg%20fill='none'%20stroke='%23fff'%20stroke-width='26'%20opacity='.85'%3e%3cpath%20d='M-30%20-150Q-70%200%20-30%20150'/%3e%3cpath%20d='M70%20-140Q30%200%2070%20140'/%3e%3c/g%3e%3ccircle%20cx='-130'%20cy='-40'%20r='44'%20fill='%23fff'%20stroke='%23b44a16'%20stroke-width='8'/%3e%3ccircle%20cx='-140'%20cy='-40'%20r='22'%20fill='%2324324a'/%3e%3ccircle%20cx='-148'%20cy='-50'%20r='8'%20fill='%23fff'/%3e%3cpath%20d='M-200%2040Q-170%2070%20-140%2050'%20fill='none'%20stroke='%23b44a16'%20stroke-width='10'%20stroke-linecap='round'/%3e%3c/g%3e%3cg%20fill='%23fff'%20fill-opacity='.55'%20stroke='%23fff'%20stroke-width='4'%3e%3ccircle%20cx='200'%20cy='360'%20r='26'/%3e%3ccircle%20cx='250'%20cy='280'%20r='16'/%3e%3ccircle%20cx='215'%20cy='210'%20r='10'/%3e%3ccircle%20cx='820'%20cy='250'%20r='22'/%3e%3ccircle%20cx='860'%20cy='180'%20r='12'/%3e%3c/g%3e%3cg%20transform='translate(830%20560)%20scale(.45)'%3e%3cpath%20d='M190%200L300%20-90Q275%200%20300%2090Z'%20fill='%239a6bff'/%3e%3cellipse%20rx='210'%20ry='130'%20fill='%23b58cff'/%3e%3ccircle%20cx='-110'%20cy='-30'%20r='30'%20fill='%23fff'/%3e%3ccircle%20cx='-118'%20cy='-30'%20r='15'%20fill='%2324324a'/%3e%3c/g%3e%3c/svg%3e",
+          "loaded": true
+        },
+        {
+          "src": "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%201024'%20width='1024'%20height='1024'%3e%3cdefs%3e%3cradialGradient%20id='space'%20cx='.5'%20cy='.4'%20r='.8'%3e%3cstop%20offset='0'%20stop-color='%233a2a8a'/%3e%3cstop%20offset='1'%20stop-color='%23120a3a'/%3e%3c/radialGradient%3e%3clinearGradient%20id='flame'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3e%3cstop%20offset='0'%20stop-color='%23fff27a'/%3e%3cstop%20offset='.5'%20stop-color='%23ffa22e'/%3e%3cstop%20offset='1'%20stop-color='%23ff4d4d'%20stop-opacity='0'/%3e%3c/linearGradient%3e%3c/defs%3e%3crect%20width='1024'%20height='1024'%20fill='url(%23space)'/%3e%3cg%20fill='%23fff'%3e%3ccircle%20cx='90'%20cy='120'%20r='5'/%3e%3ccircle%20cx='300'%20cy='80'%20r='4'/%3e%3ccircle%20cx='460'%20cy='190'%20r='6'/%3e%3ccircle%20cx='760'%20cy='90'%20r='5'/%3e%3ccircle%20cx='940'%20cy='300'%20r='4'/%3e%3ccircle%20cx='120'%20cy='460'%20r='6'/%3e%3ccircle%20cx='880'%20cy='560'%20r='5'/%3e%3ccircle%20cx='70'%20cy='760'%20r='4'/%3e%3ccircle%20cx='420'%20cy='900'%20r='5'/%3e%3ccircle%20cx='960'%20cy='860'%20r='6'/%3e%3ccircle%20cx='640'%20cy='960'%20r='4'/%3e%3c/g%3e%3cg%20fill='%23ffe14d'%3e%3cpath%20d='M200%20260l14%2030%2032%204-24%2022%206%2032-28-16-28%2016%206-32-24-22%2032-4z'/%3e%3cpath%20d='M820%20420l10%2022%2024%203-18%2016%205%2024-21-12-21%2012%205-24-18-16%2024-3z'/%3e%3c/g%3e%3ccircle%20cx='800'%20cy='200'%20r='110'%20fill='%23ffcf6b'/%3e%3cellipse%20cx='800'%20cy='200'%20rx='190'%20ry='40'%20fill='none'%20stroke='%23ff8ac0'%20stroke-width='22'%20transform='rotate(-18%20800%20200)'/%3e%3ccircle%20cx='180'%20cy='840'%20r='150'%20fill='%235fd1ff'/%3e%3cpath%20d='M80%20770q60-40%20100%2010t110%2020M60%20880q80-30%20130%200t110-10'%20fill='none'%20stroke='%232fae5f'%20stroke-width='30'%20stroke-linecap='round'/%3e%3cg%20transform='translate(540%20540)%20rotate(30)'%3e%3cpath%20d='M-50%20230Q0%20420%2050%20230Z'%20fill='url(%23flame)'/%3e%3cpath%20d='M-90%20120L-170%20230-80%20210Z'%20fill='%23ff5d5d'%20stroke='%237a2a2a'%20stroke-width='10'%20stroke-linejoin='round'/%3e%3cpath%20d='M90%20120L170%20230%2080%20210Z'%20fill='%23ff5d5d'%20stroke='%237a2a2a'%20stroke-width='10'%20stroke-linejoin='round'/%3e%3cpath%20d='M0%20-300C110%20-200%20120%200%2090%20220H-90C-120%200%20-110%20-200%200%20-300Z'%20fill='%23f4f6ff'%20stroke='%237a2a2a'%20stroke-width='10'/%3e%3cpath%20d='M0%20-300C50%20-255%2080%20-200%2092%20-150H-92C-80%20-200%20-50%20-255%200%20-300Z'%20fill='%23ff5d5d'%20stroke='%237a2a2a'%20stroke-width='10'%20stroke-linejoin='round'/%3e%3ccircle%20cy='-40'%20r='58'%20fill='%237cd6ff'%20stroke='%237a2a2a'%20stroke-width='12'/%3e%3ccircle%20cx='-18'%20cy='-58'%20r='16'%20fill='%23fff'%20opacity='.8'/%3e%3crect%20x='-90'%20y='120'%20width='180'%20height='26'%20fill='%23ffd93b'%20stroke='%237a2a2a'%20stroke-width='8'/%3e%3c/g%3e%3c/svg%3e",
+          "loaded": true
+        },
+        {
+          "src": "https://images.aiscribbles.com/0f28660275234cd38b68e9ecd16fd65b.jpg?v=54efef",
+          "loaded": true
+        },
+        {
+          "src": "https://images.aiscribbles.com/fc6ade0f496e4e1c8b2e3bde35788255.png?v=7a47b2",
+          "loaded": true
+        }
+      ]
+    }
+  ],
+  "coloring": [
+    {
+      "id": "dragon-garden",
+      "before": {
+        "count": 1525,
+        "largest": [
+          53872,
+          35244,
+          34641,
+          32853,
+          28526
+        ]
+      },
+      "after": {
+        "count": 1932,
+        "largest": [
+          45832,
+          34851,
+          34641,
+          22093,
+          17035
+        ]
+      },
+      "addedPixels": 3792
+    },
+    {
+      "id": "turtle-island",
+      "before": {
+        "count": 1518,
+        "largest": [
+          88871,
+          84023,
+          47660,
+          30326,
+          25500
+        ]
+      },
+      "after": {
+        "count": 2130,
+        "largest": [
+          25500,
+          25078,
+          24652,
+          19746,
+          19550
+        ]
+      },
+      "addedPixels": 5696
+    },
+    {
+      "id": "space-cat",
+      "before": {
+        "count": 1394,
+        "largest": [
+          138252,
+          53014,
+          44454,
+          22886,
+          22840
+        ]
+      },
+      "after": {
+        "count": 1764,
+        "largest": [
+          66645,
+          40149,
+          38787,
+          38580,
+          22840
+        ]
+      },
+      "addedPixels": 3427
+    },
+    {
+      "id": "forest-post",
+      "before": {
+        "count": 1017,
+        "largest": [
+          188256,
+          159019,
+          66611,
+          35644,
+          17647
+        ]
+      },
+      "after": {
+        "count": 1673,
+        "largest": [
+          52088,
+          39264,
+          35644,
+          23668,
+          23583
+        ]
+      },
+      "addedPixels": 7237
+    },
+    {
+      "id": "flower-city",
+      "before": {
+        "count": 1707,
+        "largest": [
+          46161,
+          28010,
+          20977,
+          19438,
+          13798
+        ]
+      },
+      "after": {
+        "count": 2350,
+        "largest": [
+          41009,
+          28010,
+          16135,
+          15493,
+          12591
+        ]
+      },
+      "addedPixels": 5365
+    },
+    {
+      "id": "ocean-friends",
+      "before": {
+        "count": 1189,
+        "largest": [
+          258157,
+          96627,
+          44279,
+          37117,
+          25408
+        ]
+      },
+      "after": {
+        "count": 1687,
+        "largest": [
+          144068,
+          89707,
+          24795,
+          23726,
+          22518
+        ]
+      },
+      "addedPixels": 4215
+    }
+  ],
+  "errors": []
+}

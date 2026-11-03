@@ -1,6 +1,7 @@
 import type { Simulation } from '../game/simulation';
 import type { Insets } from '../render';
 import { replayClass } from './dom';
+import water from '../../assets/icons/water.svg';
 
 // Панели экрана уровня: название, запас лианы, счётчик капель, подсказка и кнопки.
 
@@ -15,7 +16,7 @@ const HUD_HTML = `
   <div class="sg-hud-bottom">
     <button class="sg-btn sg-icon" data-act="undo" aria-label="Убрать последнюю лиану" title="Убрать лиану (Z)">↩️</button>
     <button class="sg-btn sg-icon" data-act="hint" aria-label="Подсказка" title="Подсказка">💡</button>
-    <button class="sg-btn sg-primary" data-act="pour" title="Полить (пробел)">💧 <span class="sg-label">Полить</span></button>
+    <button class="sg-btn sg-primary" data-act="pour" title="Полить (пробел)"><img class="sg-resource-art" src="${water}" alt=""> <span class="sg-label">Полить</span></button>
     <button class="sg-btn sg-icon" data-act="restart" aria-label="Начать заново" title="Заново (R)">🔄</button>
   </div>`;
 
@@ -62,7 +63,12 @@ export class Hud {
     if (sim.collected !== this.lastCount) {
       if (this.lastCount >= 0 && sim.collected > this.lastCount) replayClass(this.countEl, 'bump');
       this.lastCount = sim.collected;
-      this.countEl.textContent = `💧 ${Math.min(sim.collected, level.need)}/${level.need}`;
+      this.countEl.replaceChildren();
+      const icon = document.createElement('img');
+      icon.src = water;
+      icon.alt = 'Капли';
+      icon.className = 'sg-resource-art';
+      this.countEl.append(icon, ` ${Math.min(sim.collected, level.need)}/${level.need}`);
     }
     const share = Math.max(0, (sim.inkLeft - strokeInk) / level.ink);
     if (Math.abs(share - this.lastInk) > 0.002) {

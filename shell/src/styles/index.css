@@ -5,5 +5,10 @@
 @import './controls.css';
 @import './topbar.css';
 @import './welcome.css';
+@import './welcome-hero.css';
+@import './welcome-sections.css';
+@import './footer.css';
+@import './info.css';
 @import './auth.css';
 @import './children.css';
+@import './account.css';

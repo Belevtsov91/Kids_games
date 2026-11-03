@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { ApiError } from '@/api/client';
 
@@ -39,7 +39,12 @@ export function ChildrenPage() {
   return (
     <main className="children">
       <header className="topbar">
-        <span>Здравствуйте, {me?.parent.name}!</span>
+        <span className="topbar-greeting">
+          <Link to="/" className="topbar-back" aria-label="На главную" title="На главную">
+            ←
+          </Link>
+          Здравствуйте, {me?.parent.name}!
+        </span>
         <button className="btn btn-small" onClick={() => void logout()}>
           Выйти
         </button>

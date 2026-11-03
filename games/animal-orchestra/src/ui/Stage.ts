@@ -1,6 +1,8 @@
 import { ANIMALS, type Animal } from '../game/animals';
 import type { SoundMode } from '../game/song';
 import { el, replayClass } from './dom';
+import { animalArt } from './art';
+import drum from '../../assets/icons/drum.svg';
 
 // Сцена: занавес, огни, зверята полукругом и пузырь-подсказка над ними.
 
@@ -26,8 +28,8 @@ export class Stage {
           'span',
           { className: 'ao-body', attrs: { 'aria-hidden': 'true' } },
           el('span', { className: 'ao-spot' }),
-          el('span', { className: 'ao-emoji' }, animal.emoji),
-          el('span', { className: 'ao-badge' }, animal.instrumentEmoji),
+          el('img', { className: 'ao-emoji', src: animalArt[animal.id], alt: '', draggable: false }),
+          el('span', { className: 'ao-badge' }, animal.id === 'bear' ? el('img', { src: drum, alt: '', draggable: false }) : animal.instrumentEmoji),
         ),
       );
       button.addEventListener('pointerdown', (e) => {
@@ -82,7 +84,7 @@ export class Stage {
   setBadges(mode: SoundMode) {
     for (const animal of ANIMALS) {
       const badge = this.buttons.get(animal.id)?.querySelector('.ao-badge');
-      if (badge) badge.textContent = mode === 'voice' ? '💬' : animal.instrumentEmoji;
+      if (badge) badge.replaceChildren(mode === 'voice' ? '💬' : animal.id === 'bear' ? el('img', { src: drum, alt: '', draggable: false }) : animal.instrumentEmoji);
     }
   }
 

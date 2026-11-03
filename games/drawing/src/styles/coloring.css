@@ -1,0 +1,34 @@
+.coloring-studio { position: absolute; inset: 0; z-index: 15; display: flex; flex-direction: column; background: #e8f0ef; color: #173f43; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+.coloring-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px 12px 84px; background: #173f43; color: white; }
+.coloring-header small { color: #e8b86d; letter-spacing: 2px; font-size: 10px; }
+.coloring-header h2 { font-size: clamp(18px, 2vw, 28px); margin: 4px 0; }
+.coloring-studio button { cursor: pointer; border: 1px solid #b9ceca; padding: 10px 15px; border-radius: 12px; background: white; color: #173f43; font: inherit; font-weight: 600; }
+.coloring-studio button:disabled { opacity: .45; cursor: default; }
+.coloring-studio button:focus-visible, .coloring-studio input:focus-visible { outline: 3px solid #d69b40; outline-offset: 3px; }
+.coloring-catalog { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 20px; padding: 24px; overflow: auto; }
+.coloring-catalog button { overflow: hidden; padding: 0 0 18px; text-align: left; box-shadow: 0 5px 20px #173f4310; }
+.coloring-catalog img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: contain; background: white; }
+.coloring-catalog strong, .coloring-catalog span { display: block; margin: 12px 18px 0; }
+.coloring-catalog span { font-size: 12px; color: #58746e; }
+.coloring-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 10px 16px 0; }
+.coloring-actions label { display: flex; gap: 10px; align-items: center; font-size: 12px; }
+.coloring-actions input { width: 100px; accent-color: #28645c; }
+.coloring-actions output { font-size: 12px; }
+.coloring-actions button:last-child { margin-left: auto; background: #28645c; color: white; }
+.coloring-status { font-size: 12px; margin: 8px 16px; min-height: 16px; }
+.coloring-scroll { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 12px; }
+.coloring-sheet { margin: auto; background: white; box-shadow: 0 4px 20px #173f4320; }
+.coloring-sheet canvas { display: block; width: 100%; height: auto; aspect-ratio: 3/2; touch-action: none; cursor: crosshair; }
+.coloring-controls { flex: none; margin: 0; border: 0; padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); background: #fff; }
+.coloring-tools, .coloring-colors { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
+.coloring-tools button { min-height: 42px; font-size: 13px; }
+.coloring-tools [aria-pressed=true] { background: #28645c; color: white; }
+.coloring-colors { margin-top: 10px; }
+.coloring-colors button { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #173f4320; padding: 0; }
+.coloring-colors [aria-pressed=true] { outline: 3px solid #28645c; outline-offset: 2px; }
+.coloring-confirm { position: absolute; inset: 0; z-index: 30; display: grid; place-items: center; background: #082625c9; padding: 20px; }
+.coloring-confirm > div { max-width: 460px; padding: 24px; background: white; border-radius: 20px; }
+.coloring-confirm button { margin: 5px; }
+.coloring-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media(max-width: 600px) { .coloring-header { padding-left: 76px; gap: 8px; } .coloring-header button { font-size: 12px; padding: 9px; } .coloring-actions { gap: 8px; } .coloring-actions button { padding: 8px; font-size: 12px; } .coloring-catalog { padding: 14px; } }
+@media(max-height: 500px) { .coloring-header { padding-top: 5px; padding-bottom: 5px; } .coloring-header small, .coloring-status { display: none; } .coloring-controls { display: flex; gap: 14px; overflow: auto; } .coloring-tools, .coloring-colors { flex-wrap: nowrap; flex-shrink: 0; margin: 0; } }

@@ -1,0 +1,99 @@
+/* Стартовая страница: полка ярких миров, остальные игры, блок для родителей, подвал. */
+
+.wl-block { padding-block: 72px 24px; }
+.wl-section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+.wl-section-head h2 { font-size: clamp(28px, 3.6vw, 42px); }
+.wl-section-head p { max-width: 46ch; margin: 0; color: var(--wl-ink-soft); }
+
+/* ---------- полка ---------- */
+.wl-shelf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; perspective: 1000px; }
+.wl-card {
+  --rx: 0deg;
+  --ry: 0deg;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 1.5px solid var(--wl-line);
+  border-radius: 26px;
+  background: var(--wl-dusk);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 14px 0 rgba(0, 0, 0, 0.18);
+}
+.wl-card:hover { box-shadow: 0 22px 50px rgba(0, 0, 0, 0.4), 0 0 0 2px var(--c); }
+.wl-thumb { position: relative; display: grid; place-items: center; aspect-ratio: 13 / 10; overflow: hidden; background: radial-gradient(circle at 50% 30%, var(--c), var(--wl-dusk)); }
+.wl-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 0.4s ease; }
+.wl-card:hover .wl-thumb img { transform: scale(1.1); }
+.wl-thumb-icon { font-size: 72px; }
+.wl-badge,
+.wl-age { position: absolute; top: 12px; padding: 5px 10px; border-radius: 10px; font-size: 12px; font-weight: 800; }
+.wl-badge { left: 12px; background: var(--c); color: var(--wl-night); font-family: var(--wl-display); }
+.wl-age { right: 12px; background: rgba(23, 21, 63, 0.75); color: var(--wl-ink); }
+.wl-card-body { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: 16px 18px 20px; }
+.wl-card h3 { display: flex; align-items: center; gap: 8px; font-size: 17px; }
+.wl-card p { flex: 1; margin: 0; color: var(--wl-ink-soft); font-size: 15px; }
+.wl-go { margin-top: 6px; color: var(--c); font-weight: 800; font-size: 14px; }
+
+/* ---------- остальные игры ---------- */
+.wl-minis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.wl-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 18px 14px;
+  border: 1.5px solid var(--wl-line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.06);
+  transition: transform 0.2s ease, background 0.2s;
+}
+.wl-mini:hover { transform: translateY(-6px) rotate(-1.5deg); background: rgba(255, 255, 255, 0.1); }
+.wl-mini-icon { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 18px; background: var(--c); font-size: 34px; box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2); }
+.wl-mini b { font-size: 15px; line-height: 1.25; }
+.wl-mini span { color: var(--wl-ink-soft); font-size: 13px; }
+
+/* ---------- родителям ---------- */
+.wl-parents {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr;
+  align-items: start;
+  gap: 28px;
+  padding: 36px;
+  border: 1.5px solid var(--wl-line);
+  border-radius: 32px;
+  background: linear-gradient(135deg, #2a2468, #3a2d7a);
+}
+.wl-parents h2 { font-size: clamp(24px, 3vw, 34px); }
+.wl-parents > div > p { margin: 12px 0 0; color: var(--wl-ink-soft); }
+.wl-parents-more { margin-top: 16px; }
+.wl-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 26px; }
+.wl-fact b { display: block; margin-bottom: 2px; font-size: 17px; }
+.wl-fact span { color: var(--wl-ink-soft); font-size: 15px; }
+
+@media (max-width: 980px) {
+  .wl-shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wl-minis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .wl-parents { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .wl-block { padding-block: 48px 16px; }
+  .wl-shelf {
+    display: flex;
+    gap: 14px;
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+    padding: 0 max(16px, env(safe-area-inset-left, 0px)) 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .wl-shelf .wl-card { flex: 0 0 78%; scroll-snap-align: center; }
+  .wl-minis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wl-facts { grid-template-columns: 1fr; }
+  .wl-parents { padding: 24px; }
+}

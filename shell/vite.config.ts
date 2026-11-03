@@ -10,7 +10,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       // Rapier встраивает wasm в JS (~3 МБ); поднимаем лимит, чтобы 3D работало офлайн.
-      workbox: { maximumFileSizeToCacheInBytes: 5 * 1024 * 1024 },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,ico,wasm}'],
+      },
       manifest: {
         name: 'Interact Games',
         short_name: 'Games',

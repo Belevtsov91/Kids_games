@@ -2,6 +2,12 @@ import type { CSSProperties } from 'react';
 import { BLOCKS, TOOLS, TREES, type Tool } from '../game/blocks';
 import { BLOCK_TYPES, TREE_KINDS, type BlockType, type TreeKind } from '../game/world';
 import { sound } from '../audio/sound';
+import lantern from '../../assets/icons/lantern.svg';
+import wood from '../../assets/textures/wood.svg';
+import sand from '../../assets/textures/sand.svg';
+import stone from '../../assets/textures/stone.svg';
+
+const materialArt: Partial<Record<BlockType, string>> = { lantern, wood, sand, stone };
 
 // Нижняя панель: инструменты и, для некоторых из них, палитра материалов или растений.
 
@@ -32,7 +38,7 @@ export function Dock({ tool, material, treeKind, onTool, onMaterial, onTreeKind 
               }}
               title={BLOCKS[type].label}
             >
-              <span className="ib-cube" />
+              {materialArt[type] ? <img className="ib-material-art" src={materialArt[type]} alt="" /> : <span className="ib-cube" />}
               <span className="ib-label">{BLOCKS[type].label}</span>
             </button>
           ))}

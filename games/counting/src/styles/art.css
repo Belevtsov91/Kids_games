@@ -1,0 +1,7 @@
+.cg-art { display: inline-block; width: 1.5em; height: 1.5em; object-fit: contain; vertical-align: middle; pointer-events: none; }
+.cg-object .cg-art { width: 100%; height: 100%; }
+.cg-hero-art .cg-art { width: 190px; height: 190px; }
+.cg-friend .cg-art { width: clamp(110px, 20vw, 180px); height: clamp(110px, 20vw, 180px); }
+.cg-themes .cg-art { width: 36px; height: 36px; }
+.cg-result-stars .cg-art { width: 48px; height: 48px; }
+@media(max-width: 480px) { .cg-hero-art .cg-art { width: 130px; height: 130px; } }

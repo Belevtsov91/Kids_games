@@ -1,3 +1,4 @@
+import { art } from './art';
 // Кусочки разметки. Все действия — через data-action/data-value: их ловит один обработчик кликов.
 
 export function button(action: string, label: string, value?: number, className = '') {
@@ -10,10 +11,10 @@ export function button(action: string, label: string, value?: number, className 
 export function objects(n: number, item: string, counted?: ReadonlySet<number>) {
   const order = counted ? [...counted] : [];
   const cells = Array.from({ length: n }, (_, index) => {
-    if (!counted) return `<span class="cg-object" aria-hidden="true">${item}</span>`;
+    if (!counted) return `<span class="cg-object" aria-hidden="true">${art(item)}</span>`;
     const on = counted.has(index);
     const badge = on ? `<small>${order.indexOf(index) + 1}</small>` : '';
-    return `<button class="cg-object ${on ? 'cg-counted' : ''}" data-action="count" data-value="${index}" aria-label="${index + 1}" aria-pressed="${on}">${item}${badge}</button>`;
+    return `<button class="cg-object ${on ? 'cg-counted' : ''}" data-action="count" data-value="${index}" aria-label="${index + 1}" aria-pressed="${on}">${art(item)}${badge}</button>`;
   });
   return `<div class="cg-objects">${cells.join('') || '<span class="cg-zero">0</span>'}</div>`;
 }

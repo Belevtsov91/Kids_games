@@ -1,0 +1,93 @@
+/* Подвал сайта (стартовая и информационные страницы). Цвета берутся из .wl (welcome.css). */
+
+.ft {
+  position: relative;
+  margin-top: 72px;
+  background: #110f30;
+  border-top: 1.5px solid var(--wl-line);
+}
+/* облачный край сверху */
+.ft::before {
+  content: '';
+  position: absolute;
+  inset: -38px 0 auto;
+  height: 40px;
+  pointer-events: none;
+  background:
+    radial-gradient(28px 22px at 6% 100%, #110f30 98%, transparent), radial-gradient(40px 30px at 14% 100%, #110f30 98%, transparent),
+    radial-gradient(34px 26px at 30% 100%, #110f30 98%, transparent), radial-gradient(46px 34px at 47% 100%, #110f30 98%, transparent),
+    radial-gradient(30px 22px at 61% 100%, #110f30 98%, transparent), radial-gradient(44px 32px at 76% 100%, #110f30 98%, transparent),
+    radial-gradient(32px 24px at 91% 100%, #110f30 98%, transparent);
+}
+.ft-in { display: grid; gap: 30px; padding-block: 36px calc(26px + env(safe-area-inset-bottom, 0px)); }
+.ft h2 { font-family: inherit; }
+
+.ft-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid var(--wl-line); }
+.ft-badges { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.ft-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 8px;
+  border: 1.5px solid color-mix(in srgb, var(--c) 55%, transparent);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 800;
+  font-size: 14px;
+}
+.ft-badge i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--c); color: var(--wl-night); font-style: normal; font-size: 14px; }
+
+.ft-lang { display: inline-flex; align-items: center; gap: 6px; }
+.ft-lang span { margin-right: 4px; color: var(--wl-ink-soft); font-size: 13px; font-weight: 700; }
+.ft-lang button { padding: 6px 11px; border: 1.5px solid var(--wl-line); border-radius: 12px; background: none; color: var(--wl-ink-soft); font: inherit; font-weight: 800; font-size: 13px; }
+.ft-lang button[aria-pressed='true'] { border-color: var(--wl-ink); background: var(--wl-ink); color: var(--wl-night); }
+.ft-lang button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.ft-main { display: grid; grid-template-columns: 1.3fr repeat(4, minmax(0, 1fr)); gap: 28px; }
+.ft-brand p { max-width: 34ch; margin: 14px 0 0; color: var(--wl-ink-soft); font-size: 15px; }
+.ft-col h2 { margin-bottom: 12px; color: var(--c); font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.ft-col ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.ft-col a { color: var(--wl-ink-soft); font-size: 15px; font-weight: 600; text-decoration: none; }
+.ft-col a:hover { color: var(--wl-ink); text-decoration: underline; text-underline-offset: 3px; }
+.ft-col a.is-danger { color: #ffb4c8; }
+
+.ft-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 28px;
+  padding: 22px;
+  border: 1.5px solid var(--wl-line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.ft-contact h2 { margin-bottom: 4px; font-family: var(--wl-display); font-size: 18px; }
+.ft-contact p { max-width: 52ch; margin: 0; color: var(--wl-ink-soft); font-size: 15px; }
+.ft-mail { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ft-mail code {
+  padding: 8px 12px;
+  border: 1px solid var(--wl-line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--wl-gold);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 15px;
+  user-select: all;
+}
+.ft-mail code.is-placeholder { border-style: dashed; border-color: var(--wl-gold); }
+
+.ft-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 22px; padding-top: 20px; border-top: 1px solid var(--wl-line); color: var(--wl-ink-soft); font-size: 13px; }
+.ft-bottom a { color: var(--wl-ink); }
+
+@media (max-width: 980px) {
+  .ft-main { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ft-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .ft-in { gap: 24px; }
+  .ft-main { gap: 22px 16px; }
+  .ft-top,
+  .ft-bottom { flex-direction: column; align-items: flex-start; }
+  .ft-badge { font-size: 13px; }
+}

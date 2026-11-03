@@ -1,0 +1,115 @@
+/* Стартовая страница: подписи над островами, подсказка и карточка выбранной игры. */
+
+.wl-pills { position: absolute; z-index: 2; inset: 0; pointer-events: none; }
+.wl-pill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 7px 9px;
+  border: 1.5px solid var(--c, #fff);
+  border-radius: 999px;
+  background: rgba(23, 21, 63, 0.78);
+  color: var(--wl-ink);
+  font: inherit;
+  font-weight: 800;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -100%);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, opacity 0.25s ease;
+}
+.wl-pill.is-hot { transform: translate(-50%, -100%) scale(1.12); }
+.wl-pill.is-small { font-size: 12px; padding: 5px 10px 5px 7px; }
+.wl-pill-icon { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--c); font-size: 14px; }
+.wl-hero.is-focused .wl-pill { opacity: 0; pointer-events: none; }
+
+.wl-hint {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border: 1px solid var(--wl-line);
+  border-radius: 999px;
+  background: rgba(23, 21, 63, 0.6);
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.3s;
+}
+.wl-hint-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--wl-gold); animation: wl-ping 1.8s infinite; }
+.wl-hero.is-focused .wl-hint { opacity: 0; }
+
+@keyframes wl-ping {
+  0% { box-shadow: 0 0 0 0 rgba(255, 210, 90, 0.7); }
+  70%, 100% { box-shadow: 0 0 0 12px rgba(255, 210, 90, 0); }
+}
+
+/* ---------- карточка игры ---------- */
+.wl-panel {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  right: max(24px, env(safe-area-inset-right, 0px));
+  width: min(400px, calc(100% - 32px));
+  padding: 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgba(42, 36, 104, 0.94), rgba(23, 21, 63, 0.96));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(30px, -50%);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.wl-hero.is-focused .wl-panel { opacity: 1; pointer-events: auto; transform: translate(0, -50%); }
+.wl-panel-top { display: flex; align-items: center; gap: 14px; padding-right: 30px; }
+.wl-panel-icon { flex: none; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 18px; background: var(--c); font-size: 30px; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25); }
+.wl-panel h3 { font-size: 21px; }
+.wl-panel p { margin: 14px 0; color: var(--wl-ink-soft); font-size: 16px; }
+.wl-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.wl-chip { padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); font-size: 12px; font-weight: 800; letter-spacing: 0.04em; }
+.wl-chip.is-kind { background: var(--c); color: var(--wl-night); }
+.wl-shots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 14px; }
+.wl-shots img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--wl-line); border-radius: 12px; }
+.wl-shots figcaption { grid-column: 1 / -1; font-size: 12px; color: var(--wl-ink-soft); }
+.wl-panel-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.wl-panel-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--wl-ink);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .wl-panel {
+    top: auto;
+    right: 12px;
+    left: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    padding: 20px;
+    border-radius: 26px;
+    transform: translateY(40px);
+  }
+  .wl-hero.is-focused .wl-panel { transform: none; }
+  .wl-shots { display: none; }
+}

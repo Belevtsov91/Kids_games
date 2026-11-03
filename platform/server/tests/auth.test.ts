@@ -23,6 +23,16 @@ describe('защита API без БД', async () => {
     expect(res.statusCode).toBe(401);
   });
 
+  it('удалить аккаунт без входа нельзя', async () => {
+    const res = await app.inject({ method: 'DELETE', url: '/api/auth/account' });
+    expect([401, 503]).toContain(res.statusCode);
+  });
+
+  it('удаление аккаунта с чужого сайта отклоняется', async () => {
+    const res = await app.inject({ method: 'DELETE', url: '/api/auth/account', headers: { origin: 'https://evil.example' } });
+    expect(res.statusCode).toBe(403);
+  });
+
   it('изменяющий запрос с чужого сайта отклоняется', async () => {
     const res = await app.inject({
       method: 'POST',

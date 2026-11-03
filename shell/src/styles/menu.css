@@ -8,9 +8,9 @@
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  max-width: 900px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: 26px;
+  max-width: 1240px;
   margin: 0 auto;
 }
 
@@ -19,7 +19,8 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 24px 12px;
+  padding: 0;
+  overflow: hidden;
   border-radius: 24px;
   background: #fff;
   box-shadow: 0 6px 0 #f0d78c;
@@ -31,7 +32,16 @@
 
 .menu-card-emoji {
   font-size: 56px;
+  padding: 30px;
 }
+
+.menu-card-art { display: block; width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover; transition: transform .3s ease; }
+.menu-card:hover .menu-card-art { transform: scale(1.025); }
+.menu-card-caption { display: block; width: 100%; padding: 12px 20px 20px; text-align: left; }
+.menu-card-caption strong { display: block; font-size: 19px; line-height: 1.3; }
+.menu-card-caption small { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; color: #617067; }
+.menu-card:focus-visible { outline: 4px solid #315e4c; outline-offset: 5px; }
+@media(prefers-reduced-motion: reduce) { .menu-card-art { transition: none; } }
 
 .menu-others {
   margin-top: 40px;

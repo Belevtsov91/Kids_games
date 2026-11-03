@@ -81,6 +81,18 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     return reply.code(204).send();
   });
 
+  /**
+   * Удалить аккаунт родителя насовсем. Профили детей, сохранения всех игр и сессии
+   * удаляются каскадом в БД (on delete cascade). Проверку «только взрослый» делает клиент.
+   */
+  app.delete('/account', { config: strictLimit }, async (req, reply) => {
+    if (!req.session) return reply.code(401).send({ error: 'Нужно войти' });
+    const { error } = await db().from('ig_parents').delete().eq('id', req.session.parentId);
+    if (error) throw error;
+    await destroySession(req, reply);
+    return reply.code(204).send();
+  });
+
   /** Кто вошёл: родитель, его дети и выбранный ребёнок. 401 — не вошёл. */
   app.get('/me', async (req, reply) => {
     if (!req.session) return reply.code(401).send({ error: 'Нужно войти' });

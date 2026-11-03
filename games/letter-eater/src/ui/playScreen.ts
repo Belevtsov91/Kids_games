@@ -1,6 +1,7 @@
 import { layoutBubbles, type Bubble } from '../game/logic';
 import type { Word } from '../game/words';
 import { h } from './dom';
+import { wordArt } from './art';
 import type { ButtonFactory } from './screens';
 
 // Экран слова: картинка, клеточки под буквы, поле с пузырями-буквами и монстрик.
@@ -28,7 +29,7 @@ export function playScreen({ word, index, total, ghostLetters, monster, button, 
   const card = h(
     'div',
     { class: 'le-card' },
-    h('button', { type: 'button', class: 'le-picture', 'aria-label': 'Послушать слово', click: onSay }, word.emoji),
+    h('button', { type: 'button', class: 'le-picture', 'aria-label': 'Послушать слово', click: onSay }, wordArt[word.word] ? h('img', { src: wordArt[word.word], alt: '', draggable: 'false' }) : word.emoji),
     h('div', { class: 'le-slots', '--n': word.word.length }, ...slots),
   );
   const el = h(

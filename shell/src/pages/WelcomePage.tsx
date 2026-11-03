@@ -1,34 +1,31 @@
-import type { CSSProperties } from 'react';
-import { Link } from 'react-router';
+import { useCallback, useState } from 'react';
+import type { BigId, ShowcaseId } from '@/welcome/showcase';
+import { WelcomeHero } from '@/welcome/components/WelcomeHero';
+import { WorldShelf } from '@/welcome/components/WorldShelf';
+import { MoreGames } from '@/welcome/components/MoreGames';
+import { ParentsNote } from '@/welcome/components/ParentsNote';
+import { SiteFooter } from '@/info/components/SiteFooter';
+import { SiteTopbar } from '@/info/components/SiteTopbar';
 
-const FLOATERS = ['🎨', '🧩', '🚀', '⭐', '🦄', '🎈'];
-
+/** Стартовая страница для гостей: 3D-архипелаг игр, полка ярких миров и блок для родителей. */
 export function WelcomePage() {
+  const [focused, setFocused] = useState<ShowcaseId | null>(null);
+  const [thumbs, setThumbs] = useState<Partial<Record<BigId, string>>>({});
+
+  const openFromShelf = useCallback((id: BigId) => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    window.setTimeout(() => setFocused(id), reduce ? 0 : 450);
+  }, []);
+
   return (
-    <main className="welcome">
-      <div className="welcome-floaters" aria-hidden="true">
-        {FLOATERS.map((emoji, i) => (
-          <span key={emoji} style={{ '--i': i } as CSSProperties}>
-            {emoji}
-          </span>
-        ))}
-      </div>
-      <div className="welcome-hero">
-        <div className="welcome-mascot" aria-hidden="true">
-          🐻
-        </div>
-        <h1>Привет! Давай играть!</h1>
-        <p>Рисуем, строим и учимся. Игры для детей от 3 до 15 лет.</p>
-        <div className="welcome-actions">
-          <Link to="/register" className="btn btn-primary">
-            Регистрация
-          </Link>
-          <Link to="/login" className="btn btn-secondary">
-            Войти
-          </Link>
-        </div>
-        <p className="welcome-note">Аккаунт заводит взрослый, а дети выбирают свой профиль.</p>
-      </div>
+    <main className="wl">
+      <SiteTopbar />
+      <WelcomeHero focused={focused} onFocus={setFocused} onThumbnails={setThumbs} />
+      <WorldShelf thumbs={thumbs} onOpen={openFromShelf} />
+      <MoreGames />
+      <ParentsNote />
+      <SiteFooter />
     </main>
   );
 }

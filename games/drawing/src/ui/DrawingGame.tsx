@@ -5,6 +5,8 @@ import { palette, tools, type BrushTool } from '../tools';
 import { sound } from '../audio/sound';
 import { defaultTitle, drawingsApi } from '../api/drawings';
 import { Gallery } from './Gallery';
+import { ColoringStudio } from './ColoringStudio';
+import paletteArt from '../../assets/icons/palette.svg';
 import '../styles/drawing.css';
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'failed';
@@ -20,6 +22,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
   const [canUndo, setCanUndo] = useState(false);
   const [save, setSave] = useState<SaveState>('idle');
   const [gallery, setGallery] = useState(false);
+  const [coloring, setColoring] = useState(false);
   const saveTimer = useRef<number | undefined>(undefined);
 
   // Движок создаётся один раз; init у PixiJS асинхронный, а StrictMode монтирует эффект дважды — отсюда флаг.
@@ -81,11 +84,12 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
 
   return (
     <div className="drawing">
-      <div ref={hostRef} className="drawing-canvas" />
+      <div ref={hostRef} className="drawing-canvas" inert={coloring || undefined} aria-hidden={coloring || undefined} />
       {save === 'saved' && <div className="drawing-toast">Рисунок в альбоме ⭐</div>}
       {save === 'failed' && <div className="drawing-toast is-error">Не получилось сохранить. Проверь интернет.</div>}
-      <div className="drawing-toolbar">
+      <div className="drawing-toolbar" inert={coloring || undefined} aria-hidden={coloring || undefined}>
         <div className="drawing-row">
+          <button onClick={() => setColoring(true)} aria-label="Раскраски" title="Раскраски"><img src={paletteArt} alt="" style={{ width: '90%', height: '90%' }} /></button>
           {tools.map((t) => (
             <button
               key={t.id}
@@ -148,6 +152,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
         </div>
       </div>
       {gallery && <Gallery api={api} onOpen={(image) => void openDrawing(image)} onClose={closeGallery} />}
+      {coloring && <ColoringStudio onClose={() => setColoring(false)} onSave={async (title, image) => { await api.save(title, image); sound.play('save'); }} />}
     </div>
   );
 }

@@ -2,7 +2,8 @@
 
 import { useRef, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { useProgress } from '@react-three/drei';
-import { PET_EMOJI, PET_UNLOCK, FRIEND_AFFECTION, xpForNext, type ValleyState } from '../game/valley';
+import { PET_UNLOCK, FRIEND_AFFECTION, xpForNext, type ValleyState } from '../game/valley';
+import { petArt, seed, water, star, moon } from './art';
 import { NPC_NAMES, QUESTS, questView, rewardText, type NpcId } from '../game/quests';
 import { MAX_HEARTS, type Runtime } from '../app/runtime';
 
@@ -40,15 +41,15 @@ export function TopBar({
         </div>
       </div>
       <div className="mv-res" title={saveText}>
-        <span>✨ {state.starlight}</span>
-        <span>🌱 {state.seeds}</span>
-        <span>💧 {state.water}</span>
+        <span aria-label={`Звёздный свет: ${state.starlight}`}><img className="mv-resource-art" src={star} alt="" /> {state.starlight}</span>
+        <span aria-label={`Семена: ${state.seeds}`}><img className="mv-resource-art" src={seed} alt="" /> {state.seeds}</span>
+        <span aria-label={`Вода: ${state.water}`}><img className="mv-resource-art" src={water} alt="" /> {state.water}</span>
       </div>
       <button onClick={onLog} aria-label="Журнал заданий">
         📜
       </button>
       <button onClick={onNight} aria-label={night ? 'Сделать день' : 'Сделать ночь'}>
-        {night ? '☀️' : '🌙'}
+        {night ? '☀️' : <img className="mv-resource-art" src={moon} alt="" />}
       </button>
     </header>
   );
@@ -152,7 +153,7 @@ export function QuestLog({ state, onClose }: { state: ValleyState; onClose(): vo
         <div className="mv-pets">
           {state.pets.map((pet) => (
             <div key={pet.id} className={pet.unlocked ? '' : 'locked'}>
-              <span>{PET_EMOJI[pet.id]}</span>
+              <span><img className="mv-pet-art" src={petArt[pet.id]} alt="" /></span>
               <b>{pet.unlocked ? pet.name : `Придёт на ур. ${PET_UNLOCK[pet.id]}`}</b>
               {pet.unlocked && (
                 <small>

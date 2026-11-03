@@ -2,6 +2,7 @@ import type { Mode, Question } from '../game/logic';
 import { ROUNDS, type Theme } from '../game/themes';
 import type { Words } from '../i18n';
 import { button, objects } from './html';
+import { art } from './art';
 
 // Экран задания: прогресс сессии, вопрос, сцена режима, варианты ответа и обратная связь.
 
@@ -29,7 +30,7 @@ function scene(t: Words, s: PlayState) {
       return `${objects(q.a, theme.item)}<p class="cg-help"></p>`;
     case 'feed':
       return [
-        `<div class="cg-feeding"><span class="cg-friend" aria-hidden="true">${theme.pet}</span><span class="cg-target">${q.answer}</span></div>`,
+        `<div class="cg-feeding"><span class="cg-friend" aria-hidden="true">${art(theme.pet)}</span><span class="cg-target">${q.answer}</span></div>`,
         `<p>${t.collected}: <b>${s.food}</b></p>${objects(s.food, theme.item)}`,
         `<div class="cg-feed-controls">${button('food', '−', -1)}${button('food', '+', 1)}</div>`,
         `<p class="cg-help">${t.enough}</p>${button('check', t.check, undefined, 'cg-primary')}`,
@@ -62,7 +63,7 @@ export function playView(t: Words, s: PlayState) {
       ? button('clear', t.clear, undefined, 'cg-text')
       : '';
   return [
-    `<div class="cg-roundline"><span>${t.round} ${s.round} / ${ROUNDS}</span><span>⭐ ${s.stars}</span></div>`,
+    `<div class="cg-roundline"><span>${t.round} ${s.round} / ${ROUNDS}</span><span>${art('⭐')} ${s.stars}</span></div>`,
     `<div class="cg-progress"><i style="width:${progress}%"></i></div>`,
     `<section class="cg-board">`,
     `<div class="cg-prompt"><h2>${t[s.mode]} ${s.mode === 'feed' ? s.question.answer : ''}</h2>${button('repeat', `🔊 <span>${t.repeat}</span>`, undefined, 'cg-listen')}</div>`,

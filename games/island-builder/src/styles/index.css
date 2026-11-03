@@ -6,3 +6,4 @@
 @import './dock.css';
 @import './dialogs.css';
 @import './responsive.css';
+.ib-material-art { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; }

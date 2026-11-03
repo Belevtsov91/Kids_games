@@ -26,3 +26,29 @@
 .topbar-avatar {
   font-size: 32px;
 }
+
+/* Стрелка «На главную» на экране выбора профиля */
+.topbar-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-back {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 0 #f0d78c;
+  color: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.topbar-back:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #f0d78c;
+}

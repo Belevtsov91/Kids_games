@@ -1,9 +1,8 @@
-/* Фоны домов: ферма, лес, море… */
-.wlw-scene-farm { background: linear-gradient(#9fdcff 0 55%, #8ccf5a 55%); }
-.wlw-scene-forest { background: radial-gradient(circle at 30% 20%, #8fd18a, transparent 60%), linear-gradient(#5fb36a, #2f7d4a); }
-.wlw-scene-sea { background: radial-gradient(60% 20% at 20% 30%, rgb(255 255 255 / 0.35), transparent), linear-gradient(#6fd0ff, #1f78c8); }
-.wlw-scene-house { background: repeating-linear-gradient(90deg, #ffe7c2 0 18px, #ffdcae 18px 36px); }
-.wlw-scene-pond { background: radial-gradient(70% 40% at 50% 100%, #3fb7a3 0 70%, transparent 71%), linear-gradient(#c9f2d8, #89d9b4); }
-.wlw-scene-jungle { background: radial-gradient(circle at 80% 15%, #c6f36b, transparent 45%), linear-gradient(#3fae56, #1d6b38); }
-.wlw-scene-savanna { background: radial-gradient(circle at 75% 25%, #fff3a1 0 12%, transparent 13%), linear-gradient(#ffd27a 0 60%, #e8b45a 60%); }
-.wlw-scene-ice { background: radial-gradient(80% 30% at 50% 100%, #fff 0 70%, transparent 71%), linear-gradient(#dff4ff, #a8dcf5); }
+.wlw-scene-farm { background-image: url('../../assets/habitats/farm.webp'); }
+.wlw-scene-forest { background-image: url('../../assets/habitats/forest.webp'); }
+.wlw-scene-sea { background-image: url('../../assets/habitats/sea.webp'); }
+.wlw-scene-house { background-image: url('../../assets/habitats/house.webp'); }
+.wlw-scene-pond { background-image: url('../../assets/habitats/pond.webp'); }
+.wlw-scene-jungle { background-image: url('../../assets/habitats/jungle.webp'); }
+.wlw-scene-savanna { background-image: url('../../assets/habitats/savanna.webp'); }
+.wlw-scene-ice { background-image: url('../../assets/habitats/ice.webp'); }

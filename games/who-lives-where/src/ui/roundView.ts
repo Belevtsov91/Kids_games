@@ -1,6 +1,7 @@
 import type { Animal, Habitat } from '../game/data';
 import type { Round } from '../game/rounds';
 import { el } from './dom';
+import { animalImage } from './art';
 
 // Экран раунда: дома сверху, точки прогресса, лоток со зверятами снизу.
 
@@ -29,7 +30,7 @@ export function homeCard(home: Habitat, onChoose: (card: HTMLElement) => void) {
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
   card.setAttribute('aria-label', home.title);
-  card.append(el('span', 'wlw-home-emoji', home.emoji), el('span', 'wlw-home-title', home.title), el('div', 'wlw-home-residents'));
+  card.append(el('span', 'wlw-home-title', home.title), el('div', 'wlw-home-residents'));
   card.addEventListener('click', () => onChoose(card));
   card.addEventListener('keydown', (e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onChoose(card)));
   return card;
@@ -48,7 +49,7 @@ export function animalToken(animal: Animal, index: number) {
     });
   }
   token.setAttribute('aria-label', animal.name);
-  token.append(el('span', 'wlw-emoji', animal.emoji), el('span', 'wlw-animal-name', animal.name));
+  token.append(animalImage(animal.id, 'wlw-emoji'), el('span', 'wlw-animal-name', animal.name));
   return token;
 }
 
@@ -68,7 +69,8 @@ export function homeAt(stage: HTMLElement, x: number, y: number): HTMLElement | 
  */
 export function flyHome(root: HTMLElement, token: HTMLButtonElement, animal: Animal, homeCard: HTMLElement, onLand: (x: number, y: number) => void) {
   const residents = homeCard.querySelector<HTMLElement>('.wlw-home-residents')!;
-  const resident = el('span', 'wlw-resident', animal.emoji);
+  const resident = el('span', 'wlw-resident');
+  resident.append(animalImage(animal.id));
   resident.setAttribute('aria-label', animal.name);
   resident.style.visibility = 'hidden';
   residents.append(resident);
@@ -81,7 +83,8 @@ export function flyHome(root: HTMLElement, token: HTMLButtonElement, animal: Ani
   token.classList.add('is-gone');
   token.disabled = true;
 
-  const flyer = el('span', 'wlw-flyer', animal.emoji);
+  const flyer = el('span', 'wlw-flyer');
+  flyer.append(animalImage(animal.id));
   Object.assign(flyer.style, { left: `${from.left - rootBox.left}px`, top: `${from.top - rootBox.top}px`, width: `${from.width}px`, height: `${from.height}px` });
   root.append(flyer);
 

@@ -1,5 +1,6 @@
 import { habitats, type Animal, type Habitat } from '../game/data';
 import { button, el } from './dom';
+import { animalImage } from './art';
 
 // Стартовый экран, альбом найденных зверят и окно победы.
 
@@ -7,8 +8,9 @@ export function startScreen(childName: string | undefined, onPlay: () => void, o
   const screen = el('section', 'wlw-start');
   const parade = el('div', 'wlw-parade');
   parade.setAttribute('aria-hidden', 'true');
-  ['🐄', '🦊', '🐳', '🐧', '🦁', '🐸'].forEach((emoji, i) => {
-    const span = el('span', '', emoji);
+  ['cow', 'fox', 'whale', 'penguin', 'lion', 'frog'].forEach((id, i) => {
+    const span = el('span');
+    span.append(animalImage(id));
     span.style.animationDelay = `${i * 0.15}s`;
     parade.append(span);
   });
@@ -30,7 +32,7 @@ export function albumScreen(found: ReadonlySet<string>, onBack: () => void, onAn
     for (const animal of home.animals) {
       const known = found.has(animal.id);
       const card = el('button', `wlw-album-animal${known ? '' : ' is-unknown'}`);
-      card.append(el('span', 'wlw-emoji', animal.emoji), el('small', '', known ? animal.name : '?'));
+      card.append(animalImage(animal.id, 'wlw-emoji'), el('small', '', known ? animal.name : '?'));
       card.setAttribute('aria-label', known ? animal.name : 'Ещё не найден');
       card.addEventListener('click', () => onAnimal(card, animal, home, known));
       row.append(card);
