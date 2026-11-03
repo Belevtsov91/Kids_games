@@ -1,51 +1,110 @@
-/* Узкие экраны */
+/* Узкие экраны и телефон боком */
 
-@media (max-width: 690px) {
-  .mv-panel {
-    top: auto;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    max-height: 48dvh;
-    right: 10px;
-    left: 10px;
-    width: auto;
-    max-width: none;
-    padding: 11px 13px;
+.mv-scene {
+  touch-action: none;
+}
+
+@media (max-width: 760px) {
+  .mv-top {
+    flex-wrap: wrap;
+    gap: 6px;
   }
-  .mv-panel p {
-    min-height: 0;
-    margin: 4px 0 6px;
-    font-size: 12px;
+  .mv-hero-card {
+    flex: 1 1 150px;
+    padding: 5px 10px 5px 5px;
   }
-  .mv-panel h3,
-  .mv-zones,
-  .mv-quests {
-    display: none;
+  .mv-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 19px;
   }
-  .mv-panel h2 {
+  .mv-top > button {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
     font-size: 17px;
   }
-  .mv-pet {
+  .mv-res {
+    order: 5;
+    flex-basis: 100%;
+    margin-left: 0;
+    padding: 3px;
+  }
+  .mv-res span {
+    flex: 1;
+    min-width: 0;
+    padding: 6px;
+    font-size: 13px;
+  }
+  .mv-tracker {
+    top: calc(max(12px, env(safe-area-inset-top)) + 104px);
+    left: max(14px, env(safe-area-inset-left));
+    right: auto;
+    width: min(260px, calc(100vw - 28px));
+    padding: 8px 12px;
+  }
+  .mv-tracker b {
+    font-size: 13px;
+  }
+  .mv-tracker span {
+    font-size: 12px;
+  }
+  .mv-act {
+    max-width: calc(100vw - 190px);
+    padding: 12px 14px 12px 10px;
+    font-size: 14px;
+  }
+  .mv-act kbd {
     display: none;
   }
-  .mv-pet:first-of-type {
-    display: grid;
+  .mv-round {
+    width: 58px;
+    height: 58px;
   }
-  .mv-resources {
-    margin-top: 6px;
+  .mv-round.cast {
+    width: 70px;
+    height: 70px;
   }
-  .mv-hint {
+  .mv-round small {
     display: none;
+  }
+  .mv-dialog {
+    grid-template-columns: auto 1fr;
+    bottom: max(170px, calc(env(safe-area-inset-bottom) + 160px));
+  }
+  .mv-dialog button {
+    grid-column: 1 / -1;
+  }
+  .mv-dialog-face {
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+  .mv-toast {
+    font-size: 13px;
+    white-space: normal;
+    text-align: center;
+  }
+  .mv-toasts {
+    width: calc(100vw - 32px);
   }
 }
 
-/* Телефон боком: панель справа, но ниже и компактнее. */
-@media (max-height: 500px) and (min-width: 691px) {
-  .mv-panel {
-    top: 70px;
-    padding: 11px 13px;
-    max-height: calc(100dvh - 80px);
+/* Телефон боком: всё компактнее по высоте. */
+@media (max-height: 500px) {
+  .mv-tracker {
+    top: calc(max(8px, env(safe-area-inset-top)) + 58px);
   }
-  .mv-hint {
-    display: none;
+  .mv-res {
+    order: 0;
+    flex-basis: auto;
+  }
+  .mv-joystick {
+    width: 110px;
+    height: 110px;
+    bottom: 14px;
+  }
+  .mv-dialog {
+    bottom: 12px;
   }
 }

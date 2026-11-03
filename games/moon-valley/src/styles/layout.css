@@ -11,4 +11,7 @@
 .mv-scene {
   position: absolute;
   inset: 0;
+  /* Подписи над жителями (drei Html) остаются под интерфейсом. */
+  z-index: 0;
+  isolation: isolate;
 }

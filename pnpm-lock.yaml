@@ -320,6 +320,9 @@ importers:
       '@react-three/fiber':
         specifier: ^9.8.2
         version: 9.8.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(three@0.187.0)
+      '@react-three/rapier':
+        specifier: ^2.2.0
+        version: 2.2.0(@react-three/fiber@9.8.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(three@0.187.0))(react@19.3.1)(three@0.187.0)
       react:
         specifier: ^19.3.1
         version: 19.3.1
@@ -342,6 +345,9 @@ importers:
       '@types/three':
         specifier: ^0.187.0
         version: 0.187.0
+      fastify:
+        specifier: ^5.12.7
+        version: 5.12.7
       typescript:
         specifier: ^7.0.2
         version: 7.0.2

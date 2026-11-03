@@ -6,6 +6,7 @@
   "include": [
     "manifest.ts",
     "src",
+    "server",
     "tests"
   ]
 }
