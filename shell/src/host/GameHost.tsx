@@ -8,13 +8,15 @@ interface Props {
   manifest: GameManifest;
   profile: GameSdk['profile'];
   onExit: () => void;
+  /** Перерыв: игра на паузе под экраном «Потянись». */
+  paused?: boolean;
 }
 
 /**
  * Запускает игру в своём контейнере через mount() и гасит через unmount().
  * Чем игра рисует (React, Pixi, Three…), оболочке неважно.
  */
-export function GameHost({ manifest, profile, onExit }: Props) {
+export function GameHost({ manifest, profile, onExit, paused = false }: Props) {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
   const exitRef = useRef(onExit);
@@ -22,6 +24,13 @@ export function GameHost({ manifest, profile, onExit }: Props) {
   // Профиль берётся на момент запуска; смена профиля внутри игры не предусмотрена.
   const profileRef = useRef(profile);
   const [state, setState] = useState<'loading' | 'running' | 'error'>('loading');
+  const instanceRef = useRef<GameInstance | null>(null);
+
+  useEffect(() => {
+    const instance = instanceRef.current;
+    if (paused) instance?.pause?.();
+    else instance?.resume?.();
+  }, [paused, state]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -39,6 +48,7 @@ export function GameHost({ manifest, profile, onExit }: Props) {
         // StrictMode и быстрый выход: игру могли закрыть, пока она запускалась.
         if (disposed) return void queueMicrotask(() => mounted.unmount());
         instance = mounted;
+        instanceRef.current = mounted;
         document.addEventListener('visibilitychange', onVisibility);
         setState('running');
       } catch (err) {
@@ -54,6 +64,7 @@ export function GameHost({ manifest, profile, onExit }: Props) {
       // синхронно размонтировать его посреди чужого рендера.
       const running = instance;
       instance = null;
+      instanceRef.current = null;
       if (running) queueMicrotask(() => running.unmount());
     };
   }, [manifest]);

@@ -9,6 +9,8 @@ import { DashSky } from '@/dashboard/DashSky';
 import { FeaturedPortal, GamePortal } from '@/dashboard/Portal';
 import { ProfileMenu } from '@/dashboard/ProfileMenu';
 import { lastGame } from '@/dashboard/lastPlayed';
+import { useKidStatus } from '@/kid/KidStatus';
+import { KidTimer } from '@/kid/KidTimer';
 
 type Filter = 'all' | GameManifest['kind'];
 const FILTERS: Filter[] = ['all', '3d', '2d'];
@@ -25,15 +27,19 @@ export function MenuPage() {
   const [filter, setFilter] = useState<Filter>('all');
   const m = t.menu;
 
+  const { status } = useKidStatus();
+  const access = status?.access ?? {};
   const age = activeChild?.age;
-  const fits = (g: GameManifest) => age === undefined || (g.ages.min <= age && age <= g.ages.max);
-  const available = games.filter(fits);
-  const others = games.filter((g) => !fits(g));
+  // Взрослый может закрыть игру (её не видно) или поднять игру не по возрасту в «Твои миры».
+  const visible = games.filter((g) => access[g.id] !== false);
+  const fits = (g: GameManifest) => access[g.id] === true || age === undefined || (g.ages.min <= age && age <= g.ages.max);
+  const available = visible.filter(fits);
+  const others = visible.filter((g) => !fits(g));
   const shown = available.filter((g) => filter === 'all' || g.kind === filter);
 
   const lastId = activeChild && lastGame(activeChild.id);
-  const last = games.find((g) => g.id === lastId);
-  const featured = last ?? available[0] ?? games[0];
+  const last = visible.find((g) => g.id === lastId);
+  const featured = last ?? available[0] ?? visible[0];
   const play = (g: GameManifest) => navigate(`/play/${g.id}`);
 
   return (
@@ -45,6 +51,7 @@ export function MenuPage() {
           <span className="dash-logo-name">Interact Games</span>
         </Link>
         <LanguageSwitch className="dash-lang" />
+        <KidTimer />
         <ProfileMenu />
         <button type="button" className="dash-chip dash-logout" onClick={() => void logout()}>
           {t.common.logout}

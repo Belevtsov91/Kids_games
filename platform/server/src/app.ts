@@ -7,6 +7,8 @@ import { healthRoutes } from './modules/health/health.routes.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { loadSession } from './modules/auth/session.js';
 import { childrenRoutes } from './modules/children/children.routes.js';
+import { parentRoutes } from './modules/parent/index.js';
+import { kidRoutes } from './modules/kid/kid.routes.js';
 import { catalogRoutes } from './games/catalog.routes.js';
 import { loadGames } from './games/loader.js';
 import { gameDb } from './games/gameDb.js';
@@ -45,6 +47,8 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean } 
       await api.register(healthRoutes);
       await api.register(authRoutes, { prefix: '/auth' });
       await api.register(childrenRoutes, { prefix: '/children' });
+      await api.register(parentRoutes, { prefix: '/parent' });
+      await api.register(kidRoutes, { prefix: '/kid' });
       await api.register(catalogRoutes, { prefix: '/games', catalog: games.map((g) => g.manifest) });
 
       // Игры: каждая в своём префиксе и в своей инкапсуляции Fastify, друг друга не видят.

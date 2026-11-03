@@ -67,7 +67,7 @@ export async function createSession(reply: FastifyReply, parentId: string) {
   reply.setCookie(SESSION_COOKIE, encrypt(token), { ...cookieOptions, expires: expiresAt });
 }
 
-function tokenHashFrom(req: FastifyRequest) {
+export function tokenHashFrom(req: FastifyRequest) {
   const value = req.cookies[SESSION_COOKIE];
   const token = value && key ? decrypt(value) : null;
   return token ? hashToken(token) : null;

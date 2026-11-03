@@ -44,6 +44,8 @@ shell/                       @ig/shell — единственный общий �
   src/host/createSdk.ts      SDK, который получает игра
   src/pages/                 Welcome, Login/Register, Children, Menu, Game
   src/dashboard/             дашборд /dashboard: небо с облаками, игры-порталы с обложками, «Продолжить» (последняя игра)
+  src/kid/                   открытый профиль ребёнка /me (время, прогресс), таймер, «попросить ещё», экраны «время вышло»
+  src/parent/                кабинет родителя /parent: вход задачей + PIN, обзор, дети (профиль, время, игры, аналитика), аккаунт
   src/styles/                стили по экранам (index.css собирает их по порядку)
   e2e/                       Playwright: вход и меню → игра → выход для каждой игры из games/
 
@@ -60,6 +62,8 @@ platform/
                              @ig/sdk/server — сессия игрока для серверов игр (childIdOf, requireChild…)
                              @ig/sdk/assets — типы импортов *.css, *.png, *.mp3…
   server/                    @ig/server — Fastify: health, вход, профили детей, каталог, подключение серверов игр
+    src/modules/parent/      /api/parent/*: вход в кабинет, аккаунт, PIN, настройки детей, ответы на просьбы
+    src/modules/kid/         /api/kid/*: статус времени, пульс игры раз в минуту, просьбы о времени, статистика
     migrations/              SQL для Supabase (таблицы ig_*)
 
 tools/

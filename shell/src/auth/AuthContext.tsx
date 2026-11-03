@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api, ApiError } from '@/api/client';
+import { useI18n } from '@/i18n/I18nProvider';
+import { isLocale } from '@ig/sdk';
 
 // Кто вошёл — знает только сервер. Здесь копия ответа /auth/me в памяти вкладки:
 // ничего не пишется ни в localStorage, ни в sessionStorage, ни в IndexedDB.
@@ -9,10 +11,13 @@ export interface Child {
   name: string;
   age: number;
   avatar: string;
+  /** Фото и язык игр задаёт взрослый в кабинете; null — эмодзи и язык сайта. */
+  photo?: string | null;
+  lang?: string | null;
 }
 
 export interface Me {
-  parent: { id: string; name: string };
+  parent: { id: string; name: string; photo?: string | null };
   children: Child[];
   activeChildId: string | null;
 }
@@ -46,6 +51,7 @@ async function fetchMe(): Promise<Me | null> {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [me, setMe] = useState<Me | null | undefined>(undefined);
+  const { setLocale } = useI18n();
 
   const refresh = useCallback(async () => setMe(await fetchMe().catch(() => null)), []);
 
@@ -78,6 +84,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       async selectChild(childId) {
         await api.put('/children/active', { childId });
+        // язык игр, который выбрал взрослый для этого ребёнка
+        const lang = me?.children.find((c) => c.id === childId)?.lang;
+        if (isLocale(lang)) setLocale(lang);
         setMe((prev) => (prev ? { ...prev, activeChildId: childId } : prev));
       },
       async deleteAccount() {
@@ -85,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setMe(null);
       },
     }),
-    [me, refresh],
+    [me, refresh, setLocale],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

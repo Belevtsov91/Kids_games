@@ -110,9 +110,20 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     ]);
     if (parentError) throw parentError;
     if (childrenError) throw childrenError;
+    // Фото и язык ребёнка задаёт родитель в кабинете (ig_child_settings).
+    const ids = (children ?? []).map((c) => c.id);
+    const [{ data: extra, error: extraError }, { data: own, error: ownError }] = await Promise.all([
+      ids.length
+        ? db().from('ig_child_settings').select('child_id, photo, lang').in('child_id', ids)
+        : Promise.resolve({ data: [] as { child_id: string; photo: string | null; lang: string | null }[], error: null }),
+      db().from('ig_parent_settings').select('photo').eq('parent_id', req.session.parentId).maybeSingle(),
+    ]);
+    if (extraError) throw extraError;
+    if (ownError) throw ownError;
+    const byId = new Map((extra ?? []).map((e) => [e.child_id, e]));
     return {
-      parent: { id: parent.id, name: parent.display_name },
-      children,
+      parent: { id: parent.id, name: parent.display_name, photo: own?.photo ?? null },
+      children: (children ?? []).map((c) => ({ ...c, photo: byId.get(c.id)?.photo ?? null, lang: byId.get(c.id)?.lang ?? null })),
       activeChildId: req.session.activeChildId,
     };
   });

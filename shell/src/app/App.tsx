@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router';
 import { AuthProvider, useAuth } from '@/auth/AuthContext';
 import { I18nProvider, useI18n } from '@/i18n/I18nProvider';
 import { WelcomePage } from '@/pages/WelcomePage';
@@ -9,6 +9,11 @@ import { MenuPage } from '@/pages/MenuPage';
 import { GamePage } from '@/pages/GamePage';
 import { InfoPage } from '@/pages/InfoPage';
 import { INFO_SLUGS } from '@/info/types';
+import { KidStatusProvider } from '@/kid/KidStatus';
+import { KidHomePage } from '@/kid/pages/KidHomePage';
+import { KidTimePage } from '@/kid/pages/KidTimePage';
+import { KidProgressPage } from '@/kid/pages/KidProgressPage';
+import { ParentShell, parentRoutes } from '@/parent/routes';
 
 /** Закрытые страницы: без входа — на /login; без профиля ребёнка — на /children. */
 function Private({ children, needChild = false }: { children: ReactNode; needChild?: boolean }) {
@@ -45,8 +50,18 @@ export function App() {
               <Route path="/reset" element={<ResetPage />} />
             </Route>
             <Route path="/children" element={<Private><ChildrenPage /></Private>} />
-            <Route path="/dashboard" element={<Private needChild><MenuPage /></Private>} />
-            <Route path="/play/:gameId" element={<Private needChild><GamePage /></Private>} />
+            {/* Страницы ребёнка: одно время на всех (таймер, тихие часы, закрытые взрослым игры). */}
+            <Route element={<Private needChild><KidStatusProvider><Outlet /></KidStatusProvider></Private>}>
+              <Route path="/dashboard" element={<MenuPage />} />
+              <Route path="/play/:gameId" element={<GamePage />} />
+              <Route path="/me" element={<KidHomePage />} />
+              <Route path="/me/time" element={<KidTimePage />} />
+              <Route path="/me/progress" element={<KidProgressPage />} />
+            </Route>
+            {/* Кабинет родителя: закрыт задачей для взрослых и PIN. */}
+            <Route path="/parent" element={<Private><ParentShell /></Private>}>
+              {parentRoutes}
+            </Route>
             {/* Документы и страницы «Родителям», «О проекте»: открыты всем, вход не нужен. */}
             {INFO_SLUGS.map((slug) => (
               <Route key={slug} path={`/${slug}`} element={<InfoPage slug={slug} />} />
