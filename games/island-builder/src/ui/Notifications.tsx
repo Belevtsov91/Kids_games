@@ -1,4 +1,5 @@
 import type { Quest } from '../game/quests';
+import { tr } from '../i18n';
 
 /** Тост о выполненном задании (по одному за раз) и подсказка к инструменту. */
 export function Notifications({ toasts, hint }: { toasts: Quest[]; hint: string | null }) {
@@ -9,8 +10,8 @@ export function Notifications({ toasts, hint }: { toasts: Quest[]; hint: string 
           <div key={q.id} className="ib-toast">
             <span className="ib-toast-emoji">{q.emoji}</span>
             <div>
-              <strong>Задание выполнено!</strong>
-              <span>{q.title}</span>
+              <strong>{tr().questDone}</strong>
+              <span>{tr().questTitles[q.id] ?? q.title}</span>
             </div>
           </div>
         ))}

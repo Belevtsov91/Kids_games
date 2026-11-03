@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { GameInstance, GameManifest, GameSdk } from '@ig/sdk';
 import { loadGame } from '@/catalog/catalog';
+import { useI18n } from '@/i18n/I18nProvider';
 import { createSdk } from './createSdk';
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
  * Чем игра рисует (React, Pixi, Three…), оболочке неважно.
  */
 export function GameHost({ manifest, profile, onExit }: Props) {
+  const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
   const exitRef = useRef(onExit);
   exitRef.current = onExit;
@@ -59,8 +61,8 @@ export function GameHost({ manifest, profile, onExit }: Props) {
   return (
     <>
       <div ref={containerRef} className="game-container" data-testid="game-container" data-state={state} />
-      {state === 'loading' && <div className="loading">Загрузка…</div>}
-      {state === 'error' && <div className="loading">Игра не запустилась 😢</div>}
+      {state === 'loading' && <div className="loading">{t.common.loading}</div>}
+      {state === 'error' && <div className="loading">{t.game.failed}</div>}
     </>
   );
 }

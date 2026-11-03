@@ -1,5 +1,6 @@
 import type { CSSProperties, PointerEvent } from 'react';
-import { BIG_IDS, SHOWCASE, type BigId } from '../showcase';
+import { useI18n } from '@/i18n/I18nProvider';
+import { BIG_IDS, showcaseGame, type BigId } from '../showcase';
 
 interface Props {
   thumbs: Partial<Record<BigId, string>>;
@@ -25,16 +26,17 @@ function untilt(e: PointerEvent<HTMLButtonElement>) {
 
 /** Полка «Самые яркие миры»: картинки снимаются из той же 3D-сцены, карточки наклоняются за курсором. */
 export function WorldShelf({ thumbs, onOpen }: Props) {
+  const { t, locale } = useI18n();
   return (
     <section className="wl-block" id="worlds">
       <div className="wl-wrap">
         <div className="wl-section-head">
-          <h2>Самые яркие миры</h2>
-          <p>Четыре игры, с которых лучше всего начать. Нажми на карточку, и мы подлетим к её острову.</p>
+          <h2>{t.shelf.title}</h2>
+          <p>{t.shelf.text}</p>
         </div>
         <div className="wl-shelf">
           {BIG_IDS.map((id) => {
-            const g = SHOWCASE[id];
+            const g = showcaseGame(id, locale);
             return (
               <button
                 key={id}
@@ -56,7 +58,7 @@ export function WorldShelf({ thumbs, onOpen }: Props) {
                     {g.title}
                   </h3>
                   <p>{g.card}</p>
-                  <span className="wl-go">Открыть мир →</span>
+                  <span className="wl-go">{t.shelf.open}</span>
                 </div>
               </button>
             );

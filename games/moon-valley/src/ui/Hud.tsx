@@ -6,6 +6,7 @@ import { PET_UNLOCK, FRIEND_AFFECTION, xpForNext, type ValleyState } from '../ga
 import { petArt, seed, water, star, moon } from './art';
 import { NPC_NAMES, QUESTS, questView, rewardText, type NpcId } from '../game/quests';
 import { MAX_HEARTS, type Runtime } from '../app/runtime';
+import { keyParts, tr } from '../i18n';
 
 export function TopBar({
   state,
@@ -22,16 +23,17 @@ export function TopBar({
   onNight(): void;
   onLog(): void;
 }) {
+  const h = tr().hud;
   return (
     <header className="mv-top">
       <div className="mv-hero-card">
         <span className="mv-avatar">🧝</span>
         <div>
-          <strong>Хранитель · ур. {state.level}</strong>
+          <strong>{h.hero(state.level)}</strong>
           <div className="mv-xp" title={`${state.xp} / ${xpForNext(state.level)}`}>
             <i style={{ width: `${Math.min(100, (state.xp / xpForNext(state.level)) * 100)}%` }} />
           </div>
-          <div className="mv-hearts" aria-label={`Сердечки: ${hearts} из ${MAX_HEARTS}`}>
+          <div className="mv-hearts" aria-label={h.hearts(hearts, MAX_HEARTS)}>
             {Array.from({ length: MAX_HEARTS }, (_, i) => (
               <span key={i} className={i < hearts ? '' : 'empty'}>
                 ♥
@@ -41,14 +43,14 @@ export function TopBar({
         </div>
       </div>
       <div className="mv-res" title={saveText}>
-        <span aria-label={`Звёздный свет: ${state.starlight}`}><img className="mv-resource-art" src={star} alt="" /> {state.starlight}</span>
-        <span aria-label={`Семена: ${state.seeds}`}><img className="mv-resource-art" src={seed} alt="" /> {state.seeds}</span>
-        <span aria-label={`Вода: ${state.water}`}><img className="mv-resource-art" src={water} alt="" /> {state.water}</span>
+        <span aria-label={`${h.starlight}: ${state.starlight}`}><img className="mv-resource-art" src={star} alt="" /> {state.starlight}</span>
+        <span aria-label={`${h.seeds}: ${state.seeds}`}><img className="mv-resource-art" src={seed} alt="" /> {state.seeds}</span>
+        <span aria-label={`${h.water}: ${state.water}`}><img className="mv-resource-art" src={water} alt="" /> {state.water}</span>
       </div>
-      <button onClick={onLog} aria-label="Журнал заданий">
+      <button onClick={onLog} aria-label={h.log}>
         📜
       </button>
-      <button onClick={onNight} aria-label={night ? 'Сделать день' : 'Сделать ночь'}>
+      <button onClick={onNight} aria-label={night ? h.day : h.night}>
         {night ? '☀️' : <img className="mv-resource-art" src={moon} alt="" />}
       </button>
     </header>
@@ -57,18 +59,19 @@ export function TopBar({
 
 export function QuestTracker({ state, onOpen }: { state: ValleyState; onOpen(): void }) {
   const view = questView(state);
+  const h = tr().hud;
   if (!view.quest)
     return (
       <button className="mv-tracker done" onClick={onOpen}>
-        <b>Все задания выполнены!</b>
-        <span>Ты главный Хранитель долины 🌙</span>
+        <b>{h.allDone}</b>
+        <span>{h.allDoneSub}</span>
       </button>
     );
   const text =
     view.status === 'offer'
-      ? `Поговори: ${NPC_NAMES[view.quest.giver]}`
+      ? `${h.talkTo}: ${NPC_NAMES[view.quest.giver]}`
       : view.status === 'ready'
-        ? `Вернись к: ${NPC_NAMES[view.quest.giver]}`
+        ? `${h.returnTo}: ${NPC_NAMES[view.quest.giver]}`
         : `${view.quest.goal}: ${view.have}/${view.need}`;
   return (
     <button className={`mv-tracker ${view.status}`} onClick={onOpen}>
@@ -98,7 +101,7 @@ export function Toasts({ items }: { items: { id: number; text: string }[] }) {
 }
 
 export function Dialog({ npc, text, onClose }: { npc: NpcId | 'king'; text: string; onClose(): void }) {
-  const name = npc === 'king' ? 'Грибной король' : NPC_NAMES[npc];
+  const name = npc === 'king' ? tr().king : NPC_NAMES[npc];
   const face = npc === 'granny' ? '👵' : npc === 'miller' ? '🧑‍🌾' : npc === 'ranger' ? '🏹' : '🍄';
   return (
     <div className="mv-dialog" role="dialog" aria-label={name}>
@@ -108,7 +111,7 @@ export function Dialog({ npc, text, onClose }: { npc: NpcId | 'king'; text: stri
         <p>{text}</p>
       </div>
       <button onClick={onClose} autoFocus>
-        Хорошо
+        {tr().hud.ok}
       </button>
     </div>
   );
@@ -116,16 +119,17 @@ export function Dialog({ npc, text, onClose }: { npc: NpcId | 'king'; text: stri
 
 export function QuestLog({ state, onClose }: { state: ValleyState; onClose(): void }) {
   const view = questView(state);
+  const h = tr().hud;
   return (
-    <div className="mv-modal" role="dialog" aria-label="Журнал" onClick={onClose}>
+    <div className="mv-modal" role="dialog" aria-label={h.journal} onClick={onClose}>
       <section onClick={(event) => event.stopPropagation()}>
         <header>
-          <h2>📜 Журнал Хранителя</h2>
-          <button onClick={onClose} aria-label="Закрыть">
+          <h2>{h.journalTitle}</h2>
+          <button onClick={onClose} aria-label={h.close}>
             ✕
           </button>
         </header>
-        <h3>Задания</h3>
+        <h3>{h.questsTitle}</h3>
         <ol className="mv-log">
           {QUESTS.map((quest, index) => {
             const done = index < state.quest.index;
@@ -138,41 +142,36 @@ export function QuestLog({ state, onClose }: { state: ValleyState; onClose(): vo
                 {current && (
                   <span>
                     {view.status === 'offer'
-                      ? `Поговори: ${NPC_NAMES[quest.giver]}${quest.minLevel && state.level < quest.minLevel ? ` (нужен ${quest.minLevel} уровень)` : ''}`
+                      ? `${h.talkTo}: ${NPC_NAMES[quest.giver]}${quest.minLevel && state.level < quest.minLevel ? h.needLevel(quest.minLevel) : ''}`
                       : view.status === 'ready'
-                        ? `Готово! Вернись к: ${NPC_NAMES[quest.giver]}`
+                        ? `${h.ready} ${h.returnTo}: ${NPC_NAMES[quest.giver]}`
                         : `${quest.goal}: ${view.have}/${view.need}`}
                   </span>
                 )}
-                {(current || done) && <small>Награда: {rewardText(quest.reward)}</small>}
+                {(current || done) && <small>{h.reward}: {rewardText(quest.reward)}</small>}
               </li>
             );
           })}
         </ol>
-        <h3>Питомцы</h3>
+        <h3>{h.petsTitle}</h3>
         <div className="mv-pets">
           {state.pets.map((pet) => (
             <div key={pet.id} className={pet.unlocked ? '' : 'locked'}>
               <span><img className="mv-pet-art" src={petArt[pet.id]} alt="" /></span>
-              <b>{pet.unlocked ? pet.name : `Придёт на ур. ${PET_UNLOCK[pet.id]}`}</b>
+              <b>{pet.unlocked ? tr().pets[pet.id] : h.petLocked(PET_UNLOCK[pet.id])}</b>
               {pet.unlocked && (
                 <small>
-                  дружба {pet.affection}/100 {pet.affection >= FRIEND_AFFECTION ? '💛' : ''}
+                  {h.friendship} {pet.affection}/100 {pet.affection >= FRIEND_AFFECTION ? '💛' : ''}
                 </small>
               )}
             </div>
           ))}
         </div>
-        <h3>Как играть</h3>
+        <h3>{h.howTo}</h3>
         <ul className="mv-help">
-          <li>
-            <kbd>WASD</kbd> или стрелки: идти, <kbd>Shift</kbd>: шагом, <kbd>Пробел</kbd>: прыжок
-          </li>
-          <li>
-            <kbd>E</kbd>: действие рядом (грядка, житель, кристалл, сундук), <kbd>F</kbd>: волна света
-          </li>
-          <li>Тяни мышью по экрану, чтобы повернуть камеру, колесо: ближе и дальше</li>
-          <li>На телефоне: джойстик слева, кнопки справа, камера пальцем</li>
+          {h.help.map((line) => (
+            <li key={line}>{keyParts(line).map((part, i) => (i % 2 ? <kbd key={i}>{part}</kbd> : part))}</li>
+          ))}
         </ul>
       </section>
     </div>
@@ -243,10 +242,10 @@ export function ActionButtons({
         </button>
       )}
       <div>
-        <button className="mv-round jump" onClick={onJump} aria-label="Прыжок">
+        <button className="mv-round jump" onClick={onJump} aria-label={tr().hud.jump}>
           ⤴
         </button>
-        <button className="mv-round cast" onClick={onCast} aria-label="Волна света">
+        <button className="mv-round cast" onClick={onCast} aria-label={tr().hud.cast}>
           ✨<small>F</small>
         </button>
       </div>
@@ -260,7 +259,7 @@ export function Loading({ children }: { children?: ReactNode }) {
   return (
     <div className="mv-loading">
       <span className="mv-moon">☾</span>
-      <p>Долина просыпается… {Math.round(progress)}%</p>
+      <p>{tr().hud.loading} {Math.round(progress)}%</p>
       <i>
         <i style={{ width: `${progress}%` }} />
       </i>

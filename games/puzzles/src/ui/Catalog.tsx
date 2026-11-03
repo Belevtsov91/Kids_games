@@ -2,6 +2,7 @@ import { useState, type ChangeEvent } from 'react';
 import { LEVELS, type LevelId } from '../game/puzzleMath';
 import type { PuzzleImage } from '../game/catalog';
 import type { SavedPuzzleImage } from '../storage/imageLibrary';
+import { puzzleTitle, tr } from '../i18n';
 
 type Puzzle = PuzzleImage | SavedPuzzleImage;
 
@@ -17,11 +18,12 @@ interface Props {
 
 export function Catalog({ puzzles, savedIds, level, onLevel, onPick, onUpload, onRemove }: Props) {
   // Картинки из интернета могут не загрузиться (нет сети) — такие карточки прячем.
+  const t = tr();
   const [broken, setBroken] = useState<Set<string>>(() => new Set());
   return (
     <>
-      <div className="puzzle-levels" role="radiogroup" aria-label="Сколько деталей">
-        <span>Деталей:</span>
+      <div className="puzzle-levels" role="radiogroup" aria-label={t.howMany}>
+        <span>{t.pieces}</span>
         {LEVELS.map((item) => (
           <button
             key={item.id}
@@ -30,16 +32,16 @@ export function Catalog({ puzzles, savedIds, level, onLevel, onPick, onUpload, o
             className={level === item.id ? 'is-active' : ''}
             onClick={() => onLevel(item.id)}
           >
-            {item.label}
+            {item.id === 'auto' ? t.auto : item.label}
           </button>
         ))}
       </div>
-      <section className="puzzle-catalog" aria-label="Выбор пазла">
+      <section className="puzzle-catalog" aria-label={t.choose}>
         <label className="puzzle-card upload-card">
           <span className="upload-plus" aria-hidden>
             ＋
           </span>
-          <span>Своя картинка</span>
+          <span>{t.own}</span>
           <small>PNG, JPG, WEBP</small>
           <input type="file" accept="image/png,image/jpeg,image/webp" onChange={onUpload} />
         </label>
@@ -55,10 +57,10 @@ export function Catalog({ puzzles, savedIds, level, onLevel, onPick, onUpload, o
                   decoding="async"
                   onError={() => setBroken((current) => new Set(current).add(item.id))}
                 />
-                <span>{item.title}</span>
+                <span>{puzzleTitle(item)}</span>
               </button>
               {savedIds.has(item.id) && (
-                <button className="puzzle-remove" aria-label={`Удалить «${item.title}»`} onClick={() => onRemove(item.id)}>
+                <button className="puzzle-remove" aria-label={t.remove(puzzleTitle(item))} onClick={() => onRemove(item.id)}>
                   ✕
                 </button>
               )}

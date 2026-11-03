@@ -1,6 +1,7 @@
 import { levels } from '../game/levels';
 import { isUnlocked } from '../game/scoring';
 import { escapeHtml } from './dom';
+import { levelText, tr } from '../i18n';
 
 // Экран-карта: планеты-уровни со звёздами.
 
@@ -23,11 +24,11 @@ export function levelMapHtml(stars: readonly number[], name: string | undefined)
   const current = stars.findIndex((s) => s === 0);
   return `
     <div class="sg-map-inner">
-      <h1>🌱 Космический садовник</h1>
-      <p class="sg-sub">${name ? `${escapeHtml(name)}, помоги` : 'Помоги'} кометке полить космические цветы! Рисуй пальцем лианы, чтобы капли докатились до горшка.</p>
+      <h1>${tr().title}</h1>
+      <p class="sg-sub">${tr().intro(name ? escapeHtml(name) : '')}</p>
       <div class="sg-total"><span>⭐ ${total} / ${levels.length * 3}</span></div>
       <div class="sg-levels">
-        ${levels.map((level, i) => levelButton(level.name, i, stars, i === current)).join('')}
+        ${levels.map((level, i) => levelButton(levelText(level).name, i, stars, i === current)).join('')}
       </div>
     </div>`;
 }
@@ -38,7 +39,7 @@ function levelButton(name: string, i: number, stars: readonly number[], current:
   const starRow = [1, 2, 3].map((n) => `<span class="${stars[i] >= n ? '' : 'off'}">⭐</span>`).join('');
   return `
     <button class="sg-level${current ? ' sg-level-current' : ''}" data-act="level" data-index="${i}" ${open ? '' : 'disabled'}
-      aria-label="Уровень ${i + 1}: ${escapeHtml(name)}${open ? `, звёзд: ${stars[i]}` : ', закрыт'}">
+      aria-label="${tr().level(i + 1, escapeHtml(name), open ? stars[i] : null)}">
       <span class="sg-planet" style="background: radial-gradient(circle at 30% 30%, ${light}, ${dark})">${open ? i + 1 : '🔒'}</span>
       <span class="sg-level-name">${escapeHtml(name)}</span>
       <span class="sg-level-stars" aria-hidden="true">${starRow}</span>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'reac
 import type { GameSdk } from '@ig/sdk';
 import { addToy, makeToy, TOY_KINDS, type Toy, type ToyKind } from '../game/toys';
 import { createSound } from '../audio/sound';
+import { textsFor } from '../i18n';
 import { Sandbox } from '../scene/Sandbox';
 import '../styles/sandbox.css';
 
@@ -12,6 +13,7 @@ export interface PauseStore {
 
 export function App({ sdk, pause }: { sdk: GameSdk; pause: PauseStore }) {
   const paused = useSyncExternalStore(pause.subscribe, pause.get, pause.get);
+  const t = textsFor(sdk.locale);
   const sound = useMemo(() => createSound(() => sdk.audio.muted), [sdk]);
   const [kind, setKind] = useState<ToyKind>('ball');
   const [toys, setToys] = useState<Toy[]>(() => [makeToy(0, 'ball', 0, 0)]);
@@ -30,8 +32,8 @@ export function App({ sdk, pause }: { sdk: GameSdk; pause: PauseStore }) {
   return (
     <div className="pg-root">
       <Sandbox toys={toys} paused={paused} onDrop={drop} onBounce={sound.bounce} />
-      <p className="pg-hint">Нажми на траву — упадёт игрушка. Нажми на игрушку — она подпрыгнет!</p>
-      <nav className="pg-dock" aria-label="Игрушки">
+      <p className="pg-hint">{t.hint}</p>
+      <nav className="pg-dock" aria-label={t.toys}>
         {TOY_KINDS.map((item) => (
           <button
             key={item.kind}
@@ -40,12 +42,12 @@ export function App({ sdk, pause }: { sdk: GameSdk; pause: PauseStore }) {
             onClick={() => setKind(item.kind)}
           >
             <span aria-hidden>{item.emoji}</span>
-            <small>{item.label}</small>
+            <small>{t.toy[item.kind]}</small>
           </button>
         ))}
         <button className="pg-clear" onClick={clear} disabled={!toys.length}>
           <span aria-hidden>🧹</span>
-          <small>Убрать</small>
+          <small>{t.clear}</small>
         </button>
       </nav>
     </div>

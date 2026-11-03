@@ -1,5 +1,6 @@
 import type { GameManifest, GameSdk, GameStorage } from '@ig/sdk';
 import { createApiClient } from '@/api/client';
+import { localeStore } from '@/i18n/locale';
 import { settings } from './settings';
 
 function createStorage(gameId: string): GameStorage {
@@ -27,6 +28,7 @@ export function createSdk(manifest: GameManifest, profile: GameSdk['profile'], e
     profile,
     api: createApiClient(`/games/${manifest.id}`),
     storage: createStorage(manifest.id),
+    locale: localeStore.get(),
     audio: {
       get muted() {
         return settings.muted;

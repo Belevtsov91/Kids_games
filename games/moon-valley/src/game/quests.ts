@@ -1,5 +1,6 @@
 // Цепочка квестов: житель даёт задание, герой выполняет и возвращается за наградой.
 
+import { tr } from '../i18n';
 import { addXp, friendCount, type Stats, type ValleyState } from './valley';
 
 export type NpcId = 'granny' | 'miller' | 'ranger';
@@ -28,91 +29,72 @@ export interface Quest {
 }
 
 export const NPC_NAMES: Record<NpcId, string> = {
-  granny: 'Бабушка Ива',
-  miller: 'Мельник Тимофей',
-  ranger: 'Следопыт Рина',
+  get granny() { return tr().npcs.granny; },
+  get miller() { return tr().npcs.miller; },
+  get ranger() { return tr().npcs.ranger; },
 };
 
-export const QUESTS: Quest[] = [
+const BASE: Omit<Quest, 'title' | 'offer' | 'goal' | 'thanks'>[] = [
   {
     id: 'first-harvest',
     giver: 'granny',
-    title: 'Первый урожай',
-    offer: 'Здравствуй, Хранитель! Грядки у дома совсем заскучали. Посади семечко, полей дважды и собери урожай. Два раза!',
-    goal: 'Собери урожай с грядок',
     kind: 'harvest',
     need: 2,
-    thanks: 'Какие чудесные овощи! Держи семена и воду, пригодятся.',
     reward: { xp: 20, starlight: 10, seeds: 3, water: 3 },
   },
   {
     id: 'spark-friend',
     giver: 'granny',
-    title: 'Лучший друг',
-    offer: 'Искорка ходит за тобой хвостиком. Погладь её несколько раз, пусть знает, что ты её друг.',
-    goal: 'Подружись с Искоркой',
     kind: 'friend',
     need: 1,
-    thanks: 'Смотри, как она сияет! Друзья делают долину светлее.',
     reward: { xp: 20, starlight: 8 },
   },
   {
     id: 'moon-crystals',
     giver: 'miller',
-    title: 'Лунные кристаллы',
-    offer: 'Моя мельница мелет лунный свет, но кристаллы раскатились по всей долине. Принеси пять штук, а?',
-    goal: 'Собери лунные кристаллы',
     kind: 'crystals',
     need: 5,
-    thanks: 'Вот это да! Мельница снова закрутилась. Вот тебе звёздный свет.',
     reward: { xp: 30, starlight: 15, water: 3 },
   },
   {
     id: 'greenhouse',
     giver: 'granny',
-    title: 'Тёплая оранжерея',
-    offer: 'Старая оранжерея у дома развалилась. Накопи звёздного света и построй её заново, там растения растут веселее.',
-    goal: 'Построй оранжерею у дома',
     kind: 'build',
     need: 1,
-    thanks: 'Как красиво сияет стекло! Спасибо, Хранитель.',
     reward: { xp: 30, seeds: 4 },
   },
   {
     id: 'shadow-slimes',
     giver: 'ranger',
-    title: 'Теневые слаймы',
-    offer: 'В лесу бродят теневые слаймы: они глотают свет. Махни волшебным жезлом, и свет вернёт им радость. Очисти шестерых.',
-    goal: 'Очисти теневых слаймов',
     kind: 'cleanse',
     need: 6,
-    thanks: 'Лес снова светится! Ты настоящий Хранитель.',
     reward: { xp: 40, starlight: 20 },
   },
   {
     id: 'mushroom-king',
     giver: 'ranger',
-    title: 'Грибной король',
-    offer: 'На северной поляне проснулся Грибной король. Он не злой, просто ему грустно в темноте. Подари ему много света!',
-    goal: 'Успокой Грибного короля на северной поляне',
     kind: 'boss',
     need: 1,
     minLevel: 3,
-    thanks: 'Король пляшет! Вся долина слышит его смех.',
     reward: { xp: 50, starlight: 25, seeds: 3 },
   },
   {
     id: 'valley-light',
     giver: 'miller',
-    title: 'Свет долины',
-    offer: 'Говорят, древние Хранители спрятали в долине три сундука. Найди их все, и долина засияет как прежде.',
-    goal: 'Найди три старых сундука',
     kind: 'chests',
     need: 3,
-    thanks: 'Ты нашёл всё! Теперь ты главный Хранитель Лунной Долины.',
     reward: { xp: 60, starlight: 40 },
   },
 ];
+
+/** Тексты квеста берутся на языке игры в момент чтения. */
+export const QUESTS: Quest[] = BASE.map((quest) => ({
+  ...quest,
+  get title() { return tr().quests[quest.id].title; },
+  get offer() { return tr().quests[quest.id].offer; },
+  get goal() { return tr().quests[quest.id].goal; },
+  get thanks() { return tr().quests[quest.id].thanks; },
+}));
 
 const RELATIVE: Partial<Record<GoalKind, keyof Stats>> = { harvest: 'harvested', crystals: 'crystals', cleanse: 'cleansed' };
 
@@ -151,34 +133,30 @@ export interface Talk {
   event: 'accepted' | 'completed' | 'chat';
 }
 
-const SMALL_TALK: Record<NpcId, string[]> = {
-  granny: ['Поливай грядки водой из колодца в деревне.', 'Ночью лунные цветы светятся ярче.'],
-  miller: ['Ветер сегодня добрый, мельница поёт.', 'Кристаллы растут снова, если подождать.'],
-  ranger: ['Слаймы боятся света. Жезл: кнопка ✨ или клавиша F.', 'Олени у озера очень пугливые.'],
-};
+const smallTalk = (npc: NpcId): string[] => tr().smallTalk[npc];
 
 /** Разговор с жителем: выдать квест, принять выполненный или просто поболтать. */
 export function talkTo(state: ValleyState, npc: NpcId, now = 0): Talk {
   const view = questView(state);
   const quest = view.quest;
   const chat = (): Talk => {
-    const lines = SMALL_TALK[npc];
+    const lines = smallTalk(npc);
     return { state, lines: [lines[now % lines.length]], event: 'chat' };
   };
   if (!quest || quest.giver !== npc) {
-    if (quest && view.status !== 'done') return { state, lines: [`${SMALL_TALK[npc][now % 2]} Кстати, тебя ищет ${NPC_NAMES[quest.giver]}.`], event: 'chat' };
+    if (quest && view.status !== 'done') return { state, lines: [`${smallTalk(npc)[now % 2]} ${tr().talk.lookingFor(NPC_NAMES[quest.giver])}`], event: 'chat' };
     return chat();
   }
   if (view.status === 'offer') {
     if (quest.minLevel && state.level < quest.minLevel)
-      return { state, lines: [`Для этого дела нужен опыт. Возвращайся на ${quest.minLevel} уровне!`], event: 'chat' };
+      return { state, lines: [tr().talk.needLevel(quest.minLevel)], event: 'chat' };
     return {
       state: { ...state, quest: { index: state.quest.index, active: true, base: RELATIVE[quest.kind] ? counter(state, quest.kind) : 0 } },
       lines: [quest.offer],
       event: 'accepted',
     };
   }
-  if (view.status === 'active') return { state, lines: [`${quest.goal}: ${view.have} из ${view.need}. Я верю в тебя!`], event: 'chat' };
+  if (view.status === 'active') return { state, lines: [tr().talk.progress(quest.goal, view.have, view.need)], event: 'chat' };
   const { reward } = quest;
   const rewarded = addXp(
     {
@@ -203,6 +181,6 @@ export function npcMarker(state: ValleyState, npc: NpcId): '!' | '?' | null {
 }
 
 export const rewardText = (reward: Reward) =>
-  [`+${reward.xp} опыта`, reward.starlight && `+${reward.starlight} ✨`, reward.seeds && `+${reward.seeds} 🌱`, reward.water && `+${reward.water} 💧`]
+  [tr().xp(reward.xp), reward.starlight && `+${reward.starlight} ✨`, reward.seeds && `+${reward.seeds} 🌱`, reward.water && `+${reward.water} 💧`]
     .filter(Boolean)
     .join(' · ');

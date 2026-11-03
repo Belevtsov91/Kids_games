@@ -35,6 +35,8 @@ export class CountingGame {
     const saved = loadSaved(sdk.storage, this.storageKey);
     if (saved) ({ prefs: this.prefs, progress: this.progress } = saved);
     else this.failedSave = true;
+    // Язык интерфейса и голоса при запуске — как на сайте; внутри игры его можно сменить.
+    this.prefs = { ...this.prefs, language: sdk.locale, speech: sdk.locale };
     this.root.className = 'counting-game';
     container.append(this.root);
     this.audio.muted = sdk.audio.muted;

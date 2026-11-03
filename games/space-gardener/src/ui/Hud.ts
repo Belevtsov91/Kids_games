@@ -2,22 +2,23 @@ import type { Simulation } from '../game/simulation';
 import type { Insets } from '../render';
 import { replayClass } from './dom';
 import water from '../../assets/icons/water.svg';
+import { tr } from '../i18n';
 
 // Панели экрана уровня: название, запас лианы, счётчик капель, подсказка и кнопки.
 
-const HUD_HTML = `
+const hudHtml = (t = tr()) => `
   <div class="sg-hud-top">
-    <button class="sg-btn sg-icon" data-act="levels" aria-label="К уровням" title="К уровням">🪐</button>
+    <button class="sg-btn sg-icon" data-act="levels" aria-label="${t.toLevels}" title="${t.toLevels}">🪐</button>
     <div class="sg-title"></div>
-    <div class="sg-ink" title="Запас лианы"><span aria-hidden="true">🌿</span><div class="sg-ink-bar"><i></i></div></div>
+    <div class="sg-ink" title="${t.ink}"><span aria-hidden="true">🌿</span><div class="sg-ink-bar"><i></i></div></div>
     <div class="sg-count" aria-live="polite"></div>
   </div>
   <div class="sg-tip hidden" role="status"></div>
   <div class="sg-hud-bottom">
-    <button class="sg-btn sg-icon" data-act="undo" aria-label="Убрать последнюю лиану" title="Убрать лиану (Z)">↩️</button>
-    <button class="sg-btn sg-icon" data-act="hint" aria-label="Подсказка" title="Подсказка">💡</button>
-    <button class="sg-btn sg-primary" data-act="pour" title="Полить (пробел)"><img class="sg-resource-art" src="${water}" alt=""> <span class="sg-label">Полить</span></button>
-    <button class="sg-btn sg-icon" data-act="restart" aria-label="Начать заново" title="Заново (R)">🔄</button>
+    <button class="sg-btn sg-icon" data-act="undo" aria-label="${t.undo}" title="${t.undoTitle}">↩️</button>
+    <button class="sg-btn sg-icon" data-act="hint" aria-label="${t.hint}" title="${t.hint}">💡</button>
+    <button class="sg-btn sg-primary" data-act="pour" title="${t.pourTitle}"><img class="sg-resource-art" src="${water}" alt=""> <span class="sg-label">${t.pour}</span></button>
+    <button class="sg-btn sg-icon" data-act="restart" aria-label="${t.restart}" title="${t.restartTitle}">🔄</button>
   </div>`;
 
 export class Hud {
@@ -37,7 +38,7 @@ export class Hud {
   private lastInk = -1;
 
   constructor() {
-    this.el.innerHTML = HUD_HTML;
+    this.el.innerHTML = hudHtml();
     const q = <T extends HTMLElement>(selector: string) => this.el.querySelector<T>(selector)!;
     this.top = q('.sg-hud-top');
     this.bottom = q('.sg-hud-bottom');
@@ -66,7 +67,7 @@ export class Hud {
       this.countEl.replaceChildren();
       const icon = document.createElement('img');
       icon.src = water;
-      icon.alt = 'Капли';
+      icon.alt = tr().drops;
       icon.className = 'sg-resource-art';
       this.countEl.append(icon, ` ${Math.min(sim.collected, level.need)}/${level.need}`);
     }
@@ -77,7 +78,7 @@ export class Hud {
       this.inkEl.classList.toggle('low', share < 0.2);
     }
     this.pourBtn.disabled = sim.phase !== 'edit';
-    this.pourBtn.querySelector('.sg-label')!.textContent = sim.phase === 'edit' ? 'Полить' : 'Льётся…';
+    this.pourBtn.querySelector('.sg-label')!.textContent = sim.phase === 'edit' ? tr().pour : tr().pouring;
     this.undoBtn.disabled = sim.lines.length === 0 || !sim.canEdit;
   }
 

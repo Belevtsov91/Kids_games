@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
-import { DeleteAccountAction } from '../components/DeleteAccountAction';
-import { Fill } from '../components/Fill';
-import { SITE } from '../site';
-import type { InfoContent } from '../types';
+import { DeleteAccountAction } from '../../components/DeleteAccountAction';
+import { Fill } from '../../components/Fill';
+import { SITE } from '../../site';
+import type { InfoContent } from '../../types';
 
 export const cookies: InfoContent = {
   label: 'Файлы cookie',

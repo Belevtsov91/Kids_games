@@ -3,6 +3,7 @@ import type { Word } from '../game/words';
 import { h } from './dom';
 import { wordArt } from './art';
 import type { ButtonFactory } from './screens';
+import { tr } from '../i18n';
 
 // Экран слова: картинка, клеточки под буквы, поле с пузырями-буквами и монстрик.
 
@@ -25,11 +26,11 @@ export function playScreen({ word, index, total, ghostLetters, monster, button, 
     h('span', { class: 'le-slot', '--i': i }, h('span', { class: 'le-slot-ghost' }, ghostLetters ? letter : '')),
   );
   const dots = Array.from({ length: total }, (_, i) => h('i', { class: i < index ? 'done' : i === index ? 'now' : '' }));
-  const field = h('div', { class: 'le-field', role: 'group', 'aria-label': 'Буквы' });
+  const field = h('div', { class: 'le-field', role: 'group', 'aria-label': tr().letters });
   const card = h(
     'div',
     { class: 'le-card' },
-    h('button', { type: 'button', class: 'le-picture', 'aria-label': 'Послушать слово', click: onSay }, wordArt[word.word] ? h('img', { src: wordArt[word.word], alt: '', draggable: 'false' }) : word.emoji),
+    h('button', { type: 'button', class: 'le-picture', 'aria-label': tr().listen, click: onSay }, wordArt[word.art ?? word.word] ? h('img', { src: wordArt[word.art ?? word.word], alt: '', draggable: 'false' }) : word.emoji),
     h('div', { class: 'le-slots', '--n': word.word.length }, ...slots),
   );
   const el = h(
@@ -38,9 +39,9 @@ export function playScreen({ word, index, total, ghostLetters, monster, button, 
     h(
       'header',
       { class: 'le-top' },
-      button('←', onBack, 'le-btn--round', 'К уровням'),
-      h('div', { class: 'le-dots', 'aria-label': `Слово ${index + 1} из ${total}` }, ...dots),
-      h('div', { class: 'le-tools' }, button('🔊', onSay, 'le-btn--round', 'Послушать слово'), button('💡', onHint, 'le-btn--round', 'Подсказка')),
+      button('←', onBack, 'le-btn--round', tr().toLevels),
+      h('div', { class: 'le-dots', 'aria-label': tr().progress(index + 1, total) }, ...dots),
+      h('div', { class: 'le-tools' }, button('🔊', onSay, 'le-btn--round', tr().listen), button('💡', onHint, 'le-btn--round', tr().hint)),
     ),
     card,
     field,
@@ -63,7 +64,7 @@ export function placeBubbles(field: HTMLElement, bubbles: Bubble[], onTap: (bubb
       {
         type: 'button',
         class: 'le-bubble',
-        'aria-label': `Буква ${bubble.letter}`,
+        'aria-label': tr().letter(bubble.letter),
         '--x': spots[i].x.toFixed(3),
         '--y': spots[i].y.toFixed(3),
         '--hue': HUES[(bubble.letter.charCodeAt(0) + i) % HUES.length],

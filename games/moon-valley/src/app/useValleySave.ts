@@ -9,13 +9,6 @@ const SAVE_DELAY = 1500;
 
 export type SaveStatus = 'loading' | 'saved' | 'saving' | 'local';
 
-export const SAVE_STATUS_TEXT: Record<SaveStatus, string> = {
-  loading: 'Загрузка…',
-  saving: 'Сохраняю…',
-  saved: 'Сохранено ✓',
-  local: 'Сохранено на этом устройстве',
-};
-
 const stamp = (value: unknown) =>
   value && typeof value === 'object' && typeof (value as { savedAt?: unknown }).savedAt === 'number' ? (value as { savedAt: number }).savedAt : 0;
 

@@ -5,10 +5,11 @@ import { confetti } from '../ui/confetti';
 import { h, randomItem, replayClass, wait } from '../ui/dom';
 import type { Monster } from '../ui/Monster';
 import { placeBubbles } from '../ui/playScreen';
+import { tr } from '../i18n';
 
 // Одно слово: ребёнок кормит монстрика буквами по порядку, ошибки и подсказки, финальная похвала.
 
-const PRAISE = ['Ням-ням!', 'Вкусно!', 'Молодец!', 'Ура!', 'Здорово!', 'Супер!', 'Отлично!'];
+// Похвала — tr().praise.
 
 interface RoundHost {
   root: HTMLElement;
@@ -108,7 +109,7 @@ export class WordRound {
     host.monster.mood('happy', 1600);
     host.sound.word();
     host.root.querySelector('.le-slots')?.classList.add('is-done');
-    host.root.querySelector('.le-card')?.append(h('div', { class: 'le-praise' }, randomItem(PRAISE)));
+    host.root.querySelector('.le-card')?.append(h('div', { class: 'le-praise' }, randomItem(tr().praise)));
     confetti(host.root, 18);
     await wait(250);
     host.sound.say(this.word.word);

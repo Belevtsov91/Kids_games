@@ -37,11 +37,6 @@
 }
 .ft-badge i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--c); color: var(--wl-night); font-style: normal; font-size: 14px; }
 
-.ft-lang { display: inline-flex; align-items: center; gap: 6px; }
-.ft-lang span { margin-right: 4px; color: var(--wl-ink-soft); font-size: 13px; font-weight: 700; }
-.ft-lang button { padding: 6px 11px; border: 1.5px solid var(--wl-line); border-radius: 12px; background: none; color: var(--wl-ink-soft); font: inherit; font-weight: 800; font-size: 13px; }
-.ft-lang button[aria-pressed='true'] { border-color: var(--wl-ink); background: var(--wl-ink); color: var(--wl-night); }
-.ft-lang button:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .ft-main { display: grid; grid-template-columns: 1.3fr repeat(4, minmax(0, 1fr)); gap: 28px; }
 .ft-brand p { max-width: 34ch; margin: 14px 0 0; color: var(--wl-ink-soft); font-size: 15px; }

@@ -3,7 +3,8 @@ import type { GameSdk } from '@ig/sdk';
 import { DrawingEngine } from '../engine/DrawingEngine';
 import { palette, tools, type BrushTool } from '../tools';
 import { sound } from '../audio/sound';
-import { defaultTitle, drawingsApi } from '../api/drawings';
+import { drawingsApi } from '../api/drawings';
+import { drawingTitle, tr } from '../i18n';
 import { Gallery } from './Gallery';
 import { ColoringStudio } from './ColoringStudio';
 import paletteArt from '../../assets/icons/palette.svg';
@@ -65,7 +66,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
     if (!engine || engine.isEmpty || save === 'saving') return;
     flash('saving');
     try {
-      await api.save(defaultTitle(), await engine.exportPng());
+      await api.save(drawingTitle(), await engine.exportPng());
       sound.play('save');
       flash('saved');
     } catch {
@@ -80,16 +81,17 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
   }, []);
   const closeGallery = useCallback(() => setGallery(false), []);
 
-  const saveLabel = { idle: 'Сохранить', saving: 'Сохраняю…', saved: 'Сохранено', failed: 'Не сохранилось' }[save];
+  const tx = tr();
+  const saveLabel = tx.save[save];
 
   return (
     <div className="drawing">
       <div ref={hostRef} className="drawing-canvas" inert={coloring || undefined} aria-hidden={coloring || undefined} />
-      {save === 'saved' && <div className="drawing-toast">Рисунок в альбоме ⭐</div>}
-      {save === 'failed' && <div className="drawing-toast is-error">Не получилось сохранить. Проверь интернет.</div>}
+      {save === 'saved' && <div className="drawing-toast">{tx.savedToast}</div>}
+      {save === 'failed' && <div className="drawing-toast is-error">{tx.failedToast}</div>}
       <div className="drawing-toolbar" inert={coloring || undefined} aria-hidden={coloring || undefined}>
         <div className="drawing-row">
-          <button onClick={() => setColoring(true)} aria-label="Раскраски" title="Раскраски"><img src={paletteArt} alt="" style={{ width: '90%', height: '90%' }} /></button>
+          <button onClick={() => setColoring(true)} aria-label={tx.coloring} title={tx.coloring}><img src={paletteArt} alt="" style={{ width: '90%', height: '90%' }} /></button>
           {tools.map((t) => (
             <button
               key={t.id}
@@ -99,8 +101,8 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
                 setTool(t);
                 sound.play('click');
               }}
-              aria-label={t.label}
-              title={t.label}
+              aria-label={tx.tools[t.id]}
+              title={tx.tools[t.id]}
             >
               {t.emoji}
             </button>
@@ -112,8 +114,8 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
               sound.play('undo');
             }}
             disabled={!canUndo}
-            aria-label="Отменить"
-            title="Отменить"
+            aria-label={tx.undo}
+            title={tx.undo}
           >
             ↶
           </button>
@@ -122,19 +124,19 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
               engineRef.current?.clear();
               sound.play('clear');
             }}
-            aria-label="Очистить"
-            title="Очистить (можно вернуть ↶)"
+            aria-label={tx.clear}
+            title={tx.clearHint}
           >
             🗑️
           </button>
           <button onClick={() => void saveDrawing()} disabled={save === 'saving'} aria-label={saveLabel} title={saveLabel}>
             {save === 'saving' ? '⏳' : save === 'saved' ? '✅' : '💾'}
           </button>
-          <button onClick={() => setGallery(true)} aria-label="Мои рисунки" title="Мои рисунки">
+          <button onClick={() => setGallery(true)} aria-label={tx.myDrawings} title={tx.myDrawings}>
             🖼️
           </button>
         </div>
-        <div className="drawing-row" role="radiogroup" aria-label="Цвет">
+        <div className="drawing-row" role="radiogroup" aria-label={tx.color}>
           {palette.map((c) => (
             <button
               key={c}
@@ -146,7 +148,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
                 setColor(c);
                 if (tool.id === 'eraser') setTool(tools[0]);
               }}
-              aria-label={`Цвет ${hex(c)}`}
+              aria-label={tx.colorOf(hex(c))}
             />
           ))}
         </div>

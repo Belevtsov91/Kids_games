@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
-import { ALL_IDS, SHOWCASE, isBig, type BigId, type ShowcaseId } from '../showcase';
+import { useI18n } from '@/i18n/I18nProvider';
+import { LanguageSwitch } from '@/i18n/LanguageSwitch';
+import { ALL_IDS, isBig, showcaseGame, type BigId, type ShowcaseId } from '../showcase';
 import type { WelcomeScene } from '../scene/WelcomeScene';
 import { GamePanel } from './GamePanel';
 
@@ -11,9 +13,10 @@ interface Props {
   onThumbnails: (thumbs: Partial<Record<BigId, string>>) => void;
 }
 
-/** Первый экран: живой 3D-архипелаг, заголовок, подписи островов и карточка выбранной игры. */
+/** Первый экран: живой 3D-архипелаг, заголовок, выбор языка, подписи островов и карточка выбранной игры. */
 export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
   const { me } = useAuth();
+  const { t, locale } = useI18n();
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<WelcomeScene | null>(null);
@@ -35,7 +38,7 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
           onPick: (id) => handlers.current.onFocus(id),
           onHover: setHovered,
           labels: () => labels.current,
-          onThumbnails: (t) => handlers.current.onThumbnails(t),
+          onThumbnails: (th) => handlers.current.onThumbnails(th),
         });
         sceneRef.current = scene;
       })
@@ -61,43 +64,46 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
   }, []);
 
   const cls = ['wl-hero', focused && 'is-focused', no3d && 'is-flat'].filter(Boolean).join(' ');
+  const h = t.hero;
 
   return (
     <section className={cls} ref={heroRef}>
-      <canvas ref={canvasRef} className="wl-canvas" aria-label="Летающие острова: каждый остров — игра" />
+      <canvas ref={canvasRef} className="wl-canvas" aria-label={h.canvas} />
       <div className="wl-copy">
         <div className="wl-wrap">
           <div className="wl-copy-inner">
-            <span className="wl-eyebrow">10 игр · от 3 до 15 лет</span>
+            <span className="wl-eyebrow">{h.eyebrow}</span>
             <h1>
-              Привет! Выбирай <span className="wl-hl">свой мир</span> и играй!
+              {h.titleStart}<span className="wl-hl">{h.titleAccent}</span>{h.titleEnd}
             </h1>
-            <p className="wl-lead">
-              Спасай Лунную Долину, строй остров из блоков, выращивай цветы в космосе. Каждый остров здесь — отдельная игра.
-            </p>
+            <p className="wl-lead">{h.lead}</p>
             <div className="wl-actions">
-              <Link to={me ? '/dashboard' : '/register'} className="wl-btn wl-btn-primary">{me ? 'К играм' : 'Начать играть'}</Link>
-              <a href="#worlds" className="wl-btn wl-btn-ghost">Посмотреть игры</a>
+              <Link to={me ? '/dashboard' : '/register'} className="wl-btn wl-btn-primary">{me ? t.common.toGames : t.common.start}</Link>
+              <a href="#worlds" className="wl-btn wl-btn-ghost">{h.seeGames}</a>
             </div>
-            {!me && <p className="wl-note">Аккаунт заводит взрослый, а дети выбирают свой профиль.</p>}
+            <LanguageSwitch className="wl-lang" />
+            {!me && <p className="wl-note">{h.note}</p>}
           </div>
         </div>
       </div>
 
       <div className="wl-mobile-cta">
+        <div className="wl-lang-row">
+          <LanguageSwitch />
+        </div>
         {me ? (
-          <Link to="/dashboard" className="wl-btn wl-btn-primary">К играм</Link>
+          <Link to="/dashboard" className="wl-btn wl-btn-primary">{t.common.toGames}</Link>
         ) : (
           <>
-            <Link to="/register" className="wl-btn wl-btn-primary">Начать играть</Link>
-            <Link to="/login" className="wl-btn wl-btn-ghost">Войти</Link>
+            <Link to="/register" className="wl-btn wl-btn-primary">{t.common.start}</Link>
+            <Link to="/login" className="wl-btn wl-btn-ghost">{t.common.login}</Link>
           </>
         )}
       </div>
 
       <div className="wl-pills">
         {ALL_IDS.map((id) => {
-          const g = SHOWCASE[id];
+          const g = showcaseGame(id, locale);
           const cn = ['wl-pill', !isBig(id) && 'is-small', hovered === id && 'is-hot'].filter(Boolean).join(' ');
           return (
             <button
@@ -120,10 +126,10 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
 
       <div className="wl-hint" aria-hidden="true">
         <span className="wl-hint-dot" />
-        Нажми на любой остров
+        {h.hint}
       </div>
 
-      <GamePanel game={focused ? SHOWCASE[focused] : null} onClose={() => onFocus(null)} />
+      <GamePanel game={focused ? showcaseGame(focused, locale) : null} onClose={() => onFocus(null)} />
     </section>
   );
 }

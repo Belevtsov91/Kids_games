@@ -1,6 +1,7 @@
 import { isUnlocked } from '../game/logic';
 import { LEVELS, type Level } from '../game/words';
 import { h, starRow } from './dom';
+import { tr } from '../i18n';
 
 // Экран выбора уровня и окно «Уровень пройден».
 
@@ -30,21 +31,21 @@ export function levelsScreen({ stars, childName, loginNote, monster, button, onP
         class: `le-level ${unlocked ? '' : 'is-locked'}`,
         '--i': i,
         disabled: !unlocked,
-        'aria-label': `Уровень ${level.id}: ${level.title}${unlocked ? '' : ', закрыт'}`,
+        'aria-label': tr().level(level.id, level.title, unlocked),
         click: () => onPick(i),
       },
       h('span', { class: 'le-level-num' }, String(level.id)),
       h('span', { class: 'le-level-emoji' }, unlocked ? level.emoji : '🔒'),
       h('span', { class: 'le-level-title' }, level.title),
       h('span', { class: 'le-level-sample' }, level.words.slice(0, 3).map((w) => w.emoji).join(' ')),
-      h('span', { class: 'le-level-stars', 'aria-label': `${got} из 3 звёзд` }, ...starRow(got)),
+      h('span', { class: 'le-level-stars', 'aria-label': tr().starsOf(got) }, ...starRow(got)),
     );
   });
 
   const hero = h(
     'div',
     { class: 'le-hero' },
-    h('div', { class: 'le-speech' }, childName ? `${childName}, покорми меня буквами!` : 'Покорми меня буквами!'),
+    h('div', { class: 'le-speech' }, tr().feedMe(childName)),
     monster,
   );
 
@@ -54,12 +55,12 @@ export function levelsScreen({ stars, childName, loginNote, monster, button, onP
     h(
       'header',
       { class: 'le-top' },
-      button('✕', onExit, 'le-btn--round', 'Выйти из игры'),
-      h('h1', { class: 'le-title' }, 'Буквоед'),
-      h('div', { class: 'le-total', 'aria-label': `Всего звёзд: ${total}` }, `★ ${total}`),
+      button('✕', onExit, 'le-btn--round', tr().exit),
+      h('h1', { class: 'le-title' }, tr().title),
+      h('div', { class: 'le-total', 'aria-label': tr().totalStars(total) }, `★ ${total}`),
     ),
     h('div', { class: 'le-levels-body' }, hero, h('div', { class: 'le-level-grid' }, ...cards)),
-    loginNote ? h('p', { class: 'le-note' }, 'Войдите в профиль, чтобы звёзды сохранялись') : null,
+    loginNote ? h('p', { class: 'le-note' }, tr().loginNote) : null,
   );
 }
 
@@ -80,22 +81,22 @@ interface WinOptions {
 export function winOverlay({ level, title, wordCount, stars, unlocked, hasNext, button, onRetry, onNext, onLevels }: WinOptions) {
   return h(
     'div',
-    { class: 'le-overlay', role: 'dialog', 'aria-label': 'Уровень пройден' },
+    { class: 'le-overlay', role: 'dialog', 'aria-label': tr().levelDone },
     h(
       'div',
       { class: 'le-win' },
       h('div', { class: 'le-win-emoji' }, level.emoji),
       h('h2', {}, title),
-      h('p', {}, `Монстрик съел ${wordCount} слов!`),
+      h('p', {}, tr().ate(wordCount)),
       h('div', { class: 'le-win-stars' }, ...starRow(stars, true)),
-      unlocked ? h('p', { class: 'le-unlock' }, `Открыт уровень «${unlocked.title}»`) : null,
+      unlocked ? h('p', { class: 'le-unlock' }, tr().unlocked(unlocked.title)) : null,
       h(
         'div',
         { class: 'le-win-actions' },
-        button('↻ Ещё раз', onRetry, 'le-btn--soft'),
-        hasNext ? button('Дальше →', onNext, 'le-btn--main') : button('К уровням', onLevels, 'le-btn--main'),
+        button(tr().retry, onRetry, 'le-btn--soft'),
+        hasNext ? button(tr().next, onNext, 'le-btn--main') : button(tr().toLevels, onLevels, 'le-btn--main'),
       ),
-      hasNext ? button('Все уровни', onLevels, 'le-btn--link') : null,
+      hasNext ? button(tr().allLevels, onLevels, 'le-btn--link') : null,
     ),
   );
 }

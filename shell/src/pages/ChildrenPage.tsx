@@ -2,14 +2,17 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { ApiError } from '@/api/client';
+import { useI18n } from '@/i18n/I18nProvider';
+import { age as ageText } from '@/i18n/plural';
 
 const AVATARS = ['🐻', '🐰', '🦊', '🐼', '🐸', '🦁', '🐯', '🐨', '🐵', '🦄', '🐙', '🐳'];
 const AGES = Array.from({ length: 13 }, (_, i) => i + 3);
-const yearsWord = (n: number) => (n % 10 >= 2 && n % 10 <= 4 && (n < 12 || n > 14) ? 'года' : 'лет');
 
 /** Кто играет: выбор профиля ребёнка и добавление нового. */
 export function ChildrenPage() {
   const { me, addChild, selectChild, logout } = useAuth();
+  const { t, locale } = useI18n();
+  const c = t.children;
   const navigate = useNavigate();
   const children = me?.children ?? [];
   const [adding, setAdding] = useState(children.length === 0);
@@ -31,7 +34,8 @@ export function ChildrenPage() {
       await addChild({ name: String(new FormData(e.currentTarget).get('name')), age, avatar });
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof ApiError && err.status !== 400 ? err.message : 'Проверьте имя.');
+      const status = err instanceof ApiError ? err.status : -1;
+      setError(status === 409 ? c.tooMany : status === -1 ? t.auth.offline : c.checkName);
       setBusy(false);
     }
   };
@@ -40,17 +44,17 @@ export function ChildrenPage() {
     <main className="children">
       <header className="topbar">
         <span className="topbar-greeting">
-          <Link to="/" className="topbar-back" aria-label="На главную" title="На главную">
+          <Link to="/" className="topbar-back" aria-label={t.common.home} title={t.common.home}>
             ←
           </Link>
-          Здравствуйте, {me?.parent.name}!
+          {c.hello(me?.parent.name ?? '')}
         </span>
         <button className="btn btn-small" onClick={() => void logout()}>
-          Выйти
+          {t.common.logout}
         </button>
       </header>
 
-      <h1>Кто будет играть?</h1>
+      <h1>{c.title}</h1>
 
       {children.length > 0 && (
         <div className="child-grid">
@@ -58,13 +62,13 @@ export function ChildrenPage() {
             <button key={child.id} className="child-card" onClick={() => void pick(child.id)}>
               <span className="child-avatar">{child.avatar}</span>
               <span>{child.name}</span>
-              <span className="child-age">{child.age} {yearsWord(child.age)}</span>
+              <span className="child-age">{ageText(locale, child.age)}</span>
             </button>
           ))}
           {!adding && (
             <button className="child-card child-card-add" onClick={() => setAdding(true)}>
               <span className="child-avatar">➕</span>
-              <span>Добавить</span>
+              <span>{c.add}</span>
             </button>
           )}
         </div>
@@ -72,14 +76,14 @@ export function ChildrenPage() {
 
       {adding && (
         <form className="child-form" onSubmit={onSubmit}>
-          <h2>Новый профиль</h2>
+          <h2>{c.newProfile}</h2>
           <label>
-            Имя ребёнка
+            {c.name}
             <input name="name" required maxLength={40} autoComplete="off" />
           </label>
 
           <fieldset>
-            <legend>Возраст</legend>
+            <legend>{c.age}</legend>
             <div className="age-picker">
               {AGES.map((a) => (
                 <button type="button" key={a} aria-pressed={a === age} onClick={() => setAge(a)}>
@@ -90,7 +94,7 @@ export function ChildrenPage() {
           </fieldset>
 
           <fieldset>
-            <legend>Аватарка</legend>
+            <legend>{c.avatar}</legend>
             <div className="avatar-picker">
               {AVATARS.map((a) => (
                 <button type="button" key={a} aria-pressed={a === avatar} aria-label={a} onClick={() => setAvatar(a)}>
@@ -104,11 +108,11 @@ export function ChildrenPage() {
           <div className="child-form-actions">
             {children.length > 0 && (
               <button type="button" className="btn btn-secondary" onClick={() => setAdding(false)}>
-                Отмена
+                {t.common.cancel}
               </button>
             )}
             <button className="btn btn-primary" disabled={busy}>
-              {busy ? 'Сохраняем…' : 'Готово'}
+              {busy ? c.saving : c.done}
             </button>
           </div>
         </form>

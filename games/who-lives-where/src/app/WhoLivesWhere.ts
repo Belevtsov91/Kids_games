@@ -8,6 +8,7 @@ import { el } from '../ui/dom';
 import { albumScreen, startScreen, winOverlay } from '../ui/screens';
 import { RoundPlay } from './RoundPlay';
 import { Timers } from './Timers';
+import { animalName, homeWhere, tr } from '../i18n';
 
 /** Вся игра: стартовый экран, раунд с перетаскиванием, альбом найденных зверей. */
 export class WhoLivesWhere {
@@ -61,7 +62,7 @@ export class WhoLivesWhere {
 
   private showStart() {
     this.screen++;
-    this.reset('Кто где живёт?', '');
+    this.reset(tr().title, '');
     this.stage.append(startScreen(this.sdk.profile?.name, () => void this.startRound(), () => void this.showAlbum()));
   }
 
@@ -70,7 +71,7 @@ export class WhoLivesWhere {
     await this.progress.load();
     if (this.disposed || screen !== this.screen) return;
     const round = buildRound(this.progress.progress.level, this.progress.progress.found);
-    this.reset('Отведи зверят домой!', `Уровень ${round.level}`);
+    this.reset(tr().roundTitle, tr().level(round.level));
     this.round = new RoundPlay(round, {
       root: this.root,
       stage: this.stage,
@@ -86,13 +87,13 @@ export class WhoLivesWhere {
     await this.progress.load();
     if (this.disposed || screen !== this.screen) return;
     const found = new Set(this.progress.progress.found);
-    this.reset('Альбом зверят', `${found.size} из ${allAnimals.length}`);
+    this.reset(tr().albumTitle, tr().found(found.size, allAnimals.length));
     this.stage.append(
       albumScreen(found, () => this.showStart(), (card, animal, home, known) => {
-        if (!known) return this.sound.say('Этого зверька ты ещё не встречал. Играй, и он найдётся!');
+        if (!known) return this.sound.say(tr().sayUnknown);
         this.sound.pick();
         this.timers.replayClass(card, 'is-bounce');
-        this.sound.say(`${animal.name} живёт ${home.where}`);
+        this.sound.say(tr().sayLives(animalName(animal), homeWhere(home)));
       }),
     );
   }
@@ -102,7 +103,7 @@ export class WhoLivesWhere {
     void this.progress.completeRound(round.level, round.animals.map((a) => a.id));
     this.confetti.burst();
     this.sound.win();
-    this.sound.say('Ура! Все зверята дома! Молодец!');
+    this.sound.say(tr().sayWin);
     const win = winOverlay(mistakes <= 2 ? 3 : 2, () => void this.startRound(), () => this.showStart());
     this.stage.append(win.overlay);
     win.focus();

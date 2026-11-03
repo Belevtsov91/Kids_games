@@ -1,5 +1,6 @@
 // Звуки синтезируются Web Audio (без файлов), фразы — голосом браузера, если есть русский голос.
 // Всё молчит, когда в оболочке выключен звук.
+import { tr } from '../i18n';
 
 type Note = { freq: number; at: number; dur: number; type?: OscillatorType; gain?: number; slideTo?: number };
 
@@ -83,8 +84,9 @@ export class Sound {
   }
 
   private pickVoice = () => {
-    // Без русского голоса молчим: чужой голос читает кириллицу неразборчиво.
-    this.voice = this.speech?.getVoices().find((v) => v.lang.toLowerCase().startsWith('ru')) ?? null;
+    // Без голоса на языке игры молчим: чужой голос читает текст неразборчиво.
+    const lang = tr().speech;
+    this.voice = this.speech?.getVoices().find((v) => v.lang.toLowerCase().startsWith(lang)) ?? null;
   };
 
   private play(notes: Note[]) {

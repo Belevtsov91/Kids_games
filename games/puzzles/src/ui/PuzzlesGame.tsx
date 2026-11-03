@@ -5,6 +5,7 @@ import { fits, gridForLevel, shuffled, type Grid, type LevelId } from '../game/p
 import { openLibrary, prepareImage, type SavedPuzzleImage } from '../storage/imageLibrary';
 import { usePieceDrag } from '../input/usePieceDrag';
 import { createSound } from '../audio/sound';
+import { tr } from '../i18n';
 import { Catalog } from './Catalog';
 import { Board, DragGhost, Piece } from './Board';
 import '../styles/puzzles.css';
@@ -24,14 +25,14 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
   const [selected, setSelected] = useState<number | null>(null);
   const [hint, setHint] = useState(true);
   const [missCell, setMissCell] = useState<number | null>(null);
-  const [message, setMessage] = useState('Выбери картинку — и начнём!');
+  const [message, setMessage] = useState(() => tr().pick);
   const missTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     library
       .list()
       .then(setSaved)
-      .catch(() => setMessage('Не удалось открыть сохранённые картинки'));
+      .catch(() => setMessage(tr().libraryFailed));
   }, [library]);
   useEffect(() => () => (window.clearTimeout(missTimer.current), sound.dispose()), [sound]);
 
@@ -48,7 +49,7 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
     setPieces(shuffled(Array.from({ length: count }, (_, index) => index)));
     setBoard(Array.from({ length: count }, () => null));
     setSelected(null);
-    setMessage(`${count} деталей. Перетащи деталь на её место или нажми на деталь, а потом на место.`);
+    setMessage(tr().started(count));
   };
 
   const chooseLevel = (next: LevelId) => {
@@ -63,7 +64,7 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
       setMissCell(cell);
       window.clearTimeout(missTimer.current);
       missTimer.current = window.setTimeout(() => setMissCell(null), 450);
-      setMessage('Не сюда — попробуй другое место 🙂');
+      setMessage(tr().miss);
       return;
     }
     const nextBoard = board.map((value, index) => (index === cell ? piece : value));
@@ -72,10 +73,10 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
     setSelected(null);
     if (nextBoard.every((value, index) => value === index)) {
       sound.win();
-      setMessage('Ура! Пазл собран! ⭐');
+      setMessage(tr().solved);
     } else {
       sound.snap();
-      setMessage('Отлично! Ищи следующую деталь.');
+      setMessage(tr().good);
     }
   };
 
@@ -91,12 +92,12 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
-    if (!file.type.startsWith('image/')) return setMessage('Нужна картинка: PNG, JPG или WEBP.');
+    if (!file.type.startsWith('image/')) return setMessage(tr().needImage);
     try {
       const { imageUrl, width, height } = await prepareImage(file);
       const image: SavedPuzzleImage = {
         id: crypto.randomUUID(),
-        title: file.name.replace(/\.[^.]+$/, '').slice(0, 40) || 'Мой пазл',
+        title: file.name.replace(/\.[^.]+$/, '').slice(0, 40) || tr().myPuzzle,
         imageUrl,
         width,
         height,
@@ -106,7 +107,7 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
       setSaved((current) => [image, ...current]);
       start(image);
     } catch {
-      setMessage('Эту картинку не получилось открыть. Попробуй другую.');
+      setMessage(tr().badImage);
     }
   };
 
@@ -115,6 +116,7 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
     setSaved((current) => current.filter((item) => item.id !== id));
   };
 
+  const t = tr();
   const aspect = puzzle ? puzzle.width / puzzle.height : 1;
   // Детали в лотке — того же размера и формы, что клетки на поле.
   const pieceAspect = aspect * (grid.rows / grid.cols);
@@ -123,7 +125,7 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
     <main className={`puzzles ${drag ? 'is-dragging' : ''}`}>
       <header className="puzzles-header">
         <div>
-          <h1>Пазлы</h1>
+          <h1>{t.title}</h1>
           <p aria-live="polite">{message}</p>
         </div>
       </header>
@@ -141,12 +143,12 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
       ) : (
         <section className="game-area" style={{ ['--piece-aspect' as string]: String(pieceAspect) }}>
           <div className="game-topbar">
-            <button onClick={() => setPuzzle(null)}>‹ Картинки</button>
-            <button onClick={() => start(puzzle)}>↻ Заново</button>
+            <button onClick={() => setPuzzle(null)}>{t.pictures}</button>
+            <button onClick={() => start(puzzle)}>{t.restart}</button>
             <button className={hint ? 'is-active' : ''} aria-pressed={hint} onClick={() => setHint((value) => !value)}>
-              👁 Подсказка
+              {t.hint}
             </button>
-            <span>{complete ? 'Готово!' : `Осталось: ${pieces.length}`}</span>
+            <span>{complete ? t.done : t.left(pieces.length)}</span>
           </div>
           <div className="puzzle-play">
             <Board
@@ -160,12 +162,12 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
             />
             {complete ? (
               <div className="win-card">
-                <strong>🎉 Готово!</strong>
-                <button onClick={() => start(puzzle)}>Ещё раз</button>
-                <button onClick={() => setPuzzle(null)}>Другой пазл</button>
+                <strong>🎉 {t.done}</strong>
+                <button onClick={() => start(puzzle)}>{t.again}</button>
+                <button onClick={() => setPuzzle(null)}>{t.another}</button>
               </div>
             ) : (
-              <div className="piece-tray" aria-label="Детали пазла">
+              <div className="piece-tray" aria-label={t.tray}>
                 {pieces.map((piece) => (
                   <Piece
                     key={piece}

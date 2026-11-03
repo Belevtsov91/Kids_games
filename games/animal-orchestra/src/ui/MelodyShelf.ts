@@ -3,6 +3,7 @@ import type { Playback } from '../app/Playback';
 import { animalById } from '../game/animals';
 import { el } from './dom';
 import type { Toast } from './Toast';
+import { formatDate, tr } from '../i18n';
 
 // Полка «Мои мелодии»: список сохранённых мелодий с сервера — послушать или удалить.
 
@@ -32,7 +33,7 @@ export class MelodyShelf {
       this.saved = await this.api.list();
     } catch {
       this.saved = null;
-      this.toast.show('😕 Не получилось загрузить');
+      this.toast.show(tr().loadFailed);
       this.close();
       return;
     }
@@ -65,13 +66,13 @@ export class MelodyShelf {
   }
 
   private render() {
-    const close = el('button', { className: 'ao-sheet-close', type: 'button', attrs: { 'aria-label': 'Закрыть' } }, '✖');
+    const close = el('button', { className: 'ao-sheet-close', type: 'button', attrs: { 'aria-label': tr().close } }, '✖');
     close.addEventListener('click', () => this.dismiss());
     const list = el('div', { className: 'ao-songs' });
     if (this.saved === null) list.append(el('div', { className: 'ao-empty' }, '⏳'));
-    else if (!this.saved.length) list.append(el('div', { className: 'ao-empty' }, '🎼 Пока пусто'));
+    else if (!this.saved.length) list.append(el('div', { className: 'ao-empty' }, tr().empty));
     else for (const melody of this.saved) list.append(this.songCard(melody));
-    const panel = el('div', { className: 'ao-sheet-panel', attrs: { role: 'dialog', 'aria-label': 'Мои мелодии' } }, el('h2', {}, '📚 Мои мелодии'), close, list);
+    const panel = el('div', { className: 'ao-sheet-panel', attrs: { role: 'dialog', 'aria-label': tr().shelf } }, el('h2', {}, `📚 ${tr().shelf}`), close, list);
     this.el.replaceChildren(panel);
   }
 
@@ -80,10 +81,10 @@ export class MelodyShelf {
       .slice(0, 6)
       .map((n) => animalById(n.a)?.emoji ?? '')
       .join('');
-    const date = new Date(melody.createdAt).toLocaleString('ru', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const date = formatDate(melody.createdAt);
     const play = el(
       'button',
-      { className: 'ao-song-play', type: 'button', attrs: { 'aria-label': `Играть: ${melody.title}, ${date}` } },
+      { className: 'ao-song-play', type: 'button', attrs: { 'aria-label': tr().playMelody(melody.title, date) } },
       el('span', { className: 'ao-song-icon', attrs: { 'aria-hidden': 'true' } }, '▶'),
       el('span', { className: 'ao-song-faces', attrs: { 'aria-hidden': 'true' } }, faces + (melody.notes.length > 6 ? '…' : '')),
       el('span', { className: 'ao-song-date' }, date),
@@ -94,18 +95,18 @@ export class MelodyShelf {
       this.playback.play(melody.notes);
     });
 
-    const remove = el('button', { className: 'ao-song-remove', type: 'button', attrs: { 'aria-label': 'Удалить' } }, '🗑');
+    const remove = el('button', { className: 'ao-song-remove', type: 'button', attrs: { 'aria-label': tr().remove } }, '🗑');
     const card = el('div', { className: 'ao-song', dataset: { id: melody.id } }, play, remove);
     remove.addEventListener('click', () => {
       // Двойное подтверждение: первое касание спрашивает, второе удаляет.
       if (card.classList.contains('is-confirm')) return void this.remove(melody.id);
       card.classList.add('is-confirm');
       remove.textContent = '✔';
-      remove.setAttribute('aria-label', 'Точно удалить');
+      remove.setAttribute('aria-label', tr().removeSure);
       setTimeout(() => {
         card.classList.remove('is-confirm');
         remove.textContent = '🗑';
-        remove.setAttribute('aria-label', 'Удалить');
+        remove.setAttribute('aria-label', tr().remove);
       }, 3000);
     });
     return card;
@@ -118,7 +119,7 @@ export class MelodyShelf {
       this.saved = (this.saved ?? []).filter((m) => m.id !== id);
       this.render();
     } catch {
-      this.toast.show('😕 Не получилось удалить');
+      this.toast.show(tr().removeFailed);
     }
   }
 }

@@ -1,6 +1,7 @@
 import type { CSSProperties, PointerEvent } from 'react';
 import { piecePosition, type Grid } from '../game/puzzleMath';
 import type { DragState } from '../input/usePieceDrag';
+import { tr } from '../i18n';
 
 interface PieceProps {
   piece: number;
@@ -22,7 +23,7 @@ export function Piece({ piece, imageUrl, grid, className = '', style, onClick, o
         backgroundPosition: piecePosition(piece, grid),
         ...style,
       }}
-      aria-label={`Деталь ${piece + 1}`}
+      aria-label={tr().piece(piece + 1)}
       onClick={onClick}
       onPointerDown={onPointerDown}
     />
@@ -58,7 +59,7 @@ export function Board({ board, imageUrl, aspect, grid, hint, missCell, onCell }:
             data-cell={cell}
             className={`puzzle-slot ${missCell === cell ? 'is-miss' : ''}`}
             onClick={() => onCell(cell)}
-            aria-label={`Место ${cell + 1}`}
+            aria-label={tr().cell(cell + 1)}
           />
         ) : (
           <Piece key={cell} piece={piece} imageUrl={imageUrl} grid={grid} className="is-placed" />

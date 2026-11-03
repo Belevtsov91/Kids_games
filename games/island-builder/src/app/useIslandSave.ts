@@ -8,13 +8,6 @@ const SAVE_DELAY = 1500;
 
 export type SaveStatus = 'loading' | 'saved' | 'saving' | 'offline';
 
-export const SAVE_STATUS_TEXT: Record<SaveStatus, string> = {
-  loading: 'Загрузка…',
-  saving: 'Сохраняю…',
-  saved: 'Сохранено ✓',
-  offline: 'Без сохранения',
-};
-
 const randomIsland = () => generateIsland(Date.now() % 100000);
 
 export function useIslandSave(sdk: GameSdk) {

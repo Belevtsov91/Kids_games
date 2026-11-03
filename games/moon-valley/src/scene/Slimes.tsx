@@ -7,6 +7,7 @@ import { Group, Vector3 } from 'three';
 import { BOSS_CLEARING, type SlimeSpawn } from '../game/world';
 import { CAST_RADIUS, SLIME_RESPAWN, useRuntime, type Runtime } from '../app/runtime';
 import { useAnimator, useCharacter } from './models';
+import { tr } from '../i18n';
 
 const turn = (group: Group, angle: number, k: number) => {
   let diff = angle - group.rotation.y;
@@ -212,7 +213,7 @@ export function MushroomKing({ calm, onCalm, onHurt, onHit }: { calm: boolean; o
       {!calm && (
         <Html position={[0, 3.9, 0]} center distanceFactor={14} zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
           <div className="mv-boss-bar">
-            <span>Грусть Грибного короля</span>
+            <span>{tr().kingSadness}</span>
             <i style={{ width: `${(hp / BOSS_HP) * 100}%` }} />
           </div>
         </Html>

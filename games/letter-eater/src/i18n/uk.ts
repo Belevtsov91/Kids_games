@@ -1,0 +1,30 @@
+// Тексты: українська.
+import type { Texts } from './ru';
+
+export const uk: Texts = {
+  speech: 'uk-UA',
+  voiceHint: /female|lesya|леся|polina/i,
+  title: 'Буквоїд',
+  feedMe: (name) => (name ? `${name}, нагодуй мене літерами!` : 'Нагодуй мене літерами!'),
+  exit: 'Вийти з гри',
+  totalStars: (n) => `Усього зірок: ${n}`,
+  loginNote: 'Увійдіть у профіль, щоб зірки зберігалися',
+  level: (id, title, open) => `Рівень ${id}: ${title}${open ? '' : ', закрито'}`,
+  starsOf: (n) => `${n} з 3 зірок`,
+  levelDone: 'Рівень пройдено',
+  ate: (n) => `Монстрик з’їв слів: ${n}!`,
+  unlocked: (title) => `Відкрито рівень «${title}»`,
+  retry: '↻ Ще раз',
+  next: 'Далі →',
+  toLevels: 'До рівнів',
+  allLevels: 'Усі рівні',
+  letters: 'Літери',
+  listen: 'Послухати слово',
+  progress: (n, of) => `Слово ${n} з ${of}`,
+  hint: 'Підказка',
+  letter: (l) => `Літера ${l}`,
+  praise: ['Ням-ням!', 'Смачно!', 'Молодець!', 'Ура!', 'Чудово!', 'Супер!', 'Відмінно!'],
+  hungry: 'Ням-ням! Хочу літери!',
+  winTitle: (stars) => (stars === 3 ? 'Ідеально!' : stars === 2 ? 'Чудово!' : 'Вийшло!'),
+  winSay: (title, name) => (name ? `${title} ${name}, ти молодець!` : `${title} Ти молодець!`),
+};

@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { GameLink } from '@/info/components/GameLink';
+import { useI18n } from '@/i18n/I18nProvider';
 import type { ShowcaseGame } from '../showcase';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 /** Карточка выбранной игры: справа от острова на компьютере, шторкой снизу на телефоне. */
 export function GamePanel({ game, onClose }: Props) {
+  const { t } = useI18n();
   return (
     <aside
       className="wl-panel"
@@ -18,7 +20,7 @@ export function GamePanel({ game, onClose }: Props) {
     >
       {game && (
         <>
-          <button type="button" className="wl-panel-close" onClick={onClose} aria-label="Назад ко всем мирам">
+          <button type="button" className="wl-panel-close" onClick={onClose} aria-label={t.panel.close}>
             ✕
           </button>
           <div className="wl-panel-top">
@@ -28,8 +30,8 @@ export function GamePanel({ game, onClose }: Props) {
               <div className="wl-chips">
                 <span className="wl-chip is-kind">{game.kind}</span>
                 <span className="wl-chip">{game.ages}</span>
-                {game.tags.map((t) => (
-                  <span key={t} className="wl-chip">{t}</span>
+                {game.tags.map((tag) => (
+                  <span key={tag} className="wl-chip">{tag}</span>
                 ))}
               </div>
             </div>
@@ -40,13 +42,13 @@ export function GamePanel({ game, onClose }: Props) {
               {game.shots.map((s) => (
                 <img key={s.src} src={s.src} alt={s.alt} loading="lazy" />
               ))}
-              <figcaption>Настоящие кадры из игры</figcaption>
+              <figcaption>{t.panel.shots}</figcaption>
             </figure>
           )}
           <div className="wl-panel-actions">
-            <GameLink gameId={game.id} className="wl-btn wl-btn-primary wl-btn-sm">Играть</GameLink>
+            <GameLink gameId={game.id} className="wl-btn wl-btn-primary wl-btn-sm">{t.panel.play}</GameLink>
             <button type="button" className="wl-btn wl-btn-ghost wl-btn-sm" onClick={onClose}>
-              Все миры
+              {t.panel.all}
             </button>
           </div>
         </>

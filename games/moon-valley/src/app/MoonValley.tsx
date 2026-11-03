@@ -9,7 +9,6 @@ import {
   calmBoss,
   cleanseSlime,
   collectCrystal,
-  CROP_NAME,
   cropOf,
   drawWater,
   GREENHOUSE_COST,
@@ -28,35 +27,35 @@ import { ActionButtons, Dialog, Joystick, Loading, QuestLog, QuestTracker, Toast
 import { useControls } from './controls';
 import { usePaused, type Pause } from './pause';
 import { CAST_COOLDOWN, createRuntime, MAX_HEARTS, RuntimeContext, type Target } from './runtime';
-import { SAVE_STATUS_TEXT, useValleySave } from './useValleySave';
+import { useValleySave } from './useValleySave';
+import { tr } from '../i18n';
 import '../styles/index.css';
-
-const PET_NAMES: Record<PetKind, string> = { fox: 'Искорку', owl: 'Луну', bunny: 'Мха' };
 
 function actionLabel(target: Target | null, state: ValleyState): string | null {
   if (!target) return null;
+  const a = tr().act;
   switch (target.kind) {
     case 'plot': {
       const plot = state.plots[Number(target.id)];
       if (!plot) return null;
-      if (plot.stage === 0) return state.seeds > 0 ? 'Посадить' : 'Нет семян';
-      if (plot.stage === 3) return 'Собрать урожай';
-      return state.water > 0 ? 'Полить' : 'Нет воды';
+      if (plot.stage === 0) return state.seeds > 0 ? a.plant : a.noSeeds;
+      if (plot.stage === 3) return a.harvest;
+      return state.water > 0 ? a.water : a.noWater;
     }
     case 'npc':
-      return `Говорить: ${NPC_NAMES[target.id as NpcId]}`;
+      return a.talk(NPC_NAMES[target.id as NpcId]);
     case 'crystal':
-      return 'Взять кристалл';
+      return a.crystal;
     case 'chest':
-      return 'Открыть сундук';
+      return a.chest;
     case 'well':
-      return 'Набрать воды';
+      return a.well;
     case 'greenhouse':
-      return `Построить оранжерею · ${GREENHOUSE_COST} ✨`;
+      return a.build(GREENHOUSE_COST);
     case 'pet':
-      return `Погладить ${PET_NAMES[target.id as PetKind]}`;
+      return a.pet(tr().petsAcc[target.id as PetKind]);
     case 'boss':
-      return 'Говорить с королём';
+      return a.king;
   }
 }
 
@@ -115,9 +114,9 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
   useEffect(() => {
     if (state.level > level.current) {
       sound('level', 0.6);
-      toast(`🎉 Новый уровень: ${state.level}!`);
+      toast(tr().toast.level(state.level));
       for (const pet of state.pets)
-        if (PET_UNLOCK[pet.id] === state.level && PET_UNLOCK[pet.id] > level.current) toast(`${pet.name} выходит из тумана!`);
+        if (PET_UNLOCK[pet.id] === state.level && PET_UNLOCK[pet.id] > level.current) toast(tr().toast.petFree(tr().pets[pet.id]));
     }
     level.current = state.level;
   }, [state.level, state.pets, sound, toast]);
@@ -148,17 +147,17 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
         const before = s.plots[id];
         const next = tendPlot(s, id);
         if (next === s) {
-          toast(before?.stage === 0 ? 'Нужны семена: собирай урожай, очищай слаймов.' : 'Нужна вода: набери её в колодце в деревне.');
+          toast(before?.stage === 0 ? tr().toast.needSeeds : tr().toast.needWater);
           sound('ui', 0.3);
           return;
         }
         update(() => next);
         if (before?.stage === 3) {
           sound('coin');
-          toast(`Урожай: ${CROP_NAME[cropOf(id)]}! +8 ✨ +2 🌱`);
+          toast(tr().toast.harvest(tr().crops[cropOf(id)]));
         } else {
           valleySound.chime();
-          toast(before?.stage === 0 ? 'Посажено! Полей два раза.' : before?.stage === 2 ? 'Созрело! Можно собирать.' : 'Растёт!');
+          toast(before?.stage === 0 ? tr().toast.planted : before?.stage === 2 ? tr().toast.ripe : tr().toast.growing);
         }
         return;
       }
@@ -171,11 +170,11 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
         runtime.action = { name: 'wave', until: runtime.time + 1 };
         if (result.event === 'accepted') {
           sound('quest');
-          toast(`Новое задание: ${QUESTS[s.quest.index]?.title}`);
+          toast(tr().toast.newQuest(QUESTS[s.quest.index]?.title ?? ''));
         } else if (result.event === 'completed') {
           sound('level', 0.6);
           const quest = QUESTS[s.quest.index];
-          if (quest) toast(`Задание выполнено! ${rewardText(quest.reward)}`);
+          if (quest) toast(tr().toast.questDone(rewardText(quest.reward)));
         } else sound('ui', 0.3);
         return;
       }
@@ -185,28 +184,28 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
         setTarget(null);
         update(collectCrystal);
         sound('gem');
-        toast('Лунный кристалл: +3 ✨ +1 💧');
+        toast(tr().toast.crystal);
         return;
       case 'chest':
         update((value) => openChest(value, current.id));
         sound('coin');
-        toast('Сундук Хранителей: +10 ✨ +2 🌱 +2 💧');
+        toast(tr().toast.chest);
         return;
       case 'well':
         update(drawWater);
         valleySound.chime();
-        toast('Набрал воды: +2 💧');
+        toast(tr().toast.well);
         return;
       case 'greenhouse': {
         const next = buildGreenhouse(s);
         if (next === s) {
-          toast(`Нужно ${GREENHOUSE_COST} ✨ звёздного света.`);
+          toast(tr().toast.needStar(GREENHOUSE_COST));
           sound('ui', 0.3);
           return;
         }
         update(() => next);
         sound('level', 0.6);
-        toast('Оранжерея построена!');
+        toast(tr().toast.built);
         return;
       }
       case 'pet': {
@@ -214,12 +213,11 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
         update((value) => befriend(value, id));
         setHappy((value) => ({ ...value, [id]: runtime.time }));
         valleySound.chime();
-        const pet = s.pets.find((item) => item.id === id);
-        toast(`${pet?.name} радуется! 💛`);
+        toast(tr().toast.petHappy(tr().pets[id]));
         return;
       }
       case 'boss':
-        setDialog({ npc: 'king', text: 'Спасибо, Хранитель! В темноте мне было так грустно. Теперь я буду охранять северную поляну.' });
+        setDialog({ npc: 'king', text: tr().toast.kingThanks });
         return;
     }
   }, [dialog, runtime, toast, sound, update]);
@@ -261,7 +259,7 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
     (big: boolean) => {
       update((value) => cleanseSlime(value, big));
       sound('poof', 0.5);
-      toast(big ? 'Грибочек снова весёлый! +4 ✨ +1 🌱' : 'Слайм засиял! +2 ✨');
+      toast(big ? tr().toast.bigSlime : tr().toast.slime);
     },
     [update, sound, toast],
   );
@@ -269,7 +267,7 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
     sound('hurt', 0.5);
     setHearts(runtime.hearts);
     if (runtime.hearts <= 0) {
-      toast('Ой! Искорка отвела тебя домой отдохнуть.');
+      toast(tr().toast.hurt);
       setTimeout(() => {
         runtime.teleport = runtime.hero.clone().set(HERO_SPAWN[0], 0, HERO_SPAWN[1]);
         runtime.hearts = MAX_HEARTS;
@@ -281,14 +279,14 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
   const onBossHit = useCallback(
     (left: number) => {
       sound('poof', 0.4);
-      if (left > 0 && left % 3 === 0) toast(`Король светлеет! Осталось ${left}`);
+      if (left > 0 && left % 3 === 0) toast(tr().toast.kingLeft(left));
     },
     [sound, toast],
   );
   const onCalmBoss = useCallback(() => {
     update(calmBoss);
     sound('level', 0.7);
-    toast('Грибной король пляшет! +30 ✨');
+    toast(tr().toast.kingDance);
   }, [update, sound, toast]);
 
   const view = questView(state);
@@ -307,16 +305,16 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
       >
         <section>
           <span className="mv-moon">☾</span>
-          <p>Уютная 3D RPG</p>
+          <p>{tr().intro.tag}</p>
           <h1>
-            Хранители
+            {tr().intro.title[0]}
             <br />
-            Лунной Долины
+            {tr().intro.title[1]}
           </h1>
-          <p>Верни свет волшебным землям, вырасти сад и подружись с питомцами.</p>
-          <button onClick={start}>{state.quest.index > 0 || state.level > 1 ? `Продолжить · ур. ${state.level}` : 'Начать приключение'} ✨</button>
+          <p>{tr().intro.text}</p>
+          <button onClick={start}>{state.quest.index > 0 || state.level > 1 ? tr().intro.resume(state.level) : tr().intro.start} ✨</button>
           <button className="mv-link" onClick={sdk.exit}>
-            В меню
+            {tr().intro.menu}
           </button>
         </section>
       </main>
@@ -346,14 +344,14 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
           state={state}
           hearts={hearts}
           night={night}
-          saveText={SAVE_STATUS_TEXT[status]}
+          saveText={tr().save[status]}
           onNight={() => setNight((value) => !value)}
           onLog={() => setLog(true)}
         />
         <QuestTracker state={state} onOpen={() => setLog(true)} />
         <Toasts items={toasts} />
         {touch && <Joystick runtime={runtime} />}
-        {!touch && <div className="mv-keys">WASD — идти · Пробел — прыжок · E — действие · F — свет · Q — журнал · мышь — камера</div>}
+        {!touch && <div className="mv-keys">{tr().hud.keys}</div>}
         <ActionButtons label={dialog ? null : actionLabel(target, state)} onAct={act} onCast={cast} onJump={jump} />
         {dialog && <Dialog npc={dialog.npc} text={dialog.text} onClose={() => setDialog(null)} />}
         {log && <QuestLog state={state} onClose={() => setLog(false)} />}

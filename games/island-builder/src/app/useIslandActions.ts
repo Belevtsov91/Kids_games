@@ -24,6 +24,7 @@ import { sound } from '../audio/sound';
 import type { TapTarget } from '../scene/types';
 import type { IslandState } from './useIslandSave';
 import type { SceneObjects } from './useSceneObjects';
+import { tr } from '../i18n';
 
 // Что происходит по нажатию на сцену с выбранным инструментом, а также «Отменить», день/ночь и новый остров.
 
@@ -88,7 +89,7 @@ export function useIslandActions({ island, objects, tool, material, treeKind, sh
     if (target.kind !== 'block' || target.normal.y !== 1) return false;
     const cell = { ...target.cell, y: target.cell.y + 1 };
     if (world.trees.size >= MAX_TREES) {
-      showHint('Деревьев уже очень много — выкопай какое-нибудь');
+      showHint(tr().tooManyTrees);
       return false;
     }
     if (!commit(plantTree(world, cell, treeKind))) return false;
@@ -109,7 +110,7 @@ export function useIslandActions({ island, objects, tool, material, treeKind, sh
         return true;
       }
     }
-    showHint('Лодку можно спустить только на воду');
+    showHint(tr().boatOnWater);
     return false;
   };
 

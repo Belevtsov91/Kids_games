@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { DrawingsApi, DrawingSummary } from '../api/drawings';
+import { tr } from '../i18n';
 
 interface Props {
   api: DrawingsApi;
@@ -11,6 +12,7 @@ type Thumbs = Record<string, string | undefined>;
 
 /** Альбом рисунков ребёнка: открыть, чтобы дорисовать, или удалить. */
 export function Gallery({ api, onOpen, onClose }: Props) {
+  const g = tr().gallery;
   const [items, setItems] = useState<DrawingSummary[] | null>(null);
   const [thumbs, setThumbs] = useState<Thumbs>({});
   const [error, setError] = useState(false);
@@ -50,16 +52,16 @@ export function Gallery({ api, onOpen, onClose }: Props) {
   };
 
   return (
-    <div className="drawing-gallery" role="dialog" aria-modal="true" aria-label="Мои рисунки">
+    <div className="drawing-gallery" role="dialog" aria-modal="true" aria-label={tr().myDrawings}>
       <header>
-        <h2>🖼️ Мои рисунки</h2>
-        <button className="gallery-close" onClick={onClose} aria-label="Закрыть">
+        <h2>🖼️ {tr().myDrawings}</h2>
+        <button className="gallery-close" onClick={onClose} aria-label={g.close}>
           ✕
         </button>
       </header>
-      {error && <p className="gallery-note">Не получилось открыть альбом. Проверь интернет и попробуй ещё раз.</p>}
-      {!error && items === null && <p className="gallery-note">Загружаю…</p>}
-      {items?.length === 0 && <p className="gallery-note">Пока пусто. Нарисуй что-нибудь и нажми 💾!</p>}
+      {error && <p className="gallery-note">{g.error}</p>}
+      {!error && items === null && <p className="gallery-note">{g.loading}</p>}
+      {items?.length === 0 && <p className="gallery-note">{g.empty}</p>}
       <div className="gallery-grid">
         {items?.map((item) => (
           <figure key={item.id}>
@@ -68,7 +70,7 @@ export function Gallery({ api, onOpen, onClose }: Props) {
             </button>
             <figcaption>{item.title}</figcaption>
             <button className={`gallery-delete ${confirmId === item.id ? 'is-confirm' : ''}`} onClick={() => void remove(item.id)}>
-              {confirmId === item.id ? 'Точно удалить?' : '🗑️'}
+              {confirmId === item.id ? g.sure : '🗑️'}
             </button>
           </figure>
         ))}

@@ -16,6 +16,7 @@ import { lightUpStars, loseCardHtml, winCardHtml } from '../ui/resultCards';
 import { GameLoop } from './GameLoop';
 import { simFeedback } from './simFeedback';
 import '../styles/index.css';
+import { levelText, tr } from '../i18n';
 
 // Контроллер игры: экраны (карта уровней и уровень), кнопки и клавиши.
 // Весь интерфейс — обычный DOM поверх одного холста.
@@ -49,7 +50,7 @@ export class SpaceGardener implements GameActions {
     this.progress = createProgress(sdk);
     this.root.className = 'sg-root';
     this.canvas.className = 'sg-canvas';
-    this.canvas.setAttribute('aria-label', 'Игровое поле: рисуй лианы пальцем');
+    this.canvas.setAttribute('aria-label', tr().field);
     this.mapEl.className = 'sg-map';
     this.root.append(this.canvas, this.mapEl, this.hud.el, this.overlay.el);
     this.renderer = new Renderer(this.canvas);
@@ -128,8 +129,9 @@ export class SpaceGardener implements GameActions {
     this.screen = 'play';
     this.mapEl.hidden = true;
     this.hud.el.hidden = false;
-    this.hud.reset(`${index + 1}. ${level.name}`);
-    this.hud.showTip(level.tip, 6000);
+    const text = levelText(level);
+    this.hud.reset(`${index + 1}. ${text.name}`);
+    this.hud.showTip(text.tip, 6000);
     // На первом уровне сразу показываем, где рисовать.
     this.ghostUntil = index === 0 ? performance.now() + 4500 : 0;
     this.layout();

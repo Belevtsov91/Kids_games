@@ -3,6 +3,7 @@ import type { SoundMode } from '../game/song';
 import { el, replayClass } from './dom';
 import { animalArt } from './art';
 import drum from '../../assets/icons/drum.svg';
+import { tr } from '../i18n';
 
 // Сцена: занавес, огни, зверята полукругом и пузырь-подсказка над ними.
 
@@ -22,7 +23,7 @@ export class Stage {
           className: 'ao-animal',
           type: 'button',
           dataset: { animal: animal.id },
-          attrs: { 'aria-label': animal.name, style: `--c:${animal.color};--lift:${Math.abs(i - center) ** 1.6};--i:${i}` },
+          attrs: { 'aria-label': tr().animals[animal.id] ?? animal.name, style: `--c:${animal.color};--lift:${Math.abs(i - center) ** 1.6};--i:${i}` },
         },
         el(
           'span',

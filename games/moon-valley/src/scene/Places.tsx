@@ -4,10 +4,11 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html, Sparkles } from '@react-three/drei';
 import type { Group } from 'three';
-import { cropOf, type Plot } from '../game/valley';
+import { cropOf, GREENHOUSE_COST, type Plot } from '../game/valley';
 import { CRYSTALS, GREENHOUSE_SPOT, PLOTS } from '../game/world';
 import { CRYSTAL_RESPAWN, useRuntime } from '../app/runtime';
 import { Model } from './models';
+import { tr } from '../i18n';
 
 /** Масштаб, при котором созревшее растение высотой около метра. */
 const CROP_SCALE = { corn: 0.62, beet: 1, wheat: 1.25, rice: 1.25 };
@@ -112,7 +113,7 @@ export function Greenhouse({ built }: { built: boolean }) {
         <Sparkles count={14} scale={[4, 1.4, 4]} position={[0, 0.6, 0]} size={3} color="#fff0a6" />
         <Html position={[0, 1.8, 0]} center distanceFactor={12} zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
           <div className="mv-npc-label">
-            <span>Оранжерея · 15 ✨</span>
+            <span>{tr().greenhouse} · {GREENHOUSE_COST} ✨</span>
           </div>
         </Html>
       </group>

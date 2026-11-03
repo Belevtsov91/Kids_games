@@ -1,25 +1,24 @@
+import { tr } from '../i18n';
+
+const ICONS = ['👆', '🔄', '🤏', '🏆'];
+
 /** Подсказка «как играть» для нового острова. */
 export function WelcomeDialog({ onStart }: { onStart(): void }) {
+  const t = tr();
   return (
-    <div className="ib-modal" role="dialog" aria-modal="true" aria-label="Как играть">
+    <div className="ib-modal" role="dialog" aria-modal="true" aria-label={t.howTo}>
       <div className="ib-card ib-dialog">
-        <h2>🏝️ Твой остров!</h2>
+        <h2>{t.welcome}</h2>
         <ul className="ib-howto">
-          <li>
-            <span>👆</span>Нажми на остров — поставишь блок
-          </li>
-          <li>
-            <span>🔄</span>Веди пальцем или мышью — крути камеру
-          </li>
-          <li>
-            <span>🤏</span>Двумя пальцами или колёсиком — приближай
-          </li>
-          <li>
-            <span>🏆</span>Выполняй задания и строй что захочешь
-          </li>
+          {t.welcomeTips.map((tip, i) => (
+            <li key={tip}>
+              <span>{ICONS[i]}</span>
+              {tip}
+            </li>
+          ))}
         </ul>
         <button className="ib-start" onClick={onStart}>
-          Строить!
+          {t.play}
         </button>
       </div>
     </div>

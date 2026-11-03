@@ -1,4 +1,4 @@
-import type { GameManifest } from './manifest';
+import type { GameManifest, Locale } from './manifest';
 
 /** Ответы API игры. Запросы идут только в её собственный префикс `/api/games/<id>`. */
 export interface GameApi {
@@ -20,6 +20,8 @@ export interface GameSdk {
   profile: { id: string; name: string; avatar: string } | null;
   api: GameApi;
   storage: GameStorage;
+  /** Язык, выбранный на сайте. Игра берёт его при запуске и показывает интерфейс на нём. */
+  locale: Locale;
   /** Общий выключатель звука. Игра читает его сама и подписывается на изменения. */
   audio: { readonly muted: boolean; onMuteChange(listener: (muted: boolean) => void): () => void };
   /** Вернуться в меню. */

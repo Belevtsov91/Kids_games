@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
-import { Fill } from '../components/Fill';
-import { SITE } from '../site';
-import type { InfoContent } from '../types';
+import { Fill } from '../../components/Fill';
+import { SITE } from '../../site';
+import type { InfoContent } from '../../types';
 
 export const privacy: InfoContent = {
   label: 'Политика конфиденциальности',

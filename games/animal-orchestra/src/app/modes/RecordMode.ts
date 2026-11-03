@@ -5,6 +5,7 @@ import { soundToggle } from '../../ui/controls';
 import { el } from '../../ui/dom';
 import type { MelodyShelf } from '../../ui/MelodyShelf';
 import type { Mode, OrchestraContext } from '../context';
+import { tr } from '../../i18n';
 
 // «Запись»: записать мелодию, послушать, сохранить на сервер и открыть полку «Мои мелодии».
 
@@ -26,10 +27,10 @@ export class RecordMode implements Mode {
   enter() {
     const { ctx } = this;
     ctx.stage.setBubble(null);
-    const rec = bigButton('ao-rec', 'Записать', el('span', { className: 'ao-rec-dot' }));
-    const play = bigButton('ao-play', 'Послушать', '▶');
-    const save = bigButton('ao-save', 'Сохранить', '💾');
-    const shelf = bigButton('ao-shelf', 'Мои мелодии', '📚');
+    const rec = bigButton('ao-rec', tr().record, el('span', { className: 'ao-rec-dot' }));
+    const play = bigButton('ao-play', tr().listen, '▶');
+    const save = bigButton('ao-save', tr().save, '💾');
+    const shelf = bigButton('ao-shelf', tr().shelf, '📚');
     const meter = el('div', { className: 'ao-meter', attrs: { 'aria-hidden': 'true' } }, el('div', { className: 'ao-meter-fill' }));
 
     rec.addEventListener('click', () => (this.recorder ? this.stop() : this.start()));
@@ -70,7 +71,7 @@ export class RecordMode implements Mode {
     this.take = [];
     this.ctx.audio.click();
     this.onPlaybackChange();
-    this.ctx.toast.show('🎙️ Играй!');
+    this.ctx.toast.show(tr().playNow);
   }
 
   private stop() {
@@ -89,14 +90,14 @@ export class RecordMode implements Mode {
     const save = this.ctx.panel.querySelector<HTMLButtonElement>('.ao-save');
     if (save) save.disabled = true;
     try {
-      const melody = await this.melodies.save(this.take, 'Моя мелодия');
+      const melody = await this.melodies.save(this.take, tr().myMelody);
       this.shelf?.added(melody);
       this.take = [];
       this.ctx.audio.praise();
       this.ctx.fx.confetti();
-      this.ctx.toast.show('💾 Сохранили!');
+      this.ctx.toast.show(tr().saved);
     } catch {
-      this.ctx.toast.show('😕 Не получилось сохранить');
+      this.ctx.toast.show(tr().saveFailed);
     }
     this.onPlaybackChange();
   }
@@ -107,14 +108,14 @@ export class RecordMode implements Mode {
     const recording = this.recorder !== null;
     root.dataset.recording = String(recording);
     const rec = panel.querySelector<HTMLButtonElement>('.ao-rec');
-    rec?.setAttribute('aria-label', recording ? 'Стоп' : 'Записать');
+    rec?.setAttribute('aria-label', recording ? tr().stop : tr().record);
     rec?.setAttribute('aria-pressed', String(recording));
     const hasTake = this.take.length > 0 && !recording;
     const play = panel.querySelector<HTMLButtonElement>('.ao-play');
     if (play) {
       play.disabled = !hasTake;
       play.textContent = playback.playing ? '⏹' : '▶';
-      play.setAttribute('aria-label', playback.playing ? 'Стоп' : 'Послушать');
+      play.setAttribute('aria-label', playback.playing ? tr().stop : tr().listen);
     }
     const save = panel.querySelector<HTMLButtonElement>('.ao-save');
     if (save) save.disabled = !hasTake;

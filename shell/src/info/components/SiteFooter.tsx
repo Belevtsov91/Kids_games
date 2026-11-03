@@ -1,72 +1,45 @@
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
-import { BIG_IDS, SHOWCASE } from '@/welcome/showcase';
+import { useI18n } from '@/i18n/I18nProvider';
+import { BIG_IDS, showcaseGame } from '@/welcome/showcase';
 import { SITE } from '../site';
 import { CopyEmail } from './CopyEmail';
 import { GameLink } from './GameLink';
 
+/** Значки над подвалом: иконка и цвет; подписи берутся из словаря по порядку. */
 const BADGES = [
-  { icon: '✓', text: 'Без рекламы', c: '#7ef09a' },
-  { icon: '🛡', text: 'Безопасно для детей', c: '#7ee7ff' },
-  { icon: '💬', text: 'Без чатов с незнакомцами', c: '#a99bff' },
-  { icon: '📱', text: 'Работает на телефоне', c: '#ffd25a' },
+  { icon: '✓', c: '#7ef09a' },
+  { icon: '🛡', c: '#7ee7ff' },
+  { icon: '💬', c: '#a99bff' },
+  { icon: '📱', c: '#ffd25a' },
 ];
 
-const COLUMNS: { title: string; c: string; links: { to: string; text: string; danger?: boolean }[] }[] = [
+/** Колонки ссылок: адреса и цвета; заголовки и подписи — из словаря, в том же порядке. */
+const COLUMNS: { c: string; links: { to: string; danger?: boolean }[] }[] = [
   {
-    title: 'Родителям',
     c: '#ff7eb6',
-    links: [
-      { to: '/parents', text: 'Как устроен аккаунт' },
-      { to: '/parents', text: 'Возраст и польза игр' },
-      { to: '/kids', text: 'Детская приватность' },
-      { to: '/help', text: 'Помощь и вопросы' },
-      { to: '/delete-account', text: 'Удалить аккаунт и данные', danger: true },
-    ],
+    links: [{ to: '/parents' }, { to: '/parents' }, { to: '/kids' }, { to: '/help' }, { to: '/delete-account', danger: true }],
   },
-  {
-    title: 'О проекте',
-    c: '#7ee7ff',
-    links: [
-      { to: '/about', text: 'О нас' },
-      { to: '/contact', text: 'Контакты' },
-      { to: '/credits', text: 'Авторы 3D-моделей' },
-    ],
-  },
-  {
-    title: 'Документы',
-    c: '#7ef09a',
-    links: [
-      { to: '/privacy', text: 'Политика конфиденциальности' },
-      { to: '/terms', text: 'Условия использования' },
-      { to: '/cookies', text: 'Файлы cookie' },
-    ],
-  },
+  { c: '#7ee7ff', links: [{ to: '/about' }, { to: '/contact' }, { to: '/credits' }] },
+  { c: '#7ef09a', links: [{ to: '/privacy' }, { to: '/terms' }, { to: '/cookies' }] },
 ];
 
 /** Подвал сайта: значки, ссылки на игры и документы, контакты, копирайт. */
 export function SiteFooter() {
+  const { t, locale } = useI18n();
+  const f = t.footer;
   return (
     <footer className="ft">
       <div className="wl-wrap ft-in">
         <div className="ft-top">
           <ul className="ft-badges">
-            {BADGES.map((b) => (
-              <li key={b.text} className="ft-badge" style={{ '--c': b.c } as CSSProperties}>
+            {BADGES.map((b, i) => (
+              <li key={b.icon} className="ft-badge" style={{ '--c': b.c } as CSSProperties}>
                 <i aria-hidden="true">{b.icon}</i>
-                {b.text}
+                {f.badges[i]}
               </li>
             ))}
           </ul>
-          <div className="ft-lang" role="group" aria-label="Язык сайта">
-            <span>Язык</span>
-            <button type="button" aria-pressed="true">RU</button>
-            {['UA', 'RO', 'EN'].map((l) => (
-              <button key={l} type="button" aria-pressed="false" disabled title="Скоро">
-                {l}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="ft-main">
@@ -75,44 +48,47 @@ export function SiteFooter() {
               <span className="wl-logo-mark" aria-hidden="true">🐻</span>
               {SITE.name}
             </Link>
-            <p>Десять игр для детей от 3 до 15 лет: рисуем, строим, считаем и спасаем Лунную Долину. Без рекламы и без чатов.</p>
+            <p>{f.brand}</p>
           </div>
-          <nav className="ft-col" style={{ '--c': '#ffd25a' } as CSSProperties} aria-label="Игры">
-            <h2>Игры</h2>
+          <nav className="ft-col" style={{ '--c': '#ffd25a' } as CSSProperties} aria-label={f.games}>
+            <h2>{f.games}</h2>
             <ul>
-              <li><GameLink>Все игры</GameLink></li>
+              <li><GameLink>{f.allGames}</GameLink></li>
               {BIG_IDS.map((id) => (
-                <li key={id}><GameLink gameId={id}>{SHOWCASE[id].title}</GameLink></li>
+                <li key={id}><GameLink gameId={id}>{showcaseGame(id, locale).title}</GameLink></li>
               ))}
             </ul>
           </nav>
-          {COLUMNS.map((col) => (
-            <nav key={col.title} className="ft-col" style={{ '--c': col.c } as CSSProperties} aria-label={col.title}>
-              <h2>{col.title}</h2>
-              <ul>
-                {col.links.map((l) => (
-                  <li key={l.text}>
-                    <Link to={l.to} className={l.danger ? 'is-danger' : undefined}>{l.text}</Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+          {COLUMNS.map((col, ci) => {
+            const text = f.columns[ci];
+            return (
+              <nav key={text.title} className="ft-col" style={{ '--c': col.c } as CSSProperties} aria-label={text.title}>
+                <h2>{text.title}</h2>
+                <ul>
+                  {col.links.map((l, li) => (
+                    <li key={text.links[li]}>
+                      <Link to={l.to} className={l.danger ? 'is-danger' : undefined}>{text.links[li]}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            );
+          })}
         </div>
 
         <div className="ft-contact">
           <div>
-            <h2>Напишите нам</h2>
-            <p>Вопрос, идея новой игры или что-то сломалось. Отвечаем взрослым за 1–2 рабочих дня.</p>
+            <h2>{f.contactTitle}</h2>
+            <p>{f.contactText}</p>
           </div>
           <CopyEmail />
         </div>
 
         <div className="ft-bottom">
-          <span>© {SITE.year} {SITE.name}. Все права защищены.</span>
+          <span>© {SITE.year} {SITE.name}. {f.rights}</span>
           <span>
-            3D-модели: <a href="https://quaternius.com" target="_blank" rel="noreferrer">Quaternius</a> и{' '}
-            <a href="https://kenney.nl" target="_blank" rel="noreferrer">Kenney</a>, лицензия CC0 1.0
+            {f.models} <a href="https://quaternius.com" target="_blank" rel="noreferrer">Quaternius</a> {f.and}{' '}
+            <a href="https://kenney.nl" target="_blank" rel="noreferrer">Kenney</a>, {f.license}
           </span>
         </div>
       </div>

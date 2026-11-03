@@ -1,10 +1,17 @@
 // Без DOM: этот файл импортирует и сервер (через @ig/sdk/manifest).
 
+/** Языки сайта и игр: русский, украинский, румынский, английский. */
+export const LOCALES = ['ru', 'uk', 'ro', 'en'] as const;
+export type Locale = (typeof LOCALES)[number];
+export const isLocale = (value: unknown): value is Locale => (LOCALES as readonly unknown[]).includes(value);
+
 /** Описание игры. Лежит в `games/<id>/manifest.ts`; из манифестов собирается каталог и в меню, и на сервере. */
 export interface GameManifest {
   /** Совпадает с именем папки игры: латиница, цифры, дефис. */
   id: string;
   title: string;
+  /** Название на других языках; если перевода нет, показывается `title`. */
+  titles?: Partial<Record<Locale, string>>;
   /** Обложка в меню, пока эмодзи. */
   emoji: string;
   kind: '2d' | '3d';

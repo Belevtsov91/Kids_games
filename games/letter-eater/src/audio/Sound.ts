@@ -1,4 +1,5 @@
-// Звуки синтезируются Web Audio на лету (без файлов), слова читает голос браузера на русском.
+// Звуки синтезируются Web Audio на лету (без файлов), слова читает голос браузера на языке игры.
+import { tr } from '../i18n';
 
 export class Sound {
   private ctx: AudioContext | null = null;
@@ -9,8 +10,9 @@ export class Sound {
     this.muted = muted;
     if (typeof speechSynthesis !== 'undefined') {
       const pick = () => {
-        const voices = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('ru'));
-        this.voice = voices.find((v) => /female|irina|milena|светлана|ирина/i.test(v.name)) ?? voices[0] ?? null;
+        const lang = tr().speech.slice(0, 2);
+        const voices = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith(lang));
+        this.voice = voices.find((v) => tr().voiceHint.test(v.name)) ?? voices[0] ?? null;
       };
       pick();
       speechSynthesis.addEventListener?.('voiceschanged', pick);
@@ -74,7 +76,7 @@ export class Sound {
     if (this.muted || typeof speechSynthesis === 'undefined') return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text.toLowerCase());
-    u.lang = 'ru-RU';
+    u.lang = tr().speech;
     u.rate = rate;
     u.pitch = 1.15;
     if (this.voice) u.voice = this.voice;

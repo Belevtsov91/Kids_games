@@ -4,11 +4,13 @@ import { SiteFooter } from '@/info/components/SiteFooter';
 import { SiteTopbar } from '@/info/components/SiteTopbar';
 import { Fill } from '@/info/components/Fill';
 import { SITE } from '@/info/site';
+import { useI18n } from '@/i18n/I18nProvider';
 import type { InfoSlug } from '@/info/types';
 
 /** Информационная страница (документы, родителям, о проекте). Открыта и гостям, и тем, кто вошёл. */
 export function InfoPage({ slug }: { slug: InfoSlug }) {
-  const page = INFO_PAGES[slug];
+  const { t, locale } = useI18n();
+  const page = INFO_PAGES[locale][slug];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,7 +33,7 @@ export function InfoPage({ slug }: { slug: InfoSlug }) {
           <h1>{page.title}</h1>
           {page.dated && (
             <p className="info-date">
-              Редакция от <Fill value={SITE.docsDate} />
+              {t.info.revision} <Fill value={SITE.docsDate} />
             </p>
           )}
         </div>
@@ -40,7 +42,7 @@ export function InfoPage({ slug }: { slug: InfoSlug }) {
         <article className="info-doc">
           {page.summary && (
             <div className="info-summary">
-              <b>Коротко</b>
+              <b>{t.info.summary}</b>
               {page.summary}
             </div>
           )}

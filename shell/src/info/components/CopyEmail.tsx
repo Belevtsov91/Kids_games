@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
+import { useI18n } from '@/i18n/I18nProvider';
 import { SITE, isPlaceholder } from '../site';
 
 /** Адрес поддержки с кнопкой «Скопировать». Если буфер обмена недоступен, выделяет адрес. */
 export function CopyEmail() {
+  const { t } = useI18n();
   const ref = useRef<HTMLElement>(null);
   const [state, setState] = useState<'idle' | 'copied' | 'selected'>('idle');
 
@@ -27,7 +29,7 @@ export function CopyEmail() {
         {SITE.email}
       </code>
       <button type="button" className="wl-btn wl-btn-ghost wl-btn-sm" onClick={copy}>
-        {state === 'copied' ? 'Скопировано' : state === 'selected' ? 'Выделено' : 'Скопировать'}
+        {state === 'copied' ? t.copy.copied : state === 'selected' ? t.copy.selected : t.copy.copy}
       </button>
     </div>
   );

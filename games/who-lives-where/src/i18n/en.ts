@@ -1,0 +1,43 @@
+// Тексты: English.
+import type { Texts } from './ru';
+
+export const en: Texts = {
+  speech: 'en',
+  lead: (name) => (name ? `${name}, help the little animals find their homes!` : 'Help the little animals find their homes!'),
+  play: '▶ Play',
+  album: '📖 Animal album',
+  back: '‹ Back',
+  notFound: 'Not found yet',
+  win: 'You won',
+  next: 'Next ▶',
+  menu: '🏠 Menu',
+  bravo: 'Well done!',
+  allHome: 'All the animals are home',
+  homeCount: (n, of) => `Home ${n} of ${of}`,
+  tray: 'Animals',
+  title: 'Who lives where?',
+  roundTitle: 'Take the animals home!',
+  level: (n) => `Level ${n}`,
+  albumTitle: 'Animal album',
+  found: (n, of) => `${n} of ${of}`,
+  sayUnknown: 'You have not met this animal yet. Keep playing and you will find it!',
+  sayLives: (name, where) => `The ${name.toLowerCase()} lives ${where}`,
+  sayWin: 'Hooray! All the animals are home! Well done!',
+  sayAsk: (name) => `${name}. Where does the ${name.toLowerCase()} live?`,
+  sayHelp: 'Help the little animals find their homes!',
+  sayWrong: (name) => `Oops, not here! Where does the ${name.toLowerCase()} live?`,
+  homes: {
+    farm: ['Farm', 'on the farm'], forest: ['Forest', 'in the forest'], sea: ['Sea', 'in the sea'], house: ['House', 'at home, with people'],
+    pond: ['Pond', 'in the pond'], jungle: ['Jungle', 'in the jungle'], savanna: ['Savanna', 'in the savanna'], ice: ['Ice', 'on the ice'],
+  },
+  animals: {
+    cow: 'Cow', pig: 'Pig', chicken: 'Hen', sheep: 'Sheep', horse: 'Horse', goat: 'Goat',
+    bear: 'Bear', fox: 'Fox', hedgehog: 'Hedgehog', squirrel: 'Squirrel', wolf: 'Wolf', owl: 'Owl',
+    whale: 'Whale', dolphin: 'Dolphin', octopus: 'Octopus', fish: 'Fish', crab: 'Crab',
+    cat: 'Cat', dog: 'Dog', hamster: 'Hamster', rabbit: 'Rabbit',
+    frog: 'Frog', duck: 'Duck', swan: 'Swan',
+    monkey: 'Monkey', tiger: 'Tiger', parrot: 'Parrot', snake: 'Snake', sloth: 'Sloth',
+    lion: 'Lion', giraffe: 'Giraffe', zebra: 'Zebra', elephant: 'Elephant', rhino: 'Rhino',
+    'polar-bear': 'Polar bear', penguin: 'Penguin', seal: 'Seal',
+  },
+};

@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
-import { ApiError } from '@/api/client';
+import { useI18n } from '@/i18n/I18nProvider';
 import { allCorrect, makeProblems } from './parentCheck';
 
 /** Удаление аккаунта: сначала три примера (проверка, что это взрослый), потом подтверждение. */
 export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
   const { me, deleteAccount } = useAuth();
+  const { t } = useI18n();
+  const a = t.account;
   const navigate = useNavigate();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [problems, setProblems] = useState(makeProblems);
@@ -31,7 +33,7 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
     // при ошибке — новые примеры, чтобы ответ нельзя было подобрать
     setProblems(makeProblems());
     setAnswers(['', '', '']);
-    setError('Есть ошибка. Вот новые примеры.');
+    setError(a.wrong);
   };
 
   const remove = async () => {
@@ -40,8 +42,8 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
     try {
       await deleteAccount();
       navigate('/', { replace: true });
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Не получилось удалить. Попробуйте ещё раз.');
+    } catch {
+      setError(a.failed);
       setBusy(false);
     }
   };
@@ -50,11 +52,11 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
 
   return (
     <dialog ref={dialogRef} className="account-dialog" onCancel={onClose} aria-labelledby="delete-title">
-      <h2 id="delete-title">Удалить аккаунт</h2>
+      <h2 id="delete-title">{a.title}</h2>
 
       {step === 'check' ? (
         <form onSubmit={check}>
-          <p>Это может сделать только взрослый. Решите три примера.</p>
+          <p>{a.adultsOnly}</p>
           <div className="parent-check">
             {problems.map((p, i) => (
               <label key={p.text} className="parent-problem">
@@ -65,31 +67,31 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
                   required
                   value={answers[i]}
                   autoFocus={i === 0}
-                  onChange={(e) => setAnswers((a) => a.map((v, k) => (k === i ? e.target.value : v)))}
-                  aria-label={`Ответ: ${p.text}`}
+                  onChange={(e) => setAnswers((v) => v.map((x, k) => (k === i ? e.target.value : x)))}
+                  aria-label={a.answer(p.text)}
                 />
               </label>
             ))}
           </div>
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="account-actions">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>Отмена</button>
-            <button className="btn btn-primary">Проверить</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>{t.common.cancel}</button>
+            <button className="btn btn-primary">{a.check}</button>
           </div>
         </form>
       ) : (
         <div>
-          <p>Удаление нельзя отменить. Вместе с аккаунтом пропадут:</p>
+          <p>{a.cannotUndo}</p>
           <ul className="account-loss">
-            <li>почта, имя и пароль взрослого;</li>
-            <li>{kids > 0 ? `профили детей (${kids}) и все их сохранения во всех играх;` : 'все сохранения во всех играх;'}</li>
-            <li>вход на всех устройствах.</li>
+            <li>{a.lossAdult}</li>
+            <li>{kids > 0 ? a.lossKids(kids) : a.lossSaves}</li>
+            <li>{a.lossDevices}</li>
           </ul>
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="account-actions">
-            <button type="button" className="btn btn-secondary" onClick={onClose} disabled={busy}>Оставить аккаунт</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose} disabled={busy}>{a.keep}</button>
             <button type="button" className="btn btn-danger" onClick={() => void remove()} disabled={busy}>
-              {busy ? 'Удаляем…' : 'Удалить навсегда'}
+              {busy ? a.deleting : a.forever}
             </button>
           </div>
         </div>

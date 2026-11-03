@@ -51,12 +51,6 @@ export interface ValleyState {
 export const PLOT_COUNT = 6;
 export const CROPS: CropKind[] = ['corn', 'beet', 'wheat', 'rice'];
 export const cropOf = (plotId: number): CropKind => CROPS[plotId % CROPS.length];
-export const CROP_NAME: Record<CropKind, string> = {
-  corn: 'лунная кукуруза',
-  beet: 'звёздная свёкла',
-  wheat: 'серебряная пшеница',
-  rice: 'облачный рис',
-};
 
 export const LEVEL_XP = [0, 35, 90, 170, 280, 400, 540, 700];
 export const MAX_LEVEL = 8;

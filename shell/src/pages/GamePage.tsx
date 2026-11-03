@@ -2,25 +2,27 @@ import { Link, useNavigate, useParams } from 'react-router';
 import { findGame } from '@/catalog/catalog';
 import { GameHost } from '@/host/GameHost';
 import { useAuth } from '@/auth/AuthContext';
+import { useI18n } from '@/i18n/I18nProvider';
 
 export function GamePage() {
   const { gameId } = useParams();
   const navigate = useNavigate();
   const { activeChild } = useAuth();
+  const { t } = useI18n();
   const game = findGame(gameId);
 
   if (!game) {
     return (
       <main className="menu">
-        <h1>Игра не найдена</h1>
-        <Link to="/dashboard">В меню</Link>
+        <h1>{t.game.notFound}</h1>
+        <Link to="/dashboard">{t.game.toMenu}</Link>
       </main>
     );
   }
 
   return (
     <div className="game-screen">
-      <Link to="/dashboard" className="back-button" aria-label="В меню">
+      <Link to="/dashboard" className="back-button" aria-label={t.game.toMenu}>
         ⬅
       </Link>
       <GameHost

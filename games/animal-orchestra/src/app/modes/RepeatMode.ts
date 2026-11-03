@@ -3,18 +3,18 @@ import { RepeatGame } from '../../game/repeat';
 import type { SongNote } from '../../game/song';
 import { el } from '../../ui/dom';
 import type { Mode, OrchestraContext } from '../context';
+import { tr } from '../../i18n';
 
 // «Повтори за мной»: оркестр играет фразу, ребёнок повторяет. Фраза растёт, за каждую — звезда.
 
 type Phase = 'idle' | 'listen' | 'turn' | 'bravo';
 
-const PRAISE = ['Ура!', 'Молодец!', 'Здорово!', 'Супер!', 'Браво!'];
-const BUBBLES: Record<Phase, [string, string] | null> = {
-  idle: ['🐧', 'Нажми на зверя — начнём!'],
-  listen: ['👂', 'Слушай…'],
-  turn: ['👆', 'Теперь ты!'],
+const BUBBLES = (): Record<Phase, [string, string] | null> => ({
+  idle: ['🐧', tr().idle],
+  listen: ['👂', tr().listening],
+  turn: ['👆', tr().yourTurn],
   bravo: null, // похвала каждый раз случайная
-};
+});
 
 export class RepeatMode implements Mode {
   private game = new RepeatGame({ animals: ANIMAL_IDS });
@@ -31,12 +31,12 @@ export class RepeatMode implements Mode {
     this.game = new RepeatGame({ animals: ANIMAL_IDS });
     ctx.audio.stopBeat();
     ctx.setSoundMode('instrument');
-    const again = el('button', { className: 'ao-big ao-again', type: 'button', attrs: { 'aria-label': 'Послушать ещё раз' } }, '👂');
+    const again = el('button', { className: 'ao-big ao-again', type: 'button', attrs: { 'aria-label': tr().again } }, '👂');
     again.addEventListener('click', () => {
       if (this.phase === 'idle') this.nextPhrase();
       else if (this.phase === 'turn') this.listenAgain();
     });
-    ctx.panel.append(again, el('div', { className: 'ao-stars', attrs: { 'aria-label': 'Звёзды' } }));
+    ctx.panel.append(again, el('div', { className: 'ao-stars', attrs: { 'aria-label': tr().stars } }));
     this.updateStars();
     this.setPhase('idle');
   }
@@ -81,7 +81,7 @@ export class RepeatMode implements Mode {
     const { ctx } = this;
     ctx.audio.oops();
     ctx.stage.shake(animal.id);
-    ctx.stage.setBubble('🙈', 'Ой! Послушай ещё');
+    ctx.stage.setBubble('🙈', tr().oops);
     this.phase = 'bravo';
     ctx.root.dataset.listening = 'true';
     ctx.playback.later(() => this.listenAgain(), 1300);
@@ -101,14 +101,15 @@ export class RepeatMode implements Mode {
   private setPhase(phase: Phase) {
     this.phase = phase;
     this.ctx.root.dataset.listening = String(phase === 'listen' || phase === 'bravo');
-    const [icon, text] = BUBBLES[phase] ?? ['🎉', PRAISE[Math.floor(Math.random() * PRAISE.length)]];
+    const praise = tr().praise;
+    const [icon, text] = BUBBLES()[phase] ?? ['🎉', praise[Math.floor(Math.random() * praise.length)]];
     this.ctx.stage.setBubble(icon, text);
     this.updateDots();
     const again = this.ctx.panel.querySelector<HTMLButtonElement>('.ao-again');
     if (again) {
       again.disabled = phase === 'listen' || phase === 'bravo';
       again.textContent = phase === 'idle' ? '▶️' : '👂';
-      again.setAttribute('aria-label', phase === 'idle' ? 'Начать' : 'Послушать ещё раз');
+      again.setAttribute('aria-label', phase === 'idle' ? tr().start : tr().again);
     }
   }
 
@@ -117,7 +118,7 @@ export class RepeatMode implements Mode {
     if (!stars) return;
     const n = this.game.stars;
     stars.replaceChildren(el('span', { className: 'ao-star', attrs: { 'aria-hidden': 'true' } }, '⭐'), el('span', { className: 'ao-star-count' }, String(n)));
-    stars.setAttribute('aria-label', `Звёзды: ${n}`);
+    stars.setAttribute('aria-label', tr().starsN(n));
     if (n) stars.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.35)' }, { transform: 'scale(1)' }], { duration: 450 });
   }
 

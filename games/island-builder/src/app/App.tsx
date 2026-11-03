@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { GameSdk } from '@ig/sdk';
-import { TOOLS, type Tool } from '../game/blocks';
+import type { Tool } from '../game/blocks';
 import { questState } from '../game/quests';
 import type { BlockType, TreeKind } from '../game/world';
 import { sound } from '../audio/sound';
@@ -17,6 +17,7 @@ import { useIslandSave } from './useIslandSave';
 import { useSceneObjects } from './useSceneObjects';
 import { useHint, useQuestToasts } from './useTimedMessages';
 import '../styles/index.css';
+import { tr } from '../i18n';
 
 // Корень игры: связывает состояние острова, сцену и панели интерфейса.
 
@@ -41,7 +42,7 @@ export default function App({ sdk, paused }: { sdk: GameSdk; paused: boolean }) 
 
   const pickTool = (id: Tool) => {
     setTool(id);
-    setHint(TOOLS.find((t) => t.id === id)!.hint);
+    setHint(tr().tools[id][1]);
     sound.click();
   };
 

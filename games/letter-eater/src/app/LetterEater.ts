@@ -2,13 +2,14 @@ import type { GameSdk } from '@ig/sdk';
 import { ProgressStore } from '../api/progress';
 import { Sound } from '../audio/Sound';
 import { pickWords, starsFor } from '../game/logic';
-import { LEVELS, type Level, type Word } from '../game/words';
+import { ALPHABET, LEVELS, type Level, type Word } from '../game/words';
 import { confetti } from '../ui/confetti';
 import { h } from '../ui/dom';
 import { Monster } from '../ui/Monster';
 import { playScreen } from '../ui/playScreen';
 import { levelsScreen, winOverlay, type ButtonFactory } from '../ui/screens';
 import { WordRound } from './WordRound';
+import { tr } from '../i18n';
 
 // Контроллер Буквоеда: экран уровней, слова уровня по очереди и финал.
 
@@ -86,7 +87,7 @@ export class LetterEater {
     this.monster.el.onclick = () => {
       this.monster.mood('happy', 900);
       this.sound.chomp();
-      this.sound.say('Ням-ням! Хочу буквы!');
+      this.sound.say(tr().hungry);
     };
     this.setScreen(
       levelsScreen({
@@ -157,8 +158,8 @@ export class LetterEater {
     this.monster.mood('happy');
     confetti(this.root, 40);
     const name = this.sdk.profile?.name;
-    const title = stars === 3 ? 'Идеально!' : stars === 2 ? 'Отлично!' : 'Получилось!';
-    window.setTimeout(() => this.sound.say(name ? `${title} ${name}, ты молодец!` : `${title} Ты молодец!`), 600);
+    const title = tr().winTitle(stars);
+    window.setTimeout(() => this.sound.say(tr().winSay(title, name)), 600);
 
     this.root.querySelector('.le-overlay')?.remove();
     this.root.append(
@@ -184,7 +185,7 @@ export class LetterEater {
     this.monster.mood('open', 600);
   }
 
-  /** Esc — к уровням; русская буква на клавиатуре — нажать такой пузырь. */
+  /** Esc — к уровням; буква алфавита игры на клавиатуре — нажать такой пузырь. */
   private onKey(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       if (this.root.querySelector('.le-play')) this.showLevels();
@@ -192,7 +193,7 @@ export class LetterEater {
     }
     if (!this.round || e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
     const letter = e.key.toUpperCase().replace('Ё', 'Е');
-    if (!/[А-Я]/.test(letter)) return;
+    if (!ALPHABET.includes(letter)) return;
     this.round.tapLetter(letter);
   }
 }

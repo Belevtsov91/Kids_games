@@ -6,6 +6,7 @@ import lantern from '../../assets/icons/lantern.svg';
 import wood from '../../assets/textures/wood.svg';
 import sand from '../../assets/textures/sand.svg';
 import stone from '../../assets/textures/stone.svg';
+import { tr } from '../i18n';
 
 const materialArt: Partial<Record<BlockType, string>> = { lantern, wood, sand, stone };
 
@@ -24,7 +25,7 @@ export function Dock({ tool, material, treeKind, onTool, onMaterial, onTreeKind 
   return (
     <nav className="ib-dock">
       {(tool === 'build' || tool === 'paint') && (
-        <div className="ib-row ib-palette" role="radiogroup" aria-label="Материал">
+        <div className="ib-row ib-palette" role="radiogroup" aria-label={tr().material}>
           {BLOCK_TYPES.map((type) => (
             <button
               key={type}
@@ -36,16 +37,16 @@ export function Dock({ tool, material, treeKind, onTool, onMaterial, onTreeKind 
                 onMaterial(type);
                 sound.place(BLOCKS[type].pitch);
               }}
-              title={BLOCKS[type].label}
+              title={tr().blocks[type]}
             >
               {materialArt[type] ? <img className="ib-material-art" src={materialArt[type]} alt="" /> : <span className="ib-cube" />}
-              <span className="ib-label">{BLOCKS[type].label}</span>
+              <span className="ib-label">{tr().blocks[type]}</span>
             </button>
           ))}
         </div>
       )}
       {tool === 'tree' && (
-        <div className="ib-row ib-palette" role="radiogroup" aria-label="Растение">
+        <div className="ib-row ib-palette" role="radiogroup" aria-label={tr().plant}>
           {TREE_KINDS.map((kind) => (
             <button
               key={kind}
@@ -58,16 +59,16 @@ export function Dock({ tool, material, treeKind, onTool, onMaterial, onTreeKind 
               }}
             >
               <span className="ib-emoji">{TREES[kind].emoji}</span>
-              <span className="ib-label">{TREES[kind].label}</span>
+              <span className="ib-label">{tr().trees[kind]}</span>
             </button>
           ))}
         </div>
       )}
-      <div className="ib-row ib-tools" role="radiogroup" aria-label="Инструмент">
+      <div className="ib-row ib-tools" role="radiogroup" aria-label={tr().tool}>
         {TOOLS.map((t) => (
           <button key={t.id} role="radio" aria-checked={tool === t.id} className={`ib-tool${tool === t.id ? ' ib-on' : ''}`} onClick={() => onTool(t.id)}>
             <span className="ib-emoji">{t.emoji}</span>
-            <span className="ib-label">{t.label}</span>
+            <span className="ib-label">{tr().tools[t.id][0]}</span>
           </button>
         ))}
       </div>

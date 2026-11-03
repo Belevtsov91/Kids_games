@@ -2,6 +2,7 @@ import type { Animal, Habitat } from '../game/data';
 import type { Round } from '../game/rounds';
 import { el } from './dom';
 import { animalImage } from './art';
+import { animalName, homeTitle, tr } from '../i18n';
 
 // Экран раунда: дома сверху, точки прогресса, лоток со зверятами снизу.
 
@@ -12,11 +13,11 @@ export function roundScreen(round: Round, homeCard: (home: Habitat) => HTMLEleme
   for (const home of round.homes) homes.append(homeCard(home));
 
   const dots = el('div', 'wlw-dots');
-  dots.setAttribute('aria-label', `Дома 0 из ${round.animals.length}`);
+  dots.setAttribute('aria-label', tr().homeCount(0, round.animals.length));
   round.animals.forEach(() => dots.append(el('span')));
 
   const tray = el('div', 'wlw-tray');
-  tray.setAttribute('aria-label', 'Зверята');
+  tray.setAttribute('aria-label', tr().tray);
   round.animals.forEach((animal, i) => tray.append(animalToken(animal, i)));
 
   screen.append(homes, dots, tray);
@@ -29,8 +30,8 @@ export function homeCard(home: Habitat, onChoose: (card: HTMLElement) => void) {
   card.dataset.home = home.id;
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
-  card.setAttribute('aria-label', home.title);
-  card.append(el('span', 'wlw-home-title', home.title), el('div', 'wlw-home-residents'));
+  card.setAttribute('aria-label', homeTitle(home));
+  card.append(el('span', 'wlw-home-title', homeTitle(home)), el('div', 'wlw-home-residents'));
   card.addEventListener('click', () => onChoose(card));
   card.addEventListener('keydown', (e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onChoose(card)));
   return card;
@@ -48,8 +49,8 @@ export function animalToken(animal: Animal, index: number) {
       fill: 'backwards',
     });
   }
-  token.setAttribute('aria-label', animal.name);
-  token.append(animalImage(animal.id, 'wlw-emoji'), el('span', 'wlw-animal-name', animal.name));
+  token.setAttribute('aria-label', animalName(animal));
+  token.append(animalImage(animal.id, 'wlw-emoji'), el('span', 'wlw-animal-name', animalName(animal)));
   return token;
 }
 
@@ -71,7 +72,7 @@ export function flyHome(root: HTMLElement, token: HTMLButtonElement, animal: Ani
   const residents = homeCard.querySelector<HTMLElement>('.wlw-home-residents')!;
   const resident = el('span', 'wlw-resident');
   resident.append(animalImage(animal.id));
-  resident.setAttribute('aria-label', animal.name);
+  resident.setAttribute('aria-label', animalName(animal));
   resident.style.visibility = 'hidden';
   residents.append(resident);
 

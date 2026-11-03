@@ -1,25 +1,21 @@
 import { Link } from 'react-router';
-
-const FACTS = [
-  { title: 'Один аккаунт на семью', text: 'У каждого ребёнка свой профиль и свои сохранения.' },
-  { title: 'Игры по возрасту', text: 'От 3 до 15 лет, возраст указан на каждой игре.' },
-  { title: 'Прогресс не теряется', text: 'Остров, сад и квесты сохраняются между играми.' },
-  { title: 'Телефон, планшет, компьютер', text: 'Можно поставить на экран телефона как приложение.' },
-];
+import { useI18n } from '@/i18n/I18nProvider';
 
 /** Короткий блок для взрослых внизу страницы. */
 export function ParentsNote() {
+  const { t } = useI18n();
+  const p = t.parentsNote;
   return (
     <section className="wl-block">
       <div className="wl-wrap">
         <div className="wl-parents">
           <div>
-            <h2>Для родителей</h2>
-            <p>Аккаунт заводит взрослый, а дети выбирают свой профиль и играют.</p>
-            <Link to="/parents" className="wl-btn wl-btn-ghost wl-btn-sm wl-parents-more">Подробнее для родителей</Link>
+            <h2>{p.title}</h2>
+            <p>{p.text}</p>
+            <Link to="/parents" className="wl-btn wl-btn-ghost wl-btn-sm wl-parents-more">{p.more}</Link>
           </div>
           <div className="wl-facts">
-            {FACTS.map((f) => (
+            {p.facts.map((f) => (
               <div key={f.title} className="wl-fact">
                 <b>{f.title}</b>
                 <span>{f.text}</span>

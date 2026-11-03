@@ -1,0 +1,30 @@
+// Тексты: română.
+import type { Texts } from './ru';
+
+export const ro: Texts = {
+  speech: 'ro-RO',
+  voiceHint: /female|ioana|andreea/i,
+  title: 'Mâncătorul de litere',
+  feedMe: (name) => (name ? `${name}, hrănește-mă cu litere!` : 'Hrănește-mă cu litere!'),
+  exit: 'Ieși din joc',
+  totalStars: (n) => `Stele în total: ${n}`,
+  loginNote: 'Intră în profil ca stelele să se salveze',
+  level: (id, title, open) => `Nivelul ${id}: ${title}${open ? '' : ', închis'}`,
+  starsOf: (n) => `${n} din 3 stele`,
+  levelDone: 'Nivel terminat',
+  ate: (n) => `Monstrulețul a mâncat ${n} cuvinte!`,
+  unlocked: (title) => `S-a deschis nivelul „${title}”`,
+  retry: '↻ Încă o dată',
+  next: 'Mai departe →',
+  toLevels: 'La niveluri',
+  allLevels: 'Toate nivelurile',
+  letters: 'Litere',
+  listen: 'Ascultă cuvântul',
+  progress: (n, of) => `Cuvântul ${n} din ${of}`,
+  hint: 'Indiciu',
+  letter: (l) => `Litera ${l}`,
+  praise: ['Ham-ham!', 'Gustos!', 'Bravo!', 'Ura!', 'Minunat!', 'Super!', 'Excelent!'],
+  hungry: 'Ham-ham! Vreau litere!',
+  winTitle: (stars) => (stars === 3 ? 'Perfect!' : stars === 2 ? 'Excelent!' : 'Ai reușit!'),
+  winSay: (title, name) => (name ? `${title} ${name}, ești grozav!` : `${title} Ești grozav!`),
+};

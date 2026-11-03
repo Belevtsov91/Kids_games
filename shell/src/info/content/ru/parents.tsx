@@ -1,22 +1,6 @@
-import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
-import { ALL_IDS, SHOWCASE } from '@/welcome/showcase';
-import { GameLink } from '../components/GameLink';
-import type { InfoContent } from '../types';
-
-/** Чему учит каждая игра (ключи — id игр из витрины). */
-const BENEFIT: Record<string, string> = {
-  'moon-valley': 'Читать задания, планировать, заботиться о питомце и огороде.',
-  'island-builder': 'Пространственное мышление, счёт блоков, доводить задания до конца.',
-  playground3d: 'Как падают и катятся предметы: первые опыты с физикой.',
-  'space-gardener': 'Логика и траектории: как провести воду в обход препятствий.',
-  drawing: 'Мелкая моторика, цвета, фантазия.',
-  puzzles: 'Внимание, форма, терпение.',
-  'letter-eater': 'Буквы и первые слова.',
-  'animal-orchestra': 'Ритм, звуки и голоса животных.',
-  counting: 'Счёт и цифры на русском, украинском, румынском и английском.',
-  'who-lives-where': 'Животные и их дома, классификация.',
-};
+import { GamesByAge } from '../../components/GamesByAge';
+import type { InfoContent } from '../../types';
 
 export const parents: InfoContent = {
   label: 'Возраст и польза игр',
@@ -37,21 +21,7 @@ export const parents: InfoContent = {
         Подробнее о защите детей: <Link to="/kids">Детская приватность</Link>.
       </p>
       <h2>Игры по возрасту</h2>
-      <div className="info-games">
-        {ALL_IDS.map((id) => {
-          const g = SHOWCASE[id];
-          return (
-            <GameLink key={id} gameId={id} className="info-game">
-              <span className="info-game-icon" style={{ '--c': g.color } as CSSProperties} aria-hidden="true">{g.icon}</span>
-              <span className="info-game-text">
-                <b>{g.title}</b>
-                <span>{g.ages} · {g.kind}</span>
-                <span>{BENEFIT[id]}</span>
-              </span>
-            </GameLink>
-          );
-        })}
-      </div>
+      <GamesByAge />
       <h2>Сколько играть</h2>
       <p>
         Для дошкольников обычно советуют до часа в день у экрана, для школьников — по договорённости, с перерывами. Большие миры сохраняют прогресс, так что

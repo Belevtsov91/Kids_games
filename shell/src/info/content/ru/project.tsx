@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
-import { CopyEmail } from '../components/CopyEmail';
-import type { InfoContent } from '../types';
+import { CopyEmail } from '../../components/CopyEmail';
+import type { InfoContent } from '../../types';
 
 export const about: InfoContent = {
   label: 'О нас',

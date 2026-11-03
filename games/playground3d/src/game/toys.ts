@@ -9,11 +9,12 @@ export interface Toy {
   position: [number, number, number];
 }
 
-export const TOY_KINDS: { kind: ToyKind; emoji: string; label: string }[] = [
-  { kind: 'ball', emoji: '⚽', label: 'Мячик' },
-  { kind: 'cube', emoji: '🧊', label: 'Кубик' },
-  { kind: 'ring', emoji: '🍩', label: 'Бублик' },
-  { kind: 'cone', emoji: '🔺', label: 'Пирамидка' },
+/** Подписи игрушек на разных языках — в src/i18n.ts. */
+export const TOY_KINDS: { kind: ToyKind; emoji: string }[] = [
+  { kind: 'ball', emoji: '⚽' },
+  { kind: 'cube', emoji: '🧊' },
+  { kind: 'ring', emoji: '🍩' },
+  { kind: 'cone', emoji: '🔺' },
 ];
 
 export const COLORS = ['#e5484d', '#f76b15', '#ffc53d', '#30a46c', '#0090ff', '#8e4ec6', '#d6409f'];

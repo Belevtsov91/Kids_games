@@ -1,0 +1,30 @@
+// Тексты: English.
+import type { Texts } from './ru';
+
+export const en: Texts = {
+  speech: 'en-GB',
+  voiceHint: /female|samantha|serena|kate|libby|sonia/i,
+  title: 'Letter Eater',
+  feedMe: (name) => (name ? `${name}, feed me letters!` : 'Feed me letters!'),
+  exit: 'Leave the game',
+  totalStars: (n) => `Total stars: ${n}`,
+  loginNote: 'Pick a profile so your stars are saved',
+  level: (id, title, open) => `Level ${id}: ${title}${open ? '' : ', locked'}`,
+  starsOf: (n) => `${n} of 3 stars`,
+  levelDone: 'Level complete',
+  ate: (n) => `The monster ate ${n} words!`,
+  unlocked: (title) => `New level unlocked: “${title}”`,
+  retry: '↻ Again',
+  next: 'Next →',
+  toLevels: 'To levels',
+  allLevels: 'All levels',
+  letters: 'Letters',
+  listen: 'Hear the word',
+  progress: (n, of) => `Word ${n} of ${of}`,
+  hint: 'Hint',
+  letter: (l) => `Letter ${l}`,
+  praise: ['Yum-yum!', 'Tasty!', 'Well done!', 'Hooray!', 'Great!', 'Super!', 'Excellent!'],
+  hungry: 'Yum-yum! I want letters!',
+  winTitle: (stars) => (stars === 3 ? 'Perfect!' : stars === 2 ? 'Excellent!' : 'You did it!'),
+  winSay: (title, name) => (name ? `${title} ${name}, well done!` : `${title} Well done!`),
+};

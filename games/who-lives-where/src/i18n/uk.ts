@@ -1,0 +1,43 @@
+// Тексты: українська.
+import type { Texts } from './ru';
+
+export const uk: Texts = {
+  speech: 'uk',
+  lead: (name) => (name ? `${name}, допоможи звірятам знайти свій дім!` : 'Допоможи звірятам знайти свій дім!'),
+  play: '▶ Грати',
+  album: '📖 Альбом звірят',
+  back: '‹ Назад',
+  notFound: 'Ще не знайдено',
+  win: 'Перемога',
+  next: 'Далі ▶',
+  menu: '🏠 Меню',
+  bravo: 'Молодець!',
+  allHome: 'Усі звірята вдома',
+  homeCount: (n, of) => `Удома ${n} з ${of}`,
+  tray: 'Звірята',
+  title: 'Хто де живе?',
+  roundTitle: 'Відведи звірят додому!',
+  level: (n) => `Рівень ${n}`,
+  albumTitle: 'Альбом звірят',
+  found: (n, of) => `${n} з ${of}`,
+  sayUnknown: 'Цього звірятка ти ще не зустрічав. Грай, і воно знайдеться!',
+  sayLives: (name, where) => `${name} живе ${where}`,
+  sayWin: 'Ура! Усі звірята вдома! Молодець!',
+  sayAsk: (name) => `${name}. Де живе ${name.toLowerCase()}?`,
+  sayHelp: 'Допоможи звірятам знайти свій дім!',
+  sayWrong: (name) => `Ой, не тут! Де живе ${name.toLowerCase()}?`,
+  homes: {
+    farm: ['Ферма', 'на фермі'], forest: ['Ліс', 'у лісі'], sea: ['Море', 'у морі'], house: ['Дім', 'удома, з людьми'],
+    pond: ['Ставок', 'у ставку'], jungle: ['Джунглі', 'у джунглях'], savanna: ['Савана', 'у савані'], ice: ['Криги', 'серед криги'],
+  },
+  animals: {
+    cow: 'Корова', pig: 'Свинка', chicken: 'Курочка', sheep: 'Овечка', horse: 'Конячка', goat: 'Кізонька',
+    bear: 'Ведмідь', fox: 'Лисиця', hedgehog: 'Їжачок', squirrel: 'Білочка', wolf: 'Вовк', owl: 'Сова',
+    whale: 'Кит', dolphin: 'Дельфін', octopus: 'Восьминіг', fish: 'Рибка', crab: 'Краб',
+    cat: 'Кішка', dog: 'Собака', hamster: 'Хом’ячок', rabbit: 'Кролик',
+    frog: 'Жабка', duck: 'Качечка', swan: 'Лебідь',
+    monkey: 'Мавпочка', tiger: 'Тигр', parrot: 'Папуга', snake: 'Змія', sloth: 'Лінивець',
+    lion: 'Лев', giraffe: 'Жираф', zebra: 'Зебра', elephant: 'Слон', rhino: 'Носоріг',
+    'polar-bear': 'Білий ведмідь', penguin: 'Пінгвін', seal: 'Тюлень',
+  },
+};

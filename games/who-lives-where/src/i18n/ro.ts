@@ -1,0 +1,43 @@
+// Тексты: română. Названия зверят — с артиклем («Vaca»), так фразы озвучки звучат естественно.
+import type { Texts } from './ru';
+
+export const ro: Texts = {
+  speech: 'ro',
+  lead: (name) => (name ? `${name}, ajută animăluțele să-și găsească casa!` : 'Ajută animăluțele să-și găsească casa!'),
+  play: '▶ Joacă',
+  album: '📖 Albumul animalelor',
+  back: '‹ Înapoi',
+  notFound: 'Încă negăsit',
+  win: 'Victorie',
+  next: 'Mai departe ▶',
+  menu: '🏠 Meniu',
+  bravo: 'Bravo!',
+  allHome: 'Toate animăluțele sunt acasă',
+  homeCount: (n, of) => `Acasă ${n} din ${of}`,
+  tray: 'Animăluțe',
+  title: 'Cine unde locuiește?',
+  roundTitle: 'Du animăluțele acasă!',
+  level: (n) => `Nivelul ${n}`,
+  albumTitle: 'Albumul animalelor',
+  found: (n, of) => `${n} din ${of}`,
+  sayUnknown: 'Încă nu ai întâlnit acest animăluț. Joacă-te și îl vei găsi!',
+  sayLives: (name, where) => `${name} locuiește ${where}`,
+  sayWin: 'Ura! Toate animăluțele sunt acasă! Bravo!',
+  sayAsk: (name) => `${name}. Unde locuiește ${name.toLowerCase()}?`,
+  sayHelp: 'Ajută animăluțele să-și găsească casa!',
+  sayWrong: (name) => `Ups, nu aici! Unde locuiește ${name.toLowerCase()}?`,
+  homes: {
+    farm: ['Ferma', 'la fermă'], forest: ['Pădurea', 'în pădure'], sea: ['Marea', 'în mare'], house: ['Casa', 'acasă, cu oamenii'],
+    pond: ['Iazul', 'în iaz'], jungle: ['Jungla', 'în junglă'], savanna: ['Savana', 'în savană'], ice: ['Ghețurile', 'printre ghețuri'],
+  },
+  animals: {
+    cow: 'Vaca', pig: 'Purcelușul', chicken: 'Găinușa', sheep: 'Oița', horse: 'Căluțul', goat: 'Căprița',
+    bear: 'Ursul', fox: 'Vulpea', hedgehog: 'Ariciul', squirrel: 'Veverița', wolf: 'Lupul', owl: 'Bufnița',
+    whale: 'Balena', dolphin: 'Delfinul', octopus: 'Caracatița', fish: 'Peștișorul', crab: 'Crabul',
+    cat: 'Pisica', dog: 'Câinele', hamster: 'Hamsterul', rabbit: 'Iepurașul',
+    frog: 'Broscuța', duck: 'Rățușca', swan: 'Lebăda',
+    monkey: 'Maimuțica', tiger: 'Tigrul', parrot: 'Papagalul', snake: 'Șarpele', sloth: 'Leneșul',
+    lion: 'Leul', giraffe: 'Girafa', zebra: 'Zebra', elephant: 'Elefantul', rhino: 'Rinocerul',
+    'polar-bear': 'Ursul polar', penguin: 'Pinguinul', seal: 'Foca',
+  },
+};

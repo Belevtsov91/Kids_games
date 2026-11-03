@@ -5,6 +5,7 @@ import type { Confetti } from '../ui/Confetti';
 import { animalToken, flyHome, homeAt, homeCard, roundScreen } from '../ui/roundView';
 import { AnimalPicker } from './AnimalPicker';
 import type { Timers } from './Timers';
+import { animalName, homeTitle, homeWhere, tr } from '../i18n';
 
 // Один раунд: зверят надо отвести по домам. Ошибки, подсказки и победа.
 
@@ -37,12 +38,12 @@ export class RoundPlay {
       homeAt: (x, y) => homeAt(stage, x, y),
       onLift: (animal) => {
         sound.pick();
-        sound.say(animal.name);
+        sound.say(animalName(animal));
         this.clearHint();
       },
       onSelect: (animal) => {
         sound.pick();
-        sound.say(`${animal.name}. Где живёт ${animal.name.toLowerCase()}?`);
+        sound.say(tr().sayAsk(animalName(animal)));
         this.clearHint();
         this.scheduleHint();
       },
@@ -61,7 +62,7 @@ export class RoundPlay {
         homeCard(home, (card) => {
           const picked = this.picker.selected;
           if (picked) return this.tryPlace(picked.token, picked.animal, card);
-          sound.say(home.title);
+          sound.say(homeTitle(home));
           host.timers.replayClass(card, 'is-bounce');
         }),
       (animal, i) => {
@@ -71,7 +72,7 @@ export class RoundPlay {
       },
     );
     stage.append(screen);
-    sound.say('Помоги зверятам найти свой дом!');
+    sound.say(tr().sayHelp);
     this.scheduleHint();
   }
 
@@ -92,7 +93,7 @@ export class RoundPlay {
       const misses = (this.mistakes.get(animal.id) ?? 0) + 1;
       this.mistakes.set(animal.id, misses);
       sound.wrong();
-      sound.say(`Ой, не здесь! Где живёт ${animal.name.toLowerCase()}?`);
+      sound.say(tr().sayWrong(animalName(animal)));
       timers.replayClass(card, 'is-wrong');
       this.returnToken(token);
       timers.replayClass(token, 'is-wobble');
@@ -104,7 +105,7 @@ export class RoundPlay {
 
     this.placed.add(animal.id);
     sound.correct();
-    sound.say(`${animal.name} живёт ${home.where}!`);
+    sound.say(`${tr().sayLives(animalName(animal), homeWhere(home))}!`);
     flyHome(this.host.root, token, animal, card, (x, y) => {
       timers.replayClass(card, 'is-bounce');
       this.host.confetti.sparkle(x, y);
@@ -128,7 +129,7 @@ export class RoundPlay {
     const dots = this.host.stage.querySelector<HTMLElement>('.wlw-dots');
     if (!dots) return;
     [...dots.children].forEach((dot, i) => dot.classList.toggle('is-on', i < this.placed.size));
-    dots.setAttribute('aria-label', `Дома ${this.placed.size} из ${this.round.animals.length}`);
+    dots.setAttribute('aria-label', tr().homeCount(this.placed.size, this.round.animals.length));
   }
 
   /** Если ребёнок долго ничего не делает — дом для выбранного (или первого оставшегося) зверя мигает. */

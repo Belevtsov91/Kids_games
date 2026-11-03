@@ -15,6 +15,3 @@ export const drawingsApi = (api: GameApi) => ({
   remove: (id: string) => api.delete(`/drawings/${encodeURIComponent(id)}`),
 });
 export type DrawingsApi = ReturnType<typeof drawingsApi>;
-
-export const defaultTitle = (date = new Date()) =>
-  `Рисунок ${date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}, ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
