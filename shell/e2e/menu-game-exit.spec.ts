@@ -62,8 +62,8 @@ for (const id of gameIds) {
     await page.getByRole('link', { name: 'В меню' }).click();
     await expect(page).toHaveURL('/dashboard');
     await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
-    // После выхода игра должна убрать за собой холст.
-    await expect(page.locator('canvas')).toHaveCount(0);
+    // После выхода игра должна убрать за собой холст (звёзды неба дашборда — не холст игры).
+    await expect(page.locator('canvas:not(.dash-stars)')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 }

@@ -43,6 +43,7 @@ shell/                       @ig/shell — единственный общий �
   src/host/GameHost.tsx      вызывает mount()/unmount() игры, pause/resume при скрытии вкладки
   src/host/createSdk.ts      SDK, который получает игра
   src/pages/                 Welcome, Login/Register, Children, Menu, Game
+  src/dashboard/             дашборд /dashboard: небо с облаками, игры-порталы с обложками, «Продолжить» (последняя игра)
   src/styles/                стили по экранам (index.css собирает их по порядку)
   e2e/                       Playwright: вход и меню → игра → выход для каждой игры из games/
 

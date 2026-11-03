@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { findGame } from '@/catalog/catalog';
 import { GameHost } from '@/host/GameHost';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
+import { rememberGame } from '@/dashboard/lastPlayed';
 
 export function GamePage() {
   const { gameId } = useParams();
@@ -10,6 +12,11 @@ export function GamePage() {
   const { activeChild } = useAuth();
   const { t } = useI18n();
   const game = findGame(gameId);
+
+  // для портала «Продолжить» на дашборде
+  useEffect(() => {
+    if (game && activeChild) rememberGame(activeChild.id, game.id);
+  }, [game, activeChild]);
 
   if (!game) {
     return (

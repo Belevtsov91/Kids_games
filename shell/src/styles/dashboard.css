@@ -1,0 +1,93 @@
+/* Дашборд (/dashboard): основа, верхняя панель, первый экран. Палитра и кнопки — как у стартовой страницы (welcome.css).
+   Небо — dashboard-sky.css, порталы игр — dashboard-portal.css, полки — dashboard-shelf.css. */
+
+.dash {
+  --dash-night: #17153f;
+  --dash-gold: #ffd25a;
+  --dash-pink: #ff7eb6;
+  --dash-sky: #7ee7ff;
+  --dash-ink: #fff8ec;
+  --dash-ink-soft: #d9d2f7;
+  --dash-line: rgba(255, 255, 255, 0.16);
+  --dash-glass: rgba(30, 24, 80, 0.42);
+  --dash-display: 'Segoe UI Black', 'Arial Black', ui-rounded, system-ui, sans-serif;
+  position: relative;
+  min-height: 100%;
+  overflow-x: hidden;
+  background: var(--dash-night);
+  color: var(--dash-ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.dash main { position: relative; z-index: 2; padding-bottom: 56px; }
+.dash h1, .dash h2 { margin: 0; font-family: var(--dash-display); line-height: 1.05; text-wrap: balance; }
+.dash :focus-visible { outline: 3px solid var(--dash-gold); outline-offset: 3px; }
+
+.dash-wrap {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- кнопки и «таблетки» ---------- */
+.dash-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 54px; padding: 0 26px; border: 0; border-radius: 18px;
+  font: inherit; font-weight: 800; font-size: 18px; text-decoration: none; cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dash-btn:active { transform: translateY(4px); }
+.dash-btn-primary { background: var(--dash-gold); color: #3d2a00; box-shadow: 0 6px 0 #c99a1e, 0 14px 30px rgba(255, 210, 90, 0.35); }
+.dash-btn-primary:active { box-shadow: 0 2px 0 #c99a1e; }
+.dash-btn-ghost { background: rgba(255, 255, 255, 0.12); color: var(--dash-ink); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.28); backdrop-filter: blur(8px); }
+
+.dash-chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px;
+  border: 0; border-radius: 999px; font: inherit; font-weight: 800; color: var(--dash-ink);
+  background: var(--dash-glass); box-shadow: inset 0 0 0 1.5px var(--dash-line); backdrop-filter: blur(10px); cursor: pointer;
+}
+.dash-chip:hover { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4); }
+.dash-ava { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #fff3d1, #ffc970); font-size: 20px; }
+.dash-chip-age { opacity: 0.7; font-weight: 700; }
+
+/* ---------- верхняя панель ---------- */
+.dash-top { position: relative; z-index: 10; display: flex; align-items: center; gap: 10px; padding-block: calc(14px + env(safe-area-inset-top, 0px)) 6px; }
+.dash-logo { display: flex; align-items: center; gap: 10px; margin-right: auto; font-family: var(--dash-display); font-size: 18px; color: var(--dash-ink); text-decoration: none; }
+.dash-logo-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(160deg, #ffe08a, #ffb547); box-shadow: 0 4px 0 #c98a1e; font-size: 22px; }
+.dash-profile { position: relative; }
+.dash-profile .dash-chip { padding-left: 5px; }
+.dash-menu {
+  position: absolute; right: 0; top: calc(100% + 8px); min-width: 240px; padding: 8px; border-radius: 18px;
+  background: rgba(28, 22, 74, 0.94); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--dash-line); backdrop-filter: blur(14px);
+}
+.dash-menu-title { padding: 6px 10px; font-size: 13px; font-weight: 800; opacity: 0.65; }
+.dash-menu button, .dash-menu-link {
+  display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 12px;
+  background: none; color: var(--dash-ink); font: inherit; font-weight: 800; text-align: left; text-decoration: none; cursor: pointer;
+}
+.dash-menu button:hover, .dash-menu button[aria-current='true'], .dash-menu-link:hover { background: rgba(255, 255, 255, 0.1); }
+.dash-menu small { margin-left: auto; opacity: 0.65; font-weight: 700; }
+.dash-menu-link { margin-top: 4px; justify-content: center; color: var(--dash-gold); box-shadow: inset 0 1px 0 var(--dash-line); border-radius: 0 0 12px 12px; }
+
+/* ---------- первый экран ---------- */
+.dash-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(20px, 4vw, 56px); align-items: center; padding-block: clamp(18px, 4vw, 44px) 10px; }
+.dash-eyebrow {
+  display: inline-block; padding: 6px 14px; border-radius: 999px; background: rgba(23, 21, 63, 0.55);
+  box-shadow: inset 0 0 0 1px var(--dash-line); color: var(--dash-gold); font-weight: 800; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.dash-hero h1 { margin: 16px 0 12px; font-size: clamp(36px, 5.4vw, 66px); text-shadow: 0 4px 24px rgba(40, 20, 90, 0.45); }
+.dash-hl { display: block; background: linear-gradient(90deg, var(--dash-gold), var(--dash-pink) 60%, var(--dash-sky)); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 3px 14px rgba(40, 20, 90, 0.55)); }
+.dash-lead { margin: 0 0 22px; max-width: 36ch; font-size: 18px; opacity: 0.92; text-shadow: 0 2px 12px rgba(40, 20, 90, 0.5); }
+.dash-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 860px) {
+  .dash-hero { grid-template-columns: 1fr; }
+  .dash-hero .portal { order: -1; }
+  .dash-lead { max-width: none; }
+}
+@media (max-width: 640px) {
+  .dash-top { flex-wrap: wrap; }
+  .dash-lang { order: 5; width: 100%; justify-content: center; }
+  .dash-logo-name, .dash-chip-age { display: none; }
+}

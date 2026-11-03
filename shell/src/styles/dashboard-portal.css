@@ -1,0 +1,71 @@
+/* Портал игры на дашборде: обложка как окно в мир. Наклон за курсором (--rx/--ry), блик и параллакс картинки (--mx/--my)
+   ставит dashboard/tilt.ts; --c — цвет игры, --d — сдвиг фазы парения. Обложки не меняются, только подсвечиваются. */
+
+.portal {
+  --c: #ffd25a; --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+  position: relative; display: block; width: 100%; padding: 0; border: 0; background: none;
+  color: inherit; font: inherit; text-align: left; text-decoration: none; cursor: pointer; perspective: 900px;
+}
+.portal-float { position: relative; display: block; animation: portal-bob 7s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.portal-body {
+  position: relative; display: block; border-radius: 26px; transform: rotateX(var(--rx)) rotateY(var(--ry)); transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35), 0 30px 60px -18px rgba(25, 10, 60, 0.75), 0 0 0 1.5px rgba(255, 255, 255, 0.22);
+}
+.portal.is-live .portal-body { transition: transform 0.08s linear, box-shadow 0.4s; }
+.portal:hover .portal-body, .portal:focus-visible .portal-body {
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.45), 0 40px 70px -18px rgba(25, 10, 60, 0.8), 0 0 0 2px var(--c), 0 0 60px -6px var(--c);
+}
+.portal:active .portal-body { transform: scale(0.97); }
+.portal-glow { position: absolute; inset: 8% 6% -10%; z-index: -1; border-radius: 40px; background: var(--c); filter: blur(40px); opacity: 0.32; transition: opacity 0.4s; }
+.portal:hover .portal-glow { opacity: 0.6; }
+.portal-shadow {
+  position: absolute; left: 12%; right: 12%; bottom: -26px; height: 26px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(40, 15, 70, 0.45), transparent);
+  animation: portal-shadow 7s ease-in-out infinite; animation-delay: var(--d, 0s);
+}
+.portal-window { position: relative; display: block; overflow: hidden; max-width: 100%; aspect-ratio: 3 / 2; border-radius: 26px; background: #2a2468; }
+.portal-window img {
+  position: absolute; inset: -6%; width: 112%; height: 112%; max-width: none; object-fit: cover;
+  transform: translate(calc((50% - var(--mx)) * 0.08), calc((50% - var(--my)) * 0.08));
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.4s;
+}
+.portal.is-live .portal-window img { transition: transform 0.08s linear, filter 0.4s; }
+.portal-emoji { position: absolute; inset: 0; display: grid; place-items: center; font-size: 72px; }
+.portal-sheen {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.28), transparent 45%); mix-blend-mode: soft-light;
+}
+.portal:hover .portal-sheen { opacity: 1; }
+.portal-rim { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25), inset 0 -60px 60px -30px rgba(18, 12, 50, 0.55); }
+.portal-badges { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; gap: 8px; pointer-events: none; transform: translateZ(30px); }
+.portal-badge { padding: 4px 10px; border-radius: 10px; background: rgba(23, 21, 63, 0.62); color: #fff8ec; font-size: 12px; font-weight: 800; letter-spacing: 0.04em; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); }
+.portal-badge.is-kind { background: var(--c); color: #231a45; box-shadow: none; }
+
+/* подпись под порталом */
+.portal-caption { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 0 6px; }
+.portal-icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--c) 30%, rgba(23, 21, 63, 0.6)); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2); font-size: 20px; }
+.portal-text { min-width: 0; }
+.portal-text strong { display: block; font-family: var(--dash-display); font-size: 19px; line-height: 1.2; text-shadow: 0 2px 10px rgba(30, 15, 70, 0.6); }
+.portal-text small { display: -webkit-box; overflow: hidden; color: var(--dash-ink-soft); font-size: 13.5px; font-weight: 600; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.portal-go { display: grid; place-items: center; flex: none; width: 40px; height: 40px; margin-left: auto; border-radius: 50%; background: rgba(255, 255, 255, 0.12); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.25); font-weight: 800; transition: background 0.2s, color 0.2s, transform 0.2s; }
+.portal:hover .portal-go { background: var(--dash-gold); color: #3d2a00; box-shadow: none; transform: translateX(3px); }
+.portal:focus-visible { outline: none; }
+.portal:focus-visible .portal-body { outline: 3px solid var(--dash-gold); outline-offset: 5px; }
+
+/* большой портал «Продолжить» на первом экране */
+.portal.is-featured .portal-window { aspect-ratio: 16 / 10; }
+.portal.is-featured .portal-body, .portal.is-featured .portal-window { border-radius: 32px; }
+.portal-continue { position: absolute; left: 18px; right: 18px; bottom: 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; pointer-events: none; transform: translateZ(40px); }
+.portal-continue-text { padding: 10px 16px; border-radius: 18px; background: rgba(23, 21, 63, 0.6); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); }
+.portal-continue small { display: block; color: var(--dash-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.portal-continue strong { font-family: var(--dash-display); font-size: clamp(18px, 2.2vw, 26px); }
+.portal-play {
+  display: grid; place-items: center; flex: none; width: 64px; height: 64px; border-radius: 50%;
+  background: var(--dash-gold); color: #3d2a00; font-size: 26px; animation: portal-pulse 2.6s ease-in-out infinite;
+  box-shadow: 0 6px 0 #c99a1e, 0 0 0 8px rgba(255, 210, 90, 0.25), 0 0 40px rgba(255, 210, 90, 0.6);
+}
+
+@keyframes portal-bob { 50% { transform: translateY(-10px); } }
+@keyframes portal-shadow { 50% { transform: scaleX(0.86); opacity: 0.7; } }
+@keyframes portal-pulse { 50% { box-shadow: 0 6px 0 #c99a1e, 0 0 0 14px rgba(255, 210, 90, 0.12), 0 0 60px rgba(255, 210, 90, 0.8); } }

@@ -1,0 +1,47 @@
+/* Небо дашборда: тот же закат, что в 3D-сцене стартовой страницы (sky.ts), но облака мягкие и объёмные.
+   Слои облаков сдвигаются за курсором и при прокрутке: --px/--py/--sy ставит DashSky.tsx. */
+
+.dash-sky {
+  --px: 0;
+  --py: 0;
+  --sy: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 78% 64%, rgba(255, 200, 150, 0.55), transparent 70%),
+    linear-gradient(180deg, #1c1858 0%, #3b2a7a 26%, #8a4f9e 46%, #d873b4 62%, #f7a582 80%, #ffd2a8 100%);
+}
+.dash-sky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(23, 21, 63, 0.55) 100%);
+}
+.dash-stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dash-defs { position: absolute; }
+.dash-sun {
+  position: absolute;
+  right: 16%;
+  top: 52%;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3d6 0%, #ffd9a0 22%, rgba(255, 190, 140, 0.35) 48%, transparent 70%);
+  filter: blur(2px);
+}
+
+.dash-clouds {
+  --k: 10;
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  will-change: transform;
+  transform: translate3d(calc(var(--px) * var(--k) * -1px), calc((var(--sy) * var(--k) / 120 - var(--py) * var(--k) * 0.4) * 1px), 0);
+}
+.dash-clouds svg { display: block; width: 100%; height: 100%; }
+.dash-clouds-far { --k: 6; bottom: 18%; height: 34%; opacity: 0.55; }
+.dash-clouds-mid { --k: 14; bottom: 2%; height: 40%; opacity: 0.8; }
+.dash-clouds-near { --k: 26; bottom: -12%; height: 42%; }
