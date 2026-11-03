@@ -3,7 +3,6 @@ import { createProgress, type ProgressStore } from '../api/progress';
 import { Sfx } from '../audio/Sfx';
 import { strokeLength } from '../game/ink';
 import { levels } from '../game/levels';
-import { starsFor } from '../game/scoring';
 import { Simulation } from '../game/simulation';
 import { bindControls, type GameActions } from '../input/controls';
 import { PointerInput } from '../input/PointerInput';
@@ -12,17 +11,14 @@ import { Listeners } from '../ui/dom';
 import { Hud } from '../ui/Hud';
 import { levelMapHtml } from '../ui/levelMap';
 import { ResultOverlay } from '../ui/ResultOverlay';
-import { lightUpStars, loseCardHtml, winCardHtml } from '../ui/resultCards';
 import { GameLoop } from './GameLoop';
+import { showLoseCard, showWinCard } from './resultCards';
 import { simFeedback } from './simFeedback';
 import '../styles/index.css';
 import { levelText, tr } from '../i18n';
 
 // Контроллер игры: экраны (карта уровней и уровень), кнопки и клавиши.
-// Весь интерфейс — обычный DOM поверх одного холста.
-
-const BLOOM_MS = 1500;
-const LOSE_CARD_DELAY_MS = 700;
+// Весь интерфейс — обычный DOM поверх одного холста. Карточки победы и проигрыша — в resultCards.ts.
 
 export class SpaceGardener implements GameActions {
   private readonly root = document.createElement('div');
@@ -169,21 +165,14 @@ export class SpaceGardener implements GameActions {
     this.updateHud();
   }
 
+  private cards = () => ({ overlay: this.overlay, progress: this.progress, sfx: this.sfx });
+
   private onWin = () => {
-    const { level, inkUsed } = this.sim!;
-    const stars = starsFor(inkUsed, level.ink);
     this.bloomStart = performance.now();
-    this.overlay.showLater(BLOOM_MS, winCardHtml(stars, this.levelIndex === levels.length - 1), (card) => {
-      void this.progress.record(level.id, stars);
-      lightUpStars(card, stars, (i) => this.sfx.star(i));
-    });
+    showWinCard(this.cards(), this.sim!, this.levelIndex === levels.length - 1);
   };
 
-  private onLose = () => {
-    // Капли ещё докатываются: счёт берём в момент показа карточки.
-    const sim = this.sim!;
-    this.overlay.showLater(LOSE_CARD_DELAY_MS, () => loseCardHtml(sim.collected, sim.level.need), () => this.sfx.lose());
-  };
+  private onLose = () => showLoseCard(this.cards(), this.sim!);
 
   private frame = (now: number) => {
     if (this.sim) this.updateHud();

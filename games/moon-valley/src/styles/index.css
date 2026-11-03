@@ -1,6 +1,11 @@
 /* Стили Лунной Долины. Порядок важен: адаптив в конце. */
 @import './layout.css';
-@import './hud.css';
+/* Интерфейс поверх 3D — по файлу на часть экрана (см. папку hud/). */
+@import './hud/top.css';
+@import './hud/messages.css';
+@import './hud/controls.css';
+@import './hud/journal.css';
+@import './hud/scene-overlays.css';
 @import './intro.css';
 @import './responsive.css';
 .mv-resource-art { width: 28px; height: 28px; object-fit: contain; vertical-align: middle; }

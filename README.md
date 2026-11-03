@@ -18,7 +18,7 @@ corepack pnpm install     # один раз и после добавления �
 corepack pnpm dev         # shell (http://localhost:5173) + сервер (http://localhost:3000)
 corepack pnpm dev:shell   # только клиент
 corepack pnpm dev:server  # только API
-corepack pnpm lint        # проверка границ: игры не импортируют друг друга
+corepack pnpm lint        # границы (игры не импортируют друг друга) и размер файлов (≤ 200 строк)
 corepack pnpm typecheck   # типы во всех пакетах
 corepack pnpm test        # юнит- и API-тесты всех пакетов
 corepack pnpm test:e2e    # меню → игра → выход, десктоп и телефон (Playwright)
@@ -63,7 +63,10 @@ tools/
   game-template/             шаблон новой игры
   create-game.mjs            corepack pnpm new-game <id> "Название"
   check-boundaries.mjs       линтер границ (corepack pnpm lint): импорты и таблицы БД
+  check-file-size.mjs        не больше 200 строк в файле кода (corepack pnpm lint)
   db-sql.mjs                 все миграции одним скриптом (corepack pnpm db:sql)
+
+visual-lab/                  мастерская графики: обложки, иконки, векторные версии и галерея studio.html
 
 tsconfig.base.json           общие настройки TypeScript для игр
 ```
@@ -83,7 +86,9 @@ tsconfig.base.json           общие настройки TypeScript для и�
 | `api/`, `storage/` | сохранение: сервер игры или хранилище браузера |
 | `styles/` | CSS по частям; `index.css` подключает их в нужном порядке |
 
-Файл — одна ответственность и не больше 200 строк. Крупный модуль становится папкой с `index.ts`, который реэкспортирует публичное API (например, `space-gardener/src/game/simulation/`).
+Файл — одна ответственность и не больше 200 строк (это проверяет `corepack pnpm lint`; исключение — README и другие `.md`). Крупный модуль становится папкой с `index.ts`, который реэкспортирует публичное API и в комментарии перечисляет, что в каком файле (например, `space-gardener/src/game/simulation/`, `moon-valley/src/game/world/`). Большой CSS делится по частям экрана, а главный файл подключает их через `@import` в прежнем порядке.
+
+В 3D-играх `scene/` тоже делится по смыслу. Пример — `moon-valley/src/scene/`: `environment/` (небо, свет, земля, трава), `village/` (пейзаж и места), `characters/` (герой, питомцы, жители, враги), `physics/`, `targeting/`, `models/`. Подробная карта игры — в её `README.md` (`games/moon-valley/README.md`, `games/counting/README.md`).
 
 ## Правила
 
@@ -128,6 +133,7 @@ corepack pnpm dev
 | letter-eater | GET/POST `/progress` |
 | space-gardener | GET/POST `/progress` |
 | who-lives-where | GET/POST `/progress` |
+| moon-valley | GET/POST/DELETE `/save` |
 
 ## Сохранения игр в БД
 
@@ -139,6 +145,7 @@ corepack pnpm dev
 | letter-eater | `ig_game_letter_eater_progress` | звёзды по уровням (smallint[]) |
 | space-gardener | `ig_game_space_gardener_levels` | лучшие звёзды за один уровень |
 | who-lives-where | `ig_game_who_lives_where_progress` | уровень и найденные звери |
+| moon-valley | `ig_game_moon_valley_saves` | состояние долины (jsonb), одно на ребёнка |
 
 Таблицы закрыты так же, как таблицы платформы: RLS включён, политик нет, права у `anon`/`authenticated` отозваны. Читает и пишет только сервер с секретным ключом.
 

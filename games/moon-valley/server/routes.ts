@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
-import { MAX_LEVEL, PLOT_COUNT } from '../src/game/valley.js';
+import { MAX_LEVEL, PLOT_COUNT } from '../src/game/valley/index.js';
 import { QUESTS } from '../src/game/quests.js';
 import { createSavesRepository } from './repository.js';
 

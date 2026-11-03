@@ -1,0 +1,93 @@
+/* Подписи над жителями, полоска босса, экран загрузки и запасной экран, если 3D не запустилось. */
+
+.mv-npc-label {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  color: #fff;
+  font: 800 13px Inter, ui-rounded, system-ui, sans-serif;
+  white-space: nowrap;
+  text-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
+  user-select: none;
+}
+.mv-npc-label span {
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: rgb(17 33 70 / 0.55);
+}
+.mv-npc-label b {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #3b2a00;
+  background: #ffd84d;
+  box-shadow: 0 0 0 3px #fff6c9, 0 0 20px #ffd84d;
+  font-size: 22px;
+  text-shadow: none;
+  animation: mv-bob 1.2s ease-in-out infinite;
+}
+.mv-npc-label b.ready {
+  background: #8af0ff;
+  box-shadow: 0 0 0 3px #e6fdff, 0 0 20px #8af0ff;
+}
+@keyframes mv-bob {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.mv-boss-bar {
+  display: grid;
+  gap: 4px;
+  width: 180px;
+  color: #fff;
+  font: 800 13px Inter, ui-rounded, system-ui, sans-serif;
+  text-align: center;
+  text-shadow: 0 2px 6px rgb(0 0 0 / 0.7);
+}
+.mv-boss-bar i {
+  display: block;
+  height: 10px;
+  border: 2px solid #fff;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #7b4fd0, #b28cff);
+  transition: width 0.3s;
+}
+
+.mv-loading {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  background: radial-gradient(circle at 50% 40%, #2d3f7d, #121a3a);
+}
+.mv-loading p {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+}
+.mv-loading > i {
+  display: block;
+  width: 220px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgb(255 255 255 / 0.2);
+}
+.mv-loading > i i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #78e4e5, #fff0a8);
+  transition: width 0.3s;
+}
+.mv-scene-fallback {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 96px;
+  background: linear-gradient(#8fd6ee, #5d874d);
+}

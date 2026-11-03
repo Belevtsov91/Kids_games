@@ -2,15 +2,17 @@ import type { GameSdk } from '@ig/sdk';
 import { CountingAudio } from '../audio/CountingAudio';
 import { modes, type Mode } from '../game/logic';
 import { Session } from '../game/Session';
-import { LIMITS, THEMES } from '../game/themes';
-import { languages, numberWord, words, type Language } from '../i18n';
+import { THEMES } from '../game/themes';
+import { numberWord, words } from '../i18n';
 import { homeView } from '../ui/homeView';
 import { renderKeepingFocus } from '../ui/html';
 import { resultView, shellView } from '../ui/layout';
 import { playView } from '../ui/playView';
+import { applyPreference, promptSpeech } from './prompts';
 import { defaultPreferences, loadSaved, progressKey, saveState, type Preferences, type Progress } from './savedState';
 
 // Контроллер: состояние сессии, обработка нажатий и перерисовка экрана целиком.
+// Текст озвучки задания и разбор настроек — в prompts.ts, сохранение — в savedState.ts.
 
 export class CountingGame {
   private root = document.createElement('div');
@@ -84,11 +86,7 @@ export class CountingGame {
   /** Озвучивает задание на языке речи. */
   private speakPrompt() {
     if (!this.session) return;
-    const { mode, question: q } = this.session;
-    const prompt = words[this.prefs.speech][mode];
-    if (mode === 'feed') this.say(`${prompt} ${numberWord(this.prefs.speech, q.answer)}`);
-    else if (mode === 'calculate') this.say(`${prompt} ${q.a} ${q.subtract ? '−' : '+'} ${q.b}`);
-    else this.say(prompt);
+    this.say(promptSpeech(this.session, this.prefs.speech));
   }
 
   private begin(mode: Mode) {
@@ -131,10 +129,7 @@ export class CountingGame {
   private onChange = (event: Event) => {
     const target = event.target as HTMLSelectElement;
     if (this.screen !== 'home') return;
-    const language = languages.includes(target.value as Language) ? (target.value as Language) : null;
-    if (target.name === 'language' && language) this.prefs.language = language;
-    if (target.name === 'speech' && language) this.prefs.speech = language;
-    if (target.name === 'limit' && LIMITS.includes(Number(target.value))) this.prefs.limit = Number(target.value);
+    applyPreference(this.prefs, target.name, target.value);
     this.audio.stop();
     this.save();
     this.render();

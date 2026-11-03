@@ -1,0 +1,127 @@
+/* Игровое поле: верхняя панель, доска с ячейками, кусочки, лоток, перетаскиваемый кусочек, карточка победы. */
+.game-area {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.game-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+.game-topbar span {
+  margin-left: auto;
+}
+.puzzle-play {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  justify-items: center;
+}
+/* Поле целиком помещается на экране: ширину ограничивает и высота окна. */
+.puzzle-board {
+  position: relative;
+  display: grid;
+  align-self: start;
+  height: auto;
+  width: min(100%, 560px, calc((100dvh - 330px) * var(--board-aspect, 1)));
+  min-width: min(100%, 220px);
+  overflow: hidden;
+  border: 8px solid #fff;
+  border-radius: 20px;
+  background: #f5f8ff;
+  box-shadow: 0 7px 0 #c6d4ed;
+}
+.puzzle-board.with-hint::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--hint-image) center / 100% 100% no-repeat;
+  opacity: 0.28;
+  filter: grayscale(0.4);
+  pointer-events: none;
+}
+.puzzle-slot,
+.puzzle-piece {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 1px dashed #aab8d1;
+  background-color: transparent;
+  cursor: pointer;
+}
+.puzzle-slot.is-miss {
+  background: rgb(255 92 92 / 0.35);
+  animation: puzzle-shake 0.35s;
+}
+.puzzle-piece {
+  border-style: solid;
+  border-color: rgb(255 255 255 / 0.6);
+  background-repeat: no-repeat;
+  touch-action: none;
+}
+.puzzle-piece.is-placed {
+  position: relative;
+  border-color: transparent;
+  animation: puzzle-snap 0.25s ease-out;
+}
+.piece-tray {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(56px, 13vw, 92px), 1fr));
+  align-content: start;
+  gap: 8px;
+  width: 100%;
+  max-width: 680px;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.78);
+}
+.piece-tray .puzzle-piece {
+  width: 100%;
+  aspect-ratio: var(--piece-aspect, 1);
+  border-radius: 10px;
+  box-shadow: 0 3px 0 rgb(36 50 74 / 0.18);
+  transition: transform 0.12s, opacity 0.12s;
+}
+.piece-tray .is-selected {
+  outline: 4px solid #f5a623;
+  outline-offset: 2px;
+  transform: scale(1.06);
+}
+.piece-tray .is-lifted {
+  opacity: 0.25;
+}
+.drag-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 0.3);
+  pointer-events: none;
+}
+.win-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 560px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #fff6ae;
+  font-size: clamp(20px, 4vw, 26px);
+  animation: puzzle-snap 0.4s ease-out;
+}
+.win-card strong {
+  flex-basis: 100%;
+  text-align: center;
+}
+.win-card button {
+  color: #fff;
+  background: #ff9e46;
+  box-shadow: 0 3px 0 #cc6d1b;
+}

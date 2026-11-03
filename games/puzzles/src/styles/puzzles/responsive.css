@@ -1,0 +1,53 @@
+/* Адаптив (низкий и альбомный экран), анимации защёлкивания и «не туда», режим без анимаций. */
+/* Низкий экран (телефон боком): компактная шапка. */
+@media (max-height: 500px) {
+  .puzzles-header {
+    margin-bottom: 8px;
+  }
+  .puzzles h1 {
+    font-size: 24px;
+  }
+  .game-topbar {
+    margin-bottom: 8px;
+  }
+  .game-topbar button {
+    min-height: 40px;
+    padding: 6px 12px;
+  }
+}
+/* Альбомный экран: поле слева, лоток справа. */
+@media (orientation: landscape) and (min-width: 640px) {
+  .puzzle-play {
+    grid-template-columns: auto minmax(180px, 1fr);
+    justify-items: stretch;
+    align-items: start;
+  }
+  .puzzle-board {
+    width: min(60vw, 640px, calc((100dvh - 150px) * var(--board-aspect, 1)));
+    min-width: 0;
+  }
+  .piece-tray,
+  .win-card {
+    max-height: calc(100dvh - 150px);
+    overflow-y: auto;
+  }
+}
+@keyframes puzzle-snap {
+  from {
+    transform: scale(1.15);
+  }
+}
+@keyframes puzzle-shake {
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .puzzles * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
