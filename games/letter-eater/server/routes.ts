@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { playerKeyOf, requirePlayer } from '@ig/sdk/server';
-import { LEVEL_COUNT, progressRepository } from './repository.js';
+import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
+import { LEVEL_COUNT, createProgressRepository } from './repository.js';
 
 const saveBody = {
   type: 'object',
@@ -12,13 +12,14 @@ const saveBody = {
   additionalProperties: false,
 } as const;
 
-// Чей прогресс: выбранного ребёнка, а если ребёнок не выбран — родителя. Id приходит только из сессии.
-export const progressRoutes: FastifyPluginAsync = async (app) => {
-  app.addHook('preHandler', requirePlayer);
+// Прогресс привязан к ребёнку из серверной сессии: клиенту не доверяем, чей он.
+export const progressRoutes: FastifyPluginAsync<GameServerOptions> = async (app, opts) => {
+  const progressRepository = createProgressRepository(opts.db);
+  app.addHook('preHandler', requireChild);
 
-  app.get('/', async (req) => ({ stars: await progressRepository.get(playerKeyOf(req)!) }));
+  app.get('/', async (req) => ({ stars: await progressRepository.get(childIdOf(req)!) }));
 
   app.post<{ Body: { level: number; stars: number } }>('/', { schema: { body: saveBody } }, async (req) => ({
-    stars: await progressRepository.saveBest(playerKeyOf(req)!, req.body.level, req.body.stars),
+    stars: await progressRepository.saveBest(childIdOf(req)!, req.body.level, req.body.stars),
   }));
 };

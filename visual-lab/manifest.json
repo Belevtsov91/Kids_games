@@ -1,0 +1,522 @@
+[
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/covers/cover.svg",
+    "title": "Звериный оркестр — Лесной театр",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/covers/cover.svg",
+    "title": "Считай и играй — Маленькие открытия",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/covers/cover.svg",
+    "title": "Рисовалка — Мастерская воображения",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "island-builder",
+    "path": "island-builder/covers/cover.svg",
+    "title": "Остров-конструктор — Бухта фонарей",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "letter-eater",
+    "path": "letter-eater/covers/cover.svg",
+    "title": "Буквоед — Печенья для монстрика",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/covers/cover.svg",
+    "title": "Лунная Долина — Сад звёздного света",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "playground3d",
+    "path": "playground3d/covers/cover.svg",
+    "title": "3D-песочница — Лаборатория игрушек",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "puzzles",
+    "path": "puzzles/covers/cover.svg",
+    "title": "Пазлы — Истории по кусочкам",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/covers/cover.svg",
+    "title": "Космический садовник — Оранжерея среди комет",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/covers/cover.svg",
+    "title": "Кто где живёт — Большой атлас домов",
+    "category": "covers",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/bear.svg",
+    "title": "bear · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/cow.svg",
+    "title": "cow · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/frog.svg",
+    "title": "frog · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/dog.svg",
+    "title": "dog · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/cat.svg",
+    "title": "cat · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/elephant.svg",
+    "title": "elephant · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/characters/bird.svg",
+    "title": "bird · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/characters/bunny.svg",
+    "title": "bunny · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/characters/squirrel.svg",
+    "title": "squirrel · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/characters/dolphin.svg",
+    "title": "dolphin · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/characters/fox.svg",
+    "title": "fox · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/characters/owl.svg",
+    "title": "owl · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/characters/bunny.svg",
+    "title": "bunny · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/fox.svg",
+    "title": "fox · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/bear.svg",
+    "title": "bear · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/cow.svg",
+    "title": "cow · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/frog.svg",
+    "title": "frog · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/penguin.svg",
+    "title": "penguin · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/turtle.svg",
+    "title": "turtle · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/characters/bird.svg",
+    "title": "bird · персонаж",
+    "category": "characters",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/icons/carrot.svg",
+    "title": "carrot · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/icons/nut.svg",
+    "title": "nut · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/icons/fish.svg",
+    "title": "fish · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "counting",
+    "path": "counting/icons/star.svg",
+    "title": "star · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/icons/palette.svg",
+    "title": "palette · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/icons/drum.svg",
+    "title": "drum · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "island-builder",
+    "path": "island-builder/icons/lantern.svg",
+    "title": "lantern · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/icons/seed.svg",
+    "title": "seed · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/icons/water.svg",
+    "title": "water · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/icons/star.svg",
+    "title": "star · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/icons/crystal.svg",
+    "title": "crystal · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/icons/moon.svg",
+    "title": "moon · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/icons/seed.svg",
+    "title": "seed · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/icons/water.svg",
+    "title": "water · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/icons/crystal.svg",
+    "title": "crystal · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/icons/moon.svg",
+    "title": "moon · игровой предмет",
+    "category": "icons",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/farm.svg",
+    "title": "Ферма",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/forest.svg",
+    "title": "Лес",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/sea.svg",
+    "title": "Море",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/house.svg",
+    "title": "Дом",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/pond.svg",
+    "title": "Пруд",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/jungle.svg",
+    "title": "Джунгли",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/savanna.svg",
+    "title": "Саванна",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "who-lives-where",
+    "path": "who-lives-where/habitats/ice.svg",
+    "title": "Льды",
+    "category": "habitats",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/coloring-pages/dragon-garden.svg",
+    "title": "dragon-garden · раскраска",
+    "category": "coloring-pages",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/coloring-pages/turtle-island.svg",
+    "title": "turtle-island · раскраска",
+    "category": "coloring-pages",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/coloring-pages/space-cat.svg",
+    "title": "space-cat · раскраска",
+    "category": "coloring-pages",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/coloring-pages/forest-post.svg",
+    "title": "forest-post · раскраска",
+    "category": "coloring-pages",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/coloring-pages/flower-city.svg",
+    "title": "flower-city · раскраска",
+    "category": "coloring-pages",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/coloring-pages/ocean-friends.svg",
+    "title": "ocean-friends · раскраска",
+    "category": "coloring-pages",
+    "format": "SVG"
+  },
+  {
+    "game": "island-builder",
+    "path": "island-builder/textures/wood.svg",
+    "title": "wood · текстура",
+    "category": "textures",
+    "format": "SVG"
+  },
+  {
+    "game": "island-builder",
+    "path": "island-builder/textures/sand.svg",
+    "title": "sand · текстура",
+    "category": "textures",
+    "format": "SVG"
+  },
+  {
+    "game": "island-builder",
+    "path": "island-builder/textures/stone.svg",
+    "title": "stone · текстура",
+    "category": "textures",
+    "format": "SVG"
+  },
+  {
+    "game": "drawing",
+    "path": "drawing/textures/paper.svg",
+    "title": "paper · текстура",
+    "category": "textures",
+    "format": "SVG"
+  },
+  {
+    "game": "puzzles",
+    "path": "puzzles/illustrations/turtle-bakery.webp",
+    "title": "Пекарня на спине черепахи",
+    "category": "illustrations",
+    "format": "WebP",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "puzzles",
+    "path": "puzzles/illustrations/turtle-bakery.png",
+    "title": "Пекарня на спине черепахи · оригинал",
+    "category": "originals",
+    "format": "PNG",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/illustrations/moon-garden.webp",
+    "title": "Сад звёздного света",
+    "category": "illustrations",
+    "format": "WebP",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "moon-valley",
+    "path": "moon-valley/illustrations/moon-garden.png",
+    "title": "Сад звёздного света · оригинал",
+    "category": "originals",
+    "format": "PNG",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/illustrations/forest-concert.webp",
+    "title": "Большой лесной концерт",
+    "category": "illustrations",
+    "format": "WebP",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "animal-orchestra",
+    "path": "animal-orchestra/illustrations/forest-concert.png",
+    "title": "Большой лесной концерт · оригинал",
+    "category": "originals",
+    "format": "PNG",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/illustrations/comet-greenhouse.webp",
+    "title": "Оранжерея среди комет",
+    "category": "illustrations",
+    "format": "WebP",
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "game": "space-gardener",
+    "path": "space-gardener/illustrations/comet-greenhouse.png",
+    "title": "Оранжерея среди комет · оригинал",
+    "category": "originals",
+    "format": "PNG",
+    "width": 1536,
+    "height": 1024
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "game": "animal-orchestra",
+    "title": "Звериный оркестр",
+    "category": "covers",
+    "source": "animal-orchestra/covers/cover-v2.png",
+    "path": "animal-orchestra/covers/cover-v3.svg",
+    "before": "animal-orchestra/covers/cover-v2.svg"
+  },
+  {
+    "game": "counting",
+    "title": "Считай и играй",
+    "category": "covers",
+    "source": "counting/covers/cover-v2.png",
+    "path": "counting/covers/cover-v3.svg",
+    "before": "counting/covers/cover-v2.svg"
+  },
+  {
+    "game": "drawing",
+    "title": "Рисовалка",
+    "category": "covers",
+    "source": "drawing/covers/cover-v2.png",
+    "path": "drawing/covers/cover-v3.svg",
+    "before": "drawing/covers/cover-v2.svg"
+  },
+  {
+    "game": "island-builder",
+    "title": "Остров-конструктор",
+    "category": "covers",
+    "source": "island-builder/covers/cover-v2.png",
+    "path": "island-builder/covers/cover-v3.svg",
+    "before": "island-builder/covers/cover-v2.svg"
+  },
+  {
+    "game": "letter-eater",
+    "title": "Буквоед",
+    "category": "covers",
+    "source": "letter-eater/covers/cover-v2.png",
+    "path": "letter-eater/covers/cover-v3.svg",
+    "before": "letter-eater/covers/cover-v2.svg"
+  },
+  {
+    "game": "playground3d",
+    "title": "3D-песочница",
+    "category": "covers",
+    "source": "playground3d/covers/cover-v2.png",
+    "path": "playground3d/covers/cover-v3.svg",
+    "before": "playground3d/covers/cover-v2.svg"
+  },
+  {
+    "game": "puzzles",
+    "title": "Пазлы",
+    "category": "covers",
+    "source": "puzzles/covers/cover-v2.png",
+    "path": "puzzles/covers/cover-v3.svg",
+    "before": "puzzles/covers/cover-v2.svg"
+  },
+  {
+    "game": "space-gardener",
+    "title": "Космический садовник",
+    "category": "covers",
+    "source": "space-gardener/covers/cover-v2.png",
+    "path": "space-gardener/covers/cover-v3.svg",
+    "before": "space-gardener/covers/cover-v2.svg"
+  },
+  {
+    "game": "who-lives-where",
+    "title": "Кто где живёт",
+    "category": "covers",
+    "source": "who-lives-where/covers/cover-v2.png",
+    "path": "who-lives-where/covers/cover-v3.svg",
+    "before": "who-lives-where/covers/cover-v2.svg"
+  }
+]

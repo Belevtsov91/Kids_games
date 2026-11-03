@@ -3,14 +3,19 @@
 @media (max-width: 690px) {
   .mv-panel {
     top: auto;
-    bottom: max(58px, env(safe-area-inset-bottom));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    max-height: 48dvh;
     right: 10px;
     left: 10px;
     width: auto;
     max-width: none;
     padding: 11px 13px;
   }
-  .mv-panel p,
+  .mv-panel p {
+    min-height: 0;
+    margin: 4px 0 6px;
+    font-size: 12px;
+  }
   .mv-panel h3,
   .mv-zones,
   .mv-quests {
@@ -27,6 +32,18 @@
   }
   .mv-resources {
     margin-top: 6px;
+  }
+  .mv-hint {
+    display: none;
+  }
+}
+
+/* Телефон боком: панель справа, но ниже и компактнее. */
+@media (max-height: 500px) and (min-width: 691px) {
+  .mv-panel {
+    top: 70px;
+    padding: 11px 13px;
+    max-height: calc(100dvh - 80px);
   }
   .mv-hint {
     display: none;

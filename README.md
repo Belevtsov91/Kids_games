@@ -6,7 +6,7 @@
 
 - **shell:** TypeScript, Vite, React, react-router, PWA (vite-plugin-pwa).
 - **игры:** что угодно на выбор игры: чистый DOM и Canvas, React, PixiJS + Howler (рисовалка), matter-js (космический садовник), Three.js + React Three Fiber + drei + Rapier (3D-игры).
-- **сервер:** Node 24, TypeScript, Fastify (запуск через tsx). Вход родителя и профили детей — в Supabase (Postgres); данные игр пока в памяти сервера.
+- **сервер:** Node 24, TypeScript, Fastify (запуск через tsx). Вход родителя, профили детей и сохранения игр — в Supabase (Postgres); у каждой игры свои таблицы.
 - **тесты:** Vitest (юнит и API), Playwright (e2e).
 
 ## Запуск
@@ -29,7 +29,9 @@ corepack pnpm build       # lint + типы + сборка shell
 
 В dev Vite проксирует `/api/*` на `http://localhost:3000`. Настройки сервера: скопируйте `platform/server/.env.example` в `platform/server/.env`.
 
-Для входа нужна БД: создайте проект Supabase, выполните `platform/server/migrations/*.sql` и заполните в `.env` `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` и `SESSION_ENCRYPTION_KEY`. Без них сервер работает, но вход отвечает 503, а API игр — 401 (нет сессии).
+Для входа нужна БД: создайте проект Supabase, выполните миграции и заполните в `.env` `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` и `SESSION_ENCRYPTION_KEY`. Без них сервер работает, но вход отвечает 503, а API игр — 401 (нет сессии).
+
+Миграции — платформы и всех игр — собираются в один скрипт: `corepack pnpm db:sql > all.sql`, затем содержимое `all.sql` выполняется в Supabase → SQL Editor. Скрипт идемпотентный (`create … if not exists`): после добавления игры его можно просто выполнить ещё раз.
 
 ## Структура
 
@@ -46,7 +48,8 @@ games/<id>/                  @ig/game-<id> — одна игра, полност
   package.json               свои зависимости
   manifest.ts                id, название, эмодзи, 2d/3d, возраст
   src/index.ts(x)            export default defineGame({ mount(container, sdk) { … } })
-  server/index.ts            (необязательно) Fastify-плагин игры
+  server/index.ts            (необязательно) Fastify-плагин игры; получает opts.db — БД только к своим таблицам
+  server/migrations/*.sql    таблицы игры ig_game_<id>_*
   tests/
 
 platform/
@@ -59,7 +62,8 @@ platform/
 tools/
   game-template/             шаблон новой игры
   create-game.mjs            corepack pnpm new-game <id> "Название"
-  check-boundaries.mjs       линтер границ (corepack pnpm lint)
+  check-boundaries.mjs       линтер границ (corepack pnpm lint): импорты и таблицы БД
+  db-sql.mjs                 все миграции одним скриптом (corepack pnpm db:sql)
 
 tsconfig.base.json           общие настройки TypeScript для игр
 ```
@@ -89,6 +93,7 @@ tsconfig.base.json           общие настройки TypeScript для и�
 4. `id` в манифесте совпадает с именем папки. Битый манифест не роняет каталог: игра пропускается, ошибка пишется в лог.
 5. Код, который нужен только одной игре, живёт в её папке. В `platform/` попадает только то, что нужно всем.
 6. Сервер игры узнаёт, чьи данные, только из сессии: `childIdOf(req)` / `requireChild` из `@ig/sdk/server`. `profileId` из запроса не принимается.
+7. У каждой игры свои таблицы `ig_game_<id>_*` (дефисы в id → `_`), игры не делят таблицы между собой и не трогают таблицы платформы. Клиент `opts.db`, который платформа даёт серверу игры, бросает ошибку при обращении к чужой таблице, а `corepack pnpm lint` проверяет имена таблиц в коде сервера игры и в её миграциях. Единственная ссылка наружу — внешний ключ `child_id → ig_children(id) on delete cascade`: удалили профиль ребёнка — удалились и его сохранения во всех играх.
 
 ## Новая игра
 
@@ -120,10 +125,23 @@ corepack pnpm dev
 | drawing | GET/POST `/drawings`, GET/DELETE `/drawings/:id` |
 | animal-orchestra | GET/POST `/melodies`, DELETE `/melodies/:id` |
 | island-builder | GET/POST/DELETE `/island` |
-| letter-eater | GET/POST `/progress` (без ребёнка — прогресс родителя) |
+| letter-eater | GET/POST `/progress` |
 | space-gardener | GET/POST `/progress` |
 | who-lives-where | GET/POST `/progress` |
 
-## Подключение БД для игр
+## Сохранения игр в БД
 
-Данные игр пока в памяти сервера. Чтобы перенести их в БД, меняются только `games/<id>/server/repository.ts`: сигнатуры уже асинхронные, маршруты трогать не нужно.
+| Игра | Таблица | Что в строке |
+|---|---|---|
+| drawing | `ig_game_drawing_drawings` | рисунок: название, PNG (data URL) |
+| animal-orchestra | `ig_game_animal_orchestra_melodies` | мелодия: название, ноты (jsonb); не больше 30 на ребёнка |
+| island-builder | `ig_game_island_builder_islands` | остров ребёнка (jsonb), один на ребёнка |
+| letter-eater | `ig_game_letter_eater_progress` | звёзды по уровням (smallint[]) |
+| space-gardener | `ig_game_space_gardener_levels` | лучшие звёзды за один уровень |
+| who-lives-where | `ig_game_who_lives_where_progress` | уровень и найденные звери |
+
+Таблицы закрыты так же, как таблицы платформы: RLS включён, политик нет, права у `anon`/`authenticated` отозваны. Читает и пишет только сервер с секретным ключом.
+
+Репозиторий игры (`server/repository.ts`) работает с БД, когда платформа передала `opts.db`, и с памятью процесса, когда БД нет (юнит-тесты, запуск без Supabase). Маршруты от этого не зависят.
+
+Новая игра с сохранениями: таблицы — в `games/<id>/server/migrations/*.sql` с префиксом `ig_game_<id>_`, доступ — через `opts.db.from('ig_game_<id>_…')`, потом `corepack pnpm db:sql` и выполнить в SQL Editor.

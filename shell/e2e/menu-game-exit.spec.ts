@@ -31,12 +31,14 @@ test('каждая игра есть в меню для своего возра�
   }
 });
 
-test('меню показывает только игры по возрасту', async ({ page }) => {
+test('меню: сверху игры по возрасту, остальные ниже, но видны все', async ({ page }) => {
   await signedIn(page, 3);
   await page.goto('/dashboard');
   await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
   for (const id of gameIds) {
-    await expect(page.locator(`a[href="/play/${id}"]`)).toHaveCount(minAge(id) <= 3 ? 1 : 0);
+    await expect(page.locator(`a[href="/play/${id}"]`)).toHaveCount(1);
+    const section = minAge(id) <= 3 ? 'menu-fits' : 'menu-others';
+    await expect(page.getByTestId(section).locator(`a[href="/play/${id}"]`)).toHaveCount(1);
   }
 });
 

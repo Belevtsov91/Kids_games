@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3ec6e8"/><stop offset="1" stop-color="#1166a8"/></linearGradient>
+    <linearGradient id="fish" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb22e"/><stop offset="1" stop-color="#ff6a2e"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sea)"/>
+  <g fill="#fff" opacity=".18"><path d="M0 120Q128 80 256 120T512 120T768 120T1024 120V160Q896 120 768 160T512 160T256 160T0 160Z"/></g>
+  <path d="M0 880C180 840 300 870 480 900S820 880 1024 850V1024H0Z" fill="#f4d58d"/>
+  <g fill="#2fae5f"><path d="M140 900C110 780 180 720 140 600 200 700 160 780 190 900Z"/><path d="M200 905C210 800 270 760 250 660 300 760 260 820 250 905Z"/><path d="M860 880C830 760 900 700 860 590 920 690 880 770 910 880Z"/></g>
+  <g fill="#ff7aa8"><circle cx="720" cy="900" r="34"/><circle cx="760" cy="880" r="26"/><circle cx="690" cy="870" r="22"/></g>
+  <path d="M640 940l30-60 30 60 60 10-45 40 10 60-55-30-55 30 10-60-45-40z" fill="#ff5d7a" transform="translate(-240 -60) scale(.9)"/>
+  <g transform="translate(470 470)">
+    <path d="M190 0L330 -110Q300 0 330 110Z" fill="#ff8a2e" stroke="#b44a16" stroke-width="10" stroke-linejoin="round"/>
+    <ellipse rx="230" ry="160" fill="url(#fish)" stroke="#b44a16" stroke-width="10"/>
+    <path d="M-40 -150Q40 -260 120 -140" fill="#ff8a2e" stroke="#b44a16" stroke-width="10"/>
+    <g fill="none" stroke="#fff" stroke-width="26" opacity=".85"><path d="M-30 -150Q-70 0 -30 150"/><path d="M70 -140Q30 0 70 140"/></g>
+    <circle cx="-130" cy="-40" r="44" fill="#fff" stroke="#b44a16" stroke-width="8"/>
+    <circle cx="-140" cy="-40" r="22" fill="#24324a"/>
+    <circle cx="-148" cy="-50" r="8" fill="#fff"/>
+    <path d="M-200 40Q-170 70 -140 50" fill="none" stroke="#b44a16" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  <g fill="#fff" fill-opacity=".55" stroke="#fff" stroke-width="4"><circle cx="200" cy="360" r="26"/><circle cx="250" cy="280" r="16"/><circle cx="215" cy="210" r="10"/><circle cx="820" cy="250" r="22"/><circle cx="860" cy="180" r="12"/></g>
+  <g transform="translate(830 560) scale(.45)"><path d="M190 0L300 -90Q275 0 300 90Z" fill="#9a6bff"/><ellipse rx="210" ry="130" fill="#b58cff"/><circle cx="-110" cy="-30" r="30" fill="#fff"/><circle cx="-118" cy="-30" r="15" fill="#24324a"/></g>
+</svg>

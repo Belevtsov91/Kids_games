@@ -32,3 +32,13 @@
 .menu-card-emoji {
   font-size: 56px;
 }
+
+.menu-others {
+  margin-top: 40px;
+}
+
+.menu-others h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  opacity: 0.75;
+}

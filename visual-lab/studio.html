@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102b31">
+  <title>Миры, в которые веришь · Visual Lab</title>
+  <link rel="stylesheet" href="studio.css">
+  <script src="vectors-data.js" defer></script>
+  <script src="studio.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#worlds">К коллекции</a>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">✳</span> interact<span class="brand-small">VISUAL LAB</span></a>
+    <nav aria-label="Главная навигация"><a href="#worlds">Миры</a><a href="#vectors">Персонажи и SVG</a><a href="index.html">Эскизы ↗</a></nav>
+    <span class="edition">НОВАЯ ГЛАВА / 2026</span>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-art" src="moon-valley/covers/cover-v2.png" alt="Лисёнок, сова и зайчик ухаживают за светящимися цветами в лунном саду" fetchpriority="high" width="1536" height="1024">
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <span class="eyebrow">МАЛЕНЬКИЕ МИРЫ. БОЛЬШОЕ ВООБРАЖЕНИЕ.</span>
+        <h1 id="hero-title">Миры, в которые<br><em>веришь.</em></h1>
+        <p>Мягкая шерсть. Тёплый свет. Роса на листьях.<br>Знакомые истории обретают глубину.</p>
+        <a class="primary" href="#worlds">Исследовать коллекцию <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-caption"><span>В ФОКУСЕ</span><strong>Лунная долина</strong><button type="button" data-open="moon-valley">Рассмотреть ближе ↗</button></div>
+      <div class="hero-bottom"><span>10 миров · новая визуальная серия</span><span>Свет / фактура / характер</span></div>
+    </section>
+    <section class="collection" id="worlds" aria-labelledby="collection-title">
+      <div class="section-title"><div><span class="eyebrow">КОЛЛЕКЦИЯ МИРОВ</span><h2 id="collection-title">У каждой истории<br>свой свет.</h2></div><p>Открой любой мир, чтобы рассмотреть детали.<br>Передвинь границу и сравни с первым эскизом.</p></div>
+      <div class="toolbar"><div class="filters" role="group" aria-label="Фильтр миров"><button aria-pressed="true" data-filter="all">Все миры <span>10</span></button><button aria-pressed="false" data-filter="nature">Природа</button><button aria-pressed="false" data-filter="fantasy">Волшебство</button><button aria-pressed="false" data-filter="create">Творчество</button></div><span id="count" aria-live="polite">10 миров</span></div>
+      <div class="world-grid" id="world-grid"></div>
+      <noscript><p>Для фильтров и сравнения включи JavaScript. <a href="moon-valley/covers/cover-v2.png">Открыть новую иллюстрацию</a>.</p></noscript>
+    </section>
+    <section class="collection vector-section" id="vectors" aria-labelledby="vector-title">
+      <div class="section-title"><div><span class="eyebrow">ПОЛНОСТЬЮ ВЕКТОРНАЯ КОЛЛЕКЦИЯ</span><h2 id="vector-title">Больше жизни.<br>В каждой детали.</h2></div><p>Новые миры, обложки и подробные раскраски.<br>Открой рисунок и сравни с предыдущим SVG.</p></div>
+      <div class="toolbar"><div class="filters" role="group" aria-label="Категории SVG"><button data-vector-filter="characters" aria-pressed="true">Персонажи · 20</button><button data-vector-filter="icons" aria-pressed="false">Предметы · 16</button><button data-vector-filter="habitats" aria-pressed="false">Миры · 8</button><button data-vector-filter="coloring-pages" aria-pressed="false">Раскраски · 6</button><button data-vector-filter="textures" aria-pressed="false">Текстуры · 4</button><button data-vector-filter="covers" aria-pressed="false">SVG-обложки · 10</button></div></div>
+      <p class="note" id="vector-count" aria-live="polite">20 персонажей · 14 уникальных героев</p>
+      <div class="vector-grid" id="vector-grid"></div>
+    </section>
+    <section class="direction"><span class="eyebrow">НОВЫЙ ВИЗУАЛЬНЫЙ ЯЗЫК</span><h2>Сказка, которую<br>почти можно потрогать.</h2><div class="principles"><p><strong>Материалы</strong>Шерсть, керамика, дерево и стекло с собственной фактурой.</p><p><strong>Освещение</strong>Солнечные лучи, свет фонарей и отражения создают глубину.</p><p><strong>Характер</strong>Добрые лица и ясные силуэты сохраняют ощущение игры.</p></div><p class="note">PNG-обложки и векторные ресурсы для будущего внедрения. Анимационные состояния и 3D-модели потребуют отдельной подготовки.</p></section>
+  </main>
+  <footer><a class="brand" href="#">interact / visual lab</a><span>Коллекция 2026</span><a href="index.html">Каталог исходных ресурсов ↗</a></footer>
+  <dialog id="viewer" aria-labelledby="viewer-title">
+    <div class="viewer-top"><div><span class="eyebrow" id="viewer-kicker"></span><h2 id="viewer-title"></h2></div><button class="close" aria-label="Закрыть просмотр">×</button></div>
+    <div class="compare" id="compare"><img id="after" alt=""><img id="before" alt=""><span class="version before-label">Первый эскиз</span><span class="version after-label">Новый мир</span><div class="divider" aria-hidden="true"><span>↔</span></div></div>
+    <div class="viewer-bottom"><label for="reveal">До / после</label><input id="reveal" type="range" min="0" max="100" value="35" aria-label="Доля исходного эскиза"><a id="original" target="_blank" rel="noopener">Открыть PNG ↗</a></div><p id="viewer-description"></p>
+  </dialog>
+</body>
+</html>

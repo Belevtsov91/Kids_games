@@ -1,17 +1,25 @@
+import house from '../../assets/house.svg';
+import fish from '../../assets/fish.svg';
+import rocket from '../../assets/rocket.svg';
+
 export interface PuzzleImage {
   id: string;
   title: string;
   imageUrl: string;
   width: number;
   height: number;
-  sourceUrl: string;
+  /** Откуда картинка; у встроенных картинок нет. */
+  sourceUrl?: string;
 }
 
 /**
- * Стартовый набор. Изображения взяты из открытой коллекции AI Scribbles;
- * ссылка на источник сохранена у каждой карточки.
+ * Стартовый набор. Первые три картинки лежат в папке игры и работают без интернета;
+ * остальные — из открытой коллекции AI Scribbles (если не загрузились, карточка скрывается).
  */
 export const starterPuzzles: PuzzleImage[] = [
+  { id: 'house', title: 'Домик и радуга', imageUrl: house, width: 1024, height: 1024 },
+  { id: 'fish', title: 'Рыбка', imageUrl: fish, width: 1024, height: 1024 },
+  { id: 'rocket', title: 'Ракета', imageUrl: rocket, width: 1024, height: 1024 },
   {
     id: 'rainbow-cat',
     title: 'Радужный котик',

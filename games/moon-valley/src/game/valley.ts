@@ -47,14 +47,59 @@ export const initialState = (): ValleyState => ({
 });
 
 export const xpForNext = (level: number) => LEVEL_XP[Math.min(level, LEVEL_XP.length - 1)] ?? 400;
+export const MAX_LEVEL = 5;
+/** С какого уровня питомец выходит из тумана. */
+export const PET_UNLOCK: Record<PetKind, number> = { fox: 1, owl: 2, bunny: 3 };
+
+const withUnlocks = (state: ValleyState): ValleyState => ({
+  ...state,
+  pets: state.pets.map((pet) => (pet.unlocked || state.level < PET_UNLOCK[pet.id] ? pet : { ...pet, unlocked: true })),
+});
+
 export function addXp(state: ValleyState, amount: number): ValleyState {
   let xp = state.xp + amount;
   let level = state.level;
-  while (level < 5 && xp >= xpForNext(level)) {
+  while (level < MAX_LEVEL && xp >= xpForNext(level)) {
     xp -= xpForNext(level);
     level += 1;
   }
-  return { ...state, xp, level };
+  // На последнем уровне полоска опыта просто заполнена.
+  if (level >= MAX_LEVEL) xp = Math.min(xp, xpForNext(level));
+  return withUnlocks({ ...state, xp, level });
+}
+
+const num = (value: unknown, fallback: number, min = 0, max = 1e6) =>
+  typeof value === 'number' && Number.isFinite(value) ? Math.min(max, Math.max(min, Math.round(value))) : fallback;
+
+/** Сохранение из хранилища: всё битое или старое заменяется значениями по умолчанию. */
+export function restoreState(raw: unknown): ValleyState {
+  const base = initialState();
+  if (!raw || typeof raw !== 'object') return base;
+  const saved = raw as Partial<ValleyState>;
+  const list = <T,>(value: unknown): Partial<T>[] => (Array.isArray(value) ? value.filter((item) => item && typeof item === 'object') : []);
+  const savedPlots = list<Plot>(saved.plots);
+  const savedPets = list<Pet>(saved.pets);
+  const plots = base.plots.map((plot) => {
+    const stage = savedPlots.find((item) => item.id === plot.id)?.stage;
+    return { ...plot, stage: num(stage, 0, 0, 3) as PlantStage };
+  });
+  const pets = base.pets.map((pet) => {
+    const old = savedPets.find((item) => item.id === pet.id);
+    return old ? { ...pet, affection: num(old.affection, 0, 0, 100), level: num(old.level, 1, 1, 5) } : pet;
+  });
+  const strings = (list: unknown, fallback: string[]) =>
+    Array.isArray(list) ? [...new Set(list.filter((item): item is string => typeof item === 'string'))] : fallback;
+  return withUnlocks({
+    level: num(saved.level, 1, 1, MAX_LEVEL),
+    xp: num(saved.xp, 0),
+    starlight: num(saved.starlight, base.starlight),
+    seeds: num(saved.seeds, base.seeds),
+    water: num(saved.water, base.water),
+    plots,
+    pets,
+    buildings: strings(saved.buildings, base.buildings),
+    explored: strings(saved.explored, base.explored),
+  });
 }
 
 export function tendPlot(state: ValleyState, id: number): ValleyState {

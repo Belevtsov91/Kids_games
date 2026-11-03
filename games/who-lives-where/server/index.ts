@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { childIdOf, requireChild } from '@ig/sdk/server';
+import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
 import { MAX_LEVEL } from '../src/game/rounds.js';
-import { progressRepository } from './repository.js';
+import { createProgressRepository } from './repository.js';
 
 // Серверная часть «Кто где живёт». Платформа подключает её под /api/games/who-lives-where.
 // Прогресс привязан к ребёнку из серверной сессии: клиенту не доверяем, чей он.
@@ -15,7 +15,8 @@ const saveBody = {
   additionalProperties: false,
 } as const;
 
-const server: FastifyPluginAsync = async (app) => {
+const server: FastifyPluginAsync<GameServerOptions> = async (app, opts) => {
+  const progressRepository = createProgressRepository(opts.db);
   app.addHook('preHandler', requireChild);
 
   app.get('/progress', async (req) => progressRepository.get(childIdOf(req)!));

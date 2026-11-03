@@ -1,9 +1,8 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { childIdOf, requireChild } from '@ig/sdk/server';
+import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
 import { ANIMAL_IDS } from '../src/game/animals.js';
 import { MAX_NOTES, MAX_SONG_MS } from '../src/game/song.js';
-import { melodiesRepository, type Melody } from './repository.js';
-
+import { createMelodiesRepository, type Melody } from './repository.js';
 
 const createBody = {
   type: 'object',
@@ -30,7 +29,8 @@ const createBody = {
 } as const;
 
 // Мелодии привязаны к ребёнку из серверной сессии: клиенту не доверяем, чьи они.
-export const melodiesRoutes: FastifyPluginAsync = async (app) => {
+export const melodiesRoutes: FastifyPluginAsync<GameServerOptions> = async (app, opts) => {
+  const melodiesRepository = createMelodiesRepository(opts.db);
   app.addHook('preHandler', requireChild);
 
   app.get('/', async (req) => melodiesRepository.list(childIdOf(req)!));

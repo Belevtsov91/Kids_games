@@ -1,0 +1,128 @@
+[
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Ферма",
+    "source": "who-lives-where/habitats/farm-source-v3.png",
+    "path": "who-lives-where/habitats/farm-v3.svg",
+    "before": "who-lives-where/habitats/farm-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A beautiful countryside farm at late golden hour: a real timber barn and stone farmhouse, fenced paddocks, vegetable beds, orchard trees, hay bales and a winding cobbled track. Rich natural wood grain, irregular stonework, tiled roof, flowers, sunlit grasses, gentle hills in the distance."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Лес",
+    "source": "who-lives-where/habitats/forest-source-v3.png",
+    "path": "who-lives-where/habitats/forest-v3.svg",
+    "before": "who-lives-where/habitats/forest-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A lush temperate woodland with majestic twisting oak trunks, dense intricate green canopy, a clear meandering shallow stream, moss-covered boulders, ferns, tiny mushrooms and wildflowers. Warm sun shafts filter through leaves; layered deep forest, highly tactile bark and moss. Camera near the stream, spacious middle clearing."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Подводный мир",
+    "source": "who-lives-where/habitats/sea-source-v3.png",
+    "path": "who-lives-where/habitats/sea-v3.svg",
+    "before": "who-lives-where/habitats/sea-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A luminous underwater coral reef, real colorful branching corals, anemones, fan corals and marine plants framing a sandy path toward a distant rock arch. Beautiful turquoise water with sun shafts and caustics, believable coral details, no fish or animals, rich blue depth. Clear focal opening and vividly textured foreground."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Дом",
+    "source": "who-lives-where/habitats/house-source-v3.png",
+    "path": "who-lives-where/habitats/house-v3.svg",
+    "before": "who-lives-where/habitats/house-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A cozy domestic pet-friendly cottage living room, warm afternoon sun through a large garden window, a woven pet basket and soft blanket, wooden floorboards, bookshelves, houseplants, a rug and a little bowl. Detailed natural linen, wicker and wood, lived-in warmth, tasteful soft colors. Wide eye-level interior with strong perspective, no animals or people."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Пруд",
+    "source": "who-lives-where/habitats/pond-source-v3.png",
+    "path": "who-lives-where/habitats/pond-v3.svg",
+    "before": "who-lives-where/habitats/pond-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A tranquil freshwater pond with crystal-clear shallow water, water lilies and lotus flowers, reeds, river stones, mossy banks and a small rustic wooden footbridge. Willow branches hanging overhead, little wildflowers and distant woodland. Warm morning light, dew, believable reflections and water depth, immersive low viewpoint."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Джунгли",
+    "source": "who-lives-where/habitats/jungle-source-v3.png",
+    "path": "who-lives-where/habitats/jungle-v3.svg",
+    "before": "who-lives-where/habitats/jungle-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A tropical rainforest clearing with a spectacular layered waterfall dropping into an emerald pool. Giant buttress roots, glossy broad tropical leaves, hanging vines, orchids, wet stone and drifting mist, richly layered jungle canopy. Dappled sun beams, sense of scale, lush photorealistic tropical vegetation."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Саванна",
+    "source": "who-lives-where/habitats/savanna-source-v3.png",
+    "path": "who-lives-where/habitats/savanna-v3.svg",
+    "before": "who-lives-where/habitats/savanna-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A sweeping African savanna in the golden hour: graceful flat-topped acacia tree, detailed golden grasses, red earth path, weathered rocks and a distant watering hole, far hills with atmospheric haze, beautiful immense sky with sculpted clouds. Warm amber sunlight and natural shadows, realistic natural ecosystem, no animals."
+  },
+  {
+    "game": "who-lives-where",
+    "category": "habitats",
+    "title": "Льды",
+    "source": "who-lives-where/habitats/ice-source-v3.png",
+    "path": "who-lives-where/habitats/ice-v3.svg",
+    "before": "who-lives-where/habitats/ice-v2.svg",
+    "prompt": "Use case: stylized-concept. Create a premium landscape environment illustration 1536x1024 for a modern family-friendly exploration game. Sophisticated cinematic animated-feature realism, highly believable organic materials and detailed natural textures, beautiful physically plausible lighting, atmospheric depth, rich but tasteful colors. Polished art direction matching a warm, realistic storybook world. Wide composition, foreground/middle/distant planes, a clear inviting focal area. No text, no logo, no UI, no collage. No animals or people; this is an environment to place characters in later. Avoid flat vector shapes, lollipop trees, simple gradients and generic cartoon geometry. A serene Arctic landscape: luminous sculpted blue icebergs, cracked sea ice, translucent frozen ridges and snowdrifts around a calm turquoise sea channel. Distant snow-covered mountains under pearlescent dawn sky with subtle pink clouds. Realistic ice translucency and crisp snow texture, cinematic depth, gentle magical mood, no animals."
+  },
+  {
+    "game": "drawing",
+    "category": "coloring-pages",
+    "title": "Дракон в саду",
+    "source": "drawing/coloring-pages/dragon-garden-source-v3.png",
+    "path": "drawing/coloring-pages/dragon-garden-v3.svg",
+    "before": "drawing/coloring-pages/dragon-garden-v2.svg",
+    "prompt": "Create ONE original professional printable coloring-book page, landscape 1536x1024. Crisp clean black outlines on pure white, NO color, NO gray shading, NO gradients, NO hatching, NO large solid black fills. Beautiful hand-drawn storybook illustration with sophisticated clear linework and believable perspective. Full-page immersive composition: fill all four corners and the background with meaningful scenery and enclosed colorable shapes; no isolated subject on an empty page, no broad blank sky or blank ground. Dense but readable detail for older children/families: hundreds of closed areas, a mix of medium and small shapes, clearly separated foreground, middle ground and background. Consistent confident contours, every main shape enclosed for coloring. Use leaves, flowers, stones, planks, roof tiles, patterned objects and clouds to divide large blank areas naturally. Main character large and appealing. No text, letters, watermark, logo or labels. Thin clean rectangular frame just inside the image edge. A kind young dragon with two wings, a long curved tail and patterned belly, tending a beautiful cottage garden. An arched garden gate, wooden cottage with tiled roof, stepping-stone paths, fountain, patterned pots, many distinct flowers and leaves, mushrooms, butterflies, clouds and distant rolling hills. Dragon occupies center-left, garden scenery fills entire composition. Fine details but spacious colorable shapes, no empty corners."
+  },
+  {
+    "game": "drawing",
+    "category": "coloring-pages",
+    "title": "Остров на спине черепахи",
+    "source": "drawing/coloring-pages/turtle-island-source-v3.png",
+    "path": "drawing/coloring-pages/turtle-island-v3.svg",
+    "before": "drawing/coloring-pages/turtle-island-v2.svg",
+    "prompt": "Create ONE original professional printable coloring-book page, landscape 1536x1024. Crisp clean black outlines on pure white, NO color, NO gray shading, NO gradients, NO hatching, NO large solid black fills. Beautiful hand-drawn storybook illustration with sophisticated clear linework and believable perspective. Full-page immersive composition: fill all four corners and the background with meaningful scenery and enclosed colorable shapes; no isolated subject on an empty page, no broad blank sky or blank ground. Dense but readable detail for older children/families: hundreds of closed areas, a mix of medium and small shapes, clearly separated foreground, middle ground and background. Consistent confident contours, every main shape enclosed for coloring. Use leaves, flowers, stones, planks, roof tiles, patterned objects and clouds to divide large blank areas naturally. Main character large and appealing. No text, letters, watermark, logo or labels. Thin clean rectangular frame just inside the image edge. A friendly giant tortoise with a clearly patterned shell carrying a miniature island village: small bakery cottage, windmill, lighthouse, trees and gardens on its back. It walks through a beautiful river valley with stone bridge, meandering water divided into flowing shapes, pebbles, reeds, flowers, mountains and layered clouds. Every part of page has interesting closed outlines for coloring."
+  },
+  {
+    "game": "drawing",
+    "category": "coloring-pages",
+    "title": "Космический кот",
+    "source": "drawing/coloring-pages/space-cat-source-v3.png",
+    "path": "drawing/coloring-pages/space-cat-v3.svg",
+    "before": "drawing/coloring-pages/space-cat-v2.svg",
+    "prompt": "Create ONE original professional printable coloring-book page, landscape 1536x1024. Crisp clean black outlines on pure white, NO color, NO gray shading, NO gradients, NO hatching, NO large solid black fills. Beautiful hand-drawn storybook illustration with sophisticated clear linework and believable perspective. Full-page immersive composition: fill all four corners and the background with meaningful scenery and enclosed colorable shapes; no isolated subject on an empty page, no broad blank sky or blank ground. Dense but readable detail for older children/families: hundreds of closed areas, a mix of medium and small shapes, clearly separated foreground, middle ground and background. Consistent confident contours, every main shape enclosed for coloring. Use leaves, flowers, stones, planks, roof tiles, patterned objects and clouds to divide large blank areas naturally. Main character large and appealing. No text, letters, watermark, logo or labels. Thin clean rectangular frame just inside the image edge. An adorable cat astronaut in a carefully detailed spacesuit with helmet exploring a magnificent cosmic greenhouse planet. Foreground alien flowers and patterned moon rocks, little rover, rocket ship, domed greenhouse full of plants, orbital space station and distant planets with rings and segmented surface patterns. Space background filled with many large stars, comets and swirling closed nebula ribbons, no empty black space, all white with black outlines."
+  },
+  {
+    "game": "drawing",
+    "category": "coloring-pages",
+    "title": "Лесная почта",
+    "source": "drawing/coloring-pages/forest-post-source-v3.png",
+    "path": "drawing/coloring-pages/forest-post-v3.svg",
+    "before": "drawing/coloring-pages/forest-post-v2.svg",
+    "prompt": "Create ONE original professional printable coloring-book page, landscape 1536x1024. Crisp clean black outlines on pure white, NO color, NO gray shading, NO gradients, NO hatching, NO large solid black fills. Beautiful hand-drawn storybook illustration with sophisticated clear linework and believable perspective. Full-page immersive composition: fill all four corners and the background with meaningful scenery and enclosed colorable shapes; no isolated subject on an empty page, no broad blank sky or blank ground. Dense but readable detail for older children/families: hundreds of closed areas, a mix of medium and small shapes, clearly separated foreground, middle ground and background. Consistent confident contours, every main shape enclosed for coloring. Use leaves, flowers, stones, planks, roof tiles, patterned objects and clouds to divide large blank areas naturally. Main character large and appealing. No text, letters, watermark, logo or labels. Thin clean rectangular frame just inside the image edge. An adorable rabbit postal worker delivering letters to a cozy hollow-tree post office in a lush forest village. Detailed mailbag and envelopes, decorative mailbox, stone path, wooden footbridge across a stream, tiny cottages nestled in roots, owl in a branch, mushrooms, ferns, flowers, leafy canopy covering the top corners. Full-page charming scene with many clear enclosed shapes."
+  },
+  {
+    "game": "drawing",
+    "category": "coloring-pages",
+    "title": "Цветочный город",
+    "source": "drawing/coloring-pages/flower-city-source-v3.png",
+    "path": "drawing/coloring-pages/flower-city-v3.svg",
+    "before": "drawing/coloring-pages/flower-city-v2.svg",
+    "prompt": "Create ONE original professional printable coloring-book page, landscape 1536x1024. Crisp clean black outlines on pure white, NO color, NO gray shading, NO gradients, NO hatching, NO large solid black fills. Beautiful hand-drawn storybook illustration with sophisticated clear linework and believable perspective. Full-page immersive composition: fill all four corners and the background with meaningful scenery and enclosed colorable shapes; no isolated subject on an empty page, no broad blank sky or blank ground. Dense but readable detail for older children/families: hundreds of closed areas, a mix of medium and small shapes, clearly separated foreground, middle ground and background. Consistent confident contours, every main shape enclosed for coloring. Use leaves, flowers, stones, planks, roof tiles, patterned objects and clouds to divide large blank areas naturally. Main character large and appealing. No text, letters, watermark, logo or labels. Thin clean rectangular frame just inside the image edge. A magical miniature town built inside enormous flowers: sunflower tower, tulip houses, rose pavilion, winding cobbled lanes, arched bridge, a fountain, little balconies, doors and tiled roofs, butterfly visitors. Flower petals, veined leaves and curling vines frame all edges, hills and clouds fill the distant sky. Detailed town scene with elegant clear closed outlines, full composition with no large blank areas."
+  },
+  {
+    "game": "drawing",
+    "category": "coloring-pages",
+    "title": "Океан друзей",
+    "source": "drawing/coloring-pages/ocean-friends-source-v3.png",
+    "path": "drawing/coloring-pages/ocean-friends-v3.svg",
+    "before": "drawing/coloring-pages/ocean-friends-v2.svg",
+    "prompt": "Create ONE original professional printable coloring-book page, landscape 1536x1024. Crisp clean black outlines on pure white, NO color, NO gray shading, NO gradients, NO hatching, NO large solid black fills. Beautiful hand-drawn storybook illustration with sophisticated clear linework and believable perspective. Full-page immersive composition: fill all four corners and the background with meaningful scenery and enclosed colorable shapes; no isolated subject on an empty page, no broad blank sky or blank ground. Dense but readable detail for older children/families: hundreds of closed areas, a mix of medium and small shapes, clearly separated foreground, middle ground and background. Consistent confident contours, every main shape enclosed for coloring. Use leaves, flowers, stones, planks, roof tiles, patterned objects and clouds to divide large blank areas naturally. Main character large and appealing. No text, letters, watermark, logo or labels. Thin clean rectangular frame just inside the image edge. A friendly dolphin and sea turtle exploring a richly detailed coral reef with a tiny sunken ship, an open treasure chest, shells and patterned sea stars, branching corals, anemones, seaweed fronds, a distant stone arch, schools of different small fish. Surface water bands, bubbles and outlined light ribbons divide the upper water into colorable spaces. Every corner full of coral or marine plants. Pure outline illustration, no black background or shaded water."
+  }
+]

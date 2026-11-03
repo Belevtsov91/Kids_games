@@ -1,21 +1,29 @@
 /* Заставка */
 
 .mv-intro {
+  position: absolute;
+  inset: 0;
   display: grid;
-  min-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: #f7fbff;
+  font-family: Inter, ui-rounded, system-ui, sans-serif;
+  background-color: #1b2850;
   background-position: center;
   background-size: cover;
 }
 .mv-intro section {
   align-self: end;
   max-width: 570px;
-  padding: clamp(28px, 6vw, 86px);
+  /* Сверху место под кнопку «В меню» оболочки. */
+  padding: max(76px, clamp(28px, 6vw, 86px)) clamp(20px, 6vw, 86px) max(24px, env(safe-area-inset-bottom), clamp(28px, 6vw, 86px));
   text-shadow: 0 3px 16px #10152f;
 }
 .mv-intro h1 {
   margin: 0;
-  font-size: clamp(42px, 7vw, 78px);
+  font-size: clamp(36px, min(7vw, 11dvh), 78px);
   line-height: 0.94;
+  text-wrap: balance;
 }
 .mv-intro p {
   max-width: 430px;
@@ -44,4 +52,18 @@
   background: transparent;
   box-shadow: none;
   text-decoration: underline;
+}
+@media (max-height: 500px) {
+  .mv-intro section {
+    padding-top: 20px;
+    padding-left: 84px;
+  }
+  .mv-intro p {
+    margin: 6px 0;
+  }
+  .mv-intro button {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+  }
 }

@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { GameSdk } from '@ig/sdk';
 import cover from '../../assets/moon-valley-cover.png';
-import { addXp, befriend, initialState, tendPlot, type PetKind, type ValleyState, xpForNext } from '../game/valley';
+import { addXp, befriend, PET_UNLOCK, restoreState, tendPlot, type PetKind, type ValleyState, xpForNext } from '../game/valley';
 import { valleySound } from '../audio/sound';
 import { ValleyScene } from '../scene/ValleyScene';
+import { usePaused, type Pause } from './pause';
 import '../styles/index.css';
 
 const ZONES = [
@@ -13,21 +14,42 @@ const ZONES = [
   { id: 'mountain', icon: '⛰️', title: 'Горный питомник', level: 4 },
 ];
 
-export function MoonValley({ sdk }: { sdk: GameSdk }) {
-  const [state, setState] = useState<ValleyState>(() => sdk.storage.load<ValleyState>('save') ?? initialState());
+export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
+  // Сохранение своё у каждого ребёнка; старое общее «save» достаётся тому, кто первым откроет игру.
+  const saveKey = `save:${sdk.profile?.id ?? 'guest'}`;
+  const [state, setState] = useState<ValleyState>(() => {
+    const own = sdk.storage.load<unknown>(saveKey);
+    if (own) return restoreState(own);
+    const legacy = sdk.storage.load<unknown>('save');
+    if (legacy && sdk.profile) sdk.storage.save('save', null);
+    return restoreState(legacy);
+  });
+  const paused = usePaused(pause);
   const [started, setStarted] = useState(false);
   const [night, setNight] = useState(false);
   const [notice, setNotice] = useState('Добро пожаловать, Хранитель!');
   useEffect(() => {
-    sdk.storage.save('save', state);
-  }, [sdk, state]);
+    try {
+      sdk.storage.save(saveKey, state);
+    } catch {
+      /* хранилище переполнено или недоступно — играть всё равно можно */
+    }
+  }, [sdk, saveKey, state]);
   useEffect(() => {
-    const stop = sdk.audio.onMuteChange((muted) => (muted ? valleySound.stop() : valleySound.start(false)));
+    valleySound.setMuted(sdk.audio.muted);
+    const stop = sdk.audio.onMuteChange((muted) => valleySound.setMuted(muted));
     return () => {
       stop();
-      valleySound.stop();
+      valleySound.dispose();
     };
   }, [sdk]);
+  // Музыка играет только в долине, со звуком и пока вкладка видна.
+  const [muted, setMutedState] = useState(sdk.audio.muted);
+  useEffect(() => sdk.audio.onMuteChange(setMutedState), [sdk]);
+  useEffect(() => {
+    if (started && !paused && !muted) valleySound.start();
+    else valleySound.stop();
+  }, [started, paused, muted]);
   const quest = useMemo(
     () => ({
       grown: state.plots.filter((plot) => plot.stage >= 2).length,
@@ -68,6 +90,7 @@ export function MoonValley({ sdk }: { sdk: GameSdk }) {
   };
   const collect = () => {
     setState((current) => ({ ...current, starlight: current.starlight + 2 }));
+    valleySound.chime();
     setNotice('Кристалл подарил 2 звёздного света.');
   };
   const buildGreenhouse = () => {
@@ -77,18 +100,7 @@ export function MoonValley({ sdk }: { sdk: GameSdk }) {
     valleySound.chime();
     setNotice('Оранжерея восстановлена! Теперь долина стала уютнее.');
   };
-  const start = () => {
-    setStarted(true);
-    valleySound.start(sdk.audio.muted);
-  };
-  useEffect(() => {
-    setState((current) => ({
-      ...current,
-      pets: current.pets.map((pet) =>
-        pet.id === 'owl' ? { ...pet, unlocked: current.level >= 2 } : pet.id === 'bunny' ? { ...pet, unlocked: current.level >= 3 } : pet,
-      ),
-    }));
-  }, [state.level]);
+  const start = () => setStarted(true);
   if (!started)
     return (
       <main
@@ -122,12 +134,10 @@ export function MoonValley({ sdk }: { sdk: GameSdk }) {
           onPlot={actPlot}
           onPet={actPet}
           onCollect={collect}
+          paused={paused}
         />
       </div>
       <header className="mv-top">
-        <button onClick={sdk.exit} aria-label="В меню">
-          ←
-        </button>
         <div>
           <strong>Хранитель · ур. {state.level}</strong>
           <div className="mv-xp">
@@ -139,7 +149,7 @@ export function MoonValley({ sdk }: { sdk: GameSdk }) {
       </header>
       <aside className="mv-panel">
         <h2>Лунная долина</h2>
-        <p>{notice}</p>
+        <p aria-live="polite">{notice}</p>
         <div className="mv-resources">
           <span>🌱 {state.seeds}</span>
           <span>💧 {state.water}</span>
@@ -155,7 +165,7 @@ export function MoonValley({ sdk }: { sdk: GameSdk }) {
         {state.pets.map((pet) => (
           <button key={pet.id} className={`mv-pet ${pet.unlocked ? '' : 'locked'}`} onClick={() => actPet(pet.id)}>
             <span>{pet.id === 'fox' ? '🦊' : pet.id === 'owl' ? '🦉' : '🐇'}</span>
-            <b>{pet.unlocked ? pet.name : `Откроется на ур. ${pet.id === 'owl' ? 2 : 3}`}</b>
+            <b>{pet.unlocked ? pet.name : `Откроется на ур. ${PET_UNLOCK[pet.id]}`}</b>
             {pet.unlocked && <small>дружба {pet.affection}/100</small>}
           </button>
         ))}

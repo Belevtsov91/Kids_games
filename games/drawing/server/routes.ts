@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { childIdOf, requireChild } from '@ig/sdk/server';
-import { drawingsRepository, type Drawing } from './repository.js';
+import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
+import { createDrawingsRepository, type Drawing } from './repository.js';
 
 const createBody = {
   type: 'object',
@@ -15,7 +15,8 @@ const createBody = {
 const NOT_FOUND = { error: 'Drawing not found' };
 
 // Рисунки привязаны к ребёнку из серверной сессии: клиенту не доверяем, чьи они.
-export const drawingsRoutes: FastifyPluginAsync = async (app) => {
+export const drawingsRoutes: FastifyPluginAsync<GameServerOptions> = async (app, opts) => {
+  const drawingsRepository = createDrawingsRepository(opts.db);
   app.addHook('preHandler', requireChild);
 
   app.get('/', async (req) => drawingsRepository.list(childIdOf(req)!));

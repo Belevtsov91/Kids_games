@@ -1,6 +1,8 @@
 // Серверная часть контракта игры. Без DOM и без зависимостей от Fastify:
 // игры импортируют этот файл как `@ig/sdk/server`, сервер платформы — тоже.
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+
 /** Сессия, которую платформа кладёт в `req.session` для каждого запроса к /api. */
 export interface PlayerSession {
   parentId: string;
@@ -49,4 +51,37 @@ export async function requireChild(req: unknown, reply: ReplyLike) {
 /** preHandler: без входа (ни ребёнка, ни родителя) — 401. */
 export async function requirePlayer(req: unknown, reply: ReplyLike) {
   if (!playerKeyOf(req)) return reply.code(401).send(NO_SESSION_ERROR);
+}
+
+// ── База данных игры ──────────────────────────────────────────────────────────
+// Платформа передаёт серверу игры клиент БД в опциях плагина: `{ db }`.
+// Клиент пускает только в таблицы этой игры: `ig_game_<id>_*` (дефисы в id → `_`).
+// Чужие таблицы — платформы или другой игры — недоступны: `from()` бросает ошибку.
+
+
+/** Клиент БД игры: только `from(<своя таблица>)`. */
+export type GameDb = Pick<SupabaseClient, 'from'>;
+
+/** Опции, с которыми платформа подключает `server/index.ts` игры. */
+export interface GameServerOptions {
+  /** null — БД не настроена (тесты, локальный запуск без Supabase): игра держит данные в памяти. */
+  db?: GameDb | null;
+}
+
+/** Префикс таблиц игры: `who-lives-where` → `ig_game_who_lives_where_`. */
+export function gameTablePrefix(gameId: string): string {
+  return `ig_game_${gameId.replace(/-/g, '_')}_`;
+}
+
+/** Оборачивает клиент так, что игра видит только свои таблицы. */
+export function scopeGameDb(client: GameDb, gameId: string): GameDb {
+  const prefix = gameTablePrefix(gameId);
+  return {
+    from(table: string) {
+      if (!table.startsWith(prefix)) {
+        throw new Error(`Игре ${gameId} доступны только таблицы ${prefix}*, а не ${table}`);
+      }
+      return client.from(table);
+    },
+  } as GameDb;
 }

@@ -1,12 +1,38 @@
 // 3D-долина: остров с озером, грядки, питомцы, волшебное дерево, кристаллы и цветы.
-import { Canvas } from '@react-three/fiber';
-import { Cloud, ContactShadows, Float, OrbitControls, Sky, Sparkles, Stars } from '@react-three/drei';
-import { useMemo } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { ContactShadows, Float, OrbitControls, Sky, Sparkles, Stars } from '@react-three/drei';
+import { useEffect, useMemo } from 'react';
 import type { Pet, Plot } from '../game/valley';
 import { Flower } from './Flower';
 import { Greenhouse } from './Greenhouse';
 import { PetModel } from './PetModel';
 import { Plant } from './Plant';
+import { SoftCloud } from './SoftCloud';
+import { SceneErrorBoundary } from './SceneErrorBoundary';
+
+const BASE_DISTANCE = 13.2;
+
+/** На узком (портретном) экране камера отъезжает дальше, чтобы остров помещался по ширине. */
+function ResponsiveCamera() {
+  const { camera, size } = useThree();
+  const aspect = size.width / Math.max(1, size.height);
+  const distance = Math.min(24, Math.max(BASE_DISTANCE, BASE_DISTANCE * Math.pow(1 / aspect, 0.85)));
+  useEffect(() => {
+    camera.position.setLength(distance);
+    camera.updateProjectionMatrix();
+  }, [camera, distance]);
+  return (
+    <OrbitControls
+      makeDefault
+      enablePan={false}
+      minDistance={distance * 0.55}
+      maxDistance={distance + 4}
+      maxPolarAngle={1.28}
+      minPolarAngle={0.65}
+      target={[0, 0, 0]}
+    />
+  );
+}
 
 function Scene({
   plots,
@@ -16,6 +42,7 @@ function Scene({
   onPlot,
   onPet,
   onCollect,
+  paused,
 }: {
   plots: Plot[];
   pets: Pet[];
@@ -24,6 +51,7 @@ function Scene({
   onPlot(id: number): void;
   onPet(id: Pet['id']): void;
   onCollect(): void;
+  paused: boolean;
 }) {
   const crystals = useMemo(
     () =>
@@ -36,9 +64,10 @@ function Scene({
   );
   return (
     <Canvas
-      shadows
+      shadows="percentage"
       dpr={[1, 1.7]}
       camera={{ position: [7.2, 6.5, 9], fov: 42 }}
+      frameloop={paused ? 'never' : 'always'}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
     >
       <color attach="background" args={[night ? '#12203e' : '#8fd6ee']} />
@@ -47,7 +76,8 @@ function Scene({
       <ambientLight intensity={night ? 0.35 : 0.85} />
       <directionalLight position={[7, 10, 4]} intensity={night ? 0.7 : 2.4} castShadow shadow-mapSize={[1024, 1024]} />
       {night && <Stars radius={40} depth={20} count={900} factor={3} fade speed={0.4} />}
-      <Cloud position={[-5, 6, -9]} opacity={0.45} speed={0.15} />
+      <SoftCloud position={[-5, 6, -9]} scale={1.3} />
+      <SoftCloud position={[6, 7, -11]} speed={0.1} />
       <group rotation={[-0.13, 0.25, 0]}>
         <mesh receiveShadow position={[0, -0.23, 0]}>
           <cylinderGeometry args={[5.5, 6.2, 0.48, 64]} />
@@ -103,11 +133,15 @@ function Scene({
         ))}
       </group>
       <ContactShadows position={[0, -0.45, 0]} opacity={0.35} scale={18} blur={2.5} far={8} />
-      <OrbitControls makeDefault minDistance={7} maxDistance={14} maxPolarAngle={1.28} minPolarAngle={0.65} target={[0, 0, 0]} />
+      <ResponsiveCamera />
     </Canvas>
   );
 }
 
 export function ValleyScene(props: Parameters<typeof Scene>[0]) {
-  return <Scene {...props} />;
+  return (
+    <SceneErrorBoundary>
+      <Scene {...props} />
+    </SceneErrorBoundary>
+  );
 }

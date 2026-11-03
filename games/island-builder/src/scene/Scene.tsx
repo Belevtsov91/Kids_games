@@ -35,7 +35,7 @@ interface SceneProps {
 }
 export default function Scene(props: SceneProps) {
   return (
-    <Canvas shadows dpr={[1, 1.75]} camera={{ position: [15, 13, 15], fov: 45, near: 0.1, far: 300 }} style={{ position: 'absolute', inset: 0, touchAction: 'none' }}>
+    <Canvas shadows="percentage" dpr={[1, 1.75]} camera={{ position: [15, 13, 15], fov: 45, near: 0.1, far: 300 }} style={{ position: 'absolute', inset: 0, touchAction: 'none' }}>
       <SceneContent {...props} />
     </Canvas>
   );

@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "generator": "Built-in image_gen",
+  "date": "2026-11-03",
+  "gallery": "studio.html",
+  "basePrompt": "Use case: stylized-concept. Create one landscape 1536x1024 premium game cover illustration, no text, no logos, no collage. Sophisticated high-end animated feature film CGI with photorealistic tactile materials, physically plausible light, detailed fur or wood grain, subtle atmospheric depth, beautiful controlled color grading. Family-friendly, appealing expressive forms. Rich immersive scene with clear readable focal subject, not flat vector, not plastic generic clipart. ",
+  "assets": [
+    {
+      "game": "moon-valley",
+      "path": "moon-valley/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "A tiny expressive red fox with incredibly soft detailed fur and a little owl and white bunny tending luminous flowers in a miniature moonlit garden. Dew on leaves, mossy stones, a little warm-window cottage in the distance, a crescent moon, deep teal shadows, silver blue rim light, warm glowing pollen. Camera close to ground, wonder and tenderness, cinematic composition."
+    },
+    {
+      "game": "island-builder",
+      "path": "island-builder/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "An exquisite miniature coastal island built of rounded stone and natural wood, with a tiny lighthouse, cozy cottage, mossy garden and wooden pier with brass lanterns. Translucent turquoise sea with realistic wave caustics and wet sand. Late golden afternoon sunlight and misty distant islands. Three-quarter aerial diorama viewpoint, believable fine model-scale craftsmanship."
+    },
+    {
+      "game": "animal-orchestra",
+      "path": "animal-orchestra/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "A joyful baby bear playing a wooden drum, a little frog and ginger kitten on a tiny woodland concert stage. Rich velvet curtains, handmade instruments, moss, ferns, overhead warm theater lanterns, late afternoon forest sunbeams. Eye-level intimate cinematic scene, tangible fur and wood, delighted faces."
+    },
+    {
+      "game": "counting",
+      "path": "counting/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "An adorable cream bunny with realistic fluffy fur carefully arranging five carrots on a round wooden table in a sunny kitchen garden, a curious squirrel nearby. Carrots are clear separate countable objects, wicker basket, dew on leaves, warm morning sunshine, intimate close-up, dreamy soft distant garden."
+    },
+    {
+      "game": "drawing",
+      "path": "drawing/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "An inviting tiny artist workshop with a curious fluffy ginger kitten beside an open sketchbook, ceramic pots of richly pigmented paint, natural bristle brushes, colored pencils, tactile paper with a simple painted flower. Beautiful window daylight, visible wood grain and paint daubs, composition evokes imagination, premium miniature realism."
+    },
+    {
+      "game": "letter-eater",
+      "path": "letter-eater/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "A friendly round lavender furry little monster with two short honey colored horns, expressive warm eyes and two tiny teeth, sitting in a cozy magical bakery holding a golden alphabet cookie. A tray of letter-shaped cookies on the wooden counter, flour dust, warm oven glow. Cute and gentle, beautiful realistic soft fur and pastry texture, medium close-up."
+    },
+    {
+      "game": "playground3d",
+      "path": "playground3d/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "An elaborate beautiful wooden marble run on a workshop table: finely crafted oak arches, curved tracks, colored translucent glass marbles, rounded stacking blocks, a little balance seesaw. Low camera macro perspective, afternoon window light, lovely realistic glass refraction and tactile wood grain, sophisticated playful physical sandbox."
+    },
+    {
+      "game": "puzzles",
+      "path": "puzzles/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "A gentle giant tortoise carrying a tiny cozy bakery cottage on its mossy shell, strolling beside a stream through a sunny flower meadow. Warm window light, small chimney, bread baskets, realistic shell texture, detailed moss and flowers, a beautiful storybook scene with distinct landmarks ideal for a jigsaw puzzle, cinematic animated-feature realism."
+    },
+    {
+      "game": "space-gardener",
+      "path": "space-gardener/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "A magical miniature greenhouse on a small asteroid among stars, a luminous unusual flower growing from rich soil in a terracotta pot inside delicate curved glass and brass structure. A little comet trails sparkling water into winding vines, crystalline rocks, planets softly in the distance. Believable glass reflections, tactile soil and leaves, teal and warm amber lighting, hopeful wonder."
+    },
+    {
+      "game": "who-lives-where",
+      "path": "who-lives-where/covers/cover-v2.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "A fluffy red fox cub near its cozy hollow-tree home beside a small pond with a turtle and frog, a small bird perched above in a nest. A gentle sunlit woodland habitat, lush moss, translucent water, detailed bark, miniature ecosystem, rich natural colors and dappled light. Friendly realistic animated-feature animals, clear harmonious composition."
+    }
+  ]
+}

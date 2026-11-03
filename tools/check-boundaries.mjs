@@ -1,5 +1,6 @@
 // Линтер границ: игры не импортируют друг друга, оболочку и сервер платформы;
-// платформа и оболочка не импортируют код игр (оболочка видит их только через import.meta.glob).
+// платформа и оболочка не импортируют код игр (оболочка видит их только через import.meta.glob);
+// сервер игры и его миграции трогают только таблицы ig_game_<id>_*.
 // Запуск: corepack pnpm lint
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -67,8 +68,36 @@ for (const top of ['games', 'shell', 'platform']) {
   }
 }
 
+// Таблицы БД: игра работает только со своими таблицами ig_game_<id>_*.
+// В коде сервера игры — строки с именами таблиц, в миграциях — все упоминания public.ig_*.
+// Единственное исключение — внешний ключ на профиль ребёнка: references public.ig_children.
+const TABLE_IN_CODE = /(['"`])(ig_[a-z0-9_]+)\1/g;
+const TABLE_IN_SQL = /(references\s+)?public\.(ig_[a-z0-9_]+)/gi;
+for (const id of games) {
+  const serverDir = join(root, 'games', id, 'server');
+  if (!existsSync(serverDir)) continue;
+  const own = `ig_game_${id.replace(/-/g, '_')}_`;
+  const report = (file, source, index, table) =>
+    problems.push(`${relative(root, file)}:${source.slice(0, index).split('\n').length}  таблица ${table} — игре ${id} можно только ${own}*`);
+  for (const file of walk(serverDir)) {
+    const source = readFileSync(file, 'utf8');
+    for (const m of source.matchAll(TABLE_IN_CODE)) if (!m[2].startsWith(own)) report(file, source, m.index, m[2]);
+  }
+  const migrations = join(serverDir, 'migrations');
+  if (!existsSync(migrations)) continue;
+  for (const name of readdirSync(migrations).filter((n) => n.endsWith('.sql'))) {
+    const file = join(migrations, name);
+    const source = readFileSync(file, 'utf8');
+    for (const m of source.matchAll(TABLE_IN_SQL)) {
+      const table = m[2].toLowerCase();
+      if (table.startsWith(own) || (m[1] && table === 'ig_children')) continue;
+      report(file, source, m.index, table);
+    }
+  }
+}
+
 if (problems.length) {
   console.error(`Нарушены границы между играми и платформой (${problems.length}):\n  ${problems.join('\n  ')}`);
   process.exit(1);
 }
-console.log('Границы в порядке: игры изолированы.');
+console.log('Границы в порядке: игры изолированы, каждая работает только со своими таблицами.');

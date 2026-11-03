@@ -21,6 +21,9 @@ export class WhoLivesWhere {
   private readonly timers = new Timers();
   private readonly offMute: () => void;
   private round: RoundPlay | null = null;
+  private disposed = false;
+  /** Номер экрана: если ребёнок успел нажать что-то ещё, пока грузился прогресс, старый экран не показываем. */
+  private screen = 0;
 
   constructor(
     container: HTMLElement,
@@ -47,6 +50,7 @@ export class WhoLivesWhere {
   }
 
   dispose() {
+    this.disposed = true;
     this.round?.dispose();
     this.timers.clear();
     this.offMute();
@@ -56,12 +60,15 @@ export class WhoLivesWhere {
   }
 
   private showStart() {
+    this.screen++;
     this.reset('Кто где живёт?', '');
     this.stage.append(startScreen(this.sdk.profile?.name, () => void this.startRound(), () => void this.showAlbum()));
   }
 
   private async startRound() {
+    const screen = ++this.screen;
     await this.progress.load();
+    if (this.disposed || screen !== this.screen) return;
     const round = buildRound(this.progress.progress.level, this.progress.progress.found);
     this.reset('Отведи зверят домой!', `Уровень ${round.level}`);
     this.round = new RoundPlay(round, {
@@ -75,7 +82,9 @@ export class WhoLivesWhere {
   }
 
   private async showAlbum() {
+    const screen = ++this.screen;
     await this.progress.load();
+    if (this.disposed || screen !== this.screen) return;
     const found = new Set(this.progress.progress.found);
     this.reset('Альбом зверят', `${found.size} из ${allAnimals.length}`);
     this.stage.append(

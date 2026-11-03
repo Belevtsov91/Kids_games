@@ -1,77 +1,91 @@
-import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import type { GameSdk } from '@ig/sdk';
 import { starterPuzzles, type PuzzleImage } from '../game/catalog';
-import { getImageSize, listSavedImages, readFileAsDataUrl, saveImage, type SavedPuzzleImage } from '../storage/imageLibrary';
-import { recommendedGrid, shuffled, type Grid } from '../game/puzzleMath';
+import { fits, gridForLevel, shuffled, type Grid, type LevelId } from '../game/puzzleMath';
+import { openLibrary, prepareImage, type SavedPuzzleImage } from '../storage/imageLibrary';
+import { usePieceDrag } from '../input/usePieceDrag';
+import { createSound } from '../audio/sound';
+import { Catalog } from './Catalog';
+import { Board, DragGhost, Piece } from './Board';
 import '../styles/puzzles.css';
 
 type Puzzle = PuzzleImage | SavedPuzzleImage;
 type Board = Array<number | null>;
 
-function Piece({
-  piece,
-  puzzle,
-  grid,
-  selected,
-  onClick,
-}: {
-  piece: number;
-  puzzle: Puzzle;
-  grid: Grid;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  const col = piece % grid.cols;
-  const row = Math.floor(piece / grid.cols);
-  return (
-    <button
-      className={`puzzle-piece ${selected ? 'is-selected' : ''}`}
-      style={{
-        backgroundImage: `url("${puzzle.imageUrl}")`,
-        backgroundSize: `${grid.cols * 100}% ${grid.rows * 100}%`,
-        backgroundPosition: `${grid.cols === 1 ? 0 : (col / (grid.cols - 1)) * 100}% ${grid.rows === 1 ? 0 : (row / (grid.rows - 1)) * 100}%`,
-      }}
-      aria-label={`Деталь ${piece + 1}`}
-      onClick={onClick}
-    />
-  );
-}
-
 export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
+  const library = useMemo(() => openLibrary(sdk.profile?.id ?? null), [sdk]);
+  const sound = useMemo(() => createSound(() => sdk.audio.muted), [sdk]);
   const [saved, setSaved] = useState<SavedPuzzleImage[]>([]);
+  const [level, setLevel] = useState<LevelId>(() => sdk.storage.load<LevelId>(`level:${sdk.profile?.id ?? 'guest'}`) ?? 'auto');
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [grid, setGrid] = useState<Grid>({ cols: 2, rows: 2 });
   const [pieces, setPieces] = useState<number[]>([]);
   const [board, setBoard] = useState<Board>([]);
   const [selected, setSelected] = useState<number | null>(null);
+  const [hint, setHint] = useState(true);
+  const [missCell, setMissCell] = useState<number | null>(null);
   const [message, setMessage] = useState('Выбери картинку — и начнём!');
+  const missTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    listSavedImages()
+    library
+      .list()
       .then(setSaved)
       .catch(() => setMessage('Не удалось открыть сохранённые картинки'));
-  }, []);
+  }, [library]);
+  useEffect(() => () => (window.clearTimeout(missTimer.current), sound.dispose()), [sound]);
 
   const total = grid.cols * grid.rows;
-  const complete = board.length === total && board.every((piece, index) => piece === index);
-  const allPuzzles = useMemo(() => [...starterPuzzles, ...saved], [saved]);
+  const complete = puzzle !== null && board.length === total && board.every((piece, index) => piece === index);
+  const allPuzzles = useMemo(() => [...saved, ...starterPuzzles], [saved]);
+  const savedIds = useMemo(() => new Set(saved.map((item) => item.id)), [saved]);
 
-  const start = (next: Puzzle, nextGrid = recommendedGrid(next.width, next.height)) => {
+  const start = (next: Puzzle, nextLevel = level) => {
+    const nextGrid = gridForLevel(next.width, next.height, nextLevel);
     const count = nextGrid.cols * nextGrid.rows;
     setPuzzle(next);
     setGrid(nextGrid);
     setPieces(shuffled(Array.from({ length: count }, (_, index) => index)));
     setBoard(Array.from({ length: count }, () => null));
     setSelected(null);
-    setMessage('Выбери деталь снизу, потом нажми на её место.');
+    setMessage(`${count} деталей. Перетащи деталь на её место или нажми на деталь, а потом на место.`);
   };
 
-  const place = (cell: number) => {
-    if (selected === null || board[cell] !== null) return;
-    setBoard((current) => current.map((piece, index) => (index === cell ? selected : piece)));
-    setPieces((current) => current.filter((piece) => piece !== selected));
-    setSelected(null);
+  const chooseLevel = (next: LevelId) => {
+    setLevel(next);
+    sdk.storage.save(`level:${sdk.profile?.id ?? 'guest'}`, next);
   };
+
+  const place = (piece: number, cell: number) => {
+    if (board[cell] !== null) return;
+    if (!fits(piece, cell)) {
+      sound.miss();
+      setMissCell(cell);
+      window.clearTimeout(missTimer.current);
+      missTimer.current = window.setTimeout(() => setMissCell(null), 450);
+      setMessage('Не сюда — попробуй другое место 🙂');
+      return;
+    }
+    const nextBoard = board.map((value, index) => (index === cell ? piece : value));
+    setBoard(nextBoard);
+    setPieces((current) => current.filter((value) => value !== piece));
+    setSelected(null);
+    if (nextBoard.every((value, index) => value === index)) {
+      sound.win();
+      setMessage('Ура! Пазл собран! ⭐');
+    } else {
+      sound.snap();
+      setMessage('Отлично! Ищи следующую деталь.');
+    }
+  };
+
+  const { drag, bind } = usePieceDrag(
+    (piece, cell) => (cell === null ? setSelected(null) : place(piece, cell)),
+    (piece) => {
+      setSelected(piece);
+      sound.pick();
+    },
+  );
 
   const chooseFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -79,95 +93,97 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
     if (!file) return;
     if (!file.type.startsWith('image/')) return setMessage('Нужна картинка: PNG, JPG или WEBP.');
     try {
-      const imageUrl = await readFileAsDataUrl(file);
-      const { width, height } = await getImageSize(imageUrl);
+      const { imageUrl, width, height } = await prepareImage(file);
       const image: SavedPuzzleImage = {
         id: crypto.randomUUID(),
-        title: file.name.replace(/\.[^.]+$/, '') || 'Мой пазл',
+        title: file.name.replace(/\.[^.]+$/, '').slice(0, 40) || 'Мой пазл',
         imageUrl,
         width,
         height,
         createdAt: new Date().toISOString(),
       };
-      await saveImage(image);
+      await library.save(image);
       setSaved((current) => [image, ...current]);
-      const nextGrid = recommendedGrid(width, height);
-      start(image, nextGrid);
-      setMessage(
-        `Картинка ${width} × ${height}. Рекомендуем ${nextGrid.cols} × ${nextGrid.rows} = ${nextGrid.cols * nextGrid.rows} деталей.`,
-      );
+      start(image);
     } catch {
-      setMessage('Эту картинку не получилось сохранить. Попробуй другую.');
+      setMessage('Эту картинку не получилось открыть. Попробуй другую.');
     }
   };
 
-  useEffect(() => {
-    if (complete) setMessage('Ура! Пазл собран! ⭐');
-  }, [complete]);
+  const remove = async (id: string) => {
+    await library.remove(id).catch(() => undefined);
+    setSaved((current) => current.filter((item) => item.id !== id));
+  };
+
+  const aspect = puzzle ? puzzle.width / puzzle.height : 1;
+  // Детали в лотке — того же размера и формы, что клетки на поле.
+  const pieceAspect = aspect * (grid.rows / grid.cols);
 
   return (
-    <main className="puzzles">
+    <main className={`puzzles ${drag ? 'is-dragging' : ''}`}>
       <header className="puzzles-header">
-        <button className="exit-button" onClick={sdk.exit}>
-          ← В меню
-        </button>
         <div>
           <h1>Пазлы</h1>
-          <p>{message}</p>
+          <p aria-live="polite">{message}</p>
         </div>
-        <label className="upload-button">
-          ＋ Своя картинка
-          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={chooseFile} />
-        </label>
       </header>
 
       {!puzzle ? (
-        <section className="puzzle-catalog" aria-label="Выбор пазла">
-          {allPuzzles.map((item) => (
-            <button key={item.id} className="puzzle-card" onClick={() => start(item)}>
-              <img src={item.imageUrl} alt="" />
-              <span>{item.title}</span>
-              <small>
-                {item.width} × {item.height}
-              </small>
-            </button>
-          ))}
-        </section>
+        <Catalog
+          puzzles={allPuzzles}
+          savedIds={savedIds}
+          level={level}
+          onLevel={chooseLevel}
+          onPick={(item) => start(item)}
+          onUpload={chooseFile}
+          onRemove={remove}
+        />
       ) : (
-        <section className="game-area">
+        <section className="game-area" style={{ ['--piece-aspect' as string]: String(pieceAspect) }}>
           <div className="game-topbar">
-            <button onClick={() => setPuzzle(null)}>‹ К выбору</button>
-            <button onClick={() => start(puzzle, grid)}>↻ Заново</button>
-            <span>{pieces.length} деталей осталось</span>
+            <button onClick={() => setPuzzle(null)}>‹ Картинки</button>
+            <button onClick={() => start(puzzle)}>↻ Заново</button>
+            <button className={hint ? 'is-active' : ''} aria-pressed={hint} onClick={() => setHint((value) => !value)}>
+              👁 Подсказка
+            </button>
+            <span>{complete ? 'Готово!' : `Осталось: ${pieces.length}`}</span>
           </div>
-          <div className="puzzle-board" style={{ gridTemplateColumns: `repeat(${grid.cols}, 1fr)` }}>
-            {board.map((piece, cell) =>
-              piece === null ? (
-                <button key={cell} className="puzzle-slot" onClick={() => place(cell)} aria-label={`Место ${cell + 1}`} />
-              ) : (
-                <Piece key={cell} piece={piece} puzzle={puzzle} grid={grid} selected={false} onClick={() => undefined} />
-              ),
+          <div className="puzzle-play">
+            <Board
+              board={board}
+              imageUrl={puzzle.imageUrl}
+              aspect={aspect}
+              grid={grid}
+              hint={hint}
+              missCell={missCell}
+              onCell={(cell) => selected !== null && place(selected, cell)}
+            />
+            {complete ? (
+              <div className="win-card">
+                <strong>🎉 Готово!</strong>
+                <button onClick={() => start(puzzle)}>Ещё раз</button>
+                <button onClick={() => setPuzzle(null)}>Другой пазл</button>
+              </div>
+            ) : (
+              <div className="piece-tray" aria-label="Детали пазла">
+                {pieces.map((piece) => (
+                  <Piece
+                    key={piece}
+                    piece={piece}
+                    imageUrl={puzzle.imageUrl}
+                    grid={grid}
+                    className={`${selected === piece ? 'is-selected' : ''} ${drag?.piece === piece ? 'is-lifted' : ''}`}
+                    onClick={() => {
+                      setSelected((current) => (current === piece ? null : piece));
+                      sound.pick();
+                    }}
+                    onPointerDown={bind(piece)}
+                  />
+                ))}
+              </div>
             )}
           </div>
-          {complete ? (
-            <div className="win-card">
-              <strong>Готово!</strong>
-              <button onClick={() => start(puzzle, grid)}>Ещё раз</button>
-            </div>
-          ) : (
-            <div className="piece-tray" aria-label="Детали пазла">
-              {pieces.map((piece) => (
-                <Piece
-                  key={piece}
-                  piece={piece}
-                  puzzle={puzzle}
-                  grid={grid}
-                  selected={selected === piece}
-                  onClick={() => setSelected(piece)}
-                />
-              ))}
-            </div>
-          )}
+          {drag && <DragGhost drag={drag} imageUrl={puzzle.imageUrl} grid={grid} aspect={aspect} />}
         </section>
       )}
     </main>

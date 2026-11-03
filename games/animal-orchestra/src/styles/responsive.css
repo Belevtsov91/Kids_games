@@ -34,6 +34,30 @@
   }
 }
 
+/* Совсем узкие телефоны (320–380px): вкладки помещаются рядом с кнопкой «В меню». */
+@media (max-width: 380px) {
+  .ao-bar {
+    padding-left: max(70px, calc(env(safe-area-inset-left) + 70px));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+
+  .ao-modes {
+    gap: 2px;
+    padding: 4px;
+    min-width: 0;
+  }
+
+  .ao-mode {
+    min-width: 0;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .ao-mode-emoji {
+    font-size: 20px;
+  }
+}
+
 @media (max-height: 480px) {
   .ao-bar {
     padding-top: 8px;

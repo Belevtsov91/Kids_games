@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { childIdOf, requireChild } from '@ig/sdk/server';
+import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
 import { BLOCK_TYPES, GRID, MAX_HEIGHT, MAX_TREES, STAT_KEYS, TREE_KINDS, type SaveData } from '../src/game/world/index.js';
-import { islandsRepository } from './repository.js';
+import { createIslandsRepository } from './repository.js';
 
 const cell = (types: number) =>
   ({
@@ -36,7 +36,8 @@ const saveBody = {
 } as const;
 
 // Остров привязан к ребёнку из серверной сессии: клиенту не доверяем, чей он.
-export const islandsRoutes: FastifyPluginAsync = async (app) => {
+export const islandsRoutes: FastifyPluginAsync<GameServerOptions> = async (app, opts) => {
+  const islandsRepository = createIslandsRepository(opts.db);
   app.addHook('preHandler', requireChild);
 
   app.get('/', async (req) => {

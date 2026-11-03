@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { childIdOf, requireChild } from '@ig/sdk/server';
-import { progressRepository } from './repository.js';
+import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
+import { createProgressRepository } from './repository.js';
 
 // Серверная часть садовника. Платформа подключает её под /api/games/space-gardener.
 // Прогресс привязан к ребёнку из серверной сессии: клиенту не доверяем, чей он.
@@ -15,7 +15,8 @@ const recordBody = {
   additionalProperties: false,
 } as const;
 
-const spaceGardenerServer: FastifyPluginAsync = async (app) => {
+const spaceGardenerServer: FastifyPluginAsync<GameServerOptions> = async (app, opts) => {
+  const progressRepository = createProgressRepository(opts.db);
   app.addHook('preHandler', requireChild);
 
   app.get('/progress', async (req) => progressRepository.get(childIdOf(req)!));

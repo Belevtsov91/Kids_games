@@ -8,11 +8,12 @@ export default defineGame({
     sound.setMuted(sdk.audio.muted);
     const stopMuteSync = sdk.audio.onMuteChange((muted) => sound.setMuted(muted));
     const root = createRoot(container);
-    root.render(<DrawingGame />);
+    root.render(<DrawingGame sdk={sdk} />);
     return {
       unmount() {
         stopMuteSync();
         root.unmount();
+        sound.dispose();
       },
     };
   },

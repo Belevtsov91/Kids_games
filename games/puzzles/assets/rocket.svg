@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="space" cx=".5" cy=".4" r=".8"><stop offset="0" stop-color="#3a2a8a"/><stop offset="1" stop-color="#120a3a"/></radialGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff27a"/><stop offset=".5" stop-color="#ffa22e"/><stop offset="1" stop-color="#ff4d4d" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#space)"/>
+  <g fill="#fff"><circle cx="90" cy="120" r="5"/><circle cx="300" cy="80" r="4"/><circle cx="460" cy="190" r="6"/><circle cx="760" cy="90" r="5"/><circle cx="940" cy="300" r="4"/><circle cx="120" cy="460" r="6"/><circle cx="880" cy="560" r="5"/><circle cx="70" cy="760" r="4"/><circle cx="420" cy="900" r="5"/><circle cx="960" cy="860" r="6"/><circle cx="640" cy="960" r="4"/></g>
+  <g fill="#ffe14d"><path d="M200 260l14 30 32 4-24 22 6 32-28-16-28 16 6-32-24-22 32-4z"/><path d="M820 420l10 22 24 3-18 16 5 24-21-12-21 12 5-24-18-16 24-3z"/></g>
+  <circle cx="800" cy="200" r="110" fill="#ffcf6b"/><ellipse cx="800" cy="200" rx="190" ry="40" fill="none" stroke="#ff8ac0" stroke-width="22" transform="rotate(-18 800 200)"/>
+  <circle cx="180" cy="840" r="150" fill="#5fd1ff"/><path d="M80 770q60-40 100 10t110 20M60 880q80-30 130 0t110-10" fill="none" stroke="#2fae5f" stroke-width="30" stroke-linecap="round"/>
+  <g transform="translate(540 540) rotate(30)">
+    <path d="M-50 230Q0 420 50 230Z" fill="url(#flame)"/>
+    <path d="M-90 120L-170 230-80 210Z" fill="#ff5d5d" stroke="#7a2a2a" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M90 120L170 230 80 210Z" fill="#ff5d5d" stroke="#7a2a2a" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M0 -300C110 -200 120 0 90 220H-90C-120 0 -110 -200 0 -300Z" fill="#f4f6ff" stroke="#7a2a2a" stroke-width="10"/>
+    <path d="M0 -300C50 -255 80 -200 92 -150H-92C-80 -200 -50 -255 0 -300Z" fill="#ff5d5d" stroke="#7a2a2a" stroke-width="10" stroke-linejoin="round"/>
+    <circle cy="-40" r="58" fill="#7cd6ff" stroke="#7a2a2a" stroke-width="12"/>
+    <circle cx="-18" cy="-58" r="16" fill="#fff" opacity=".8"/>
+    <rect x="-90" y="120" width="180" height="26" fill="#ffd93b" stroke="#7a2a2a" stroke-width="8"/>
+  </g>
+</svg>
