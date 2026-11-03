@@ -48,6 +48,9 @@ export function createRuntime() {
     pets: new Map<string, Vector3>(),
     time: 0,
     target: null as Target | null,
+    /** Где цель (для подсветки под ней) и её размер. */
+    targetAt: new Vector3(),
+    targetSize: 1,
   };
 }
 

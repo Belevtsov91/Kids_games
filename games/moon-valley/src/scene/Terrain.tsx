@@ -33,8 +33,9 @@ export function groundHeight(x: number, z: number) {
   return y;
 }
 
-const GRASS_A = new Color('#6fb85a');
-const GRASS_B = new Color('#8fcf63');
+const GRASS_A = new Color('#5fae55');
+const GRASS_B = new Color('#9ad46a');
+const GRASS_WARM = new Color('#b8cf62');
 const GRASS_DARK = new Color('#4f9450');
 const PATH = new Color('#d8b98a');
 const SAND = new Color('#ecd9a4');
@@ -56,6 +57,9 @@ function buildGround() {
       positions.push(x, groundHeight(x, z), z);
       const n = noise(x * 1.7, z * 1.7);
       c.copy(GRASS_A).lerp(GRASS_B, 0.5 + n * 0.5);
+      // Крупные тёплые пятна (солнечные поляны), чтобы луг не был однотонным.
+      const patch = noise(x * 0.45 + 13, z * 0.45 - 7);
+      if (patch > 0.35) c.lerp(GRASS_WARM, Math.min(1, (patch - 0.35) * 1.6) * 0.55);
       // Под деревьями на северо-западе — темнее.
       if (x < -6 && z < -10) c.lerp(GRASS_DARK, Math.min(1, (-z - 10) / 10) * 0.6);
       const lake = Math.hypot(x - LAKE.center[0], z - LAKE.center[1]) - LAKE.radius;
@@ -85,9 +89,16 @@ function buildGround() {
 export function Terrain({ night }: { night: boolean }) {
   const ground = useMemo(buildGround, []);
   const water = useRef<Mesh>(null);
+  const foam = useRef<Mesh>(null);
   useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
     const material = water.current?.material as MeshStandardMaterial | undefined;
-    if (material) material.emissiveIntensity = (night ? 0.55 : 0.18) + Math.sin(clock.elapsedTime * 1.3) * 0.05;
+    if (material) material.emissiveIntensity = (night ? 0.55 : 0.18) + Math.sin(t * 1.3) * 0.05;
+    // Пена у берега мягко «дышит».
+    if (foam.current) {
+      foam.current.scale.setScalar(1 + Math.sin(t * 0.9) * 0.012);
+      (foam.current.material as MeshStandardMaterial).opacity = 0.55 + Math.sin(t * 0.9 + 1) * 0.15;
+    }
   });
   const lake: Vec2 = LAKE.center;
   return (
@@ -109,7 +120,7 @@ export function Terrain({ night }: { night: boolean }) {
         <meshStandardMaterial color="#6d5444" />
       </mesh>
       {/* Озеро */}
-      <mesh ref={water} position={[lake[0], -0.32, lake[1]]} rotation-x={-Math.PI / 2}>
+      <mesh ref={water} userData={{ noAO: true }} position={[lake[0], -0.32, lake[1]]} rotation-x={-Math.PI / 2}>
         <circleGeometry args={[LAKE.radius + 0.7, 48]} />
         <meshStandardMaterial
           color={night ? '#3b7fb5' : '#6cc7ea'}
@@ -120,6 +131,11 @@ export function Terrain({ night }: { night: boolean }) {
           transparent
           opacity={0.88}
         />
+      </mesh>
+      {/* Пена у берега */}
+      <mesh ref={foam} userData={{ noAO: true }} position={[lake[0], -0.28, lake[1]]} rotation-x={-Math.PI / 2}>
+        <ringGeometry args={[LAKE.radius + 0.15, LAKE.radius + 0.75, 64]} />
+        <meshStandardMaterial color="#ffffff" emissive="#dff6ff" emissiveIntensity={night ? 0.35 : 0.1} roughness={1} transparent opacity={0.6} depthWrite={false} />
       </mesh>
     </group>
   );

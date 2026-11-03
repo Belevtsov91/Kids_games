@@ -256,3 +256,23 @@ export function nearest<T>(items: T[], at: (item: T) => Vec2, p: Vec2, radius: n
 }
 
 export { dist };
+
+/**
+ * Травинки для густого луга: детерминированно, не на дорожках, не в озере, не на грядках и не в домах.
+ * Возвращает [x, z, масштаб, поворот] для каждой травинки.
+ */
+export function generateGrass(count: number): [number, number, number, number][] {
+  const random = rng(99);
+  const blades: [number, number, number, number][] = [];
+  for (let i = 0; i < count * 3 && blades.length < count; i++) {
+    const a = random() * Math.PI * 2;
+    const r = Math.sqrt(random()) * (ISLAND_RADIUS - 2);
+    const p: Vec2 = [Math.cos(a) * r, Math.sin(a) * r];
+    if (dist(p, LAKE.center) < LAKE.radius + 1.2) continue;
+    if (nearPath(p, 1.25)) continue;
+    if (PLOTS.some((plot) => dist(p, plot) < 1.5)) continue;
+    if (BUILDINGS.some((b) => dist(p, b.at) < 4.2)) continue;
+    blades.push([p[0], p[1], 0.7 + random() * 0.7, random() * Math.PI * 2]);
+  }
+  return blades;
+}

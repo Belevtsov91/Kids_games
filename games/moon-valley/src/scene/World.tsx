@@ -4,7 +4,7 @@ import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Sky, Sparkles, Stars, useGLTF } from '@react-three/drei';
 import { CuboidCollider, CylinderCollider, Physics, RigidBody } from '@react-three/rapier';
-import { Box3, type DirectionalLight, Object3D, ACESFilmicToneMapping, SRGBColorSpace } from 'three';
+import { AgXToneMapping, Box3, type DirectionalLight, Object3D, SRGBColorSpace } from 'three';
 import type { PetKind, ValleyState } from '../game/valley';
 import { npcMarker, type NpcId } from '../game/quests';
 import {
@@ -34,6 +34,31 @@ import { Chest, Crystals, Garden, Greenhouse } from './Places';
 import { Instanced, Model, modelUrl, Placement } from './models';
 import { SoftCloud } from './SoftCloud';
 import { Terrain } from './Terrain';
+import { Effects } from './Effects';
+import { GrassField, WindClock } from './GrassField';
+import { TargetHalo } from './TargetHalo';
+import { detectQuality, type Quality } from './quality';
+import type { WindOptions } from './wind';
+
+const TARGET_SIZE: Record<Target['kind'], number> = {
+  plot: 1.25,
+  npc: 0.85,
+  crystal: 0.7,
+  chest: 0.95,
+  well: 1.5,
+  greenhouse: 2.4,
+  pet: 0.6,
+  boss: 1.8,
+};
+
+// Качание на ветру: постоянные объекты, чтобы не пересоздавать материалы.
+const WIND: Record<string, WindOptions> = {
+  grass: { height: 0.7, amount: 0.09 },
+  'flower-red': { height: 0.7, amount: 0.07 },
+  'bush-1': { height: 1.4, amount: 0.05 },
+  'mushroom-red': { height: 0.5, amount: 0.01 },
+};
+const TREE_WIND: WindOptions = { height: 10, amount: 0.16 };
 
 export interface WorldProps {
   state: ValleyState;
@@ -137,7 +162,7 @@ function groupByModel(items: Placed[]) {
 }
 
 /** Солнце (или луна) следует за героем, чтобы тени были чёткими рядом с ним. */
-function Sun({ night }: { night: boolean }) {
+function Sun({ night, quality }: { night: boolean; quality: Quality }) {
   const runtime = useRuntime();
   const light = useRef<DirectionalLight>(null);
   const target = useMemo(() => new Object3D(), []);
@@ -155,10 +180,12 @@ function Sun({ night }: { night: boolean }) {
       <directionalLight
         ref={light}
         target={target}
-        intensity={night ? 1.3 : 2.6}
-        color={night ? '#9db8ff' : '#fff1d6'}
+        intensity={night ? 1.4 : 2.5}
+        color={night ? '#a9c0ff' : '#ffe2b8'}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[quality.shadowMap, quality.shadowMap]}
+        shadow-intensity={night ? 0.75 : 0.85}
+        shadow-radius={quality.high ? 5 : 3}
         shadow-bias={-0.0004}
         shadow-normalBias={0.04}
         shadow-camera-left={-26}
@@ -190,6 +217,8 @@ function Interactor({ state, bossCalm, onTarget }: { state: ValleyState; bossCal
     const hz = runtime.hero.z;
     let best: Target | null = null;
     let bestD = Infinity;
+    let bestX = 0;
+    let bestZ = 0;
     const consider = (kind: Target['kind'], id: string, at: Vec2 | { x: number; z: number }, radius: number) => {
       const [x, z] = Array.isArray(at) ? at : [at.x, at.z];
       // Питомцы всё время рядом: уступают жителям и грядкам, если те тоже близко.
@@ -197,6 +226,8 @@ function Interactor({ state, bossCalm, onTarget }: { state: ValleyState; bossCal
       if (d < radius && d < bestD) {
         best = { kind, id };
         bestD = d;
+        bestX = x;
+        bestZ = z;
       }
     };
     PLOTS.forEach((at, i) => consider('plot', String(i), at, 1.9));
@@ -216,6 +247,10 @@ function Interactor({ state, bossCalm, onTarget }: { state: ValleyState; bossCal
     if (bossCalm) consider('boss', 'king', { x: runtime.slimes.get('king')?.x ?? 0, z: runtime.slimes.get('king')?.z ?? -31 }, 3.5);
     const key = best ? `${(best as Target).kind}:${(best as Target).id}` : '';
     runtime.target = best;
+    if (best) {
+      runtime.targetAt.set(bestX, 0, bestZ);
+      runtime.targetSize = TARGET_SIZE[(best as Target).kind];
+    }
     if (key !== last.current) {
       last.current = key;
       onTarget(best);
@@ -224,7 +259,7 @@ function Interactor({ state, bossCalm, onTarget }: { state: ValleyState; bossCal
   return null;
 }
 
-function Scene(props: WorldProps) {
+function Scene(props: WorldProps & { quality: Quality }) {
   const { state, night, happy, talk } = props;
   const trees = useMemo(generateTrees, []);
   const decor = useMemo(generateDecor, []);
@@ -233,7 +268,8 @@ function Scene(props: WorldProps) {
   return (
     <>
       <color attach="background" args={[night ? '#101a38' : '#9fd9f0']} />
-      <fog attach="fog" args={[night ? '#16234a' : '#bfe6f3', 40, 120]} />
+      {/* Дымка цвета горизонта: даль мягко растворяется, лес за ней выглядит глубже. */}
+      <fog attach="fog" args={[night ? '#1b2a58' : '#cfe6ee', 34, 115]} />
       <Sky
         distance={4000}
         sunPosition={night ? [-10, -2, -30] : [30, 18, 10]}
@@ -242,11 +278,15 @@ function Scene(props: WorldProps) {
         mieCoefficient={0.004}
         mieDirectionalG={0.8}
       />
-      <hemisphereLight args={[night ? '#5a6ea8' : '#d9f1ff', night ? '#1c2440' : '#6b8a4a', night ? 0.85 : 1.05]} />
-      <Sun night={night} />
+      {/* Небо голубое, отражённый от земли свет тёплый: тени получаются цветными, а не серыми. */}
+      <hemisphereLight args={[night ? '#6a7fc0' : '#bcdcff', night ? '#2a2550' : '#8a7a5a', night ? 0.95 : 0.85]} />
+      <Sun night={night} quality={props.quality} />
+      <WindClock />
       {night && <Stars radius={120} depth={40} count={2500} factor={4} fade speed={0.5} />}
-      {night && <Sparkles count={160} scale={[80, 5, 80]} position={[0, 2.2, 0]} size={5} speed={0.35} color="#fff3a0" />}
+      {night && <Sparkles count={220} scale={[80, 5, 80]} position={[0, 2.2, 0]} size={6} speed={0.35} color="#fff3a0" />}
       <Sparkles count={60} scale={[30, 4, 30]} position={[-20, 2, -20]} size={4} speed={0.3} color="#b7f9d0" />
+      {/* Днём — пыльца и пушинки над лугом. */}
+      {!night && <Sparkles count={120} scale={[70, 6, 70]} position={[0, 2.5, 0]} size={2.5} speed={0.2} opacity={0.7} color="#fffbe0" />}
 
       <SoftCloud position={[-30, 14, -50]} scale={4} />
       <SoftCloud position={[40, 18, -40]} scale={5} speed={0.08} />
@@ -254,6 +294,8 @@ function Scene(props: WorldProps) {
       <SoftCloud position={[-55, -4, 20]} scale={6} speed={0.06} />
 
       <Terrain night={night} />
+      <GrassField count={props.quality.grass} />
+      <TargetHalo night={night} />
       {BUILDINGS.map((item, index) => (
         <Placement key={index} item={item} />
       ))}
@@ -261,10 +303,10 @@ function Scene(props: WorldProps) {
         <Placement key={index} item={item} />
       ))}
       {groupByModel(trees).map(([name, items]) => (
-        <Instanced key={name} name={name} items={items} />
+        <Instanced key={name} name={name} items={items} wind={TREE_WIND} />
       ))}
       {groupByModel(decor).map(([name, items]) => (
-        <Instanced key={name} name={name} items={items} shadows={name !== 'grass' && name !== 'flower-red'} />
+        <Instanced key={name} name={name} items={items} shadows={name !== 'grass' && name !== 'flower-red'} wind={WIND[name]} />
       ))}
       <Fences />
       {OBELISKS.map((at, index) => (
@@ -311,6 +353,7 @@ function Scene(props: WorldProps) {
       </Physics>
       <Interactor state={state} bossCalm={bossCalm} onTarget={props.onTarget} />
       <KingTracker active={bossCalm} />
+      <Effects night={night} quality={props.quality} />
     </>
   );
 }
@@ -325,16 +368,25 @@ function KingTracker({ active }: { active: boolean }) {
 }
 
 export function World(props: WorldProps) {
+  const quality = useMemo(detectQuality, []);
   return (
     <Canvas
       shadows="soft"
-      dpr={[1, 1.6]}
+      dpr={quality.dpr}
       camera={{ position: [0, 6, 14], fov: 50, near: 0.1, far: 600 }}
       frameloop={props.paused ? 'never' : 'always'}
-      gl={{ antialias: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping, outputColorSpace: SRGBColorSpace }}
+      gl={{
+        // Сглаживание делает пост-обработка (MSAA в своей цели рендера).
+        antialias: false,
+        powerPreference: 'high-performance',
+        // AgX мягче ACES: яркие цвета не «выгорают», небо и трава остаются сочными.
+        toneMapping: AgXToneMapping,
+        toneMappingExposure: 1.0,
+        outputColorSpace: SRGBColorSpace,
+      }}
     >
       <Suspense fallback={null}>
-        <Scene {...props} />
+        <Scene {...props} quality={quality} />
       </Suspense>
     </Canvas>
   );

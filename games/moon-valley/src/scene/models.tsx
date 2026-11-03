@@ -21,6 +21,7 @@ import {
 } from 'three';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import type { Placed } from '../game/world';
+import { windMaterial, type WindOptions } from './wind';
 
 const files = import.meta.glob<string>('../../assets/models/*.glb', { eager: true, query: '?url', import: 'default' });
 
@@ -217,16 +218,30 @@ export function useAnimator(mixer: AnimationMixer, clips: AnimationClip[]) {
 /**
  * Много одинаковых моделей (лес, камни, цветы) одним вызовом отрисовки на каждую часть модели.
  */
-export function Instanced({ name, items, shadows = true }: { name: string; items: Placed[]; shadows?: boolean }) {
+export function Instanced({
+  name,
+  items,
+  shadows = true,
+  wind,
+}: {
+  name: string;
+  items: Placed[];
+  shadows?: boolean;
+  /** Качание на ветру (трава, цветы, кроны). */
+  wind?: WindOptions;
+}) {
   const { scene } = useGLTF(modelUrl(name));
   const parts = useMemo(() => {
     const root = prepare(scene.clone(true), shadows);
     root.updateMatrixWorld(true);
     const list: { mesh: Mesh; matrix: Matrix4 }[] = [];
     root.traverse((child) => {
-      if (child instanceof Mesh) list.push({ mesh: child, matrix: child.matrixWorld.clone() });
+      if (!(child instanceof Mesh)) return;
+      if (wind && !Array.isArray(child.material)) child.material = windMaterial(child.material, wind);
+      list.push({ mesh: child, matrix: child.matrixWorld.clone() });
     });
     return list;
+    // wind — постоянный объект у вызывающего.
   }, [scene, shadows]);
   return (
     <>
