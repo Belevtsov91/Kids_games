@@ -1,6 +1,6 @@
 /* Кабинет: поля, переключатели, сегменты, фото, список игр, итоги аналитики, таблица данных. */
 
-.pa-form { display: grid; gap: 16px; }
+.pa-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .pa-narrow { max-width: 460px; }
 .pa-field { display: grid; gap: 6px; min-width: 0; margin: 0; padding: 0; border: 0; }
 .pa-field > span, .pa-field > legend { padding: 0; font-weight: 800; font-size: 14px; }
@@ -13,8 +13,8 @@
 .pa-field select option { background: #2a2468; }
 .pa-pin-input { font-size: 24px !important; letter-spacing: 0.5em; text-align: center; }
 .pa-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.pa-check { display: flex; gap: 10px; align-items: center; font-size: 14px; color: var(--dash-ink-soft); }
-.pa-check input { width: 20px; height: 20px; accent-color: var(--dash-gold); }
+.pa-check { display: flex; flex-direction: row; gap: 10px; align-items: center; font-size: 14px; color: var(--dash-ink-soft); }
+.pa-check input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--dash-gold); }
 .pa-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--dash-line); }
 .pa-row:last-child { border-bottom: 0; }
 .pa-row-label { display: grid; min-width: 0; }

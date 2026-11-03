@@ -3,7 +3,7 @@
 .pa-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
 .pa-head h1 { margin-top: 6px; font-size: clamp(26px, 3.4vw, 38px); text-shadow: 0 4px 24px rgba(40, 20, 90, 0.45); }
 .pa-head p { margin: 8px 0 0; max-width: 62ch; color: var(--dash-ink-soft); font-weight: 600; }
-.pa-back { display: inline-block; margin-bottom: 8px; color: var(--dash-ink-soft); font-weight: 800; font-size: 14px; text-decoration: none; }
+.pa-back { display: table; margin-bottom: 8px; color: var(--dash-ink-soft); font-weight: 800; font-size: 14px; text-decoration: none; }
 .pa-back:hover { color: var(--dash-gold); }
 .pa-panel { min-width: 0; padding: 20px; border-radius: 24px; background: rgba(36, 30, 96, 0.72); box-shadow: inset 0 0 0 1px var(--dash-line); backdrop-filter: blur(14px); }
 .pa-panel-head { margin-bottom: 14px; }
