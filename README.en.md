@@ -41,7 +41,7 @@ There are no paid features yet.
 | Keepers of Moon Valley | `moon-valley` | 7–15 | 3D | ✓ |
 | Island Builder | `island-builder` | 10–15 | 3D | ✓ |
 
-Games without their own server keep progress in the platform cloud (`sdk.cloud`) and in the browser.
+Games without their own server keep progress in the platform cloud (`sdk.cloud`). The shell keeps `sdk.storage` per child and copies it to the cloud, so every game’s saves move between devices.
 
 ## Stack
 
@@ -74,19 +74,31 @@ In dev, Vite proxies `/api/*` to `http://localhost:3000`. Server settings: copy 
 
 Create a Supabase project and fill in `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and `SESSION_ENCRYPTION_KEY` in `.env`. Without them the server still runs, but sign-in returns 503 and game APIs return 401 (no session).
 
-Platform migrations (`platform/server/migrations/001–005`) and all game migrations are combined into one script:
+Platform migrations (`platform/server/migrations/001–006`) and all game migrations are combined into one script:
 
 ```bash
 node tools/db-sql.mjs > all.sql
 ```
 
-Run the contents of `all.sql` in Supabase → SQL Editor. The script is idempotent (`create … if not exists`), so after a new migration or game you can simply run it again. Without migrations 004 and 005, skills, stickers, cloud saves, comfort settings, helpers, emails and the day plan don’t work.
+Run the contents of `all.sql` in Supabase → SQL Editor. The script is idempotent (`create … if not exists`), so after a new migration or game you can simply run it again. Without migrations 004 and 005, skills, stickers, cloud saves, comfort settings, helpers, emails and the day plan don’t work; without 006, the one-time profile switch with an adult’s PIN doesn’t.
 
 ### Email
 
 Emails (password reset, a child’s time request with Yes/No buttons, the weekly report) are sent through **Brevo**. In `platform/server/.env` set `MAIL_FROM_EMAIL` (a sender verified in Brevo → Senders) and one way of sending: SMTP (`SMTP_USER` like `xxxx@smtp-brevo.com` and `SMTP_PASSWORD`, an `xsmtpsib-…` key) or the HTTP API (`BREVO_API_KEY`, an `xkeysib-…` key). `APP_URL` is the site address used in email links. Keys live only in `.env` and the host’s environment variables, never in git.
 
 Without email, in dev the server logs the reset link, and in production (`NODE_ENV=production`) it returns 503. A reset link works once and lasts 30 minutes; the buttons in a request email last 24 hours. The weekly report is sent by a background job of the real server (`server.ts`); it doesn’t run in tests.
+
+### Production
+
+Client on Vercel (`shell/vercel.json` rewrites `/api` to the server), server on Render. Server variables in production:
+
+- `NODE_ENV=production`, `COOKIE_SECURE=true`, `APP_URL=https://your-domain`.
+- `CORS_ORIGIN`: one origin or a comma-separated list (for example, the domain and Vercel previews).
+- `TRUST_PROXY`: how many proxies sit in front of the server (default 2: Vercel and Render). Rate-limit IPs depend on it.
+- `CRON_SECRET`: enables `POST /api/jobs/hourly` (weekly reports) and `/api/jobs/daily` (cleanup) with an `x-cron-secret` header. Needed when free Render puts the server to sleep: internal timers stop firing, so an external cron wakes them.
+- Leave `VITE_API_URL` unset on Vercel: requests go to the same domain through the rewrite, otherwise the session cookie becomes third-party.
+
+On start the server logs which settings are missing.
 
 ## Structure
 
@@ -156,7 +168,7 @@ A game gets only the SDK from the shell:
 |---|---|
 | `manifest`, `profile`, `locale` | manifest, the child (or `null`), site language |
 | `api` | requests only to its own prefix `/api/games/<id>` |
-| `storage` | localStorage with the game’s keys |
+| `storage` | localStorage keyed by game and child, copied to the platform cloud |
 | `cloud` | per-child saves on the platform server (for games without a server), up to 64 KB per key |
 | `audio` | the shared mute switch |
 | `progress` | `level()`, `skill(skill, ok)`, `sticker(id)` — progress for the album and the parent area |
@@ -172,7 +184,7 @@ A game gets only the SDK from the shell:
 4. Code needed by one game lives in that game’s folder. Only what everyone needs goes into `platform/`.
 5. A game server learns whose data it is only from the session: `childIdOf(req)` / `requireChild` from `@ig/sdk/server`. A `profileId` from the request is never accepted.
 6. Each game has its own `ig_game_<id>_*` tables (dashes in the id → `_`). The `opts.db` client throws on another game’s table, and lint checks table names. The only outside link is `child_id → ig_children(id) on delete cascade`.
-7. New platform tables only come with a new migration (`006_…`), then `all.sql` is rebuilt.
+7. New platform tables only come with a new migration (`007_…`), then `all.sql` is rebuilt.
 
 ## New game
 
@@ -198,7 +210,9 @@ Platform (all paths under `/api`):
 | GET | `/games`, `/games/:id` | game catalogue from manifests |
 | GET, POST | `/kid/status`, `/kid/beat`, `/kid/requests`, `/kid/stats` | time, game heartbeat, requests, stats |
 | POST, GET | `/kid/progress`, `/kid/stickers`, `/kid/stickers/seen` | progress and the sticker album |
-| GET, PUT | `/kid/cloud/:gameId/:key` | a game’s cloud saves |
+| GET, PUT | `/kid/cloud/:gameId/:key` | a game’s cloud saves (`null` deletes the key) |
+| DELETE | `/auth/account` | delete the account: open parent area and password |
+| POST | `/jobs/hourly`, `/jobs/daily` | weekly reports and cleanup for an external cron, `x-cron-secret` header |
 | POST | `/errors` | game crash report |
 | POST | `/answer`, `/helper`, `/helper/answer` | answer a request from an email link or as a helper |
 | * | `/parent/*` | parent area: sign-in, overview, children, skills, requests, helpers, emails, day plan, PIN, account, `/setup`, `/export` |
@@ -241,3 +255,4 @@ All tables are locked down: RLS on, no policies, `anon`/`authenticated` privileg
 - Nine new games: Robot Chef, House of Feelings, Breathe with Dragon, Shape Workshop, Little Shop, Pack Your Bag, Memory Train, Story Workshop, Seasons Garden.
 - Dashboard: Teddy the bear, day plan (migration 005), at-home task, seasonal decor, grown-up’s voice greeting; “How to play together” tips.
 - README in four languages.
+- Audit fixes: proxy hops and per-session rate limit, one-time profile switch (migration 006), account deletion with password, PIN from age 7, offline time, cloud copy of `sdk.storage`, sticker toast once, progress in every game, “2 minutes left” banner, cleanup of old data, cron endpoints.

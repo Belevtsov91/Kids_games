@@ -41,7 +41,7 @@ Funcții plătite încă nu există.
 | Paznicii Văii Lunii | `moon-valley` | 7–15 | 3D | ✓ |
 | Insula-constructor | `island-builder` | 10–15 | 3D | ✓ |
 
-Jocurile fără server propriu își salvează progresul în cloudul platformei (`sdk.cloud`) și în browser.
+Jocurile fără server propriu își salvează progresul în cloudul platformei (`sdk.cloud`). `sdk.storage` e păstrat separat pentru fiecare copil și copiat automat în cloud, așa că salvările oricărui joc trec de pe un dispozitiv pe altul.
 
 ## Tehnologii
 
@@ -74,19 +74,31 @@ corepack pnpm build       # lint + tipuri + build shell
 
 Creați un proiect Supabase și completați în `.env` `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` și `SESSION_ENCRYPTION_KEY`. Fără ele serverul merge, dar intrarea răspunde 503, iar API-ul jocurilor 401 (fără sesiune).
 
-Migrările platformei (`platform/server/migrations/001–005`) și ale tuturor jocurilor se adună într-un singur script:
+Migrările platformei (`platform/server/migrations/001–006`) și ale tuturor jocurilor se adună într-un singur script:
 
 ```bash
 node tools/db-sql.mjs > all.sql
 ```
 
-Conținutul `all.sql` se rulează în Supabase → SQL Editor. Scriptul e idempotent (`create … if not exists`): după o migrare sau un joc nou poate fi rulat din nou. Fără migrările 004 și 005 nu funcționează abilitățile, abțibildurile, salvările în cloud, confortul, ajutoarele, e-mailurile și planul zilei.
+Conținutul `all.sql` se rulează în Supabase → SQL Editor. Scriptul e idempotent (`create … if not exists`): după o migrare sau un joc nou poate fi rulat din nou. Fără migrările 004 și 005 nu funcționează abilitățile, abțibildurile, salvările în cloud, confortul, ajutoarele, e-mailurile și planul zilei; fără 006 — schimbarea unică a profilului cu PIN-ul adultului.
 
 ### E-mail
 
 E-mailurile (resetarea parolei, cererea copilului pentru timp cu butoanele „Da/Nu”, raportul săptămânal) se trimit prin **Brevo**. În `platform/server/.env` setați `MAIL_FROM_EMAIL` (expeditor confirmat în Brevo → Senders) și una dintre metode: SMTP (`SMTP_USER` de forma `xxxx@smtp-brevo.com` și `SMTP_PASSWORD` — cheia `xsmtpsib-…`) sau HTTP API (`BREVO_API_KEY` — cheia `xkeysib-…`). `APP_URL` — adresa site-ului pentru linkurile din e-mailuri. Cheile stau doar în `.env` și în variabilele de mediu ale găzduirii, nu în git.
 
 Fără e-mail, în dev serverul scrie linkul de resetare în log, iar în producție (`NODE_ENV=production`) răspunde 503. Linkul de resetare e de unică folosință și valabil 30 de minute, butoanele din e-mailul cu cererea — 24 de ore. Raportul săptămânal îl trimite o sarcină de fundal a serverului real (`server.ts`); în teste ea nu pornește.
+
+### Producție
+
+Clientul — Vercel (`shell/vercel.json` trimite `/api` la server), serverul — Render. Variabilele serverului în producție:
+
+- `NODE_ENV=production`, `COOKIE_SECURE=true`, `APP_URL=https://domeniul-tau`.
+- `CORS_ORIGIN` — o adresă sau o listă separată prin virgulă (de exemplu, domeniul și previzualizările Vercel).
+- `TRUST_PROXY` — câte proxy-uri sunt în fața serverului (implicit 2: Vercel și Render). De el depind IP-urile din limitele de cereri.
+- `CRON_SECRET` — activează `POST /api/jobs/hourly` (rapoarte săptămânale) și `/api/jobs/daily` (curățenie) cu antetul `x-cron-secret`. E nevoie de el dacă Render gratuit adoarme serverul: atunci temporizatoarele interne nu pornesc și le trezește un cron extern.
+- `VITE_API_URL` nu se setează pe Vercel: cererile merg pe același domeniu prin proxy, altfel cookie-ul sesiunii devine terț.
+
+La pornire serverul scrie în log ce setări lipsesc.
 
 ## Structură
 
@@ -156,7 +168,7 @@ Jocul primește de la înveliș doar SDK-ul:
 |---|---|
 | `manifest`, `profile`, `locale` | manifestul, copilul (sau `null`), limba site-ului |
 | `api` | cereri doar spre prefixul propriu `/api/games/<id>` |
-| `storage` | localStorage cu cheile jocului |
+| `storage` | localStorage cu cheile jocului și ale copilului, copie în cloudul platformei |
 | `cloud` | salvări pe serverul platformei pe copil (pentru jocuri fără server propriu), până la 64 KB pe cheie |
 | `audio` | comutatorul comun de sunet |
 | `progress` | `level()`, `skill(skill, ok)`, `sticker(id)` — progres pentru album și cabinet |
@@ -172,7 +184,7 @@ Jocul primește de la înveliș doar SDK-ul:
 4. Codul necesar doar unui joc stă în dosarul lui. În `platform/` ajunge doar ce e necesar tuturor.
 5. Serverul jocului află ale cui sunt datele doar din sesiune: `childIdOf(req)` / `requireChild` din `@ig/sdk/server`. `profileId` din cerere nu se acceptă.
 6. Fiecare joc are tabelele lui `ig_game_<id>_*` (cratimele din id → `_`). Clientul `opts.db` aruncă o eroare la accesarea unui tabel străin, iar lint-ul verifică numele tabelelor. Singura legătură în afară — `child_id → ig_children(id) on delete cascade`.
-7. Tabele noi ale platformei — doar printr-o migrare nouă (`006_…`), apoi se reface `all.sql`.
+7. Tabele noi ale platformei — doar printr-o migrare nouă (`007_…`), apoi se reface `all.sql`.
 
 ## Joc nou
 
@@ -198,7 +210,9 @@ Platforma (toate căile sub `/api`):
 | GET | `/games`, `/games/:id` | catalogul jocurilor din manifeste |
 | GET, POST | `/kid/status`, `/kid/beat`, `/kid/requests`, `/kid/stats` | timp, pulsul jocului, cereri, statistici |
 | POST, GET | `/kid/progress`, `/kid/stickers`, `/kid/stickers/seen` | progres și albumul de abțibilduri |
-| GET, PUT | `/kid/cloud/:gameId/:key` | salvările jocului în cloud |
+| GET, PUT | `/kid/cloud/:gameId/:key` | salvările jocului în cloud (`null` șterge cheia) |
+| DELETE | `/auth/account` | ștergerea contului: cont deschis și parolă |
+| POST | `/jobs/hourly`, `/jobs/daily` | rapoarte săptămânale și curățenie pentru un cron extern, antet `x-cron-secret` |
 | POST | `/errors` | raport despre căderea jocului |
 | POST | `/answer`, `/helper`, `/helper/answer` | răspuns la cerere prin linkul din e-mail sau de la un ajutor |
 | * | `/parent/*` | cabinet: intrare, ansamblu, copii, abilități, cereri, ajutoare, e-mailuri, planul zilei, PIN, cont, `/setup`, `/export` |
@@ -241,3 +255,4 @@ Toate tabelele sunt închise: RLS pornit, fără politici, drepturile pentru `an
 - Nouă jocuri noi: Robotul bucătar, Căsuța emoțiilor, Respiră cu dragonul, Atelierul formelor, Magazinul mic, Fă-ți rucsacul, Trenulețul memoriei, Atelierul de povești, Grădina anotimpurilor.
 - Panoul: ursulețul Teo, planul zilei (migrarea 005), sarcina de acasă, decor de sezon, salutul vocal al adultului; sfaturi „Cum să jucați împreună”.
 - README în patru limbi.
+- Corecturi după audit: proxy și rate limit pe sesiune, schimbare unică de profil (migrarea 006), ștergerea contului cu parolă, PIN de la 7 ani, timp offline, cloud pentru `sdk.storage`, abțibild o singură dată, reușite în toate jocurile, mesajul „mai sunt 2 minute”, curățarea datelor vechi, endpointuri cron.
