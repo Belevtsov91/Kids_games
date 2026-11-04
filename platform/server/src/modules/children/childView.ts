@@ -1,6 +1,6 @@
 // Профиль ребёнка для оболочки: базовые поля + то, что взрослый настроил в кабинете.
 
-export const CHILD_EXTRA = 'child_id, photo, lang, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons';
+export const CHILD_EXTRA = 'child_id, photo, lang, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons, day_plan';
 
 export interface ChildExtra {
   child_id: string;
@@ -12,6 +12,7 @@ export interface ChildExtra {
   effects_volume: number;
   reduce_motion: boolean;
   big_buttons: boolean;
+  day_plan?: string[] | null;
 }
 
 /** Полных лет по месяцу рождения «YYYY-MM-01» на дату now. */
@@ -44,5 +45,6 @@ export function childView(c: { id: string; name: string; age: number; avatar: st
       reduceMotion: e?.reduce_motion ?? false,
       bigButtons: e?.big_buttons ?? false,
     },
+    plan: e?.day_plan ?? [],
   };
 }

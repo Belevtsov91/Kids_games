@@ -3,6 +3,7 @@ import { games } from '@/catalog/catalog';
 import { covers } from '@/catalog/covers';
 import { gameTitle, useI18n } from '@/i18n/I18nProvider';
 import { ageRange } from '@/i18n/plural';
+import { useFamilyText } from '@/family/text';
 import { papi } from '../api';
 import { useParent } from '../ParentShell';
 import { useParentText } from '../text';
@@ -19,9 +20,12 @@ export function ChildGamesPage() {
   const g = p.games;
   const { locale } = useI18n();
   const { toast } = useParent();
-  const { id, child } = useChild();
+  const fp = useFamilyText().plan;
+  const { id, child, save } = useChild();
   const [access, setAccess] = useState<Record<string, boolean>>({});
+  const [plan, setPlan] = useState<string[]>([]);
   useEffect(() => setAccess(child?.access ?? {}), [child]);
+  useEffect(() => setPlan(child?.plan ?? []), [child]);
   if (!child) return null;
 
   const setMode = async (gameId: string, title: string, mode: Mode) => {
@@ -39,11 +43,29 @@ export function ChildGamesPage() {
     }
   };
 
+  // План дня: до трёх игр, закрытую игру в план не добавить.
+  const togglePlan = async (gameId: string) => {
+    const next = plan.includes(gameId) ? plan.filter((g) => g !== gameId) : [...plan, gameId];
+    if (next.length > 3) return toast(fp.full);
+    setPlan(next);
+    if (!(await save({ dayPlan: next }, fp.saved))) setPlan(plan);
+  };
+
   const label = (m: Mode) => (m === false ? g.modes.closed : m === null ? g.modes.auto : g.modes.mine);
 
   return (
     <>
       <PageHead back={{ to: `/parent/kids/${id}`, label: child.name }} eyebrow={p.child.eyebrow} title={p.child.tiles.games[0]} lead={g.lead} />
+      <Panel title={fp.parentTitle} lead={fp.parentLead}>
+        <p className="pa-plan-now">
+          {plan.length ? plan.map((g) => games.find((x) => x.id === g)).filter(Boolean).map((g) => `${g!.emoji} ${gameTitle(g!, locale)}`).join(' · ') : '—'}
+        </p>
+        {plan.length > 0 && (
+          <button type="button" className="pa-btn pa-btn-quiet" onClick={() => void save({ dayPlan: [] }, fp.saved)}>
+            {fp.clear}
+          </button>
+        )}
+      </Panel>
       <Panel>
         <ul className="pa-games">
           {games.map((game) => {
@@ -61,6 +83,15 @@ export function ChildGamesPage() {
                     <i className={`pa-tag ${fits ? 'pa-tag-ok' : 'pa-tag-warn'}`}>{fits ? g.fits : g.clouds}</i>
                   </span>
                 </div>
+                <button
+                  type="button"
+                  className={`pa-btn pa-plan ${plan.includes(game.id) ? 'pa-btn-gold' : 'pa-btn-quiet'}`}
+                  aria-pressed={plan.includes(game.id)}
+                  disabled={mode === false && !plan.includes(game.id)}
+                  onClick={() => void togglePlan(game.id)}
+                >
+                  📋 {plan.includes(game.id) ? fp.inPlan : fp.add}
+                </button>
                 <div className="pa-seg pa-seg-sm" role="group" aria-label={title}>
                   {MODES.map((m) => (
                     <button key={String(m)} type="button" aria-pressed={mode === m} onClick={() => void setMode(game.id, title, m)}>

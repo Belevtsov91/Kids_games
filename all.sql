@@ -226,6 +226,20 @@ alter table public.ig_helpers force row level security;
 
 revoke all on public.ig_play_events, public.ig_stickers, public.ig_cloud_saves, public.ig_helpers from anon, authenticated;
 
+-- ===== platform/server/migrations/005_day_plan.sql =====
+-- 005: план дня от взрослого — до трёх игр, которые ребёнок видит наверху дашборда.
+-- Как в 001: префикс ig_, RLS без политик, доступ только у сервера. Скрипт идемпотентный.
+
+alter table public.ig_child_settings add column if not exists day_plan text[] not null default '{}';
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'ig_child_settings_day_plan_check') then
+    alter table public.ig_child_settings
+      add constraint ig_child_settings_day_plan_check check (cardinality(day_plan) <= 3);
+  end if;
+end $$;
+
 -- ===== games/animal-orchestra/server/migrations/001_melodies.sql =====
 -- Звериный оркестр: мелодии детей (до 30 на ребёнка, лишние удаляет сервер игры).
 -- Таблица только этой игры (префикс ig_game_animal_orchestra_).

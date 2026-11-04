@@ -47,6 +47,7 @@ async function childCard(child: ChildRow, zone: string) {
       reduceMotion: settings?.reduce_motion ?? false,
       bigButtons: settings?.big_buttons ?? false,
     },
+    plan: settings?.day_plan ?? [],
     lang: settings?.lang ?? null,
     photo: settings?.photo ?? null,
     rules: rulesOf(settings),

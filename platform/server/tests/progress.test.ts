@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { levelsByGame, summarizeSkills, type SkillEvent } from '../src/modules/progress/skills';
 import { answerToken, readAnswerToken } from '../src/modules/notify/answerToken';
-import { ageFromBirth, birthdayMonth, effectiveAge } from '../src/modules/children/childView';
+import { ageFromBirth, birthdayMonth, childView, effectiveAge } from '../src/modules/children/childView';
 import { reportDue } from '../src/modules/notify/weekly';
 
 const ev = (name: string, ok: boolean, i: number, game = 'counting'): SkillEvent => ({
@@ -67,5 +67,16 @@ describe('отчёт за неделю', () => {
     expect(reportDue(sunday, '2026-11-08')).toBe(false);
     expect(reportDue({ ...sunday, minutes: 17 * 60 }, null)).toBe(false);
     expect(reportDue({ ...sunday, weekday: 1 }, null)).toBe(false);
+  });
+});
+
+describe('план дня', () => {
+  const kid = { id: 'c1', name: 'Аня', age: 5, avatar: '🐰' };
+
+  it('без настроек план пустой, с настройками — как сохранил взрослый', () => {
+    expect(childView(kid, undefined).plan).toEqual([]);
+    const extra = { child_id: 'c1', photo: null, lang: null, toddler: null, birth_month: null, music_volume: 80, effects_volume: 100, reduce_motion: false, big_buttons: false };
+    expect(childView(kid, { ...extra, day_plan: null }).plan).toEqual([]);
+    expect(childView(kid, { ...extra, day_plan: ['robot-chef', 'memory-train'] }).plan).toEqual(['robot-chef', 'memory-train']);
   });
 });

@@ -37,6 +37,7 @@ const patchBody = {
     effectsVolume: { type: 'integer', minimum: 0, maximum: 100 },
     reduceMotion: { type: 'boolean' },
     bigButtons: { type: 'boolean' },
+    dayPlan: { type: 'array', maxItems: 3, uniqueItems: true, items: { type: 'string', pattern: '^[a-z0-9-]{1,40}$' } },
   },
   additionalProperties: false,
 } as const;
@@ -59,6 +60,7 @@ interface PatchBody {
   effectsVolume?: number;
   reduceMotion?: boolean;
   bigButtons?: boolean;
+  dayPlan?: string[];
 }
 
 /** Поле запроса → колонка ig_child_settings. */
@@ -76,6 +78,7 @@ const SETTINGS_FIELDS: [keyof PatchBody, string][] = [
   ['effectsVolume', 'effects_volume'],
   ['reduceMotion', 'reduce_motion'],
   ['bigButtons', 'big_buttons'],
+  ['dayPlan', 'day_plan'],
 ];
 
 const gameParams = {

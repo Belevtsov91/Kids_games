@@ -19,10 +19,11 @@ export interface SettingsRow {
   effects_volume?: number;
   reduce_motion?: boolean;
   big_buttons?: boolean;
+  day_plan?: string[] | null;
 }
 
 const SETTINGS_COLUMNS =
-  'lang, photo, limit_weekday, limit_weekend, quiet_from, quiet_to, break_every, can_ask, last_beat_at, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons';
+  'lang, photo, limit_weekday, limit_weekend, quiet_from, quiet_to, break_every, can_ask, last_beat_at, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons, day_plan';
 
 export const rulesOf = (row: SettingsRow | null): TimeRules =>
   row

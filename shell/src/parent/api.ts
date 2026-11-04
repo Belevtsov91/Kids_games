@@ -19,6 +19,8 @@ export interface ChildCard {
   toddler: boolean | null;
   birthMonth: string | null;
   comfort: { musicVolume: number; effectsVolume: number; reduceMotion: boolean; bigButtons: boolean };
+  /** План дня: до трёх id игр. */
+  plan: string[];
 }
 
 export interface SkillsReport {
