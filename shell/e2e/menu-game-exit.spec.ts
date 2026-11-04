@@ -1,6 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { serverAwake } from './server';
+
+test.beforeEach(({ page }) => serverAwake(page));
 
 // Список игр берём из папки games/, а не из кода: новая игра попадёт в проверку сама.
 const gamesDir = fileURLToPath(new URL('../../games', import.meta.url));
@@ -10,6 +13,7 @@ const minAge = (id: string) => Number(/min:\s*(\d+)/.exec(readFileSync(`${gamesD
 // Сервер API здесь не запускается: вход подменяем ответом /api/auth/me.
 // Возраст ребёнка влияет на меню: игра видна, только если он в её диапазоне ages.
 async function signedIn(page: Page, age = 15) {
+  await serverAwake(page);
   await page.route('/api/auth/me', (route) =>
     route.fulfill({
       json: {

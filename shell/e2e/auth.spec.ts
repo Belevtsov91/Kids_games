@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
+import { serverAwake } from './server';
+
+test.beforeEach(({ page }) => serverAwake(page));
 
 // Приветствие → регистрация → профиль ребёнка → дашборд → выход.
 // API подменяем: проверяем оболочку, а не Supabase. Сервер держит состояние, браузер — ничего.
@@ -23,6 +26,7 @@ function fakeServer(page: Page) {
         calls.push(`${req.method()} ${path}`);
         const body = req.postDataJSON() as Record<string, unknown> | null;
 
+        if (path === '/api/health') return route.fulfill({ json: { status: 'ok' } });
         if (path === '/api/auth/me') return me ? route.fulfill({ json: me }) : route.fulfill({ status: 401, json: { error: 'Нужно войти' } });
         if (path === '/api/auth/register') {
           me = { parent: { id: 'p1', name: String(body?.name) }, children: [], activeChildId: null };

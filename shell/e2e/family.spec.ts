@@ -1,4 +1,7 @@
 import { expect, test } from '@playwright/test';
+import { serverAwake } from './server';
+
+test.beforeEach(({ page }) => serverAwake(page));
 
 // Мишка, план дня и задание дома на дашборде. API нет: /api/auth/me подменяем.
 test('план дня от взрослого: игры наверху и галочка после игры', async ({ page }) => {

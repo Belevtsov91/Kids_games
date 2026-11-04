@@ -1,0 +1,72 @@
+/* Экран «Мишка просыпается»: поверх всего сайта, пока сервер не ответил. */
+
+.wake {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 100%, #4a3488 0%, #17153f 70%);
+  color: #fff8ec;
+  animation: wake-in 0.45s ease both;
+}
+.wake.is-leaving { animation: wake-out 0.65s ease forwards; pointer-events: none; }
+
+.wake-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.wake-text {
+  position: absolute;
+  left: 50%;
+  top: calc(36px + env(safe-area-inset-top, 0px));
+  width: min(560px, calc(100% - 32px));
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+.wake-title {
+  margin: 0 0 10px;
+  font-family: 'Segoe UI Black', 'Arial Black', ui-rounded, system-ui, sans-serif;
+  font-size: clamp(28px, 5vw, 46px);
+  line-height: 1.05;
+  text-shadow: 0 4px 24px rgba(20, 10, 60, 0.55);
+}
+.wake-lead {
+  margin: 0 auto 14px;
+  max-width: 460px;
+  color: #e4defc;
+  font-size: clamp(15px, 2.2vw, 17px);
+  line-height: 1.45;
+  text-shadow: 0 2px 12px rgba(20, 10, 60, 0.6);
+}
+.wake-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(23, 21, 63, 0.62);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  font-weight: 800;
+  font-size: 15px;
+  animation: wake-hint 0.4s ease both;
+}
+.wake-title, .wake-lead { transition: color 0.8s ease, text-shadow 0.8s ease; }
+.wake.is-awake .wake-title { color: #3b2a66; text-shadow: 0 2px 18px rgba(255, 255, 255, 0.5); }
+.wake.is-awake .wake-lead { color: #5a3f7f; text-shadow: none; }
+.wake.is-awake .wake-hint { background: #ffd25a; color: #3d2a00; box-shadow: 0 6px 0 #c99a1e; }
+
+.wake-dots { display: inline-flex; gap: 4px; }
+.wake-dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.35; animation: wake-dot 1.2s ease-in-out infinite; }
+.wake-dots i:nth-child(2) { animation-delay: 0.2s; }
+.wake-dots i:nth-child(3) { animation-delay: 0.4s; }
+.wake.is-awake .wake-dots { display: none; }
+
+@keyframes wake-in { from { opacity: 0; } }
+@keyframes wake-out { to { opacity: 0; transform: scale(1.04); } }
+@keyframes wake-hint { from { opacity: 0; transform: translateY(6px); } }
+@keyframes wake-dot { 50% { opacity: 1; transform: translateY(-3px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wake, .wake.is-leaving, .wake-hint, .wake-dots i { animation-duration: 0.01s; animation-iteration-count: 1; }
+}
