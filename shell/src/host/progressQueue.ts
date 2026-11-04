@@ -16,7 +16,35 @@ export interface ProgressQueue extends GameProgress {
   flush(): void;
 }
 
-export function createProgressQueue(manifest: GameManifest, enabled: boolean, onSticker?: (id: string) => void): ProgressQueue {
+/** Какие наклейки уже показывали этому ребёнку на этом устройстве: вылет наклейки — только в первый раз. */
+function shownStickers(gameId: string, childId: string | null) {
+  const key = `ig:stickers-shown:${childId ?? 'guest'}:${gameId}`;
+  let shown: string[] = [];
+  try {
+    shown = JSON.parse(localStorage.getItem(key) ?? '[]') as string[];
+  } catch {
+    /* нет хранилища — покажем, как раньше */
+  }
+  return {
+    has: (id: string) => shown.includes(id),
+    add(id: string) {
+      shown = [...shown, id];
+      try {
+        localStorage.setItem(key, JSON.stringify(shown));
+      } catch {
+        /* ничего */
+      }
+    },
+  };
+}
+
+export function createProgressQueue(
+  manifest: GameManifest,
+  enabled: boolean,
+  onSticker?: (id: string) => void,
+  childId: string | null = null,
+): ProgressQueue {
+  const shown = shownStickers(manifest.id, childId);
   let events: ProgressEvent[] = [];
   let stickers: string[] = [];
   let timer: ReturnType<typeof setTimeout> | null = null;
@@ -50,7 +78,11 @@ export function createProgressQueue(manifest: GameManifest, enabled: boolean, on
     sticker(id) {
       if (!known.has(id)) return console.warn(`${manifest.id}: наклейки «${id}» нет в manifest.stickers`);
       if (!stickers.includes(id)) stickers.push(id);
-      onSticker?.(id);
+      // Сервер хранит наклейку один раз; игре можно звать sticker() хоть на каждой победе.
+      if (!shown.has(id)) {
+        shown.add(id);
+        onSticker?.(id);
+      }
       later();
     },
     flush,

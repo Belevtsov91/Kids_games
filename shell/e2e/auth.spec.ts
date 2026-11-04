@@ -80,11 +80,12 @@ test('приветствие → регистрация → ребёнок → �
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Создать аккаунт' }).click();
 
-  // Новый аккаунт: настройка за минуту — ребёнок, время, PIN (PIN можно позже).
+  // Новый аккаунт: настройка за минуту — ребёнок, время, PIN (до 7 лет PIN можно позже).
   await expect(page).toHaveURL('/setup', { timeout: 10_000 });
   await expect(page.getByRole('heading', { name: 'Кто будет играть?' })).toBeVisible();
   await page.getByLabel('Имя ребёнка').fill('Петя');
-  await page.getByRole('button', { name: '7', exact: true }).click();
+  // С 7 лет PIN обязателен; младшему ребёнку его можно отложить.
+  await page.getByRole('button', { name: '5', exact: true }).click();
   await page.getByRole('button', { name: '🦊' }).click();
   await page.getByRole('button', { name: 'Дальше →' }).click();
   await expect(page.getByRole('heading', { name: 'Сколько можно играть в день?' })).toBeVisible();

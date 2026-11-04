@@ -22,10 +22,10 @@ export function ChildrenPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // Сервер ответил 423: у текущего ребёнка кончилось время, сменить профиль может только взрослый.
-  const [locked, setLocked] = useState<{ reason: 'limit' | 'quiet'; retry: () => void } | null>(null);
+  const [locked, setLocked] = useState<{ reason: 'limit' | 'quiet' | 'rules'; retry: () => void } | null>(null);
   const lockedBy = (err: unknown, retry: () => void) => {
     if (!(err instanceof ApiError) || err.status !== 423) return false;
-    setLocked({ reason: err.data?.reason === 'quiet' ? 'quiet' : 'limit', retry });
+    setLocked({ reason: err.data?.reason === 'quiet' || err.data?.reason === 'rules' ? err.data.reason : 'limit', retry });
     return true;
   };
 

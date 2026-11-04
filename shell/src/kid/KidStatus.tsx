@@ -92,8 +92,3 @@ export function useKidStatus() {
   if (!value) throw new Error('useKidStatus вне KidStatusProvider');
   return value;
 }
-
-/** Можно ли ребёнку эту игру: решение взрослого, иначе возраст. */
-export function gameAllowed(access: Record<string, boolean> | undefined, gameId: string, fitsAge: boolean) {
-  return access?.[gameId] ?? fitsAge;
-}

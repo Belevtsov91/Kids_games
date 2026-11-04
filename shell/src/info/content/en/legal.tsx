@@ -11,7 +11,7 @@ export const privacy: InfoContent = {
   icon: '🔒',
   dated: true,
   summary:
-    'We keep only what is needed for logging in and saving: the parent’s email, the child’s name or nickname, their age and game progress. No ads, no trackers, no selling of data.',
+    'We keep only what is needed for logging in, time rules and saves: the parent’s email, the child’s name or nickname, age, settings and game progress. No ads, no trackers, no selling of data.',
   body: (
     <>
       <h2>Who is responsible for the data</h2>
@@ -20,24 +20,27 @@ export const privacy: InfoContent = {
       </p>
       <h2>What we store</h2>
       <ul>
-        <li><b>About the grown-up:</b> email, a name for greetings and a password. The password is stored only as a hash, we cannot see it.</li>
-        <li><b>About the child:</b> name or nickname, age from 3 to 15 and the chosen avatar picture.</li>
-        <li><b>Progress:</b> game saves, for example a built island, completed levels and quests.</li>
-        <li><b>Login session:</b> a technical record so you do not have to type the password every time. It lasts 7 days.</li>
+        <li><b>About the adult:</b> email, a name for greetings, the password and the parent area PIN (both only as a hash), time zone and, if you upload one, a small 256×256 photo.</li>
+        <li><b>About the child:</b> name or nickname, age, avatar, optionally the birth month (for a greeting) and a 256×256 photo, language and comfort settings.</li>
+        <li><b>Rules and time:</b> limits, quiet hours, breaks, closed games, minutes played per day and requests for extra time.</li>
+        <li><b>Progress:</b> game saves, drawings and melodies, completed levels, stickers and skill answers (right or wrong) for the “What they learned” page.</li>
+        <li><b>Helpers:</b> the name and, if you add it, the email of a grandparent, nanny or other adult you allowed to answer requests.</li>
+        <li><b>Login session:</b> a technical record so you do not type the password every time. It lasts 7 days.</li>
       </ul>
+      <p>The voice greeting an adult records stays on this device only and is never sent to the server.</p>
       <h2>What we do not collect</h2>
-      <p>Surname, photos, voice, location, contacts, school, advertising IDs. The games have no chats or messaging.</p>
+      <p>Surname, location, contacts, school, advertising identifiers. The games have no chats and no messaging between people.</p>
       <h2>Why</h2>
-      <p>So the parent can log in, the child can pick their profile and the games remember progress. Nothing else: no ads, no analytics, no profiling.</p>
+      <p>So the parent can log in and set time rules, the child can pick their profile, and games remember progress on every device. No ads, no third-party analytics, no profiling.</p>
       <h2>Where the data is stored and who sees it</h2>
       <p>
-        In a Supabase (Postgres) database, region <Fill value={SITE.dbRegion} />. The site is hosted on Vercel. These companies process data only on our
-        behalf. We do not share or sell data to anyone else.
+        The database is Supabase (Postgres), region <Fill value={SITE.dbRegion} />. The site is hosted on Vercel, the server on Render, and emails are sent by Brevo.
+        These companies process data only on our instructions. We do not share or sell data to anyone else.
       </p>
       <h2>How long we keep it</h2>
       <p>
-        As long as the account exists. Login sessions are deleted after 7 days. After the account is deleted the data is erased at once, and hosting backups
-        are overwritten within <Fill value={SITE.backupDays} />.
+        For as long as the account exists. Login sessions are deleted after 7 days, password reset links once they expire, and detailed skill answers after
+        180 days. When the account is deleted the data is erased at once, and hosting backups are overwritten within <Fill value={SITE.backupDays} />.
       </p>
       <h2>Your rights</h2>
       <p>

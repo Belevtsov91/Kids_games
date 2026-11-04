@@ -8,7 +8,7 @@ export const about: InfoContent = {
   eyebrow: 'Despre proiect',
   color: '#a99bff',
   icon: '🐻',
-  summary: 'Interact Games înseamnă zece jocuri pentru copii de la 3 la 15 ani într-un singur loc: desenăm, construim, numărăm și salvăm Valea Lunii.',
+  summary: 'Interact Games înseamnă jocuri pentru copii de la 3 la 15 ani într-un singur loc: desenăm, construim, numărăm și salvăm Valea Lunii.',
   body: (
     <>
       <h2>De ce facem asta</h2>

@@ -52,3 +52,18 @@
 .sticker-toast-emoji { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: #fff3c4; font-size: 34px; }
 @keyframes sticker-in { from { opacity: 0; transform: translate(-50%, 40px) scale(0.6); } }
 @media (prefers-reduced-motion: reduce) { .sticker-toast { animation: none; } }
+
+/* Удобство из настроек ребёнка для любых игр (атрибуты ставит GameHost). */
+.game-container[data-reduce-motion] *,
+.game-container[data-reduce-motion] *::before,
+.game-container[data-reduce-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+.game-container[data-big-buttons] button,
+.game-container[data-big-buttons] [role='button'] {
+  min-width: 56px;
+  min-height: 56px;
+}

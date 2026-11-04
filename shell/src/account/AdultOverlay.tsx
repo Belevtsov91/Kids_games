@@ -5,9 +5,10 @@ import { useI18n } from '@/i18n/I18nProvider';
 
 /**
  * Задача для взрослых поверх любой страницы ребёнка. Нужна, когда сервер ответил 423:
- * у текущего ребёнка кончилось время, а профиль хотят сменить. После входа зовёт onUnlocked.
+ * у текущего ребёнка есть правила времени (или оно кончилось), а профиль хотят сменить.
+ * Задача даёт одну смену профиля и не открывает кабинет. После неё зовёт onUnlocked.
  */
-export function AdultOverlay({ reason, onUnlocked, onClose }: { reason: 'limit' | 'quiet'; onUnlocked: () => void; onClose: () => void }) {
+export function AdultOverlay({ reason, onUnlocked, onClose }: { reason: 'limit' | 'quiet' | 'rules'; onUnlocked: () => void; onClose: () => void }) {
   const { t } = useI18n();
   const l = t.children.locked;
   const [hasPin, setHasPin] = useState<boolean | null>(null);
@@ -21,7 +22,7 @@ export function AdultOverlay({ reason, onUnlocked, onClose }: { reason: 'limit' 
     <div className="adult-overlay dash pa pa-locked" role="dialog" aria-modal="true">
       {!asking ? (
         <div className="adult-ask">
-          <span className="adult-ask-icon" aria-hidden="true">{reason === 'quiet' ? '🌙' : '⏰'}</span>
+          <span className="adult-ask-icon" aria-hidden="true">{reason === 'quiet' ? '🌙' : reason === 'rules' ? '🔒' : '⏰'}</span>
           <p>{l[reason]}</p>
           <div className="adult-ask-actions">
             <button type="button" className="dash-btn" onClick={onClose}>{l.back}</button>
@@ -31,7 +32,7 @@ export function AdultOverlay({ reason, onUnlocked, onClose }: { reason: 'limit' 
           </div>
         </div>
       ) : (
-        hasPin !== null && <ParentGate hasPin={hasPin} onUnlocked={onUnlocked} />
+        hasPin !== null && <ParentGate hasPin={hasPin} purpose="switch" onUnlocked={onUnlocked} />
       )}
     </div>
   );

@@ -8,6 +8,7 @@ import { rememberGame } from '@/dashboard/lastPlayed';
 import { markToday } from '@/family/daily';
 import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
+import { EndingBanner } from '@/kid/EndingBanner';
 import { usePlayClock } from '@/kid/usePlayClock';
 import { HoldButton } from '@/kid/HoldButton';
 import { StickerToast, useStickerToast } from '@/kid/StickerToast';
@@ -56,6 +57,7 @@ export function GamePage() {
         </Link>
       )}
       {!closed && !blocked && <KidTimer className="game-timer" />}
+      {!closed && !blocked && <EndingBanner />}
       {closed ? (
         <ClosedGameScreen />
       ) : blocked && status ? (

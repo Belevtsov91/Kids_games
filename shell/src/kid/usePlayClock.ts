@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { kidApi, tz, useKidStatus, type KidStatus } from './KidStatus';
+import { applyOffline, offlineSeconds } from './offlineTime';
 
 const BEAT_MS = 60_000;
 
@@ -12,15 +13,28 @@ export function usePlayClock(gameId: string | undefined, running: boolean) {
   const breakEvery = status?.breakEvery ?? 0;
   const [pause, setPause] = useState(false);
   const streak = useRef(0);
+  // Последний ответ сервера: от него считаем время, если сеть пропала.
+  const serverStatus = useRef<KidStatus | null>(null);
+  if (status && !serverStatus.current) serverStatus.current = status;
 
   useEffect(() => {
     if (!gameId || !running) return;
+    let lastTry = Date.now();
     const beat = async () => {
       if (document.hidden) return;
+      const now = Date.now();
+      const gap = Math.min(60, Math.max(0, Math.round((now - lastTry) / 1000)));
+      lastTry = now;
+      const offline = offlineSeconds.get();
       try {
-        set(await kidApi.post<KidStatus>('/beat', { gameId, tz: tz() }));
+        const next = await kidApi.post<KidStatus>('/beat', { gameId, tz: tz(), ...(offline ? { offline } : {}) });
+        offlineSeconds.clear();
+        serverStatus.current = next;
+        set(next);
       } catch {
-        // без сервера играем без счёта времени
+        // Нет сети: время считаем сами, иначе режим полёта снимал бы лимит и тихие часы.
+        offlineSeconds.add(gap);
+        if (serverStatus.current) set(applyOffline(serverStatus.current, offlineSeconds.get()));
       }
     };
     void beat();

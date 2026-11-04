@@ -32,6 +32,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 export function createApiClient(prefix = ''): GameApi & {
   put<T>(path: string, body: unknown): Promise<T>;
   patch<T>(path: string, body: unknown): Promise<T>;
+  delete(path: string, body?: unknown): Promise<void>;
 } {
   const base = `${BASE_URL}${prefix}`;
   return {
@@ -39,7 +40,8 @@ export function createApiClient(prefix = ''): GameApi & {
     post: <T>(path: string, body: unknown) => request<T>(`${base}${path}`, { method: 'POST', body: JSON.stringify(body) }),
     put: <T>(path: string, body: unknown) => request<T>(`${base}${path}`, { method: 'PUT', body: JSON.stringify(body) }),
     patch: <T>(path: string, body: unknown) => request<T>(`${base}${path}`, { method: 'PATCH', body: JSON.stringify(body) }),
-    delete: (path: string) => request<void>(`${base}${path}`, { method: 'DELETE' }),
+    delete: (path: string, body?: unknown) =>
+      request<void>(`${base}${path}`, body === undefined ? { method: 'DELETE' } : { method: 'DELETE', body: JSON.stringify(body) }),
   };
 }
 

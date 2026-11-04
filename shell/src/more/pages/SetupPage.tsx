@@ -28,6 +28,8 @@ export function SetupPage() {
   const [quiet, setQuiet] = useState(true);
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
+  // С 7 лет PIN обязателен (сервер проверяет то же самое).
+  const pinRequired = age >= 7;
   const [busy, setBusy] = useState(false);
 
   if (me && me.children.length > 0 && step === 0 && !busy && !childId) return <Navigate to="/children" replace />;
@@ -55,9 +57,9 @@ export function SetupPage() {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       await papi.raw.post('/setup', { childId, limit, quiet, tz, ...(withPin && pin ? { pin } : {}) });
     } catch (err) {
-      if (err instanceof ApiError && err.data?.code === 'weak') {
+      if (err instanceof ApiError && (err.data?.code === 'weak' || err.data?.code === 'pinRequired')) {
         setBusy(false);
-        return setError(s.weak);
+        return setError(err.data?.code === 'weak' ? s.weak : s.pinNeeded);
       }
       // 409 — настройка уже пройдена: просто идём играть.
     }
@@ -109,10 +111,11 @@ export function SetupPage() {
           <div className="setup-card">
             <h1>{s.pinTitle}</h1>
             <p>{s.pinLead}</p>
+            {pinRequired && <p className="setup-note">{s.pinNeeded}</p>}
             <input className="setup-pin" inputMode="numeric" maxLength={4} value={pin} aria-label={s.pinTitle} onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))} />
             {error && <p className="form-error" role="alert">{error}</p>}
             <div className="setup-actions">
-              <button type="button" className="dash-btn" disabled={busy} onClick={() => void finish(false)}>{s.pinSkip}</button>
+              {!pinRequired && <button type="button" className="dash-btn" disabled={busy} onClick={() => void finish(false)}>{s.pinSkip}</button>}
               <button type="button" className="dash-btn dash-btn-primary" disabled={busy || pin.length !== 4} onClick={() => void finish(true)}>{s.done}</button>
             </div>
           </div>

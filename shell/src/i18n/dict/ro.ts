@@ -15,7 +15,7 @@ export const ro: Dict = {
   },
   hero: {
     canvas: 'Insule zburătoare: fiecare insulă este un joc',
-    eyebrow: '20 jocuri · de la 3 la 15 ani',
+    eyebrow: 'de la 3 la 15 ani',
     titleStart: 'Salut! Alege-ți ',
     titleAccent: 'lumea',
     titleEnd: ' și joacă-te!',
@@ -102,7 +102,7 @@ export const ro: Dict = {
     tooMany: 'Nu mai poți adăuga profiluri.',
     saving: 'Salvăm…',
     done: 'Gata',
-    locked: { limit: 'Timpul de azi s-a terminat. Doar un adult poate schimba profilul.', quiet: 'Acum sunt orele de liniște. Doar un adult poate schimba profilul.', adult: 'Sunt adult', back: 'Înapoi' },
+    locked: { rules: 'Acest profil are o limită de timp. Doar un adult poate schimba profilul.', limit: 'Timpul de azi s-a terminat. Doar un adult poate schimba profilul.', quiet: 'Acum sunt orele de liniște. Doar un adult poate schimba profilul.', adult: 'Sunt adult', back: 'Înapoi' },
   },
   menu: {
     changeProfile: 'Schimbă profilul',
@@ -133,6 +133,10 @@ export const ro: Dict = {
     answer: (problem) => `Răspuns: ${problem}`,
     wrong: 'Există o greșeală. Iată exerciții noi.',
     failed: 'Nu s-a putut șterge. Încearcă din nou.',
+    password: 'Parola contului',
+    passwordWrong: 'Parolă greșită.',
+    inCabinet: 'Contul se șterge din zona părinților: „Cont” → „Date”. Vei avea nevoie de sarcina pentru adulți și de parolă.',
+    goCabinet: 'Deschide zona părinților',
     check: 'Verifică',
     cannotUndo: 'Ștergerea nu poate fi anulată. Împreună cu contul dispar:',
     lossAdult: 'e-mailul, numele și parola adultului;',

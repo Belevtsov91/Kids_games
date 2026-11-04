@@ -9,10 +9,21 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
-      // Rapier встраивает wasm в JS (~3 МБ); поднимаем лимит, чтобы 3D работало офлайн.
       workbox: {
+        // Заранее кэшируем только лёгкое (оболочка, 2D-игры, обложки). Тяжёлые 3D-куски (Rapier ~2,4 МБ)
+        // кэшируются при первом запуске игры (runtimeCaching ниже), а не качаются всем при первом визите.
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,svg,png,webp,ico,wasm}'],
+        globIgnores: ['**/react-three-rapier*.js', '**/three.module*.js', '**/*-cover-*.png'],
+        // /api — всегда сервер: без этого навигация на /api/parent/export получила бы index.html из кэша.
+        navigateFallbackDenylist: [/^\/api\//],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/assets/'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'ig-assets', expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 60 } },
+          },
+        ],
       },
       manifest: {
         name: 'Interact Games',

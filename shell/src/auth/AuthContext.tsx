@@ -45,7 +45,7 @@ interface AuthValue {
   addChild(data: Omit<Child, 'id'>): Promise<Child>;
   selectChild(childId: string): Promise<void>;
   /** Удалить аккаунт со всеми профилями и сохранениями. */
-  deleteAccount(): Promise<void>;
+  deleteAccount(password: string): Promise<void>;
 }
 
 const AuthContext = createContext<AuthValue | null>(null);
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       me,
       activeChild: me?.children.find((c) => c.id === me.activeChildId) ?? null,
       async register(data, opts) {
-        await api.post('/auth/register', data);
+        await api.post('/auth/register', { ...data, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
         if (!opts?.silent) await refresh();
       },
       async login(data, opts) {
@@ -99,8 +99,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isLocale(lang)) setLocale(lang);
         setMe((prev) => (prev ? { ...prev, activeChildId: childId } : prev));
       },
-      async deleteAccount() {
-        await api.delete('/auth/account');
+      async deleteAccount(password) {
+        await api.delete('/auth/account', { password });
         setMe(null);
       },
     }),

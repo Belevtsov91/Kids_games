@@ -3,7 +3,8 @@ import type { GameInstance, GameManifest, GameSdk } from '@ig/sdk';
 import { loadGame } from '@/catalog/catalog';
 import { useI18n } from '@/i18n/I18nProvider';
 import type { Child } from '@/auth/AuthContext';
-import { createSdk } from './createSdk';
+import { comfortOf, createSdk } from './createSdk';
+import { hydrateStorage } from './syncedStorage';
 import { GameCrash, useGameCrash } from './GameCrash';
 
 interface Props {
@@ -25,6 +26,8 @@ interface Props {
 export function GameHost({ manifest, profile, child, onSticker, onExit, paused = false }: Props) {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
+  // Удобство и для старых игр, которые sdk.comfort не читают: оболочка ставит атрибуты, CSS делает остальное.
+  const comfort = comfortOf(child);
   const exitRef = useRef(onExit);
   exitRef.current = onExit;
   // Профиль берётся на момент запуска; смена профиля внутри игры не предусмотрена.
@@ -53,7 +56,7 @@ export function GameHost({ manifest, profile, child, onSticker, onExit, paused =
 
     (async () => {
       try {
-        const game = await loadGame(manifest.id);
+        const [game] = await Promise.all([loadGame(manifest.id), hydrateStorage(manifest.id, profileRef.current?.id ?? null)]);
         if (disposed) return;
         const sdk = createSdk(manifest, profileRef.current, () => exitRef.current(), {
           child: extrasRef.current.child,
@@ -88,7 +91,14 @@ export function GameHost({ manifest, profile, child, onSticker, onExit, paused =
 
   return (
     <>
-      <div ref={containerRef} className="game-container" data-testid="game-container" data-state={state} />
+      <div
+        ref={containerRef}
+        className="game-container"
+        data-testid="game-container"
+        data-state={state}
+        data-reduce-motion={comfort.reduceMotion || undefined}
+        data-big-buttons={comfort.bigButtons || undefined}
+      />
       {state === 'loading' && <div className="loading">{t.common.loading}</div>}
       {state === 'error' && <div className="loading">{t.game.failed}</div>}
       {crashed && state === 'running' && <GameCrash onRetry={() => setAttempt((n) => n + 1)} onExit={() => exitRef.current()} />}

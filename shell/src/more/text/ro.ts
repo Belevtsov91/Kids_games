@@ -44,6 +44,7 @@ export const ro: MoreText = {
     next: 'Înainte',
     done: 'Gata, la joacă!',
     weak: 'PIN prea simplu, alege altul.',
+    pinNeeded: 'Copilul are 7 ani sau mai mult: rezolvă singur sarcina pentru adulți, așa că PIN-ul e obligatoriu.',
   },
   game: {
     eyebrow: 'Joc',
@@ -60,6 +61,8 @@ export const ro: MoreText = {
     title: 'Ce e nou',
     lead: 'Jocuri și funcții noi pe site.',
     items: [
+      { date: '2026-11-04', icon: '🎮', title: 'Încă nouă jocuri noi', text: 'Mâncătorul de litere, Grădinarul spațial, Căsuța emoțiilor, Respiră cu dragonul, Magazinul mic, Trenulețul memoriei, Fă-ți rucsacul, Robotul bucătar și altele — peste douăzeci de jocuri în catalog.' },
+      { date: '2026-11-04', icon: '☁️', title: 'Planul zilei și salvări în cloud', text: 'Un plan scurt pentru azi, jocuri salvate pe toate dispozitivele și mesajul „mai sunt 2 minute” în orice joc.' },
       { date: '2026-11-04', icon: '🐻', title: 'Joc nou „Teo merge la culcare”', text: 'Un joc liniștit pentru 3–5 ani: cină, baie, dinți, pijama și poveste. Culori, forme și numărat până la cinci — iar copilul adoarme odată cu Teo.' },
       { date: '2026-11-04', icon: '⭐', title: 'Album de abțibilduri și „Ce a învățat”', text: 'Abțibilduri pentru reușite în toate jocurile, iar pentru adulți — ce abilități îi reușesc.' },
       { date: '2026-11-04', icon: '📬', title: 'Cereri de timp pe e-mail și ajutoare', text: 'Poți răspunde direct din e-mail, iar bunicii sau bonei îi poți da propriul link.' },

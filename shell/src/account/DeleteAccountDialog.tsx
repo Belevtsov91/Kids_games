@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
+import { ApiError } from '@/api/client';
 import { useI18n } from '@/i18n/I18nProvider';
 import { allCorrect, makeProblems } from './parentCheck';
 
@@ -16,6 +17,7 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState<'check' | 'confirm'>('check');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     const d = dialogRef.current;
@@ -37,13 +39,14 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
   };
 
   const remove = async () => {
+    if (!password) return setError(a.passwordWrong);
     setBusy(true);
     setError(null);
     try {
-      await deleteAccount();
+      await deleteAccount(password);
       navigate('/', { replace: true });
-    } catch {
-      setError(a.failed);
+    } catch (err) {
+      setError(err instanceof ApiError && err.data?.code === 'password' ? a.passwordWrong : a.failed);
       setBusy(false);
     }
   };
@@ -87,6 +90,10 @@ export function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
             <li>{kids > 0 ? a.lossKids(kids) : a.lossSaves}</li>
             <li>{a.lossDevices}</li>
           </ul>
+          <label className="parent-problem">
+            <span>{a.password}</span>
+            <input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </label>
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="account-actions">
             <button type="button" className="btn btn-secondary" onClick={onClose} disabled={busy}>{a.keep}</button>

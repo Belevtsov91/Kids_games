@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router';
+
+let shellMounts = 0;
 import { DashSky } from '@/dashboard/DashSky';
 import { useAuth } from '@/auth/AuthContext';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
@@ -73,6 +75,28 @@ export function ParentShell() {
   const lock = useCallback(async () => {
     await papi.raw.post('/lock', {}).catch(() => undefined);
     setState((s) => s && { ...s, open: false });
+  }, []);
+
+  // Ушли из кабинета (ссылка, «назад», закрыли вкладку) — кабинет закрывается сразу,
+  // а не через 15 минут: иначе ребёнок зайдёт в него следом без задачи и PIN.
+  useEffect(() => {
+    const close = () => {
+      void fetch(`${import.meta.env.VITE_API_URL ?? '/api'}/parent/lock`, {
+        method: 'POST',
+        credentials: 'include',
+        keepalive: true,
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      }).catch(() => undefined);
+    };
+    window.addEventListener('pagehide', close);
+    shellMounts += 1;
+    return () => {
+      window.removeEventListener('pagehide', close);
+      shellMounts -= 1;
+      // StrictMode в dev размонтирует и сразу монтирует снова: закрываем, только если кабинет правда ушёл.
+      setTimeout(() => shellMounts === 0 && close(), 300);
+    };
   }, []);
 
   const ctx: ParentCtx = { toast: setMessage, lock };

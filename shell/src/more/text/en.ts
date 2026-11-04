@@ -44,6 +44,7 @@ export const en: MoreText = {
     next: 'Next',
     done: 'Done, let’s play!',
     weak: 'That PIN is too easy, pick another one.',
+    pinNeeded: 'Your child is 7 or older and can solve the grown-up puzzle, so a PIN is required.',
   },
   game: {
     eyebrow: 'Game',
@@ -60,6 +61,8 @@ export const en: MoreText = {
     title: 'What’s new',
     lead: 'New games and features.',
     items: [
+      { date: '2026-11-04', icon: '🎮', title: 'Nine more new games', text: 'Letter Eater, Space Gardener, House of Feelings, Breathe with Dragon, Little Shop, Memory Train, Pack Your Bag, Robot Chef and more: over twenty games in the catalogue now.' },
+      { date: '2026-11-04', icon: '☁️', title: 'Day plan and cloud saves', text: 'A short plan for today, game saves on every device, and a “2 minutes left” banner in any game.' },
       { date: '2026-11-04', icon: '🐻', title: 'New game: “Teddy’s Bedtime”', text: 'A calm game for ages 3–5: dinner, bath, teeth, pyjamas and a bedtime story. Colours, shapes and counting to five — and your child winds down with Teddy.' },
       { date: '2026-11-04', icon: '⭐', title: 'Sticker album and “What they learned”', text: 'Stickers for wins in every game, and for grown-ups — which skills are clicking.' },
       { date: '2026-11-04', icon: '📬', title: 'Time requests by email, and helpers', text: 'Answer right from the email, or give a grandparent or babysitter their own link.' },

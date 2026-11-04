@@ -1,30 +1,13 @@
-import type { GameComfort, GameManifest, GameSdk, GameStorage } from '@ig/sdk';
+import type { GameComfort, GameManifest, GameSdk } from '@ig/sdk';
 import { createApiClient } from '@/api/client';
 import type { Child } from '@/auth/AuthContext';
 import { isToddler } from '@/kid/toddler';
 import { timeBus } from '@/kid/timeBus';
 import { createCloud } from './cloud';
+import { createSyncedStorage } from './syncedStorage';
 import { createProgressQueue, type ProgressQueue } from './progressQueue';
 import { localeStore } from '@/i18n/locale';
 import { settings } from './settings';
-
-function createStorage(gameId: string): GameStorage {
-  const prefix = `ig:game:${gameId}:`;
-  return {
-    load<T>(key: string) {
-      const raw = localStorage.getItem(prefix + key);
-      if (raw === null) return null;
-      try {
-        return JSON.parse(raw) as T;
-      } catch {
-        return null;
-      }
-    },
-    save(key, value) {
-      localStorage.setItem(prefix + key, JSON.stringify(value));
-    },
-  };
-}
 
 /** Удобство из настроек ребёнка; системное «уменьшить движение» тоже считается. */
 export function comfortOf(child: Child | null | undefined): GameComfort {
@@ -57,7 +40,7 @@ export function createSdk(
     manifest,
     profile,
     api: createApiClient(`/games/${manifest.id}`),
-    storage: createStorage(manifest.id),
+    storage: createSyncedStorage(manifest.id, profile?.id ?? null),
     locale: localeStore.get(),
     audio: {
       get muted() {
@@ -65,7 +48,7 @@ export function createSdk(
       },
       onMuteChange: settings.onMuteChange,
     },
-    progress: createProgressQueue(manifest, Boolean(profile), extras.onSticker),
+    progress: createProgressQueue(manifest, Boolean(profile), extras.onSticker, profile?.id ?? null),
     time: {
       get remaining() {
         return timeBus.remaining;

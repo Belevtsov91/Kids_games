@@ -7,8 +7,11 @@ import { PinStep } from './PinStep';
 
 const COOLDOWN_S = 30;
 
-/** Вход в кабинет: задача для взрослых, потом PIN (если включён). Ответ проверяет только сервер. */
-export function ParentGate({ hasPin, onUnlocked }: { hasPin: boolean; onUnlocked: () => void }) {
+/**
+ * Вход в кабинет: задача для взрослых, потом PIN (если включён). Ответ проверяет только сервер.
+ * purpose 'switch' — взрослый разрешает одну смену профиля, кабинет при этом не открывается.
+ */
+export function ParentGate({ hasPin, purpose, onUnlocked }: { hasPin: boolean; purpose?: 'switch'; onUnlocked: () => void }) {
   const p = useParentText();
   const [task, setTask] = useState<{ challenge: Challenge; token: string } | null>(null);
   const [answer, setAnswer] = useState('');
@@ -43,7 +46,7 @@ export function ParentGate({ hasPin, onUnlocked }: { hasPin: boolean; onUnlocked
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!task || !answer.trim() || cooldown) return;
-    const body = { token: task.token, answer: Number(answer), tz: browserZone() };
+    const body = { token: task.token, answer: Number(answer), tz: browserZone(), ...(purpose ? { purpose } : {}) };
     try {
       if (hasPin) {
         await papi.raw.post('/check', body);
@@ -110,7 +113,7 @@ export function ParentGate({ hasPin, onUnlocked }: { hasPin: boolean; onUnlocked
             </div>
           </>
         ) : (
-          task && <PinStep token={task.token} answer={Number(answer)} onUnlocked={onUnlocked} onFail={() => setShake((n) => n + 1)} />
+          task && <PinStep token={task.token} answer={Number(answer)} purpose={purpose} onUnlocked={onUnlocked} onFail={() => setShake((n) => n + 1)} />
         )}
       </div>
     </section>

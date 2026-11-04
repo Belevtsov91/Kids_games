@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
+import { gameCount } from '@/i18n/plural';
+import { games } from '@/catalog/catalog';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
 import { ALL_IDS, isBig, showcaseGame, type BigId, type ShowcaseId } from '../showcase';
 import type { WelcomeScene } from '../scene/WelcomeScene';
@@ -72,7 +74,7 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
       <div className="wl-copy">
         <div className="wl-wrap">
           <div className="wl-copy-inner">
-            <span className="wl-eyebrow">{h.eyebrow}</span>
+            <span className="wl-eyebrow">{gameCount(locale, games.length)} · {h.eyebrow}</span>
             <h1>
               {h.titleStart}<span className="wl-hl">{h.titleAccent}</span>{h.titleEnd}
             </h1>

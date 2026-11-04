@@ -15,7 +15,7 @@ export const en: Dict = {
   },
   hero: {
     canvas: 'Flying islands: every island is a game',
-    eyebrow: '20 games · ages 3 to 15',
+    eyebrow: 'ages 3 to 15',
     titleStart: 'Hi! Pick ',
     titleAccent: 'your world',
     titleEnd: ' and play!',
@@ -102,7 +102,7 @@ export const en: Dict = {
     tooMany: 'You cannot add more profiles.',
     saving: 'Saving…',
     done: 'Done',
-    locked: { limit: 'Time is up for today. Only a grown-up can switch profiles.', quiet: "It's quiet time now. Only a grown-up can switch profiles.", adult: "I'm a grown-up", back: 'Back' },
+    locked: { rules: 'This profile has a time limit. Only a grown-up can switch profiles.', limit: 'Time is up for today. Only a grown-up can switch profiles.', quiet: "It's quiet time now. Only a grown-up can switch profiles.", adult: "I'm a grown-up", back: 'Back' },
   },
   menu: {
     changeProfile: 'Switch profile',
@@ -133,6 +133,10 @@ export const en: Dict = {
     answer: (problem) => `Answer: ${problem}`,
     wrong: 'There is a mistake. Here are new problems.',
     failed: 'Could not delete. Please try again.',
+    password: 'Account password',
+    passwordWrong: 'Wrong password.',
+    inCabinet: "You can delete the account in the parent area: Account → Data. You'll need the grown-up puzzle and your password.",
+    goCabinet: 'Open the parent area',
     check: 'Check',
     cannotUndo: 'Deletion cannot be undone. Together with the account you will lose:',
     lossAdult: 'the grown-up’s email, name and password;',

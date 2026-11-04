@@ -11,7 +11,7 @@ export const privacy: InfoContent = {
   icon: '🔒',
   dated: true,
   summary:
-    'Păstrăm doar ce e necesar pentru intrare și salvări: e-mailul părintelui, numele sau porecla copilului, vârsta lui și progresul în jocuri. Fără reclame, fără trackere, fără vânzare de date.',
+    'Păstrăm doar ce e nevoie pentru autentificare, regulile de timp și salvări: emailul părintelui, numele sau porecla copilului, vârsta, setările și reușitele din jocuri. Fără reclame, fără trackere, fără vânzare de date.',
   body: (
     <>
       <h2>Cine răspunde de date</h2>
@@ -20,24 +20,27 @@ export const privacy: InfoContent = {
       </p>
       <h2>Ce păstrăm</h2>
       <ul>
-        <li><b>Despre adult:</b> e-mailul, un nume pentru salut și parola. Parola se păstrează doar ca hash, noi nu o vedem.</li>
-        <li><b>Despre copil:</b> numele sau porecla, vârsta între 3 și 15 ani și imaginea-avatar aleasă.</li>
-        <li><b>Progresul:</b> salvările jocurilor, de exemplu insula construită, nivelurile și misiunile terminate.</li>
-        <li><b>Sesiunea de intrare:</b> o înregistrare tehnică, ca să nu introduci parola de fiecare dată. Durează 7 zile.</li>
+        <li><b>Despre adult:</b> email, nume pentru salut, parola și PIN-ul contului (ambele doar ca hash), fusul orar și, dacă o încarci tu, o fotografie mică 256×256.</li>
+        <li><b>Despre copil:</b> nume sau poreclă, vârstă, avatar, opțional luna nașterii (pentru felicitare) și o fotografie 256×256, limba și setările de confort.</li>
+        <li><b>Reguli și timp:</b> limite, ore de liniște, pauze, jocuri închise, minutele de joc pe zile și cererile de timp suplimentar.</li>
+        <li><b>Reușite:</b> salvările jocurilor, desene și melodii, niveluri trecute, abțibilduri și răspunsuri pe abilități (corect sau nu) pentru pagina „Ce a învățat”.</li>
+        <li><b>Ajutoare:</b> numele și, dacă îl dai, emailul bunicii, bonei sau altui adult căruia i-ai permis să răspundă la cereri.</li>
+        <li><b>Sesiunea de autentificare:</b> o înregistrare tehnică ca să nu introduci parola de fiecare dată. Durează 7 zile.</li>
       </ul>
+      <p>Salutul vocal înregistrat de adult rămâne doar pe acest dispozitiv și nu este trimis la server.</p>
       <h2>Ce nu colectăm</h2>
-      <p>Numele de familie, fotografii, vocea, locația, contactele, școala, identificatori de publicitate. În jocuri nu există chat sau mesaje.</p>
+      <p>Numele de familie, localizarea, contactele, școala, identificatorii de publicitate. În jocuri nu există chat și nici mesaje între oameni.</p>
       <h2>De ce</h2>
-      <p>Ca părintele să poată intra, copilul să-și aleagă profilul, iar jocurile să țină minte progresul. Pentru nimic altceva: nici reclame, nici analiză, nici profilare.</p>
+      <p>Ca părintele să se poată autentifica și seta timpul, copilul să-și aleagă profilul, iar jocurile să țină minte progresul pe toate dispozitivele. Fără reclame, fără analiză terță, fără profilare.</p>
       <h2>Unde se păstrează datele și cine le vede</h2>
       <p>
-        În baza de date Supabase (Postgres), regiunea <Fill value={SITE.dbRegion} />. Site-ul este găzduit pe Vercel. Aceste companii prelucrează datele
-        doar la cererea noastră. Nu transmitem și nu vindem datele nimănui altcuiva.
+        Baza de date este Supabase (Postgres), regiunea <Fill value={SITE.dbRegion} />. Site-ul e găzduit pe Vercel, serverul pe Render, iar emailurile le trimite Brevo.
+        Aceste companii prelucrează datele doar la cererea noastră. Nu transmitem și nu vindem datele nimănui altcuiva.
       </p>
       <h2>Cât timp le păstrăm</h2>
       <p>
-        Cât timp există contul. Sesiunile de intrare se șterg după 7 zile. După ștergerea contului datele se șterg imediat, iar copiile de rezervă ale
-        găzduirii se suprascriu în <Fill value={SITE.backupDays} />.
+        Cât timp există contul. Sesiunile se șterg după 7 zile, linkurile de resetare a parolei după expirare, iar răspunsurile detaliate pe abilități după
+        180 de zile. După ștergerea contului datele dispar imediat, iar copiile de rezervă ale găzduirii se suprascriu în <Fill value={SITE.backupDays} />.
       </p>
       <h2>Drepturile tale</h2>
       <p>

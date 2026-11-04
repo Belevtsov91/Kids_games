@@ -8,7 +8,7 @@ export const about: InfoContent = {
   eyebrow: 'About',
   color: '#a99bff',
   icon: '🐻',
-  summary: 'Interact Games is ten games for kids aged 3 to 15 in one place: we draw, build, count and save Moon Valley.',
+  summary: 'Interact Games is a set of games for kids aged 3 to 15 in one place: we draw, build, count and save Moon Valley.',
   body: (
     <>
       <h2>Why we do this</h2>

@@ -5,7 +5,7 @@ import { useParentText } from '../text';
 import { PinPad } from '../ui/PinPad';
 
 /** Шаг 2: PIN. «Забыли PIN?» и блокировка после 5 ошибок — вход паролем аккаунта. */
-export function PinStep({ token, answer, onUnlocked, onFail }: { token: string; answer: number; onUnlocked: () => void; onFail: () => void }) {
+export function PinStep({ token, answer, purpose, onUnlocked, onFail }: { token: string; answer: number; purpose?: 'switch'; onUnlocked: () => void; onFail: () => void }) {
   const p = useParentText();
   const [mode, setMode] = useState<'pin' | 'password'>('pin');
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export function PinStep({ token, answer, onUnlocked, onFail }: { token: string; 
   const unlock = async (extra: { pin?: string; password?: string }) => {
     setBusy(true);
     try {
-      await papi.raw.post('/unlock', { token, answer, tz: browserZone(), ...extra });
+      await papi.raw.post('/unlock', { token, answer, tz: browserZone(), ...(purpose ? { purpose } : {}), ...extra });
       onUnlocked();
     } catch (err) {
       const code = errorCode(err);
