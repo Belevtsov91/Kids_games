@@ -7,4 +7,10 @@ export default defineManifest({
   emoji: '🖍️',
   kind: '2d',
   ages: { min: 3, max: 15 },
+  skills: ['creativity', 'colors', 'motor'],
+  stickers: [
+    { id: 'first-drawing', emoji: '🖍️', title: 'Первый рисунок', titles: { uk: 'Перший малюнок', ro: 'Primul desen', en: 'First drawing' } },
+    { id: 'first-coloring', emoji: '🎨', title: 'Первая раскраска', titles: { uk: 'Перша розмальовка', ro: 'Prima colorare', en: 'First colouring' } },
+    { id: 'ten-drawings', emoji: '🖼️', title: 'Десять рисунков', titles: { uk: 'Десять малюнків', ro: 'Zece desene', en: 'Ten drawings' } },
+  ],
 });

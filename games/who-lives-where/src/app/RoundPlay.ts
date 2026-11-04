@@ -20,6 +20,8 @@ interface RoundHost {
   timers: Timers;
   /** Все зверята дома; `mistakes` — сколько было промахов. */
   onWin(mistakes: number): void;
+  /** Ответ ребёнка для навыков платформы (sdk.progress). */
+  answer(ok: boolean): void;
 }
 
 export class RoundPlay {
@@ -92,6 +94,7 @@ export class RoundPlay {
     if (card.dataset.home !== home.id) {
       const misses = (this.mistakes.get(animal.id) ?? 0) + 1;
       this.mistakes.set(animal.id, misses);
+      this.host.answer(false);
       sound.wrong();
       sound.say(tr().sayWrong(animalName(animal)));
       timers.replayClass(card, 'is-wrong');
@@ -104,6 +107,7 @@ export class RoundPlay {
     }
 
     this.placed.add(animal.id);
+    this.host.answer(true);
     sound.correct();
     sound.say(`${tr().sayLives(animalName(animal), homeWhere(home))}!`);
     flyHome(this.host.root, token, animal, card, (x, y) => {

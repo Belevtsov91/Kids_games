@@ -26,6 +26,7 @@ export class OrchestraApp implements OrchestraContext {
   readonly toast = new Toast();
   readonly stage: Stage;
   readonly playback: Playback;
+  readonly progress: GameSdk['progress'];
   soundMode: SoundMode = 'instrument';
 
   private readonly tabs: ModeTabs;
@@ -35,6 +36,7 @@ export class OrchestraApp implements OrchestraContext {
   private readonly cleanups: (() => void)[] = [];
 
   constructor(sdk: GameSdk) {
+    this.progress = sdk.progress;
     this.stage = new Stage((animal) => this.mode.onAnimal(animal), () => this.audio.unlock());
     this.playback = new Playback(
       (animal, sound) => this.hit(animal, sound),

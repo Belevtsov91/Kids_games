@@ -1,3 +1,4 @@
+import type { GameProgress } from '@ig/sdk';
 import type { OrchestraAudio } from '../audio/OrchestraAudio';
 import type { Animal } from '../game/animals';
 import type { SoundMode } from '../game/song';
@@ -15,6 +16,8 @@ export interface OrchestraContext {
   readonly stage: Stage;
   readonly playback: Playback;
   readonly toast: Toast;
+  /** Навыки и наклейки платформы. */
+  readonly progress: GameProgress;
   /** Выбранный звук: инструменты или голоса. */
   readonly soundMode: SoundMode;
   setSoundMode(mode: SoundMode): void;

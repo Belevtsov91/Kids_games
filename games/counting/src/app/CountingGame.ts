@@ -8,11 +8,11 @@ import { homeView } from '../ui/homeView';
 import { renderKeepingFocus } from '../ui/html';
 import { resultView, shellView } from '../ui/layout';
 import { playView } from '../ui/playView';
+import { pullCloud, pushCloud, reportAnswer, reportFinish } from './platform';
 import { applyPreference, promptSpeech } from './prompts';
 import { defaultPreferences, loadSaved, progressKey, saveState, type Preferences, type Progress } from './savedState';
 
-// Контроллер: состояние сессии, обработка нажатий и перерисовка экрана целиком.
-// Текст озвучки задания и разбор настроек — в prompts.ts, сохранение — в savedState.ts.
+// Контроллер: сессия, нажатия, перерисовка. Озвучка — prompts.ts, сохранение — savedState.ts, платформа — platform.ts.
 
 export class CountingGame {
   private root = document.createElement('div');
@@ -37,6 +37,7 @@ export class CountingGame {
     const saved = loadSaved(sdk.storage, this.storageKey);
     if (saved) ({ prefs: this.prefs, progress: this.progress } = saved);
     else this.failedSave = true;
+    void pullCloud(sdk, this.progress).then((p) => p && !this.disposed && ((this.progress = p), this.render()));
     // Язык интерфейса и голоса при запуске — как на сайте; внутри игры его можно сменить.
     this.prefs = { ...this.prefs, language: sdk.locale, speech: sdk.locale };
     this.root.className = 'counting-game';
@@ -73,6 +74,7 @@ export class CountingGame {
 
   private save() {
     if (!saveState(this.sdk.storage, this.storageKey, this.prefs, this.progress)) this.failedSave = true;
+    pushCloud(this.sdk, this.progress);
   }
 
   private say(text: string) {
@@ -105,6 +107,7 @@ export class CountingGame {
   private answer(value: number) {
     const result = this.session?.answer(value);
     if (!result) return;
+    reportAnswer(this.sdk, this.mode, result === 'right');
     if (result === 'right') this.audio.reward();
     const key = result === 'right' ? 'correct' : 'retry';
     this.feedback = words[this.prefs.language][key];
@@ -122,6 +125,7 @@ export class CountingGame {
     const key = progressKey(session.mode, this.prefs);
     this.progress[key] = Math.max(this.progress[key] ?? 0, session.stars);
     this.save();
+    reportFinish(this.sdk, session.mode, session.stars, this.progress, this.prefs.limit);
     this.screen = 'result';
     this.render();
   }
@@ -191,7 +195,6 @@ export class CountingGame {
     renderKeepingFocus(this.root, shellView(t, body, { ...options, voiceMissing: !this.audio.hasVoice(this.prefs.speech) }));
     // Не даём ответить повторно и случайно перескочить вперёд; отзыв остаётся в той же живой области.
     if (s?.solved) this.root.querySelectorAll<HTMLButtonElement>('[data-action="check"], [data-action="food"]').forEach((b) => (b.disabled = true));
-    // Слева в шапке — кнопка «В меню» оболочки.
     this.root.querySelector<HTMLElement>('.cg-header')!.style.paddingLeft = '48px';
   }
 }

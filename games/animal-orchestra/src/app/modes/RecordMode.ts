@@ -96,6 +96,8 @@ export class RecordMode implements Mode {
       this.ctx.audio.praise();
       this.ctx.fx.confetti();
       this.ctx.toast.show(tr().saved);
+      this.ctx.progress.skill('creativity', true);
+      this.ctx.progress.sticker('my-melody');
     } catch {
       this.ctx.toast.show(tr().saveFailed);
     }

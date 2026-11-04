@@ -6,6 +6,7 @@ import { fits, gridForLevel, shuffled, type Grid, type LevelId } from '../game/p
 import { betterTurned, fitGrid, type Viewport } from '../game/boardFit';
 import { loadProgress, saveProgress, SAVE_FROM } from '../storage/progress';
 import type { SavedPuzzleImage } from '../storage/imageLibrary';
+import { reportPlace, rewardSolved } from '../storage/rewards';
 import type { createSound } from '../audio/sound';
 import { tr } from '../i18n';
 
@@ -50,12 +51,14 @@ export function usePuzzle(sdk: GameSdk, sound: Sound, view: Viewport) {
     if (!puzzle || board[cell] !== null) return;
     if (!fits(piece, cell)) {
       sound.miss();
+      reportPlace(sdk, false);
       setMissCell(cell);
       window.clearTimeout(missTimer.current);
       missTimer.current = window.setTimeout(() => setMissCell(null), 450);
       setMessage(tr().miss);
       return;
     }
+    reportPlace(sdk, true);
     const nextBoard = board.map((value, index) => (index === cell ? piece : value));
     const done = nextBoard.every((value, index) => value === index);
     setBoard(nextBoard);
@@ -67,6 +70,7 @@ export function usePuzzle(sdk: GameSdk, sound: Sound, view: Viewport) {
     }
     if (done) {
       sound.win();
+      void rewardSolved(sdk, total, 'createdAt' in puzzle);
       setMessage(tr().solved);
     } else {
       sound.snap();

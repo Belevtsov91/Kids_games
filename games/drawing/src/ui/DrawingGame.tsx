@@ -4,6 +4,7 @@ import { DrawingEngine } from '../engine/DrawingEngine';
 import { palette, tools, type BrushTool } from '../tools';
 import { sound } from '../audio/sound';
 import { drawingsApi } from '../api/drawings';
+import { rewardSaved } from '../api/rewards';
 import { drawingTitle, tr } from '../i18n';
 import { Gallery } from './Gallery';
 import { ColoringStudio } from './ColoringStudio';
@@ -69,6 +70,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
       await api.save(drawingTitle(), await engine.exportPng());
       sound.play('save');
       flash('saved');
+      void rewardSaved(sdk, api, 'drawing');
     } catch {
       flash('failed');
     }
@@ -154,7 +156,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
         </div>
       </div>
       {gallery && <Gallery api={api} onOpen={(image) => void openDrawing(image)} onClose={closeGallery} />}
-      {coloring && <ColoringStudio onClose={() => setColoring(false)} onSave={async (title, image) => { await api.save(title, image); sound.play('save'); }} />}
+      {coloring && <ColoringStudio onClose={() => setColoring(false)} onSave={async (title, image) => { await api.save(title, image); sound.play('save'); void rewardSaved(sdk, api, 'coloring'); }} />}
     </div>
   );
 }
