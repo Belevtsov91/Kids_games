@@ -15,7 +15,7 @@ export const ro: Dict = {
   },
   hero: {
     canvas: 'Insule zburătoare: fiecare insulă este un joc',
-    eyebrow: '11 jocuri · de la 3 la 15 ani',
+    eyebrow: '19 jocuri · de la 3 la 15 ani',
     titleStart: 'Salut! Alege-ți ',
     titleAccent: 'lumea',
     titleEnd: ' și joacă-te!',

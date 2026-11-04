@@ -15,7 +15,7 @@ export const en: Dict = {
   },
   hero: {
     canvas: 'Flying islands: every island is a game',
-    eyebrow: '11 games · ages 3 to 15',
+    eyebrow: '19 games · ages 3 to 15',
     titleStart: 'Hi! Pick ',
     titleAccent: 'your world',
     titleEnd: ' and play!',
