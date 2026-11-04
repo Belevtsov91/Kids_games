@@ -25,4 +25,7 @@ export default defineManifest({
     ro: 'Jucați pe rând: cine ține minte mai multe vagoane? Spuneți cu voce tare: „vagonul albastru — pisica”.',
     en: 'Take turns: who remembers more carriages? Say it out loud: “blue carriage — cat”.',
   },
+  tagline: 'Запомни, кто едет в каждом вагоне паровозика.',
+  taglines: { uk: 'Запам’ятай, хто їде в кожному вагоні потяга.', ro: 'Ține minte cine călătorește în fiecare vagon.', en: 'Remember who rides in each carriage of the train.' },
+  color: '#ffd27a',
 });

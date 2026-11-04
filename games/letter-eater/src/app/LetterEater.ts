@@ -2,6 +2,7 @@ import type { GameSdk } from '@ig/sdk';
 import { ProgressStore } from '../api/progress';
 import { Sound } from '../audio/Sound';
 import { pickWords, starsFor } from '../game/logic';
+import { levelDone, wordDone } from './rewards';
 import { ALPHABET, LEVELS, type Level, type Word } from '../game/words';
 import { confetti } from '../ui/confetti';
 import { h } from '../ui/dom';
@@ -19,16 +20,13 @@ export class LetterEater {
   private readonly monster = new Monster();
   private readonly progress: ProgressStore;
   private readonly cleanup: (() => void)[] = [];
-  /** Растёт при смене экрана: отложенные действия старого экрана видят, что устарели. */
-  private screenToken = 0;
-
-  // Состояние уровня и текущего слова.
+  private screenToken = 0; // растёт при смене экрана: отложенные действия старого экрана видят, что устарели
   private level: Level = LEVELS[0];
   private words: Word[] = [];
   private roundIndex = 0;
-  /** Текущее слово; null на экране уровней. */
-  private round: WordRound | null = null;
+  private round: WordRound | null = null; // null на экране уровней
   private totalMistakes = 0;
+  private wordStartMistakes = 0;
 
   constructor(
     container: HTMLElement,
@@ -115,6 +113,7 @@ export class LetterEater {
   }
 
   private startRound() {
+    this.wordStartMistakes = this.totalMistakes;
     const word = this.words[this.roundIndex];
     const screen = playScreen({
       word,
@@ -142,6 +141,7 @@ export class LetterEater {
   }
 
   private nextWord() {
+    wordDone(this.sdk, this.totalMistakes === this.wordStartMistakes);
     this.roundIndex++;
     if (this.roundIndex < this.words.length) this.startRound();
     else this.levelComplete();
@@ -152,6 +152,7 @@ export class LetterEater {
     const stars = starsFor(this.totalMistakes, this.words.length);
     const firstTime = (this.progress.stars[levelIndex] ?? 0) === 0;
     void this.progress.save(levelIndex, stars);
+    levelDone(this.sdk, levelIndex, stars, levelIndex === LEVELS.length - 1);
     const next = levelIndex + 1 < LEVELS.length ? levelIndex + 1 : null;
 
     this.sound.fanfare();

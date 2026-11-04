@@ -85,6 +85,7 @@ export class EmotionHouse {
     const before = this.progress.rooms[e] ?? 0;
     this.save(recordCorrect(this.progress, e));
     this.sdk.progress.level(e);
+    this.sdk.progress.skill('emotions', true);
     if (before < ROOM_FULL && (this.progress.rooms[e] ?? 0) >= ROOM_FULL) {
       this.sdk.progress.sticker('first-room');
       if (litRooms(this.progress) >= 6) this.sdk.progress.sticker('all-rooms');

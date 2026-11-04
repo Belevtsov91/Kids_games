@@ -48,6 +48,7 @@ export const ro: FamilyText = {
       motor: 'Construiește un turn din zece cuburi sau cărți.',
       space: 'Ascunde o jucărie și spune unde e: sub, peste, după sau lângă.',
       nature: 'Uită-te pe geam: ce vreme e și ce anotimp?',
+      emotions: 'Arată cu fața bucurie, tristețe și uimire — să ghicească adultul.',
     } as Record<string, string>,
     done: 'Gata! ✓',
     thanks: 'Ura! Ursulețul e mândru de tine.',

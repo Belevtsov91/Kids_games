@@ -18,6 +18,7 @@ import { useSceneObjects } from './useSceneObjects';
 import { useHint, useQuestToasts } from './useTimedMessages';
 import '../styles/index.css';
 import { tr } from '../i18n';
+import { reportQuests } from './rewards';
 
 // Корень игры: связывает состояние острова, сцену и панели интерфейса.
 
@@ -30,7 +31,7 @@ export default function App({ sdk, paused }: { sdk: GameSdk; paused: boolean }) 
   const [showQuests, setShowQuests] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [hint, setHint] = useHint();
-  const toasts = useQuestToasts(island);
+  const toasts = useQuestToasts(island, (done, total) => reportQuests(sdk, done, total));
   const actions = useIslandActions({ island, objects, tool, material, treeKind, showHint: setHint });
 
   // Браузер разрешает звук только после первого касания.

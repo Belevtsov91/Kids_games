@@ -24,4 +24,7 @@ export default defineManifest({
     { id: 'clean-paws', emoji: '🛁', title: 'Чистые лапки', titles: { uk: 'Чисті лапки', ro: 'Lăbuțe curate', en: 'Clean paws' } },
     { id: 'seven-nights', emoji: '🌌', title: 'Семь спокойных ночей', titles: { uk: 'Сім спокійних ночей', ro: 'Șapte nopți liniștite', en: 'Seven calm nights' } },
   ],
+  tagline: 'Уложи мишку Тёпу спать: ужин, купание, пижама и сказка.',
+  taglines: { uk: 'Поклади ведмедика Тьопу спати: вечеря, купання, піжама й казка.', ro: 'Culcă ursulețul Teo: cină, baie, pijama și poveste.', en: 'Put Teddy the bear to bed: supper, bath, pyjamas and a story.' },
+  color: '#9db4ff',
 });

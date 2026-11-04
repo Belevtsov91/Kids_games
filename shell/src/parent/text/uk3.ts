@@ -19,7 +19,7 @@ export const uk3: ParentTextC = {
     names: {
       count: 'Лічба', numbers: 'Цифри', letters: 'Букви', reading: 'Читання', colors: 'Кольори', shapes: 'Фігури',
       sizes: 'Великий і маленький', animals: 'Тварини', music: 'Музика і ритм', memory: 'Пам’ять', logic: 'Логіка',
-      creativity: 'Творчість', routine: 'Режим дня', motor: 'Дрібна моторика', space: 'Простір', nature: 'Природа',
+      creativity: 'Творчість', routine: 'Режим дня', motor: 'Дрібна моторика', space: 'Простір', nature: 'Природа', emotions: 'Емоції',
     },
   },
   comfort: {

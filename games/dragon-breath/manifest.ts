@@ -25,4 +25,7 @@ export default defineManifest({
     ro: 'Respirați împreună cu dragonul înainte de somn sau după o ceartă. Puneți palma pe burtică și simțiți cum se ridică.',
     en: 'Breathe along with the dragon before bed or after an argument. Put a hand on the tummy and feel it rise.',
   },
+  tagline: 'Дыши вместе с дракончиком и успокойся.',
+  taglines: { uk: 'Дихай разом із дракончиком і заспокойся.', ro: 'Respiră împreună cu dragonul și liniștește-te.', en: 'Breathe with the little dragon and feel calm.' },
+  color: '#8fe3d0',
 });

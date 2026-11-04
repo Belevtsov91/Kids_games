@@ -14,4 +14,7 @@ export default defineManifest({
     { id: 'half-album', emoji: '📗', title: 'Полальбома', titles: { uk: 'Пів альбому', ro: 'Jumătate de album', en: 'Half the album' } },
     { id: 'full-album', emoji: '🦁', title: 'Все зверята', titles: { uk: 'Усі звірята', ro: 'Toate animalele', en: 'Every animal' } },
   ],
+  tagline: 'Помоги лисёнку, черепахе и птичке найти свои домики.',
+  taglines: { uk: 'Допоможи лисеняті, черепасі й пташці знайти свої хатки.', ro: 'Ajută vulpița, broasca țestoasă și păsărica să-și găsească casa.', en: 'Help the fox, the tortoise and the bird find their homes.' },
+  color: '#ffc86b',
 });

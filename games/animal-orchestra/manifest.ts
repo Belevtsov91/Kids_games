@@ -15,4 +15,7 @@ export default defineManifest({
     { id: 'long-phrase', emoji: '🎼', title: 'Длинная мелодия', titles: { uk: 'Довга мелодія', ro: 'Melodie lungă', en: 'Long tune' } },
     { id: 'my-melody', emoji: '💾', title: 'Моя мелодия', titles: { uk: 'Моя мелодія', ro: 'Melodia mea', en: 'My tune' } },
   ],
+  tagline: 'Мишка, котик и лягушонок играют музыку. Повтори мелодию.',
+  taglines: { uk: 'Ведмедик, котик і жабеня грають музику. Повтори мелодію.', ro: 'Ursulețul, pisoiul și broscuța cântă. Repetă melodia.', en: 'A bear, a kitten and a frog play music. Repeat the tune.' },
+  color: '#ffa36b',
 });

@@ -165,7 +165,7 @@ export class SpaceGardener implements GameActions {
     this.updateHud();
   }
 
-  private cards = () => ({ overlay: this.overlay, progress: this.progress, sfx: this.sfx });
+  private cards = () => ({ sdk: this.sdk, overlay: this.overlay, progress: this.progress, sfx: this.sfx });
 
   private onWin = () => {
     this.bloomStart = performance.now();

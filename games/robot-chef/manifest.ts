@@ -25,4 +25,7 @@ export default defineManifest({
     ro: 'Rugați copilul să spună cu voce tare unde va merge robotul înainte de „Start”. Greșeala nu e un eșec, ci un prilej să găsiți împreună „bugul”.',
     en: "Ask your child to say out loud where the robot will go before pressing Start. A mistake isn't a failure, it's a bug to find together.",
   },
+  tagline: 'Составь команды, и робот приготовит суп.',
+  taglines: { uk: 'Склади команди, і робот зварить суп.', ro: 'Alcătuiește comenzile și robotul gătește supa.', en: 'Line up the commands and the robot cooks the soup.' },
+  color: '#7cc4ff',
 });

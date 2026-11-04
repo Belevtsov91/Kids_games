@@ -7,7 +7,7 @@ import { ageRange } from '@/i18n/plural';
 import { tilt } from './tilt';
 import { worldColor, worldText } from './worlds';
 
-const portalStyle = (game: GameManifest, delay = 0) => ({ '--c': worldColor(game.id), '--d': `${delay}s` }) as CSSProperties;
+const portalStyle = (game: GameManifest, delay = 0) => ({ '--c': worldColor(game), '--d': `${delay}s` }) as CSSProperties;
 
 /** Окно в мир: обложка игры без изменений, наклон за курсором, блик, свечение цвета игры и тень на облаках. */
 function PortalArt({ game, eager, children }: { game: GameManifest; eager?: boolean; children?: ReactNode }) {
@@ -44,7 +44,7 @@ export function GamePortal({ game, delay }: { game: GameManifest; delay?: number
         <span className="portal-icon" aria-hidden="true">{game.emoji}</span>
         <span className="portal-text">
           <strong>{title}</strong>
-          <small>{t.menu.kind[game.kind]} · {worldText(game.id, locale)}</small>
+          <small>{t.menu.kind[game.kind]} · {worldText(game, locale)}</small>
         </span>
         <span className="portal-go" aria-hidden="true">→</span>
       </span>

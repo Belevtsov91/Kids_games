@@ -7,6 +7,7 @@ export default defineManifest({
   emoji: '🏠',
   kind: '2d',
   ages: { min: 3, max: 7 },
+  skills: ['emotions'],
   stickers: [
     { id: 'first-room', emoji: '🏠', title: 'Первая комната', titles: { uk: 'Перша кімната', ro: 'Prima cameră', en: 'First room' } },
     { id: 'all-rooms', emoji: '🌈', title: 'Весь домик светится', titles: { uk: 'Увесь будиночок світиться', ro: 'Toată căsuța luminează', en: 'Whole house lit' } },
@@ -24,4 +25,7 @@ export default defineManifest({
     ro: 'Amintiți-vă o situație asemănătoare: „Când te-ai simțit așa?” Numiți și propriile emoții.',
     en: 'Recall a similar moment from real life: “When did you feel like that?” Name your own feelings too.',
   },
+  tagline: 'Узнай, что чувствуют зверята, и зажги комнаты домика.',
+  taglines: { uk: 'Дізнайся, що відчувають звірята, і засвіти кімнати будиночка.', ro: 'Află ce simt animăluțele și aprinde camerele căsuței.', en: 'Find out how the animals feel and light up the house.' },
+  color: '#ff9fb8',
 });

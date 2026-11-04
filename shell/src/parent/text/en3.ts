@@ -19,7 +19,7 @@ export const en3: ParentTextC = {
     names: {
       count: 'Counting', numbers: 'Numbers', letters: 'Letters', reading: 'Reading', colors: 'Colours', shapes: 'Shapes',
       sizes: 'Big and small', animals: 'Animals', music: 'Music and rhythm', memory: 'Memory', logic: 'Logic',
-      creativity: 'Creativity', routine: 'Daily routine', motor: 'Fine motor skills', space: 'Space', nature: 'Nature',
+      creativity: 'Creativity', routine: 'Daily routine', motor: 'Fine motor skills', space: 'Space', nature: 'Nature', emotions: 'Emotions',
     },
   },
   comfort: {

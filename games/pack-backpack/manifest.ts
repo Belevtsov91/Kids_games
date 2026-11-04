@@ -26,4 +26,7 @@ export default defineManifest({
     ro: 'Înainte de o plimbare adevărată, faceți rucsacul ca în joc și întrebați: „De ce luăm asta?”',
     en: 'Before a real outing, pack a bag like in the game and ask: “Why do we need this?”',
   },
+  tagline: 'Собери рюкзак в поход, на море или в школу.',
+  taglines: { uk: 'Збери рюкзак у похід, на море чи до школи.', ro: 'Fă-ți rucsacul pentru drumeție, mare sau școală.', en: 'Pack the bag for a hike, the beach or school.' },
+  color: '#ffb36b',
 });

@@ -15,4 +15,7 @@ export default defineManifest({
     { id: 'own-picture', emoji: '📷', title: 'Своя картинка', titles: { uk: 'Своя картинка', ro: 'Poza mea', en: 'My own picture' } },
     { id: 'ten-puzzles', emoji: '🏅', title: 'Десять пазлов', titles: { uk: 'Десять пазлів', ro: 'Zece puzzle-uri', en: 'Ten puzzles' } },
   ],
+  tagline: 'Собирай сказочные картинки из кусочков.',
+  taglines: { uk: 'Збирай казкові картинки зі шматочків.', ro: 'Asamblează imagini de poveste din bucăți.', en: 'Put fairy-tale pictures together piece by piece.' },
+  color: '#9be38c',
 });

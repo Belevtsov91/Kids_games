@@ -25,4 +25,7 @@ export default defineManifest({
     ro: 'Uitați-vă pe geam și comparați cu grădina din joc: ce anotimp e acum, unde sunt ursul și păsările?',
     en: 'Look out of the window and compare it with the garden in the game: what season is it, where are the bear and the birds now?',
   },
+  tagline: 'Сажай, поливай и смотри, как сад меняется по сезонам.',
+  taglines: { uk: 'Сади, поливай і дивись, як сад змінюється за сезонами.', ro: 'Plantează, udă și privește grădina schimbându-se cu anotimpurile.', en: 'Plant, water and watch the garden change with the seasons.' },
+  color: '#a6e07a',
 });

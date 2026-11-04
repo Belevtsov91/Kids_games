@@ -48,6 +48,7 @@ export const en: FamilyText = {
       motor: 'Build a tower of ten blocks or books.',
       space: 'Hide a toy and say where it is: under, over, behind or next to.',
       nature: 'Look out of the window: what is the weather and the season?',
+      emotions: 'Show happy, sad and surprised with your face and let a grown-up guess.',
     } as Record<string, string>,
     done: 'Done! ✓',
     thanks: 'Hooray! The bear is proud of you.',

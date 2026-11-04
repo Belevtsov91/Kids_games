@@ -26,4 +26,7 @@ export default defineManifest({
     ro: 'Numiți formele și culorile cu voce tare, apoi căutați-le prin casă. În atelierul liber rugați copilul să povestească ce a construit.',
     en: 'Name shapes and colours out loud, then find the same ones at home. In free build, ask what they made.',
   },
+  tagline: 'Собери машинку, домик и ракету из фигур.',
+  taglines: { uk: 'Збери машинку, будиночок і ракету з фігур.', ro: 'Construiește o mașinuță, o căsuță și o rachetă din forme.', en: 'Build a car, a house and a rocket out of shapes.' },
+  color: '#7fd8a8',
 });

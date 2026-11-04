@@ -4,7 +4,7 @@ import type { Locale } from './manifest';
 /** Навыки, которые тренируют игры. По ним строится страница родителя «Чему научился». */
 export const SKILLS = [
   'count', 'numbers', 'letters', 'reading', 'colors', 'shapes', 'sizes', 'animals',
-  'music', 'memory', 'logic', 'creativity', 'routine', 'motor', 'space', 'nature',
+  'music', 'memory', 'logic', 'creativity', 'routine', 'motor', 'space', 'nature', 'emotions',
 ] as const;
 export type Skill = (typeof SKILLS)[number];
 export const isSkill = (value: unknown): value is Skill => (SKILLS as readonly unknown[]).includes(value);

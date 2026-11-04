@@ -14,7 +14,7 @@ export function ProfileMenu() {
   const { t, locale } = useI18n();
   const k = useKidText();
   const [open, setOpen] = useState(false);
-  const [locked, setLocked] = useState<{ id: string; reason: 'limit' | 'quiet' } | null>(null);
+  const [locked, setLocked] = useState<{ id: string; reason: 'limit' | 'quiet' | 'rules' } | null>(null);
   const box = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function ProfileMenu() {
     } catch (err) {
       // 423: у текущего ребёнка кончилось время — сменить профиль может только взрослый.
       if (!(err instanceof ApiError) || err.status !== 423) throw err;
-      setLocked({ id, reason: err.data?.reason === 'quiet' ? 'quiet' : 'limit' });
+      setLocked({ id, reason: err.data?.reason === 'quiet' || err.data?.reason === 'rules' ? err.data.reason : 'limit' });
     }
   };
 

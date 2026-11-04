@@ -21,6 +21,7 @@ import { createRuntime, RuntimeContext, type Target } from './runtime';
 import { useCombat } from './useCombat';
 import { useInteract } from './useInteract';
 import { useLevelUps } from './useLevelUps';
+import { useRewards } from './useRewards';
 import { useToasts } from './useToasts';
 import { useValleyAudio } from './useValleyAudio';
 import { useValleySave } from './useValleySave';
@@ -28,7 +29,7 @@ import { tr } from '../i18n';
 import '../styles/index.css';
 
 export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
-  const { state, setState, status } = useValleySave(sdk);
+  const { state, setState, status, ready } = useValleySave(sdk);
   const paused = usePaused(pause);
   const runtime = useMemo(createRuntime, []);
   // В режиме разработки мир доступен из консоли (и автотестам): window.__moonValley.
@@ -49,6 +50,7 @@ export function MoonValley({ sdk, pause }: { sdk: GameSdk; pause: Pause }) {
   const { toasts, toast } = useToasts();
   const sound = useValleyAudio(sdk, started, paused);
   useLevelUps(state, sound, toast);
+  useRewards(sdk, state, ready);
   const update = useCallback((next: (current: ValleyState) => ValleyState) => setState(next), [setState]);
   const { hearts, cast, onCleanse, onHurt, onBossHit, onCalmBoss } = useCombat({ runtime, active: started && !paused, update, sound, toast });
   const { act, dialog, setDialog, happy, talk } = useInteract({ runtime, stateRef, update, sound, toast, setTarget });

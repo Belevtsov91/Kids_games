@@ -19,7 +19,7 @@ export const ro3: ParentTextC = {
     names: {
       count: 'Numărat', numbers: 'Cifre', letters: 'Litere', reading: 'Citit', colors: 'Culori', shapes: 'Forme',
       sizes: 'Mare și mic', animals: 'Animale', music: 'Muzică și ritm', memory: 'Memorie', logic: 'Logică',
-      creativity: 'Creativitate', routine: 'Rutina zilei', motor: 'Motricitate fină', space: 'Spațiu', nature: 'Natură',
+      creativity: 'Creativitate', routine: 'Rutina zilei', motor: 'Motricitate fină', space: 'Spațiu', nature: 'Natură', emotions: 'Emoții',
     },
   },
   comfort: {

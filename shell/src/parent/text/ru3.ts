@@ -18,7 +18,7 @@ export const ru3 = {
     names: {
       count: 'Счёт', numbers: 'Цифры', letters: 'Буквы', reading: 'Чтение', colors: 'Цвета', shapes: 'Фигуры',
       sizes: 'Большой и маленький', animals: 'Животные', music: 'Музыка и ритм', memory: 'Память', logic: 'Логика',
-      creativity: 'Творчество', routine: 'Режим дня', motor: 'Мелкая моторика', space: 'Пространство', nature: 'Природа',
+      creativity: 'Творчество', routine: 'Режим дня', motor: 'Мелкая моторика', space: 'Пространство', nature: 'Природа', emotions: 'Эмоции',
     } as Record<string, string>,
   },
   comfort: {

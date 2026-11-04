@@ -28,6 +28,11 @@ export interface GameManifest {
   /** Для родителя: как играть вместе с ребёнком, совет на карточке игры. */
   together?: string;
   togethers?: Partial<Record<Locale, string>>;
+  /** Для ребёнка: одна короткая фраза под названием на дашборде. */
+  tagline?: string;
+  taglines?: Partial<Record<Locale, string>>;
+  /** Цвет свечения портала игры на дашборде, #rrggbb. */
+  color?: string;
 }
 
 export const GAME_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
@@ -55,6 +60,8 @@ export function validateManifest(manifest: unknown, folder: string): string[] {
       errors.push(`${folder}: у наклеек должны быть разные id из латиницы, цифр и дефиса`);
     }
   }
+  if (m.tagline !== undefined && (typeof m.tagline !== 'string' || !m.tagline.trim())) errors.push(`${folder}: tagline должен быть непустой строкой`);
+  if (m.color !== undefined && (typeof m.color !== 'string' || !/^#[0-9a-f]{6}$/i.test(m.color))) errors.push(`${folder}: color должен быть вида #rrggbb`);
   if (m.together !== undefined && (typeof m.together !== 'string' || !m.together.trim())) errors.push(`${folder}: together должен быть непустой строкой`);
   return errors;
 }

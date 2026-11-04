@@ -13,4 +13,7 @@ export default defineManifest({
     { id: 'first-coloring', emoji: '🎨', title: 'Первая раскраска', titles: { uk: 'Перша розмальовка', ro: 'Prima colorare', en: 'First colouring' } },
     { id: 'ten-drawings', emoji: '🖼️', title: 'Десять рисунков', titles: { uk: 'Десять малюнків', ro: 'Zece desene', en: 'Ten drawings' } },
   ],
+  tagline: 'Рисуй, раскрашивай и сохраняй рисунки в галерею.',
+  taglines: { uk: 'Малюй, розфарбовуй і зберігай малюнки в галерею.', ro: 'Desenează, colorează și păstrează desenele în galerie.', en: 'Draw, colour in and keep your pictures in a gallery.' },
+  color: '#ff7eb6',
 });

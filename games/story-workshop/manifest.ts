@@ -25,4 +25,7 @@ export default defineManifest({
     ro: 'Fiți ascultătorul: întrebați „Și apoi ce-a fost?”, „De ce?”. Apoi desenați o imagine pentru poveste.',
     en: 'Be the listener: ask “What happened next?” and “Why?”. Then draw a picture for the story.',
   },
+  tagline: 'Сочини свою сказку из героев, мест и событий.',
+  taglines: { uk: 'Склади свою казку з героїв, місць і подій.', ro: 'Inventează-ți povestea din eroi, locuri și întâmplări.', en: 'Make up your own story from heroes, places and events.' },
+  color: '#c9a7ff',
 });

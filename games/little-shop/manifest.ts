@@ -26,4 +26,7 @@ export default defineManifest({
     ro: 'Fiți cumpărătorul: „Vreau un măr de 3 monede”. Apoi jucați-vă de-a magazinul cu monede adevărate.',
     en: 'Be the customer: “One apple for 3 coins, please.” Then play shop with real coins.',
   },
+  tagline: 'Стань продавцом: взвешивай, считай монеты и давай сдачу.',
+  taglines: { uk: 'Стань продавцем: зважуй, рахуй монети й давай решту.', ro: 'Fii vânzător: cântărește, numără monedele și dă restul.', en: 'Be the shopkeeper: weigh, count coins and give change.' },
+  color: '#ffc06b',
 });

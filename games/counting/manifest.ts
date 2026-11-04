@@ -13,4 +13,7 @@ export default defineManifest({
     { id: 'big-numbers', emoji: '🔟', title: 'Большие числа', titles: { uk: 'Великі числа', ro: 'Numere mari', en: 'Big numbers' } },
     { id: 'all-modes', emoji: '🏆', title: 'Все задания', titles: { uk: 'Усі завдання', ro: 'Toate jocurile', en: 'Every mode' } },
   ],
+  tagline: 'Считай морковки вместе с зайчиком и белкой.',
+  taglines: { uk: 'Лічи морквинки разом із зайчиком і білкою.', ro: 'Numără morcovii împreună cu iepurașul și veverița.', en: 'Count carrots together with the bunny and the squirrel.' },
+  color: '#ffb347',
 });
