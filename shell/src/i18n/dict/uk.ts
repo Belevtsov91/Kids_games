@@ -15,7 +15,7 @@ export const uk: Dict = {
   },
   hero: {
     canvas: 'Летючі острови: кожен острів — це гра',
-    eyebrow: '10 ігор · від 3 до 15 років',
+    eyebrow: '11 ігор · від 3 до 15 років',
     titleStart: 'Привіт! Обирай ',
     titleAccent: 'свій світ',
     titleEnd: ' і грай!',

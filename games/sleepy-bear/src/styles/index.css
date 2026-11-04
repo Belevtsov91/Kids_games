@@ -1,0 +1,6 @@
+/* «Тёпа идёт спать». Все классы с префиксом sb-, чтобы не задеть оболочку и другие игры. */
+@import './base.css';
+@import './screens.css';
+@import './kitchen-bath.css';
+@import './bedroom.css';
+@import './night.css';
