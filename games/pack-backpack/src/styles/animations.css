@@ -1,0 +1,31 @@
+/* Анимации */
+
+@keyframes pb-boing {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.12, 0.9); }
+  70% { transform: scale(0.95, 1.05); }
+}
+
+@keyframes pb-shake {
+  0%, 100% { translate: 0 0; }
+  25% { translate: -8px 0; }
+  50% { translate: 8px 0; }
+  75% { translate: -4px 0; }
+}
+
+@keyframes pb-fly {
+  to { transform: translate(var(--pb-dx), var(--pb-dy)) scale(0.4); opacity: 0.4; }
+}
+
+@keyframes pb-hop {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pb-walk-kid,
+  .pb-bag.is-bounce,
+  .pb-item.is-shake {
+    animation: none;
+  }
+}
