@@ -9,6 +9,11 @@ import { DashSky } from '@/dashboard/DashSky';
 import { FeaturedPortal, GamePortal } from '@/dashboard/Portal';
 import { ProfileMenu } from '@/dashboard/ProfileMenu';
 import { lastGame } from '@/dashboard/lastPlayed';
+import { listToday } from '@/family/daily';
+import { DayPlan } from '@/family/DayPlan';
+import { Mascot } from '@/family/Mascot';
+import { OfflineTask } from '@/family/OfflineTask';
+import { SeasonDecor } from '@/family/SeasonDecor';
 import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
 import { isToddler } from '@/kid/toddler';
@@ -27,6 +32,7 @@ export function MenuPage() {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
   const [filter, setFilter] = useState<Filter>('all');
+  const [note, setNote] = useState<string>();
   const m = t.menu;
   const toddler = isToddler(activeChild);
   const more = useMoreText();
@@ -45,10 +51,15 @@ export function MenuPage() {
   const last = visible.find((g) => g.id === lastId);
   const featured = last ?? available[0] ?? visible[0];
   const play = (g: GameManifest) => navigate(`/play/${g.id}`);
+  // План дня от взрослого (закрытые игры из него выпадают) и что из него уже сыграно сегодня на этом устройстве.
+  const plan = (activeChild?.plan ?? []).map((id) => visible.find((g) => g.id === id)).filter((g): g is GameManifest => Boolean(g));
+  const played = activeChild ? listToday('played', activeChild.id) : [];
+  const playedPlan = plan.filter((g) => played.includes(g.id)).length;
 
   return (
     <div className="dash">
       <DashSky />
+      <SeasonDecor calm={Boolean(activeChild?.comfort?.reduceMotion)} />
       <header className="dash-top dash-wrap">
         <Link to="/" className="dash-logo" aria-label={t.common.home}>
           <span className="dash-logo-mark" aria-hidden="true">🐻</span>
@@ -85,6 +96,14 @@ export function MenuPage() {
           </div>
           {featured && <FeaturedPortal game={featured} label={last ? m.continue : m.startHere} onPlay={() => play(featured)} />}
         </section>
+
+        {activeChild && (
+          <section className="family-row dash-wrap">
+            <Mascot childId={activeChild.id} name={activeChild.name} plan={plan.length} played={playedPlan} note={note} />
+            <DayPlan plan={plan} played={played} onPlay={play} />
+            {last && <OfflineTask childId={activeChild.id} game={last} onDone={setNote} />}
+          </section>
+        )}
 
         <section className="dash-shelf dash-wrap" id="mine" aria-label={m.mine}>
           <div className="dash-shelf-head">

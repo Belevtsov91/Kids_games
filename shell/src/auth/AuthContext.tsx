@@ -22,6 +22,8 @@ export interface Child {
   birthMonth?: string | null;
   /** Сейчас месяц рождения: на главной торт и поздравление. */
   birthday?: boolean;
+  /** План дня от взрослого: до трёх id игр, они наверху дашборда с галочками. */
+  plan?: string[];
 }
 
 export interface Me {

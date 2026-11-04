@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useFamilyText } from '@/family/text';
+import { VoiceRecorder } from '@/family/VoiceRecorder';
+import { useParent } from '../ParentShell';
 import { useParentText } from '../text';
 import { PageHead, Panel, ToggleRow } from '../ui/bits';
 import { useChild } from './useChild';
@@ -12,6 +15,8 @@ const thisYear = new Date().getFullYear();
 export function ChildComfortPage() {
   const p = useParentText();
   const c = p.comfort;
+  const voice = useFamilyText().voice;
+  const { toast } = useParent();
   const { id, child, save } = useChild();
   const [vol, setVol] = useState(child?.comfort);
   useEffect(() => setVol(child?.comfort), [child]);
@@ -70,6 +75,9 @@ export function ChildComfortPage() {
             />
           </label>
           {!child.birthMonth && <p className="pa-empty">{c.birthNone}</p>}
+        </Panel>
+        <Panel title={voice.title} lead={voice.lead}>
+          <VoiceRecorder childId={id} toast={toast} />
         </Panel>
       </div>
     </>

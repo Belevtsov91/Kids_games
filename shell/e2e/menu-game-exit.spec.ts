@@ -22,6 +22,8 @@ async function signedIn(page: Page, age = 15) {
 }
 
 test('каждая игра есть в меню для своего возраста', async ({ page }) => {
+  // Игр в каталоге всё больше, а дашборд открывается заново для каждой: время растёт вместе с каталогом.
+  test.setTimeout(20_000 + gameIds.length * 4_000);
   for (const id of gameIds) {
     await page.unrouteAll();
     await signedIn(page, minAge(id));

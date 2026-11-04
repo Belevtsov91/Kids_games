@@ -5,6 +5,7 @@ import { GameHost } from '@/host/GameHost';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
 import { rememberGame } from '@/dashboard/lastPlayed';
+import { markToday } from '@/family/daily';
 import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
 import { usePlayClock } from '@/kid/usePlayClock';
@@ -29,7 +30,9 @@ export function GamePage() {
 
   // для портала «Продолжить» на дашборде
   useEffect(() => {
-    if (game && activeChild) rememberGame(activeChild.id, game.id);
+    if (!game || !activeChild) return;
+    rememberGame(activeChild.id, game.id);
+    markToday('played', activeChild.id, game.id); // галочка в «Плане на сегодня»
   }, [game, activeChild]);
 
   if (!game) {
