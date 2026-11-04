@@ -28,5 +28,17 @@ export async function verifyPassword(password: string, stored: string) {
   return key.length === expected.length && timingSafeEqual(key, expected);
 }
 
+/**
+ * Слишком простой новый пароль. Те же правила, что подсказывает форма (shell/src/auth/validation.ts):
+ * кроме длины (её проверяет схема) — хотя бы два из трёх: строчные и заглавные, цифра, символ; и не повторять почту.
+ */
+export function isWeakPassword(password: string, email = '') {
+  const kinds = [/\p{Ll}/u.test(password) && /\p{Lu}/u.test(password), /\d/.test(password), /[^\p{L}\d\s]/u.test(password)];
+  const local = email.split('@')[0].toLowerCase();
+  return kinds.filter(Boolean).length < 2 || (local.length >= 4 && password.toLowerCase().includes(local));
+}
+
+export const WEAK_PASSWORD = { error: 'Пароль слишком простой', code: 'weakPassword' } as const;
+
 /** Для входа с несуществующей почтой: тратим то же время, чтобы по задержке нельзя было угадать почту. */
 export const DUMMY_HASH = await hashPassword(randomBytes(16).toString('hex'));

@@ -76,6 +76,7 @@ export const en: Dict = {
     wrongLogin: 'Wrong email or password.',
     emailTaken: 'Could not sign up with this email.',
     unavailable: 'Login is temporarily unavailable.',
+    serverError: 'Something went wrong on our side. Please try again in a minute.',
     mismatch: 'Passwords do not match.',
     loginTitle: 'Grown-up login',
     noAccount: 'No account?',

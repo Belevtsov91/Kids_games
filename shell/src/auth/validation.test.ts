@@ -6,6 +6,7 @@ describe('проверки входа и регистрации', () => {
     expect(checkEmail('').error).toBe('empty');
     expect(checkEmail('mama.example.com').error).toBe('noAt');
     expect(checkEmail('mama@example').error).toBe('format');
+    expect(checkEmail('юзер@почта.рф').error).toBe('latin');
     expect(checkEmail(' mama@example.com ').error).toBeNull();
   });
 

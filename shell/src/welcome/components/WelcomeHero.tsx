@@ -118,9 +118,10 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
               style={{ '--c': g.color } as CSSProperties}
               onClick={() => onFocus(id)}
               tabIndex={isBig(id) ? 0 : -1}
+              aria-label={g.short ?? g.title}
             >
               <span className="wl-pill-icon" aria-hidden="true">{g.icon}</span>
-              {g.short ?? g.title}
+              <span className="wl-pill-text">{g.short ?? g.title}</span>
             </button>
           );
         })}

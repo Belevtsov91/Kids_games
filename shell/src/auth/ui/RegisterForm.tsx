@@ -134,7 +134,7 @@ export function RegisterForm() {
         <Field
           id="reg-pass2" ref={refs.pass2} label={a.passwordAgain} icon={<LockCheckIcon />} name="password2" type="password" autoComplete="new-password"
           maxLength={LIMITS.passMax} placeholder={text.pass2Ph} value={v.pass2}
-          state={stateOf(touched.pass2 || v.pass2.length >= v.pass.length, errors.pass2, !!v.pass2)}
+          state={stateOf(touched.pass2 || (!!v.pass2 && v.pass2.length >= v.pass.length), errors.pass2, !!v.pass2)}
           message={touched.pass2 || (v.pass2 && v.pass2.length >= v.pass.length) ? errors.pass2 : null}
           onChange={(e) => change('pass2', e.target.value)} onFocus={() => focus.on('pass', 0)} onBlur={() => blur('pass2', !!v.pass2)}
         />

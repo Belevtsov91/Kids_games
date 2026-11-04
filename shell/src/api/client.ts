@@ -10,6 +10,8 @@ export class ApiError extends Error {
     message: string,
     /** Тело ответа с ошибкой: например { code, left } у входа в кабинет. */
     readonly data: Record<string, unknown> | null = null,
+    /** Сколько секунд ждать по заголовку Retry-After (у 429); null — сервер не сказал. */
+    readonly retryAfter: number | null = null,
   ) {
     super(message);
   }
@@ -39,7 +41,8 @@ async function request<T>(url: string, init?: RequestInit, retry = true): Promis
   }
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as ({ error?: string } & Record<string, unknown>) | null;
-    throw new ApiError(res.status, body?.error ?? `API ${res.status}: ${url}`, body);
+    const retryAfter = Number(res.headers.get('retry-after'));
+    throw new ApiError(res.status, body?.error ?? `API ${res.status}: ${url}`, body, retryAfter > 0 ? Math.ceil(retryAfter) : null);
   }
   return (res.status === 204 ? undefined : res.json()) as Promise<T>;
 }

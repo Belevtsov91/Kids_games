@@ -1,7 +1,7 @@
 // Проверки полей входа и регистрации на стороне браузера. Сервер всё равно проверяет сам;
 // здесь — быстрые подсказки, чтобы взрослый видел ошибку сразу, а не после отправки.
 
-export type EmailError = 'empty' | 'noAt' | 'format';
+export type EmailError = 'empty' | 'noAt' | 'latin' | 'format';
 export type NameError = 'short' | 'chars';
 export type NewPassError = 'empty' | 'short' | 'weak' | 'long' | 'likeEmail';
 
@@ -36,6 +36,8 @@ export function checkEmail(raw: string): { error: EmailError | null; hint: strin
   const v = raw.trim();
   if (!v) return { error: 'empty', hint: null };
   if (!v.includes('@')) return { error: 'noAt', hint: null };
+  // Сервер принимает только латинские адреса (format: email), поэтому кириллицу ловим здесь, а не общим «Проверьте поля».
+  if (/[^ -~]/.test(v)) return { error: 'latin', hint: null };
   if (!EMAIL_RE.test(v) || v.length > LIMITS.email) return { error: 'format', hint: null };
   return { error: null, hint: domainHint(v) };
 }

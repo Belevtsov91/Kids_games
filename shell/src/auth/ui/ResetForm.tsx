@@ -99,8 +99,8 @@ export function ResetForm() {
     return (
       <section className="au-pane au-success" aria-live="polite">
         <div className="au-badge" aria-hidden="true">🧊</div>
-        <h2>{f.goneTitle}</h2>
-        <p className="au-lead-text">{f.goneText}</p>
+        <h2>{token ? f.goneTitle : f.noLinkTitle}</h2>
+        <p className="au-lead-text">{token ? f.goneText : f.noLinkText}</p>
         <Link to="/forgot" replace className="au-submit au-submit-link">{f.newLink}</Link>
       </section>
     );

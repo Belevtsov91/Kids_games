@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { hashPassword, verifyPassword } from '../src/modules/auth/password';
+import { hashPassword, isWeakPassword, verifyPassword } from '../src/modules/auth/password';
 import { buildApp } from '../src/app';
 
 describe('пароли', () => {
@@ -9,6 +9,14 @@ describe('пароли', () => {
     expect(await verifyPassword('super-secret-1', hash)).toBe(true);
     expect(await verifyPassword('super-secret-2', hash)).toBe(false);
     expect(await hashPassword('super-secret-1')).not.toBe(hash);
+  });
+
+  it('слишком простой пароль — по тем же правилам, что в форме', () => {
+    expect(isWeakPassword('password')).toBe(true);
+    expect(isWeakPassword('password1')).toBe(true);
+    expect(isWeakPassword('Password1')).toBe(false);
+    expect(isWeakPassword('pass-word1')).toBe(false);
+    expect(isWeakPassword('xAnnaqa1!', 'annaqa@example.com')).toBe(true);
   });
 });
 

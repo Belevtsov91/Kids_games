@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
+import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
 import { useAuthText } from '../text';
@@ -54,8 +55,9 @@ export function LoginForm() {
     return () => clearTimeout(id);
   }, [frozen, fx, text]);
 
-  const freeze = () => {
-    setFrozen(FREEZE_S);
+  /** seconds — сколько ждать: у 429 столько, сколько сказал сервер (Retry-After), иначе своя пауза после трёх ошибок. */
+  const freeze = (seconds = FREEZE_S) => {
+    setFrozen(seconds);
     fx.set({ frozen: true });
     fx.say(text.say.frozen, 3000);
   };
@@ -87,7 +89,7 @@ export function LoginForm() {
       fx.wrong();
       const status = statusOf(err);
       setError(serverMessage(err, a));
-      if (status === 429) return freeze();
+      if (status === 429) return freeze(err instanceof ApiError && err.retryAfter ? err.retryAfter : FREEZE_S);
       if (status !== 401) return;
       const left = tries - 1;
       setTries(left);

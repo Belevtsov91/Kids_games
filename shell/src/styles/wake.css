@@ -37,6 +37,17 @@
   line-height: 1.45;
   text-shadow: 0 2px 12px rgba(20, 10, 60, 0.6);
 }
+/* Небо в сцене меняется от ночного до светлого персикового утра: под светлый текст кладём тёмную подложку,
+   чтобы он читался на любом небе и без WebGL. */
+.wake-title, .wake-lead {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 4px 14px;
+  border-radius: 18px;
+  background: rgba(23, 21, 63, 0.5);
+  backdrop-filter: blur(6px);
+}
 .wake-hint {
   display: inline-flex;
   align-items: center;
@@ -51,9 +62,7 @@
   font-size: 15px;
   animation: wake-hint 0.4s ease both;
 }
-.wake-title, .wake-lead { transition: color 0.8s ease, text-shadow 0.8s ease; }
-.wake.is-awake .wake-title { color: #3b2a66; text-shadow: 0 2px 18px rgba(255, 255, 255, 0.5); }
-.wake.is-awake .wake-lead { color: #5a3f7f; text-shadow: none; }
+/* Утром небо в сцене остаётся сиреневым, поэтому текст не темнеет: светлый текст с тенью читается и на рассвете, и без WebGL. */
 .wake.is-awake .wake-hint { background: #ffd25a; color: #3d2a00; box-shadow: 0 6px 0 #c99a1e; }
 
 .wake-dots { display: inline-flex; gap: 4px; }

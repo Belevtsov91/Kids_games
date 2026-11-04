@@ -9,4 +9,5 @@ export const ro: WakeText = {
   },
   hints: ['Șșș… ursulețul încă sforăie', 'Se întinde și cască…', 'S-a ridicat în capul oaselor! Își freacă ochii…', 'Își caută papucii. Încă puțin!'],
   awake: 'Bună dimineața! Hai la joacă',
+  stuck: 'Ursulețul e tare somnoros azi. Verificați internetul, noi continuăm să-l trezim.',
 };

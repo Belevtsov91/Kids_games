@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "pnpm@12.16.1",
   "scripts": {
+    "start": "pnpm --filter @ig/server start",
     "dev": "corepack pnpm --parallel --filter @ig/shell --filter @ig/server dev",
     "dev:shell": "corepack pnpm --filter @ig/shell dev",
     "dev:server": "corepack pnpm --filter @ig/server dev",

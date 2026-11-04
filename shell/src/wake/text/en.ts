@@ -9,4 +9,5 @@ export const en: WakeText = {
   },
   hints: ['Shh… the bear is still snoring', 'Stretching and yawning…', 'Sitting up! Rubbing sleepy eyes…', 'Looking for slippers. Almost there!'],
   awake: 'Good morning! Let’s play',
+  stuck: 'The bear is a real sleepyhead today. Check your internet, we keep trying to wake it up.',
 };

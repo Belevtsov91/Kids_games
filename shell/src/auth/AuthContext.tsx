@@ -63,7 +63,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [me, setMe] = useState<Me | null | undefined>(undefined);
   const { setLocale } = useI18n();
 
-  const refresh = useCallback(async () => setMe(await fetchMe().catch(() => null)), []);
+  // 401/503 — точно не вошёл (fetchMe вернёт null). Любая другая ошибка (500, сеть после повтора) ничего не говорит
+  // о сессии: того, кто уже вошёл, не выкидываем, а при первой загрузке показываем гостевой вид.
+  const refresh = useCallback(async () => {
+    try {
+      setMe(await fetchMe());
+    } catch {
+      setMe((prev) => prev ?? null);
+    }
+  }, []);
 
   useEffect(() => {
     void refresh();

@@ -3,7 +3,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { env } from '../../../config/env.js';
 import { db } from '../../../db/index.js';
 import { mailEnabled, sendMail } from '../../../mail/mailer.js';
-import { hashPassword } from '../password.js';
+import { hashPassword, isWeakPassword, WEAK_PASSWORD } from '../password.js';
 import { createSession } from '../session.js';
 import { resetPasswordMail } from './email/template.js';
 import { MAIL_LOCALES, mailLocale } from './email/text.js';
@@ -107,6 +107,8 @@ export const resetRoutes: FastifyPluginAsync = async (app) => {
     '/reset',
     { schema: { body: resetBody }, config: strictLimit },
     async (req, reply) => {
+      // До удаления токена: иначе ссылка сгорит из-за слишком простого пароля.
+      if (isWeakPassword(req.body.password)) return reply.code(400).send(WEAK_PASSWORD);
       const tokenHash = hashResetToken(req.body.token);
       // Сначала удаляем токен: если две вкладки отправят форму одновременно, пройдёт только одна.
       const { data: used, error } = await db()

@@ -113,3 +113,10 @@
   .wl-hero.is-focused .wl-panel { transform: none; }
   .wl-shots { display: none; }
 }
+
+/* На телефоне острова стоят тесно и подписи налезали друг на друга: оставляем только значок, название — в aria-label. */
+@media (max-width: 600px) {
+  .wl-pill, .wl-pill.is-small { padding: 4px; }
+  .wl-pill-text { display: none; }
+  .wl-pill-icon { width: 34px; height: 34px; font-size: 18px; }
+}

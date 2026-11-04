@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { CHILD_EXTRA, childView, type ChildExtra } from '../children/childView.js';
 import { db } from '../../db/index.js';
-import { DUMMY_HASH, hashPassword, verifyPassword } from './password.js';
+import { DUMMY_HASH, hashPassword, isWeakPassword, verifyPassword, WEAK_PASSWORD } from './password.js';
 import { createSession, destroySession, sessionsEnabled } from './session.js';
 import { resetRoutes } from './reset/reset.routes.js';
 import { parentStatus } from '../parent/parentSession.js';
@@ -55,6 +55,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     '/register',
     { schema: { body: registerBody }, config: strictLimit },
     async (req, reply) => {
+      if (isWeakPassword(req.body.password, req.body.email)) return reply.code(400).send(WEAK_PASSWORD);
       const { data, error } = await db()
         .from('ig_parents')
         .insert({
@@ -69,12 +70,18 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
         if (error.code === '23505') return reply.code(409).send({ error: 'Не получилось зарегистрироваться с этой почтой' });
         throw error;
       }
-      const zone = safeZone(req.body.tz);
-      if (req.body.tz && zone === req.body.tz) {
-        const { error: zoneError } = await db().from('ig_parent_settings').insert({ parent_id: data.id, timezone: zone });
-        if (zoneError) throw zoneError;
+      try {
+        const zone = safeZone(req.body.tz);
+        if (req.body.tz && zone === req.body.tz) {
+          const { error: zoneError } = await db().from('ig_parent_settings').insert({ parent_id: data.id, timezone: zone });
+          if (zoneError) throw zoneError;
+        }
+        await createSession(reply, data.id);
+      } catch (err) {
+        // Без транзакции в supabase-js: убираем полусозданный аккаунт, иначе повторная регистрация получит 409.
+        await db().from('ig_parents').delete().eq('id', data.id);
+        throw err;
       }
-      await createSession(reply, data.id);
       return reply.code(201).send({ ok: true });
     },
   );

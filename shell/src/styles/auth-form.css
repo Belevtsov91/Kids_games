@@ -2,7 +2,7 @@
 
 .au-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
 .au-form > * { min-width: 0; }
-.au-field > label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 800; }
+.au-field > label:not(.au-check) { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 800; }
 
 .au-control {
   display: flex;
@@ -66,12 +66,13 @@
 .au-rules li.is-ok { color: var(--au-mint); }
 .au-rules li.is-ok::before { background: var(--au-mint); box-shadow: 0 0 8px rgba(126, 240, 154, 0.7); }
 
-.au-check { display: flex; align-items: flex-start; gap: 10px; color: var(--au-ink-soft); font-size: 14px; cursor: pointer; }
+.au-check { display: flex; flex-direction: row; align-items: flex-start; gap: 10px; color: var(--au-ink-soft); font-size: 14px; cursor: pointer; }
 .au-check a { color: var(--au-ink); font-weight: 800; }
-.au-check input { appearance: none; display: grid; flex: none; place-items: center; width: 22px; height: 22px; margin: 0; border-radius: 7px; background: var(--au-field); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3); cursor: pointer; }
+.au-check input { appearance: none; display: grid; flex: none; place-items: center; width: 22px; height: 22px; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 7px; background: var(--au-field); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3); cursor: pointer; }
 .au-check input:checked { background: var(--au-mint); box-shadow: none; }
 .au-check input:checked::after { content: ''; width: 6px; height: 11px; border: solid #0d3a1a; border-width: 0 3px 3px 0; transform: translateY(-1px) rotate(45deg); }
 .au-agree.is-error .au-check input { box-shadow: inset 0 0 0 2px var(--au-err); }
+.au-check input:focus-visible { outline: 3px solid #ffd25a; outline-offset: 2px; }
 
 .au-tries { display: flex; align-items: center; gap: 8px; color: var(--au-ink-soft); font-size: 13px; font-weight: 800; }
 .au-tries i { width: 14px; height: 14px; border-radius: 3px; background: var(--au-sky); box-shadow: 0 0 10px rgba(126, 231, 255, 0.7); transform: rotate(45deg); transition: all 0.3s; }

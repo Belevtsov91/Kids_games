@@ -9,6 +9,8 @@ const TEXTS: Record<Locale, WakeText> = { ru, uk, ro, en };
 
 /** Через сколько секунд ожидания показывать следующую подсказку. */
 export const WAKE_HINT_STEPS = [0, 10, 24, 42] as const;
+/** Через сколько секунд вместо подсказок честно сказать, что ждём дольше обычного. */
+export const WAKE_STUCK_S = 90;
 
 /** Тексты экрана «Мишка просыпается» на языке сайта. */
 export function useWakeText(): WakeText {
