@@ -1,0 +1,5 @@
+/* Стили «Паровозика памяти». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './train.css';
+@import './animations.css';
