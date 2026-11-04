@@ -14,7 +14,7 @@ export const ru = {
   },
   hero: {
     canvas: 'Летающие острова: каждый остров — игра',
-    eyebrow: '19 игр · от 3 до 15 лет',
+    eyebrow: '20 игр · от 3 до 15 лет',
     titleStart: 'Привет! Выбирай ',
     titleAccent: 'свой мир',
     titleEnd: ' и играй!',

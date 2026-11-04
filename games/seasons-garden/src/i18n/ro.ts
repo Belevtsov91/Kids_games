@@ -1,0 +1,61 @@
+// Texte: română.
+import type { Texts } from './ru';
+
+export const ro: Texts = {
+  speech: 'ro',
+  title: 'Grădina anotimpurilor',
+  lead: (name?: string) => (name ? `${name}, hai să vedem cum trăiește grădina tot anul!` : 'Hai să vedem cum trăiește grădina tot anul!'),
+  garden: '🌳 Grădina mea',
+  quiz: '❓ Ghicitori',
+  home: '🏠 Acasă',
+  next: 'Mai departe ▶',
+  coach: 'Schimbă anotimpul și vremea, apasă pe animale.',
+  level: (n: number) => `Nivelul ${n}`,
+  seasons: { spring: 'Primăvara', summer: 'Vara', autumn: 'Toamna', winter: 'Iarna' },
+  when: { spring: 'primăvara', summer: 'vara', autumn: 'toamna', winter: 'iarna' },
+  after: { spring: 'primăvară', summer: 'vară', autumn: 'toamnă', winter: 'iarnă' },
+  weathers: { sun: 'Soare', rain: 'Ploaie', snow: 'Zăpadă', wind: 'Vânt' },
+  arrive: {
+    spring: 'A venit primăvara! Înfloresc pomii, se topește zăpada.',
+    summer: 'A venit vara! E cald, e verde, se coc fructele.',
+    autumn: 'A venit toamna! Frunzele se îngălbenesc și cad.',
+    winter: 'A venit iarna! Totul e acoperit de zăpadă.',
+  },
+  noSnow: 'Zăpada vine doar iarna!',
+  noRain: 'Iarna, în loc de ploaie, ninge.',
+  hidden: 'Animalele se ascund de vremea rea.',
+  facts: {
+    bear: {
+      spring: 'Ursul s-a trezit după iarnă și caută mâncare.',
+      summer: 'Ursul mănâncă zmeură și prinde pești.',
+      autumn: 'Ursul mănâncă mult și își pregătește bârlogul.',
+      winter: 'Ursul doarme adânc în bârlog până primăvara.',
+    },
+    bird: {
+      spring: 'Păsările s-au întors din sud și își fac cuiburi.',
+      summer: 'Puii au crescut și învață să zboare.',
+      autumn: 'Păsările se strâng în stoluri și pleacă spre sud.',
+      winter: 'Multe păsări au plecat în țările calde.',
+    },
+    squirrel: {
+      spring: 'Veverița își schimbă blănița gri cu una roșcată.',
+      summer: 'Veverița sare pe crengi și caută conuri.',
+      autumn: 'Veverița ascunde nuci și ciuperci pentru iarnă.',
+      winter: 'Veverița stă la căldură în scorbură, cu blăniță gri.',
+    },
+    hedgehog: {
+      spring: 'Ariciul s-a trezit și a ieșit din vizuină.',
+      summer: 'Ariciul prinde gândaci prin iarbă.',
+      autumn: 'Ariciul cară frunze în vizuină pentru culcuș.',
+      winter: 'Ariciul doarme sub frunze până primăvara.',
+    },
+  },
+  askFits: (when: string) => `Ce este ${when}?`,
+  askOdd: (when: string) => `Ce nu se potrivește? Ce nu este ${when}?`,
+  askWhich: 'Când se întâmplă asta?',
+  askNext: (after: string) => `Ce vine după ${after}?`,
+  sayRight: 'Corect! Bravo!',
+  sayWrong: 'Nu chiar. Mai gândește-te!',
+  sayLevelUp: 'Super! Ghicitorile devin mai interesante!',
+  sayEnding: 'Curând facem pauză. Hai să terminăm liniștit.',
+};

@@ -1,0 +1,39 @@
+/* Экраны: старт, сад, загадка */
+
+.sg-explore,
+.sg-start,
+.sg-ask {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2vmin, 18px);
+  min-height: 100%;
+  padding: 6px 16px 20px;
+  box-sizing: border-box;
+}
+
+.sg-start {
+  justify-content: center;
+}
+
+.sg-hero {
+  font-size: clamp(48px, 11vmin, 96px);
+  animation: sg-bob 2.6s ease-in-out infinite;
+}
+
+.sg-lead,
+.sg-question {
+  margin: 0;
+  max-width: 32ch;
+  text-align: center;
+  font-size: clamp(20px, 4vmin, 30px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.sg-coach {
+  margin: 0;
+  font-size: 14px;
+  color: var(--sg-soft);
+  text-align: center;
+}

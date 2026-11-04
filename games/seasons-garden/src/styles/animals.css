@@ -1,0 +1,49 @@
+/* Звери в саду и их состояния */
+
+.sg-animal {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 9cqw;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.5s ease, translate 0.8s ease, scale 0.5s ease, filter 0.5s ease;
+}
+
+.sg-animal-bear { left: 8%; bottom: 5%; font-size: 11cqw; }
+.sg-animal-hedgehog { right: 6%; bottom: 3%; font-size: 8cqw; }
+.sg-animal-squirrel { left: 54%; bottom: 44%; font-size: 7cqw; }
+.sg-animal-bird { left: 38%; bottom: 64%; font-size: 6.5cqw; }
+
+.sg-animal[data-state='asleep'] .sg-animal-emoji {
+  filter: saturate(0.6);
+  rotate: -80deg;
+  scale: 0.9;
+}
+
+.sg-animal[data-state='away'] {
+  translate: 400% -300%;
+  scale: 0.4;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sg-animal[data-state='hidden'] {
+  opacity: 0.35;
+  scale: 0.85;
+}
+
+.sg-animal-badge {
+  position: absolute;
+  top: -30%;
+  right: -35%;
+  font-size: 0.5em;
+}
+
+.sg-animal.is-wiggle .sg-animal-emoji {
+  animation: sg-boing 0.5s ease;
+}
