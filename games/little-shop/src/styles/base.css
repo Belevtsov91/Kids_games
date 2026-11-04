@@ -1,0 +1,92 @@
+/* «Магазинчик». Все классы с префиксом ls-, чтобы не задеть оболочку и другие игры. */
+
+.ls {
+  --ls-ink: #2b2d42;
+  --ls-soft: #5c6178;
+  --ls-accent: #ff7a3d;
+  --ls-accent-dark: #e85d1f;
+  --ls-tile: #fff8ec;
+  --ls-tile-alt: #ffeccc;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--ls-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    linear-gradient(#fff6e3, #fff6e3 62%, #e9c79b 62.2%, #d8ae7c);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ls [hidden] {
+  display: none !important;
+}
+
+:where(.ls) button {
+  font: inherit;
+  color: inherit;
+}
+
+.ls-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.ls-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.ls-badge:empty {
+  display: none;
+}
+
+.ls-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.ls-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.ls-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Удобство от взрослого: меньше движения и крупные кнопки */
+.ls.ls-calm *,
+.ls.ls-calm *::before,
+.ls.ls-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.ls.ls-big button {
+  zoom: 1.15;
+}

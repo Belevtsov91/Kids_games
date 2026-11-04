@@ -1,0 +1,8 @@
+/* Стили «Магазинчика». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './shop.css';
+@import './scales.css';
+@import './juice.css';
+@import './cash.css';
+@import './animations.css';
