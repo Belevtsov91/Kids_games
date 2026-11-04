@@ -1,0 +1,181 @@
+/* Сад: небо, дерево, земля и осадки по сезону и погоде */
+
+.sg-garden {
+  position: relative;
+  width: min(100%, 860px, calc((100vh - 260px) * 1.6));
+  min-width: min(100%, 320px);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  container-type: inline-size;
+}
+
+.sg-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#8fd3ff, #d8f1ff);
+  transition: background 0.6s ease;
+}
+
+.sg-season-spring .sg-sky { background: linear-gradient(#a6dcff, #fdf0f7); }
+.sg-season-autumn .sg-sky { background: linear-gradient(#9cc9e8, #fbe9d0); }
+.sg-season-winter .sg-sky { background: linear-gradient(#b9d3ea, #eef5fb); }
+.sg-weather-rain .sg-sky,
+.sg-weather-snow .sg-sky { background: linear-gradient(#8f9db0, #cfd8e2); }
+
+.sg-sun {
+  position: absolute;
+  top: 6%;
+  right: 7%;
+  font-size: 11cqw;
+  transition: opacity 0.5s ease;
+}
+
+.sg-weather-rain .sg-sun,
+.sg-weather-snow .sg-sun { opacity: 0; }
+
+.sg-cloud {
+  position: absolute;
+  font-size: 12cqw;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: sg-drift 8s ease-in-out infinite;
+}
+
+.sg-cloud-1 { top: 4%; left: 12%; }
+.sg-cloud-2 { top: 12%; left: 58%; animation-delay: -3s; }
+.sg-weather-rain .sg-cloud,
+.sg-weather-snow .sg-cloud,
+.sg-weather-wind .sg-cloud { opacity: 0.95; }
+.sg-weather-wind .sg-cloud { animation-duration: 2.4s; }
+
+.sg-ground {
+  position: absolute;
+  inset: auto 0 0;
+  height: 30%;
+  background: #6fbf4a;
+  transition: background 0.6s ease;
+}
+
+.sg-season-spring .sg-ground { background: radial-gradient(circle at 20% 30%, #3f9a2e 0 2px, transparent 3px) 0 0 / 46px 34px, #9fd77f; }
+.sg-season-autumn .sg-ground { background: radial-gradient(circle at 30% 40%, #d9662c 0 4px, transparent 5px) 0 0 / 52px 38px, #c9a052; }
+.sg-season-winter .sg-ground { background: #f4f8ff; }
+
+.sg-tree {
+  position: absolute;
+  left: 50%;
+  bottom: 22%;
+  width: 36cqw;
+  height: 48cqw;
+  max-height: 72%;
+  translate: -50% 0;
+}
+
+.sg-trunk {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 13%;
+  height: 48%;
+  translate: -50% 0;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(90deg, #7a5230, #94663e);
+}
+
+.sg-crown {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 92%;
+  aspect-ratio: 1.15;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: #4caf50;
+  transition: background 0.6s ease, opacity 0.6s ease;
+}
+
+.sg-tree-blossom .sg-crown { background: radial-gradient(circle, #ff8fb8 0 3px, transparent 4px) 0 0 / 22px 20px, #ffd6e6; }
+.sg-tree-green .sg-crown { background: radial-gradient(circle, #e53935 0 4px, transparent 5px) 6px 8px / 46px 40px, #4caf50; }
+.sg-tree-yellow .sg-crown { background: radial-gradient(circle, #e8641f 0 5px, transparent 6px) 0 0 / 30px 26px, #f4b42a; }
+.sg-tree-bare .sg-crown {
+  background:
+    radial-gradient(circle, #d3e2f2 0 3px, transparent 4px) 0 0 / 24px 20px,
+    #fbfdff;
+  box-shadow: inset 0 -10px 18px rgb(150 180 210 / 0.35);
+}
+
+.sg-weather-wind .sg-crown { animation: sg-drift 1.6s ease-in-out infinite; }
+
+.sg-fall {
+  position: absolute;
+  inset: 20% -20% -40%;
+  pointer-events: none;
+}
+
+.sg-tree-yellow .sg-fall::before,
+.sg-tree-yellow .sg-fall::after {
+  content: '🍂';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  font-size: 4cqw;
+  animation: sg-fall 3.2s linear infinite;
+}
+
+.sg-tree-yellow .sg-fall::after { left: 70%; animation-delay: -1.6s; }
+
+.sg-precip {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.sg-weather-rain .sg-precip,
+.sg-weather-snow .sg-precip { opacity: 1; }
+
+.sg-drop {
+  position: absolute;
+  top: -8%;
+  width: 2px;
+  height: 14px;
+  border-radius: 2px;
+  background: #3d8bd9;
+  animation: sg-fall 1s linear infinite;
+}
+
+.sg-weather-snow .sg-drop {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 2px rgb(0 0 0 / 0.15);
+  animation-duration: 4s;
+}
+
+.sg-extra {
+  position: absolute;
+  bottom: 6%;
+  font-size: 7cqw;
+  animation: sg-pop 0.4s ease both;
+}
+
+.sg-extra-0 { left: 26%; }
+.sg-extra-1 { left: 66%; bottom: 14%; }
+.sg-extra-2 { left: 80%; bottom: 3%; }
+.sg-season-winter .sg-extra-0 { font-size: 11cqw; left: 70%; }
+
+@media (max-aspect-ratio: 3 / 4) {
+  .sg-garden {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .sg-tree {
+    width: 46cqw;
+    height: 62cqw;
+    max-height: 66%;
+  }
+}

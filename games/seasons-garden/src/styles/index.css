@@ -1,0 +1,8 @@
+/* Стили «Сада сезонов». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './layout.css';
+@import './garden.css';
+@import './animals.css';
+@import './quiz.css';
+@import './animations.css';

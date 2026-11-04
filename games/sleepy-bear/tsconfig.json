@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": [
+    "manifest.ts",
+    "src",
+    "server",
+    "tests"
+  ]
+}

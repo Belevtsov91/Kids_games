@@ -1,6 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { serverAwake } from './server';
+
+test.beforeEach(({ page }) => serverAwake(page));
 
 // Список игр берём из папки games/, а не из кода: новая игра попадёт в проверку сама.
 const gamesDir = fileURLToPath(new URL('../../games', import.meta.url));
@@ -10,6 +13,7 @@ const minAge = (id: string) => Number(/min:\s*(\d+)/.exec(readFileSync(`${gamesD
 // Сервер API здесь не запускается: вход подменяем ответом /api/auth/me.
 // Возраст ребёнка влияет на меню: игра видна, только если он в её диапазоне ages.
 async function signedIn(page: Page, age = 15) {
+  await serverAwake(page);
   await page.route('/api/auth/me', (route) =>
     route.fulfill({
       json: {
@@ -22,6 +26,8 @@ async function signedIn(page: Page, age = 15) {
 }
 
 test('каждая игра есть в меню для своего возраста', async ({ page }) => {
+  // Игр в каталоге всё больше, а дашборд открывается заново для каждой: время растёт вместе с каталогом.
+  test.setTimeout(20_000 + gameIds.length * 4_000);
   for (const id of gameIds) {
     await page.unrouteAll();
     await signedIn(page, minAge(id));
@@ -49,7 +55,8 @@ for (const id of gameIds) {
     // API-сервер в e2e не запущен: сетевые ошибки запросов к нему — не ошибки игры.
     page.on('console', (msg) => msg.type() === 'error' && !msg.text().startsWith('Failed to load resource') && errors.push(msg.text()));
 
-    await signedIn(page, minAge(id));
+    // С 5 лет: у малышей выход из игры — удержанием (отдельный тест ниже).
+    await signedIn(page, Math.max(5, minAge(id)));
     await page.goto('/dashboard');
     await page.locator(`a[href="/play/${id}"]`).click();
     await expect(page).toHaveURL(`/play/${id}`);
@@ -62,8 +69,8 @@ for (const id of gameIds) {
     await page.getByRole('link', { name: 'В меню' }).click();
     await expect(page).toHaveURL('/dashboard');
     await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
-    // После выхода игра должна убрать за собой холст.
-    await expect(page.locator('canvas')).toHaveCount(0);
+    // После выхода игра должна убрать за собой холст (звёзды неба дашборда — не холст игры).
+    await expect(page.locator('canvas:not(.dash-stars)')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 }
@@ -72,4 +79,25 @@ test('неизвестная игра → понятное сообщение', 
   await signedIn(page);
   await page.goto('/play/nope');
   await expect(page.getByRole('heading', { name: 'Игра не найдена' })).toBeVisible();
+});
+
+test('режим малыша: нет «Выйти» на главной, выход из игры — удержанием', async ({ page }) => {
+  await signedIn(page, 3);
+  await page.goto('/dashboard');
+  await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Выйти' })).toHaveCount(0);
+  await page.goto('/play/drawing');
+  const back = page.getByRole('button', { name: 'Подержи, чтобы выйти' });
+  await back.click();
+  await expect(page).toHaveURL('/play/drawing');
+  await back.hover();
+  await page.mouse.down();
+  await page.waitForTimeout(2300);
+  await page.mouse.up();
+  await expect(page).toHaveURL('/dashboard');
+});
+
+test('неизвестный адрес → страница «такой страницы нет»', async ({ page }) => {
+  await page.goto('/nowhere');
+  await expect(page.getByRole('heading', { name: 'Ой, такой страницы нет' })).toBeVisible();
 });

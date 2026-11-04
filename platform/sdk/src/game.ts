@@ -1,4 +1,5 @@
 import type { GameManifest, Locale } from './manifest';
+import type { GameCloud, GameComfort, GameProgress, GameTime } from './progress';
 
 /** Ответы API игры. Запросы идут только в её собственный префикс `/api/games/<id>`. */
 export interface GameApi {
@@ -24,6 +25,14 @@ export interface GameSdk {
   locale: Locale;
   /** Общий выключатель звука. Игра читает его сама и подписывается на изменения. */
   audio: { readonly muted: boolean; onMuteChange(listener: (muted: boolean) => void): () => void };
+  /** Успехи: уровни, навыки, наклейки. Видны ребёнку в альбоме и взрослому в кабинете. */
+  progress: GameProgress;
+  /** Сколько осталось играть и сигнал «скоро конец». */
+  time: GameTime;
+  /** Сохранения на сервере платформы (для игр без своего сервера). */
+  cloud: GameCloud;
+  /** Громкость, меньше движения, крупные кнопки, режим малыша. */
+  comfort: GameComfort;
   /** Вернуться в меню. */
   exit(): void;
 }

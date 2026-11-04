@@ -38,3 +38,6 @@ desktop.ini
 
 # Локальные настройки Claude Code
 .claude/settings.local.json
+
+# Временные файлы
+.claude-tmp/

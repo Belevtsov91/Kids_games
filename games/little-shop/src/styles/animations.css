@@ -1,0 +1,16 @@
+/* Анимации */
+
+@keyframes ls-drop {
+  from { translate: 0 -30px; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-beam,
+  .ls-pan {
+    transition: none;
+  }
+
+  .ls-tray .ls-coin {
+    animation: none;
+  }
+}

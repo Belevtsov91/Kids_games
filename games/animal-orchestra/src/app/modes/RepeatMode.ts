@@ -48,6 +48,7 @@ export class RepeatMode implements Mode {
     if (this.phase !== 'turn') return;
     this.ctx.hit(animal, 'instrument');
     const result = this.game.answer(animal.id);
+    if (result !== 'ok') this.ctx.progress.skill('memory', result === 'done');
     if (result === 'miss') this.onMiss(animal);
     else if (result === 'done') this.onPhraseDone();
     else this.updateDots();
@@ -95,7 +96,17 @@ export class RepeatMode implements Mode {
       ctx.fx.confetti();
     }, 250);
     this.updateStars();
+    this.reward();
     ctx.playback.later(() => this.nextPhrase(), 2300);
+  }
+
+  /** Наклейки за фразы: первая, пять звёзд, длинная фраза из шести нот. */
+  private reward() {
+    const { progress } = this.ctx;
+    progress.level(this.game.phrase.length);
+    progress.sticker('first-phrase');
+    if (this.game.stars >= 5) progress.sticker('five-stars');
+    if (this.game.phrase.length >= 6) progress.sticker('long-phrase');
   }
 
   private setPhase(phase: Phase) {

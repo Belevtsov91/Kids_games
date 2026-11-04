@@ -1,0 +1,44 @@
+/* «Как я себя чувствую» и круг дыхания */
+
+.eh-feel {
+  justify-content: flex-start;
+}
+
+.eh-feel > .eh-btn-small {
+  align-self: flex-start;
+}
+
+.eh-feel-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 16px 32px;
+  text-align: center;
+}
+
+.eh-feel-face {
+  font-size: clamp(90px, 20vmin, 140px);
+  line-height: 1;
+  filter: drop-shadow(0 8px 0 color-mix(in srgb, var(--eh-room) 60%, transparent));
+}
+
+.eh-feel-answer p {
+  margin: 0;
+  font-size: clamp(20px, 4vmin, 28px);
+  font-weight: 800;
+}
+
+.eh-breath {
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 30%, var(--eh-room) 70%);
+  font-weight: 900;
+  font-size: 20px;
+  animation: eh-breathe 4s ease-in-out 6 alternate;
+}

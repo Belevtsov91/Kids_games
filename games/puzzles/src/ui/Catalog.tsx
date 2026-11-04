@@ -10,13 +10,15 @@ interface Props {
   puzzles: Puzzle[];
   savedIds: Set<string>;
   level: LevelId;
+  /** Помещается ли уровень на этом экране (клетки не слишком мелкие для пальца). */
+  fits: (level: LevelId) => boolean;
   onLevel: (level: LevelId) => void;
   onPick: (puzzle: Puzzle) => void;
   onUpload: (event: ChangeEvent<HTMLInputElement>) => void;
   onRemove: (id: string) => void;
 }
 
-export function Catalog({ puzzles, savedIds, level, onLevel, onPick, onUpload, onRemove }: Props) {
+export function Catalog({ puzzles, savedIds, level, fits, onLevel, onPick, onUpload, onRemove }: Props) {
   // Картинки из интернета могут не загрузиться (нет сети) — такие карточки прячем.
   const t = tr();
   const [broken, setBroken] = useState<Set<string>>(() => new Set());
@@ -24,17 +26,23 @@ export function Catalog({ puzzles, savedIds, level, onLevel, onPick, onUpload, o
     <>
       <div className="puzzle-levels" role="radiogroup" aria-label={t.howMany}>
         <span>{t.pieces}</span>
-        {LEVELS.map((item) => (
-          <button
-            key={item.id}
-            role="radio"
-            aria-checked={level === item.id}
-            className={level === item.id ? 'is-active' : ''}
-            onClick={() => onLevel(item.id)}
-          >
-            {item.id === 'auto' ? t.auto : item.label}
-          </button>
-        ))}
+        {LEVELS.map((item) => {
+          const locked = !fits(item.id);
+          return (
+            <button
+              key={item.id}
+              role="radio"
+              aria-checked={level === item.id}
+              className={level === item.id ? 'is-active' : ''}
+              disabled={locked}
+              title={locked ? t.tooSmall : undefined}
+              onClick={() => onLevel(item.id)}
+            >
+              <span aria-hidden>{item.icon}</span> {item.id === 'auto' ? t.auto : item.pieces}
+              {locked && <span aria-hidden> 🔒</span>}
+            </button>
+          );
+        })}
       </div>
       <section className="puzzle-catalog" aria-label={t.choose}>
         <label className="puzzle-card upload-card">

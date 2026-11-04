@@ -1,0 +1,61 @@
+// Texts: English.
+import type { Texts } from './ru';
+
+export const en: Texts = {
+  speech: 'en',
+  title: 'Seasons Garden',
+  lead: (name?: string) => (name ? `${name}, let's see how the garden lives all year!` : "Let's see how the garden lives all year!"),
+  garden: '🌳 My garden',
+  quiz: '❓ Riddles',
+  home: '🏠 Home',
+  next: 'Next ▶',
+  coach: 'Change the season and the weather, tap the animals.',
+  level: (n: number) => `Level ${n}`,
+  seasons: { spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter' },
+  when: { spring: 'in spring', summer: 'in summer', autumn: 'in autumn', winter: 'in winter' },
+  after: { spring: 'spring', summer: 'summer', autumn: 'autumn', winter: 'winter' },
+  weathers: { sun: 'Sun', rain: 'Rain', snow: 'Snow', wind: 'Wind' },
+  arrive: {
+    spring: 'Spring is here! Trees blossom and the snow melts.',
+    summer: 'Summer is here! Warm and green, berries are ripening.',
+    autumn: 'Autumn is here! Leaves turn yellow and fall.',
+    winter: 'Winter is here! Everything is covered in snow.',
+  },
+  noSnow: 'Snow only comes in winter!',
+  noRain: 'In winter it snows instead of raining.',
+  hidden: 'The animals hide from the bad weather.',
+  facts: {
+    bear: {
+      spring: 'The bear woke up after winter and looks for food.',
+      summer: 'The bear eats raspberries and catches fish.',
+      autumn: 'The bear eats a lot and gets its den ready.',
+      winter: 'The bear sleeps soundly in its den until spring.',
+    },
+    bird: {
+      spring: 'The birds came back from the south and build nests.',
+      summer: 'The chicks have grown and are learning to fly.',
+      autumn: 'The birds gather in flocks and fly south.',
+      winter: 'Many birds have flown away to warm lands.',
+    },
+    squirrel: {
+      spring: 'The squirrel swaps its grey coat for a red one.',
+      summer: 'The squirrel jumps along branches looking for cones.',
+      autumn: 'The squirrel hides nuts and mushrooms for winter.',
+      winter: 'The squirrel keeps warm in its hollow, in a grey coat.',
+    },
+    hedgehog: {
+      spring: 'The hedgehog woke up and came out of its burrow.',
+      summer: 'The hedgehog catches beetles in the grass.',
+      autumn: 'The hedgehog carries leaves to make its bed.',
+      winter: 'The hedgehog sleeps under the leaves until spring.',
+    },
+  },
+  askFits: (when: string) => `What belongs ${when}?`,
+  askOdd: (when: string) => `Which one doesn't belong ${when}?`,
+  askWhich: 'When does this happen?',
+  askNext: (after: string) => `What comes after ${after}?`,
+  sayRight: 'Right! Well done!',
+  sayWrong: 'Not quite. Think again!',
+  sayLevelUp: 'Great! The riddles will get trickier!',
+  sayEnding: 'Break time soon. Let’s finish calmly.',
+};

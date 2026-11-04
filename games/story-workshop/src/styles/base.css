@@ -1,0 +1,93 @@
+/* Основа. Все классы с префиксом st-, чтобы не задеть оболочку и другие игры. */
+
+.st {
+  --st-ink: #2b2d42;
+  --st-soft: #5c6178;
+  --st-accent: #ff7a3d;
+  --st-accent-dark: #e85d1f;
+  --st-tile: #fff8ec;
+  --st-tile-alt: #ffeccc;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--st-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(50% 40% at 15% 10%, #fff3d6 0 50%, transparent 51%),
+    linear-gradient(#ffe9c7, #fdf6ea 55%, #f4e2c4);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.st [hidden] {
+  display: none !important;
+}
+
+:where(.st) button {
+  font: inherit;
+  color: inherit;
+}
+
+.st-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.st-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.st-badge:empty {
+  display: none;
+}
+
+.st-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.st-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.st-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Удобство от взрослого: меньше движения и крупные кнопки */
+.st.st-calm *,
+.st.st-calm *::before,
+.st.st-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.st.st-big button {
+  zoom: 1.15;
+}

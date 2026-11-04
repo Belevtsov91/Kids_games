@@ -1,0 +1,35 @@
+/* Кабинет: навыки, удобство, рисунки, просьбы, семья. */
+.pa-seg button[aria-checked='true'] { color: #3d2a00; background: var(--dash-gold); }
+.pa-seg-wide { display: flex; }
+.pa-seg-wide button { flex: 1 1 auto; }
+
+.pa-skills { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.pa-skill { padding: 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 0 0 1px var(--dash-line); display: grid; gap: 8px; }
+.pa-skill-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.pa-skill-badge { font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); }
+.pa-skill.is-good .pa-skill-badge { background: #7ef09a; color: #0f3d1d; }
+.pa-skill.is-learning .pa-skill-badge { background: var(--dash-gold); color: #3d2a00; }
+.pa-skill-bar { height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.pa-skill-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--dash-gold), #7ef09a); }
+.pa-skill small { color: var(--dash-ink-soft); }
+
+.pa-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pa-list li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--dash-line); }
+.pa-list li:last-child { border-bottom: 0; }
+.pa-sticker-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pa-sticker { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); font-size: 28px; }
+
+.pa-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+.pa-drawing { margin: 0; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); }
+.pa-drawing img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; }
+.pa-drawing figcaption { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; background: #2b2170; }
+.pa-drawing figcaption a, .pa-drawing figcaption button { font: inherit; font-size: 13px; font-weight: 700; color: #fff; background: rgba(255, 255, 255, 0.12); border: 0; border-radius: 8px; padding: 5px 8px; cursor: pointer; text-decoration: none; }
+
+.pa-inbox { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pa-inbox li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.06); }
+.pa-inbox li b { flex: 1 1 160px; }
+.pa-inbox .is-pending { box-shadow: inset 0 0 0 2px var(--dash-gold); }
+.pa-inbox small { color: var(--dash-ink-soft); }
+
+.pa-helper-link { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px; border-radius: 12px; background: rgba(0, 0, 0, 0.3); word-break: break-all; font-family: ui-monospace, monospace; font-size: 13px; }
+@media print { .pa-drawing figcaption { display: none; } }

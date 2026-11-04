@@ -1,0 +1,7 @@
+/* Стили «Домика эмоций». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './house.css';
+@import './round.css';
+@import './feel.css';
+@import './animations.css';

@@ -1,4 +1,5 @@
 // Без DOM: этот файл импортирует и сервер (через @ig/sdk/manifest).
+import { isSkill, STICKER_ID_PATTERN, type Skill, type StickerDef } from './progress';
 
 /** Языки сайта и игр: русский, украинский, румынский, английский. */
 export const LOCALES = ['ru', 'uk', 'ro', 'en'] as const;
@@ -17,6 +18,21 @@ export interface GameManifest {
   kind: '2d' | '3d';
   /** Возраст, для которого игра подходит, включительно. */
   ages: { min: number; max: number };
+  /** Что тренирует игра: по этим навыкам родитель видит успехи. */
+  skills?: Skill[];
+  /** Наклейки, которые можно получить в игре. */
+  stickers?: StickerDef[];
+  /** Для родителя: что развивает игра, одна-две фразы. */
+  about?: string;
+  abouts?: Partial<Record<Locale, string>>;
+  /** Для родителя: как играть вместе с ребёнком, совет на карточке игры. */
+  together?: string;
+  togethers?: Partial<Record<Locale, string>>;
+  /** Для ребёнка: одна короткая фраза под названием на дашборде. */
+  tagline?: string;
+  taglines?: Partial<Record<Locale, string>>;
+  /** Цвет свечения портала игры на дашборде, #rrggbb. */
+  color?: string;
 }
 
 export const GAME_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
@@ -37,6 +53,16 @@ export function validateManifest(manifest: unknown, folder: string): string[] {
   if (!ages || !Number.isInteger(ages.min) || !Number.isInteger(ages.max) || ages.min < 0 || ages.min > ages.max) {
     errors.push(`${folder}: ages должен быть { min, max }, min ≤ max`);
   }
+  if (m.skills !== undefined && (!Array.isArray(m.skills) || !m.skills.every(isSkill))) errors.push(`${folder}: неизвестный навык в skills`);
+  if (m.stickers !== undefined) {
+    const ids = Array.isArray(m.stickers) ? m.stickers.map((s) => s?.id) : null;
+    if (!ids || !ids.every((id) => typeof id === 'string' && STICKER_ID_PATTERN.test(id)) || new Set(ids).size !== ids.length) {
+      errors.push(`${folder}: у наклеек должны быть разные id из латиницы, цифр и дефиса`);
+    }
+  }
+  if (m.tagline !== undefined && (typeof m.tagline !== 'string' || !m.tagline.trim())) errors.push(`${folder}: tagline должен быть непустой строкой`);
+  if (m.color !== undefined && (typeof m.color !== 'string' || !/^#[0-9a-f]{6}$/i.test(m.color))) errors.push(`${folder}: color должен быть вида #rrggbb`);
+  if (m.together !== undefined && (typeof m.together !== 'string' || !m.together.trim())) errors.push(`${folder}: together должен быть непустой строкой`);
   return errors;
 }
 
@@ -56,3 +82,4 @@ export function buildCatalog(
   }
   return catalog.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
 }
+export * from './progress';

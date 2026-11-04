@@ -1,0 +1,44 @@
+/* Стакан с соком и линией-отметкой */
+
+.ls-glass {
+  position: relative;
+  width: clamp(120px, 26vmin, 170px);
+  height: clamp(200px, 42vh, 300px);
+  overflow: hidden;
+  border: 6px solid rgb(255 255 255 / 0.9);
+  border-top: 0;
+  border-radius: 0 0 28px 28px;
+  background: rgb(200 230 255 / 0.35);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.12), inset 0 0 0 2px rgb(0 0 0 / 0.06);
+}
+
+.ls-juice {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--ls-amount, 0) * 100%);
+  background: linear-gradient(#ffb347, #ff8c1a);
+}
+
+.ls-line {
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  height: 0;
+  border-top: 4px dashed #e53935;
+}
+
+.ls-line::after {
+  content: '◀';
+  position: absolute;
+  right: -2px;
+  top: -14px;
+  color: #e53935;
+  font-size: 18px;
+}
+
+.ls-hold {
+  min-height: 80px;
+  touch-action: none;
+}

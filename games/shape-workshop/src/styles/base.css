@@ -1,0 +1,93 @@
+/* «Мастерская фигур». Все классы с префиксом sw-, чтобы не задеть оболочку и другие игры. */
+
+.sw {
+  --sw-ink: #2b2d42;
+  --sw-soft: #5c6178;
+  --sw-accent: #ff7a3d;
+  --sw-accent-dark: #e85d1f;
+  --sw-tile: #fff8ec;
+  --sw-tile-alt: #ffeccc;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--sw-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.5) 1.5px, transparent 2px) 0 0 / 28px 28px,
+    linear-gradient(#e3f4ff, #f3ecff);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sw [hidden] {
+  display: none !important;
+}
+
+:where(.sw) button {
+  font: inherit;
+  color: inherit;
+}
+
+.sw-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.sw-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.sw-badge:empty {
+  display: none;
+}
+
+.sw-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.sw-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.sw-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Удобство от взрослого: меньше движения и крупные кнопки */
+.sw.sw-calm *,
+.sw.sw-calm *::before,
+.sw.sw-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.sw.sw-big button {
+  zoom: 1.15;
+}

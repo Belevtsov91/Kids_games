@@ -1,0 +1,94 @@
+/* «Дыши с дракончиком». Все классы с префиксом db-, чтобы не задеть оболочку и другие игры. */
+
+.db {
+  --db-ink: #2b2d42;
+  --db-soft: #5c6178;
+  --db-accent: #ff7a3d;
+  --db-accent-dark: #e85d1f;
+  --db-tile: #fff8ec;
+  --db-tile-alt: #ffeccc;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--db-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 80% 14%, #fff7c2 0 4%, transparent 4.5%),
+    radial-gradient(140% 50% at 50% 120%, #9fd7b1 0 45%, transparent 46%),
+    linear-gradient(#c9d8ff, #e6ecff 55%, #eef8f1);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.db [hidden] {
+  display: none !important;
+}
+
+:where(.db) button {
+  font: inherit;
+  color: inherit;
+}
+
+.db-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.db-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.db-badge:empty {
+  display: none;
+}
+
+.db-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.db-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.db-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Удобство от взрослого: меньше движения и крупные кнопки */
+.db.db-calm *,
+.db.db-calm *::before,
+.db.db-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.db.db-big button {
+  zoom: 1.15;
+}

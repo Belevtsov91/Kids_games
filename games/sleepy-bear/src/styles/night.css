@@ -1,0 +1,91 @@
+.sb-night {
+  isolation: isolate;
+  background:
+    linear-gradient(transparent 72%, #b79ad6 72%),
+    linear-gradient(#cdb8ef, #e3d6f8);
+  transition: filter 1.2s ease;
+}
+.sb-night::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #1d1640;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s ease;
+}
+.sb-night.is-dark::after {
+  opacity: 0.5;
+}
+/* Окно со звёздами и лампа остаются над темнотой. */
+.sb-night .sb-window,
+.sb-night .sb-lamp {
+  z-index: 1;
+}
+.sb-window {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  width: min(70vmin, 460px);
+  height: min(36vmin, 240px);
+  translate: -50% 0;
+  border: 12px solid #fff;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 85% 25%, #fff6c9 0 9%, transparent 9.5%),
+    linear-gradient(#2c2463, #4b3e8f);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.sb-star {
+  width: calc(var(--sb-item) * 0.75);
+  height: calc(var(--sb-item) * 0.75);
+  margin-top: calc((var(--i) - 2) * (var(--i) - 2) * 4% - 6%);
+  filter: none;
+}
+.sb-star.is-lit svg {
+  animation: sb-twinkle 2.4s ease-in-out infinite;
+}
+@keyframes sb-twinkle {
+  50% { transform: scale(1.12) rotate(8deg); }
+}
+.sb-bed {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  width: min(80vmin, 520px);
+  height: min(40vmin, 260px);
+  translate: -50% 0;
+  border-radius: 28px 28px 12px 12px;
+  background: linear-gradient(transparent 40%, #8a6bc2 40%);
+}
+.sb-bear-bed {
+  left: 50%;
+  bottom: 22%;
+  width: 46%;
+  height: 120%;
+  translate: -50% 0;
+}
+.sb-blanket {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 10%;
+  height: 44%;
+  border-radius: 40px 40px 16px 16px;
+  background: repeating-linear-gradient(45deg, #ffd8a8 0 22px, #ffc58a 22px 44px);
+}
+.sb-lamp {
+  position: absolute;
+  right: 4%;
+  bottom: 12%;
+  width: calc(var(--sb-item) * 1.1);
+  height: calc(var(--sb-item) * 1.5);
+}
+.sb-night.is-asleep .bear-z {
+  animation: sb-z 2.4s ease-in-out infinite;
+}
+@keyframes sb-z {
+  50% { transform: translate(6px, -8px); opacity: 0.6; }
+}

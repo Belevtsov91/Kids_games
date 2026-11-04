@@ -1,0 +1,138 @@
+/* Семейные мелочи на дашборде: мишка Тёпа, план дня, задание дома, сезонное оформление; голосовой привет в кабинете. */
+
+.family-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  align-items: start;
+  margin-top: 8px;
+  margin-bottom: 28px;
+}
+
+.family-card {
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: var(--dash-glass);
+  box-shadow: inset 0 0 0 1px var(--dash-line);
+  backdrop-filter: blur(10px);
+}
+.family-card h2 { margin: 0 0 8px; font-size: 18px; }
+.family-muted { margin: 0; color: var(--dash-ink-soft); font-size: 14px; }
+
+.mascot { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mascot-bear {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 0;
+  border-radius: 24px;
+  background: linear-gradient(160deg, #ffe08a, #ffb547);
+  box-shadow: 0 5px 0 #c98a1e;
+  font-size: 44px;
+  cursor: pointer;
+  animation: mascot-bob 3s ease-in-out infinite;
+}
+.mascot-bear:active { transform: translateY(4px); box-shadow: 0 1px 0 #c98a1e; }
+.mascot-bear.has-voice { box-shadow: 0 5px 0 #c98a1e, 0 0 0 6px rgba(255, 126, 182, 0.55); }
+.mascot-bubble {
+  position: relative;
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: #fff8ec;
+  color: #2b1d4e;
+  font-size: 16px;
+  line-height: 1.35;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+.mascot-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  border: 9px solid transparent;
+  border-right-color: #fff8ec;
+  border-left: 0;
+  translate: 0 -50%;
+}
+
+.day-plan ol { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.day-plan button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 10px 6px 6px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--dash-ink);
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+.day-plan img { border-radius: 12px; object-fit: cover; }
+.day-plan span { flex: 1; min-width: 0; }
+.day-plan b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--dash-gold); color: #3d2a00; }
+.day-plan .is-done b { background: #6ee7a8; color: #0d3b24; }
+.day-plan .is-done span { opacity: 0.7; text-decoration: line-through; }
+
+.offline-text { margin: 6px 0 12px; font-size: 17px; font-weight: 700; }
+.offline-task .dash-btn { min-height: 44px; padding: 0 18px; font-size: 16px; }
+.offline-task.is-done { opacity: 0.75; }
+
+/* Сезонное оформление поверх неба */
+.season { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.season-flake {
+  position: absolute;
+  top: -40px;
+  color: #fff;
+  opacity: 0.85;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+  animation: season-fall linear infinite;
+}
+.season-summer .season-flake { color: #fff4b0; animation-name: season-float; }
+.season-garland {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  justify-content: space-around;
+  height: 34px;
+  background: radial-gradient(120% 60px at 50% -20px, transparent 70%, rgba(40, 90, 50, 0.9) 71% 74%, transparent 75%) 0 0 / 140px 34px repeat-x;
+}
+.season-garland i { width: 12px; height: 16px; margin-top: 14px; border-radius: 50%; background: #ffd25a; box-shadow: 0 0 12px #ffd25a; animation: season-blink 1.5s ease-in-out infinite; }
+.season-garland i:nth-child(3n + 1) { background: #ff7eb6; box-shadow: 0 0 12px #ff7eb6; }
+.season-garland i:nth-child(3n + 2) { background: #7ee7ff; box-shadow: 0 0 12px #7ee7ff; }
+
+@keyframes season-fall {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to { transform: translate3d(40px, 110vh, 0) rotate(300deg); }
+}
+@keyframes season-float {
+  0% { transform: translate3d(0, 60vh, 0); opacity: 0; }
+  50% { opacity: 0.9; }
+  100% { transform: translate3d(30px, 20vh, 0); opacity: 0; }
+}
+@keyframes season-blink { 50% { opacity: 0.45; } }
+@keyframes mascot-bob { 50% { transform: translateY(-5px); } }
+
+.season-calm .season-garland i { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .season-flake, .mascot-bear, .season-garland i { animation: none; }
+  .season-flake { display: none; }
+}
+
+@media (max-width: 720px) {
+  .family-row { grid-template-columns: 1fr; }
+}
+
+/* Голосовой привет в кабинете */
+.voice-rec { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.voice-rec-live { font-weight: 800; color: #d2335c; }
+
+/* План дня в кабинете */
+.pa-plan { min-height: 36px; padding: 0 12px; font-size: 14px; white-space: nowrap; }
+.pa-plan-now { margin: 0 0 10px; font-weight: 800; }

@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
+import { serverAwake } from './server';
+
+test.beforeEach(({ page }) => serverAwake(page));
 
 // Приветствие → регистрация → профиль ребёнка → дашборд → выход.
 // API подменяем: проверяем оболочку, а не Supabase. Сервер держит состояние, браузер — ничего.
@@ -23,6 +26,7 @@ function fakeServer(page: Page) {
         calls.push(`${req.method()} ${path}`);
         const body = req.postDataJSON() as Record<string, unknown> | null;
 
+        if (path === '/api/health') return route.fulfill({ json: { status: 'ok' } });
         if (path === '/api/auth/me') return me ? route.fulfill({ json: me }) : route.fulfill({ status: 401, json: { error: 'Нужно войти' } });
         if (path === '/api/auth/register') {
           me = { parent: { id: 'p1', name: String(body?.name) }, children: [], activeChildId: null };
@@ -65,29 +69,36 @@ async function browserStorage(page: Page) {
 }
 
 test('приветствие → регистрация → ребёнок → дашборд → выход', async ({ page }) => {
+  test.slow(); // 3D-остров на страницах входа грузится долго, особенно в параллельных прогонах
   const server = fakeServer(page);
   await server.install();
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Привет! Давай играть!' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Привет! Выбирай свой мир и играй!' })).toBeVisible();
   await page.getByRole('link', { name: 'Регистрация' }).click();
 
   await page.getByLabel('Ваше имя').fill('Мама');
   await page.getByLabel('Почта').fill('mama@example.com');
   await page.getByLabel('Пароль (от 8 символов)').fill('super-secret-1');
   await page.getByLabel('Пароль ещё раз').fill('super-secret-1');
+  await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Создать аккаунт' }).click();
 
-  await expect(page).toHaveURL('/children');
+  // Новый аккаунт: настройка за минуту — ребёнок, время, PIN (до 7 лет PIN можно позже).
+  await expect(page).toHaveURL('/setup', { timeout: 10_000 });
   await expect(page.getByRole('heading', { name: 'Кто будет играть?' })).toBeVisible();
   await page.getByLabel('Имя ребёнка').fill('Петя');
-  await page.getByRole('button', { name: '7', exact: true }).click();
+  // С 7 лет PIN обязателен; младшему ребёнку его можно отложить.
+  await page.getByRole('button', { name: '5', exact: true }).click();
   await page.getByRole('button', { name: '🦊' }).click();
-  await page.getByRole('button', { name: 'Готово' }).click();
+  await page.getByRole('button', { name: 'Дальше →' }).click();
+  await expect(page.getByRole('heading', { name: 'Сколько можно играть в день?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Дальше →' }).click();
+  await page.getByRole('button', { name: 'Позже' }).click();
 
   await expect(page).toHaveURL('/dashboard');
   await expect(page.getByRole('heading', { name: 'Во что поиграем?' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Сменить профиль' })).toContainText('Петя');
+  await expect(page.getByRole('heading', { name: /Петя/ })).toBeVisible();
 
   // Ни пароля, ни профиля в хранилищах браузера.
   expect(await browserStorage(page)).toEqual({ local: [], session: [], idb: [] });
@@ -98,16 +109,18 @@ test('приветствие → регистрация → ребёнок → �
 });
 
 test('вход: неверный пароль показывает ошибку, верный ведёт в дашборд', async ({ page }) => {
+  test.slow(); // 3D-остров на страницах входа грузится долго, особенно в параллельных прогонах
   await fakeServer(page).install();
   await page.goto('/login');
   await page.getByLabel('Почта').fill('mama@example.com');
   await page.getByLabel('Пароль').fill('wrong-password');
   await page.getByRole('button', { name: 'Войти' }).click();
-  await expect(page.getByRole('alert')).toHaveText('Неверная почта или пароль');
+  await expect(page.getByRole('alert')).toHaveText('Неверная почта или пароль.');
 
   await page.getByLabel('Пароль').fill('correct-horse');
   await page.getByRole('button', { name: 'Войти' }).click();
-  await expect(page).toHaveURL('/dashboard');
+  // После входа форма пару секунд показывает «дверь открыта», потом переход.
+  await expect(page).toHaveURL('/dashboard', { timeout: 10_000 });
 });
 
 test('закрытые страницы без входа ведут на вход', async ({ page }) => {

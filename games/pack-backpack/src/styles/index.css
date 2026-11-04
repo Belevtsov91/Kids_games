@@ -1,0 +1,7 @@
+/* Стили «Собери рюкзак». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './trips.css';
+@import './pack.css';
+@import './done.css';
+@import './animations.css';

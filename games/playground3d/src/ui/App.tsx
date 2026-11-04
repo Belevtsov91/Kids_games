@@ -4,6 +4,7 @@ import { addToy, makeToy, TOY_KINDS, type Toy, type ToyKind } from '../game/toys
 import { createSound } from '../audio/sound';
 import { textsFor } from '../i18n';
 import { Sandbox } from '../scene/Sandbox';
+import { createRewards } from './rewards';
 import '../styles/sandbox.css';
 
 export interface PauseStore {
@@ -18,11 +19,13 @@ export function App({ sdk, pause }: { sdk: GameSdk; pause: PauseStore }) {
   const [kind, setKind] = useState<ToyKind>('ball');
   const [toys, setToys] = useState<Toy[]>(() => [makeToy(0, 'ball', 0, 0)]);
   const nextId = useRef(1);
+  const reward = useMemo(() => createRewards(sdk), [sdk]);
   useEffect(() => () => sound.dispose(), [sound]);
 
   const drop = (x: number, z: number) => {
     setToys((current) => addToy(current, makeToy(nextId.current++, kind, x, z)));
     sound.drop();
+    reward(kind);
   };
   const clear = () => {
     setToys([]);

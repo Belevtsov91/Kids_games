@@ -48,6 +48,16 @@ export async function requireChild(req: unknown, reply: ReplyLike) {
   if (!childIdOf(req)) return reply.code(401).send(NO_CHILD_ERROR);
 }
 
+/**
+ * Может ли взрослый сейчас смотреть данные этого ребёнка: он вошёл, кабинет открыт (задача и PIN)
+ * и ребёнок его. Так игра показывает родителю, например, рисунки любого своего ребёнка.
+ * Проверяет платформа: игра только спрашивает.
+ */
+export async function parentCanView(req: unknown, childId: string): Promise<boolean> {
+  const check = (req as { canParentView?: ((childId: string) => Promise<boolean>) | null } | null)?.canParentView;
+  return typeof check === 'function' ? check(childId) : false;
+}
+
 /** preHandler: без входа (ни ребёнка, ни родителя) — 401. */
 export async function requirePlayer(req: unknown, reply: ReplyLike) {
   if (!playerKeyOf(req)) return reply.code(401).send(NO_SESSION_ERROR);

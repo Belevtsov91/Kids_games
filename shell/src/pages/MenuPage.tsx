@@ -1,62 +1,143 @@
-import { Link } from 'react-router';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import type { GameManifest } from '@ig/sdk';
 import { games } from '@/catalog/catalog';
-import { covers } from '@/catalog/covers';
 import { useAuth } from '@/auth/AuthContext';
 import { gameTitle, useI18n } from '@/i18n/I18nProvider';
-import { ageRange } from '@/i18n/plural';
+import { LanguageSwitch } from '@/i18n/LanguageSwitch';
+import { DashSky } from '@/dashboard/DashSky';
+import { FeaturedPortal, GamePortal } from '@/dashboard/Portal';
+import { ProfileMenu } from '@/dashboard/ProfileMenu';
+import { lastGame } from '@/dashboard/lastPlayed';
+import { listToday } from '@/family/daily';
+import { DayPlan } from '@/family/DayPlan';
+import { Mascot } from '@/family/Mascot';
+import { OfflineTask } from '@/family/OfflineTask';
+import { SeasonDecor } from '@/family/SeasonDecor';
+import { useKidStatus } from '@/kid/KidStatus';
+import { KidTimer } from '@/kid/KidTimer';
+import { isToddler } from '@/kid/toddler';
+import { useMoreText } from '@/more/text';
 
-function GameCard({ game }: { game: GameManifest }) {
-  const { locale } = useI18n();
-  const title = gameTitle(game, locale);
-  return (
-    <Link to={`/play/${game.id}`} className="menu-card" aria-label={title}>
-      {covers[game.id] ? <img className="menu-card-art" src={covers[game.id]} alt="" loading="lazy" decoding="async" width="960" height="640" /> : <span className="menu-card-emoji">{game.emoji}</span>}
-      <span className="menu-card-caption"><strong>{title}</strong><small>{ageRange(locale, game.ages.min, game.ages.max)} <span aria-hidden="true">↗</span></small></span>
-    </Link>
-  );
-}
+type Filter = 'all' | GameManifest['kind'];
+const FILTERS: Filter[] = ['all', '3d', '2d'];
 
 /**
- * Дашборд: сверху игры, подходящие по возрасту выбранному ребёнку, ниже — все остальные.
- * Прятать игры совсем нельзя: в каталоге 10 игр, а ребёнку 13–15 лет по возрасту подходят только 4.
+ * Дашборд в стиле стартовой страницы: закатное небо, облака и игры-порталы с обложками.
+ * Сверху игры по возрасту выбранного ребёнка, ниже — все остальные «за облаками».
+ * Прятать игры совсем нельзя: в каталоге 20 игр, а ребёнку 13–15 лет по возрасту подходят только 4.
  */
 export function MenuPage() {
   const { activeChild, logout } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState<Filter>('all');
+  const [note, setNote] = useState<string>();
+  const m = t.menu;
+  const toddler = isToddler(activeChild);
+  const more = useMoreText();
+
+  const { status } = useKidStatus();
+  const access = status?.access ?? {};
   const age = activeChild?.age;
-  const fits = (g: GameManifest) => age === undefined || (g.ages.min <= age && age <= g.ages.max);
-  const available = games.filter(fits);
-  const others = games.filter((g) => !fits(g));
+  // Взрослый может закрыть игру (её не видно) или поднять игру не по возрасту в «Твои миры».
+  const visible = games.filter((g) => access[g.id] !== false);
+  const fits = (g: GameManifest) => access[g.id] === true || age === undefined || (g.ages.min <= age && age <= g.ages.max);
+  const available = visible.filter(fits);
+  const others = visible.filter((g) => !fits(g));
+  const shown = available.filter((g) => filter === 'all' || g.kind === filter);
+
+  const lastId = activeChild && lastGame(activeChild.id);
+  const last = visible.find((g) => g.id === lastId);
+  const featured = last ?? available[0] ?? visible[0];
+  const play = (g: GameManifest) => navigate(`/play/${g.id}`);
+  // План дня от взрослого (закрытые игры из него выпадают) и что из него уже сыграно сегодня на этом устройстве.
+  const plan = (activeChild?.plan ?? []).map((id) => visible.find((g) => g.id === id)).filter((g): g is GameManifest => Boolean(g));
+  const played = activeChild ? listToday('played', activeChild.id) : [];
+  const playedPlan = plan.filter((g) => played.includes(g.id)).length;
 
   return (
-    <main className="menu">
-      <header className="topbar">
-        <Link to="/children" className="topbar-child" aria-label={t.menu.changeProfile}>
-          <span className="topbar-avatar">{activeChild?.avatar}</span>
-          {activeChild?.name}
+    <div className="dash">
+      <DashSky />
+      <SeasonDecor calm={Boolean(activeChild?.comfort?.reduceMotion)} />
+      <header className="dash-top dash-wrap">
+        <Link to="/" className="dash-logo" aria-label={t.common.home}>
+          <span className="dash-logo-mark" aria-hidden="true">🐻</span>
+          <span className="dash-logo-name">Interact Games</span>
         </Link>
-        <button className="btn btn-small" onClick={() => void logout()}>
-          {t.common.logout}
-        </button>
+        {/* Малышу не нужны кнопки, которые выкидывают из сайта: язык и выход — у взрослого в кабинете. */}
+        {!toddler && <LanguageSwitch className="dash-lang" />}
+        <KidTimer />
+        <ProfileMenu />
+        {!toddler && (
+          <button type="button" className="dash-chip dash-logout" onClick={() => void logout()}>
+            {t.common.logout}
+          </button>
+        )}
       </header>
-      <h1>{t.menu.title}</h1>
-      {available.length === 0 && <p>{t.menu.empty}</p>}
-      <div className="menu-grid" data-testid="menu-fits">
-        {available.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
-      </div>
-      {others.length > 0 && (
-        <section className="menu-others" aria-label={t.menu.others}>
-          <h2>{t.menu.others}</h2>
-          <div className="menu-grid" data-testid="menu-others">
-            {others.map((game) => (
-              <GameCard key={game.id} game={game} />
+
+      <main>
+        {activeChild?.birthday && <p className="dash-birthday">{more.birthday(activeChild.name)}</p>}
+        <section className="dash-hero dash-wrap">
+          <div className="dash-hero-copy">
+            <span className="dash-eyebrow">{m.count(available.length)}</span>
+            <h1>
+              <span className="dash-hl">{m.hello(activeChild?.name ?? '')}</span> {m.title}
+            </h1>
+            {featured && <p className="dash-lead">{last ? m.last(gameTitle(last, locale)) : m.first(gameTitle(featured, locale))}</p>}
+            <div className="dash-actions">
+              {featured && (
+                <button type="button" className="dash-btn dash-btn-primary" onClick={() => play(featured)}>
+                  ▶ {last ? m.continue : m.startHere}
+                </button>
+              )}
+              <a href="#mine" className="dash-btn dash-btn-ghost">{m.allMine}</a>
+            </div>
+          </div>
+          {featured && <FeaturedPortal game={featured} label={last ? m.continue : m.startHere} onPlay={() => play(featured)} />}
+        </section>
+
+        {activeChild && (
+          <section className="family-row dash-wrap">
+            <Mascot childId={activeChild.id} name={activeChild.name} plan={plan.length} played={playedPlan} note={note} />
+            <DayPlan plan={plan} played={played} onPlay={play} />
+            {last && <OfflineTask childId={activeChild.id} game={last} onDone={setNote} />}
+          </section>
+        )}
+
+        <section className="dash-shelf dash-wrap" id="mine" aria-label={m.mine}>
+          <div className="dash-shelf-head">
+            <h2>{m.mine}</h2>
+            <div className="dash-filters" role="group" aria-label={m.filter.label}>
+              {FILTERS.map((f) => (
+                <button key={f} type="button" aria-pressed={f === filter} onClick={() => setFilter(f)}>
+                  {m.filter[f]}
+                </button>
+              ))}
+            </div>
+          </div>
+          {shown.length === 0 && <p className="dash-empty">{m.empty}</p>}
+          <div className="dash-grid" data-testid="menu-fits">
+            {shown.map((game, i) => (
+              <GamePortal key={game.id} game={game} delay={-i * 1.3} />
             ))}
           </div>
         </section>
-      )}
-    </main>
+
+        {others.length > 0 && (
+          <section className="dash-shelf dash-mist dash-wrap" aria-label={m.others}>
+            <div className="dash-shelf-head">
+              <h2>{m.others}</h2>
+              <p>{m.othersText}</p>
+            </div>
+            <div className="dash-grid" data-testid="menu-others">
+              {others.map((game, i) => (
+                <GamePortal key={game.id} game={game} delay={-i * 1.7} />
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+    </div>
   );
 }

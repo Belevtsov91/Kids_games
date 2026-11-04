@@ -1,0 +1,48 @@
+/* Анимации */
+
+@keyframes st-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes st-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes st-hop {
+  0%, 100% { translate: 0 0; }
+  40% { translate: 0 -18%; }
+}
+
+@keyframes st-shake {
+  0%, 100% { translate: 0 0; }
+  25% { translate: -8px 0; }
+  50% { translate: 8px 0; }
+  75% { translate: -4px 0; }
+}
+
+@keyframes st-boing {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.25, 0.85); }
+  70% { transform: scale(0.92, 1.1); }
+}
+
+@keyframes st-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 196 0 / 0.9); }
+  50% { box-shadow: 0 0 0 10px rgb(255 196 0 / 0.25); }
+}
+
+@keyframes st-fade {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-hero,
+  .st-panel,
+  .st-actor,
+  .st-card.is-picked {
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,60 @@
+/* Кнопки */
+
+.eh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 60px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  font-size: clamp(20px, 4vmin, 26px);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.2s;
+  touch-action: manipulation;
+}
+
+.eh-btn:active {
+  transform: translateY(3px) scale(0.98);
+}
+
+.eh-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.eh-btn-play {
+  background: linear-gradient(#ff9b5e, var(--eh-accent));
+  color: #fff;
+  box-shadow: 0 6px 0 var(--eh-accent-dark), 0 10px 20px rgb(232 93 31 / 0.35);
+}
+
+.eh-btn-soft {
+  background: #fff;
+  box-shadow: 0 5px 0 #d5dbe8, 0 8px 16px rgb(0 0 0 / 0.08);
+}
+
+.eh-btn-small {
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 18px;
+}
+
+.eh-btn-icon {
+  width: 60px;
+  padding: 0;
+}
+
+.eh :focus-visible {
+  outline: 4px solid #4d96ff;
+  outline-offset: 3px;
+}
+
+.eh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 18px;
+}

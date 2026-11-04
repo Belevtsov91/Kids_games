@@ -1,0 +1,55 @@
+/* Окно «дракончик спокоен» */
+
+.db-done {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(30 40 90 / 0.35);
+  backdrop-filter: blur(3px);
+  animation: db-fade 0.4s ease both;
+}
+
+.db-done-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(440px, 100%);
+  padding: 24px 20px 28px;
+  border-radius: 32px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.25);
+  text-align: center;
+}
+
+.db-done-card h2 {
+  margin: 0;
+  font-size: clamp(28px, 6vmin, 40px);
+}
+
+.db-done-card p {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: var(--db-soft);
+}
+
+.db-done-card .db-new {
+  color: var(--db-accent-dark);
+  font-weight: 800;
+}
+
+.db-dragon-sleep {
+  position: relative;
+  animation: db-sleep 3s ease-in-out infinite;
+}
+
+.db-zzz {
+  position: absolute;
+  top: -10px;
+  right: -26px;
+  font-size: 0.35em;
+  filter: hue-rotate(calc(-1 * var(--db-hue, 0deg)));
+}

@@ -3,22 +3,42 @@ export interface Grid {
   rows: number;
 }
 
-/** Уровни сложности: примерное число деталей. 0 — подобрать по картинке. */
+/** Уровни сложности: примерное число деталей. 0 — подобрать по картинке. Точное число зависит от формы картинки. */
 export const LEVELS = [
-  { id: 'auto', label: 'Авто', pieces: 0 },
-  { id: 'easy', label: '4', pieces: 4 },
-  { id: 'medium', label: '9', pieces: 9 },
-  { id: 'hard', label: '16', pieces: 16 },
-  { id: 'expert', label: '25', pieces: 25 },
+  { id: 'auto', icon: '✨', pieces: 0 },
+  { id: 'easy', icon: '🐣', pieces: 4 },
+  { id: 'medium', icon: '🐰', pieces: 9 },
+  { id: 'hard', icon: '🦊', pieces: 16 },
+  { id: 'expert', icon: '🐻', pieces: 25 },
+  { id: 'master', icon: '🦁', pieces: 36 },
+  { id: 'legend', icon: '🐲', pieces: 49 },
 ] as const;
 export type LevelId = (typeof LEVELS)[number]['id'];
 
-/** Сетка под нужное число деталей с учётом пропорций картинки (детали близки к квадрату). */
+/** Самый крупный пазл: 10 столбцов или строк и не больше 54 деталей. */
+export const MAX_SIDE = 10;
+export const MAX_PIECES = 54;
+
+/**
+ * Сетка под нужное число деталей с учётом пропорций картинки.
+ * Перебираем все сетки 2…10 и берём ту, где число деталей ближе к нужному, а сами детали ближе к квадрату.
+ */
 export function gridFor(width: number, height: number, targetPieces: number): Grid {
-  const aspect = width / height;
-  const cols = Math.max(2, Math.min(6, Math.round(Math.sqrt(targetPieces * aspect))));
-  const rows = Math.max(2, Math.min(6, Math.round(targetPieces / cols)));
-  return { cols, rows };
+  let best: Grid = { cols: 2, rows: 2 };
+  let bestScore = Infinity;
+  for (let rows = 2; rows <= MAX_SIDE; rows += 1) {
+    for (let cols = 2; cols <= MAX_SIDE; cols += 1) {
+      const count = cols * rows;
+      if (count > MAX_PIECES) continue;
+      const pieceShape = width / cols / (height / rows);
+      const score = 2 * Math.abs(Math.log(count / targetPieces)) + Math.abs(Math.log(pieceShape));
+      if (score < bestScore) {
+        bestScore = score;
+        best = { cols, rows };
+      }
+    }
+  }
+  return best;
 }
 
 export function recommendedGrid(width: number, height: number): Grid {
@@ -26,8 +46,10 @@ export function recommendedGrid(width: number, height: number): Grid {
   return gridFor(width, height, Math.max(4, Math.min(36, Math.round(6 + megapixels * 8))));
 }
 
+export const levelPieces = (level: LevelId) => LEVELS.find((item) => item.id === level)?.pieces ?? 0;
+
 export function gridForLevel(width: number, height: number, level: LevelId): Grid {
-  const pieces = LEVELS.find((item) => item.id === level)?.pieces ?? 0;
+  const pieces = levelPieces(level);
   return pieces ? gridFor(width, height, pieces) : recommendedGrid(width, height);
 }
 
@@ -42,6 +64,13 @@ export function shuffled<T>(items: T[]): T[] {
 
 /** Деталь подходит только на своё место: так пазл всегда можно собрать до конца. */
 export const fits = (piece: number, cell: number) => piece === cell;
+
+/** Деталь с края картинки (рамка): с них удобно начинать большой пазл. */
+export function isEdge(piece: number, grid: Grid): boolean {
+  const col = piece % grid.cols;
+  const row = Math.floor(piece / grid.cols);
+  return col === 0 || row === 0 || col === grid.cols - 1 || row === grid.rows - 1;
+}
 
 /** Положение фрагмента картинки для детали (CSS background-position в процентах). */
 export function piecePosition(piece: number, grid: Grid): string {

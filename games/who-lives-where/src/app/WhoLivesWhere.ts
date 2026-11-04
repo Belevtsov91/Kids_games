@@ -6,6 +6,7 @@ import { buildRound } from '../game/rounds';
 import { Confetti } from '../ui/Confetti';
 import { el } from '../ui/dom';
 import { albumScreen, startScreen, winOverlay } from '../ui/screens';
+import { rewardRound } from './rewards';
 import { RoundPlay } from './RoundPlay';
 import { Timers } from './Timers';
 import { animalName, homeWhere, tr } from '../i18n';
@@ -79,6 +80,7 @@ export class WhoLivesWhere {
       confetti: this.confetti,
       timers: this.timers,
       onWin: (mistakes) => this.showWin(mistakes),
+      answer: (ok) => this.sdk.progress.skill('animals', ok),
     });
   }
 
@@ -101,6 +103,7 @@ export class WhoLivesWhere {
   private showWin(mistakes: number) {
     const round = this.round!.round;
     void this.progress.completeRound(round.level, round.animals.map((a) => a.id));
+    rewardRound(this.sdk.progress, round.level, mistakes, new Set([...this.progress.progress.found, ...round.animals.map((a) => a.id)]).size);
     this.confetti.burst();
     this.sound.win();
     this.sound.say(tr().sayWin);

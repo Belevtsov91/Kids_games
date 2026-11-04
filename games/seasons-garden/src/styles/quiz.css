@@ -1,0 +1,89 @@
+/* Панели выбора сезона и погоды, загадки */
+
+.sg-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sg-chip {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #d5dbe8;
+  font-size: clamp(16px, 2.8vmin, 20px);
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sg-chip-weather {
+  width: 56px;
+  padding: 0;
+  font-size: 26px;
+}
+
+.sg-chip.is-on {
+  background: #ffe28a;
+  box-shadow: 0 4px 0 #e0b73a, 0 0 0 3px #ffb703;
+}
+
+.sg-chip.is-off {
+  opacity: 0.4;
+}
+
+.sg-quiz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 2.4vmin, 22px);
+}
+
+.sg-quiz-picture {
+  display: grid;
+  place-items: center;
+  width: clamp(110px, 22vmin, 170px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+  font-size: clamp(60px, 13vmin, 100px);
+  animation: sg-pop 0.4s ease both;
+}
+
+.sg-quiz-picture.sg-season-spring { background: #ffe3ee; }
+.sg-quiz-picture.sg-season-summer { background: #fff3c4; }
+.sg-quiz-picture.sg-season-autumn { background: #ffe0c2; }
+.sg-quiz-picture.sg-season-winter { background: #e3f0ff; }
+
+.sg-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(10px, 2vmin, 18px);
+}
+
+.sg-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: clamp(84px, 17vmin, 130px);
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 5px 0 #d5dbe8, 0 8px 16px rgb(0 0 0 / 0.08);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sg-option-emoji { font-size: clamp(40px, 8vmin, 64px); line-height: 1; }
+.sg-option-label { font-size: clamp(13px, 2.4vmin, 17px); font-weight: 800; }
+.sg-option:disabled { cursor: default; opacity: 0.6; }
+.sg-option.is-right { opacity: 1; box-shadow: 0 0 0 5px #3cb371, 0 8px 18px rgb(60 179 113 / 0.35); }
+.sg-option.is-wrong { opacity: 1; box-shadow: 0 0 0 5px #ef6f6c; animation: sg-shake 0.4s ease; }

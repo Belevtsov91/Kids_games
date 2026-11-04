@@ -1,0 +1,93 @@
+/* «Собери рюкзак». Все классы с префиксом pb-, чтобы не задеть оболочку и другие игры. */
+
+.pb {
+  --pb-ink: #2b2d42;
+  --pb-soft: #5c6178;
+  --pb-accent: #ff7a3d;
+  --pb-accent-dark: #e85d1f;
+  --pb-tile: #fff8ec;
+  --pb-tile-alt: #ffeccc;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--pb-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(140% 45% at 50% 115%, #b8e08f 0 45%, transparent 46%),
+    linear-gradient(#bfe6ff, #eaf7ff 60%, #f3fbe9);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pb [hidden] {
+  display: none !important;
+}
+
+:where(.pb) button {
+  font: inherit;
+  color: inherit;
+}
+
+.pb-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.pb-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.pb-badge:empty {
+  display: none;
+}
+
+.pb-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.pb-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.pb-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Удобство от взрослого: меньше движения и крупные кнопки */
+.pb.pb-calm *,
+.pb.pb-calm *::before,
+.pb.pb-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.pb.pb-big button {
+  zoom: 1.15;
+}

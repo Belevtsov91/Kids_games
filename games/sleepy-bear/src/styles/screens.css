@@ -1,0 +1,87 @@
+.sb-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 80% 15%, #fff6c9 0 6%, transparent 6.5%),
+    linear-gradient(#6d5aa8, #a68fd6 70%, #d9c7f2);
+}
+.sb-screen .sb-bear {
+  position: relative;
+  width: min(46vmin, 300px);
+  height: min(54vmin, 354px);
+}
+.sb-bear-start svg {
+  animation: sb-breathe 3.2s ease-in-out infinite;
+}
+@keyframes sb-breathe {
+  50% { transform: scale(1.03, 0.98) translateY(3px); }
+}
+.sb-moons {
+  display: flex;
+  gap: 6px;
+  font-size: clamp(22px, 5vmin, 36px);
+}
+.sb-moons span {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+.sb-moons span.is-on {
+  opacity: 1;
+  filter: none;
+}
+.sb-big-btn {
+  width: var(--sb-btn);
+  height: var(--sb-btn);
+  border-radius: 50% !important;
+  font-size: calc(var(--sb-btn) * 0.42) !important;
+  color: #fff !important;
+  background: var(--sb-accent) !important;
+  box-shadow: 0 8px 0 #e07a4a, 0 14px 24px rgba(0, 0, 0, 0.2);
+}
+.sb-big-btn:active {
+  translate: 0 6px;
+  box-shadow: 0 2px 0 #e07a4a;
+}
+.sb-play {
+  animation: sb-pulse 1.6s ease-in-out infinite;
+}
+@keyframes sb-pulse {
+  50% { transform: scale(1.08); }
+}
+.sb-soft-btn {
+  background: #fff !important;
+  box-shadow: 0 8px 0 #d6c9ee, 0 14px 24px rgba(0, 0, 0, 0.15);
+}
+.sb-buttons {
+  display: flex;
+  gap: 28px;
+}
+.sb-prizes {
+  display: flex;
+  gap: 14px;
+  min-height: 1px;
+}
+.sb-prize {
+  display: grid;
+  place-items: center;
+  width: clamp(64px, 13vmin, 96px);
+  height: clamp(64px, 13vmin, 96px);
+  border-radius: 50%;
+  background: #fff;
+  font-size: clamp(34px, 7vmin, 52px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  animation: sb-pop-in 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+.sb-prize:nth-child(2) { animation-delay: 0.3s; }
+.sb-prize:nth-child(3) { animation-delay: 0.6s; }
+.sb-prize:nth-child(4) { animation-delay: 0.9s; }
+/* Снизу всплывает наклейка оболочки: кнопки чуть выше, чтобы она их не закрывала. */
+.sb-finale {
+  padding-bottom: 104px;
+}
+@keyframes sb-pop-in {
+  from { transform: scale(0); }
+}

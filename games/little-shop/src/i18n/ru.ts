@@ -1,0 +1,36 @@
+// Тексты: русский (образец формы для остальных языков).
+export const ru = {
+  speech: 'ru',
+  title: 'Магазинчик',
+  lead: (name?: string) => (name ? `${name}, сегодня ты продавец! Выбери прилавок.` : 'Сегодня ты продавец! Выбери прилавок.'),
+  stations: { scales: '⚖️ Весы', juice: '🧃 Сок', cash: '🪙 Касса' } as Record<string, string>,
+  level: (n: number) => `Уровень ${n}`,
+  back: '‹ Прилавки',
+  heavier: 'Что тяжелее? Нажми на чашу.',
+  balance: 'Положи гирьки, чтобы весы стали ровно.',
+  pourAsk: 'Налей сок до линии. Держи кнопку.',
+  pourHold: 'Держи — наливаю',
+  again: '↻ Ещё раз',
+  payAsk: (n: number) => `С покупателя ${n}. Положи монеты.`,
+  changeAsk: (paid: number, total: number) => `Покупатель дал ${paid}, покупка стоит ${total}. Дай сдачу.`,
+  done: 'Готово ✓',
+  kg: (n: number) => `${n} кг`,
+  sayHeavier: (name: string) => `Да! ${name} тяжелее.`,
+  sayLighter: 'Эта чаша легче. Посмотри, куда опустились весы.',
+  sayBalanced: 'Ровно! Весы уравновешены.',
+  sayTooHeavy: 'Перевесило. Убери гирьку — нажми на неё.',
+  sayJuiceOk: 'Точно до линии!',
+  sayJuiceLess: 'Чуть-чуть не хватает.',
+  sayJuiceMore: 'Через край линии! Попробуй ещё.',
+  sayPaid: 'Спасибо! Ровно столько.',
+  sayLess: 'Пока мало.',
+  sayMore: 'Слишком много. Убери монету — нажми на неё.',
+  sayLevelUp: 'Молодец! Теперь чуть сложнее.',
+  items: {
+    strawberry: 'клубника', lemon: 'лимон', carrot: 'морковка', apple: 'яблоко', potato: 'картошка',
+    cheese: 'сыр', pineapple: 'ананас', melon: 'дыня', watermelon: 'арбуз', pumpkin: 'тыква',
+  } as Record<string, string>,
+  sayEnding: 'Скоро отдых. Давай спокойно закончим.',
+};
+
+export type Texts = typeof ru;

@@ -1,15 +1,40 @@
+import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { findGame } from '@/catalog/catalog';
 import { GameHost } from '@/host/GameHost';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
+import { rememberGame } from '@/dashboard/lastPlayed';
+import { markToday } from '@/family/daily';
+import { useKidStatus } from '@/kid/KidStatus';
+import { KidTimer } from '@/kid/KidTimer';
+import { EndingBanner } from '@/kid/EndingBanner';
+import { usePlayClock } from '@/kid/usePlayClock';
+import { HoldButton } from '@/kid/HoldButton';
+import { StickerToast, useStickerToast } from '@/kid/StickerToast';
+import { isToddler } from '@/kid/toddler';
+import { ClosedGameScreen, PauseScreen, TimeUpScreen } from '@/kid/RestScreens';
 
 export function GamePage() {
   const { gameId } = useParams();
   const navigate = useNavigate();
   const { activeChild } = useAuth();
   const { t } = useI18n();
+  const { status } = useKidStatus();
   const game = findGame(gameId);
+  const { sticker, showSticker } = useStickerToast();
+
+  // Игру закрыл взрослый, кончилось время или тихие часы — игра не запускается (или закрывается).
+  const closed = Boolean(game && status?.access[game.id] === false);
+  const blocked = status?.time.blocked ?? null;
+  const { pause, endPause } = usePlayClock(game?.id, Boolean(game) && !closed && !blocked);
+
+  // для портала «Продолжить» на дашборде
+  useEffect(() => {
+    if (!game || !activeChild) return;
+    rememberGame(activeChild.id, game.id);
+    markToday('played', activeChild.id, game.id); // галочка в «Плане на сегодня»
+  }, [game, activeChild]);
 
   if (!game) {
     return (
@@ -22,15 +47,34 @@ export function GamePage() {
 
   return (
     <div className="game-screen">
-      <Link to="/dashboard" className="back-button" aria-label={t.game.toMenu}>
-        ⬅
-      </Link>
-      <GameHost
-        key={game.id}
-        manifest={game}
-        profile={activeChild && { id: activeChild.id, name: activeChild.name, avatar: activeChild.avatar }}
-        onExit={() => navigate('/dashboard')}
-      />
+      {isToddler(activeChild) ? (
+        <HoldButton className="back-button" label={t.game.hold} onDone={() => navigate('/dashboard')}>
+          ⬅
+        </HoldButton>
+      ) : (
+        <Link to="/dashboard" className="back-button" aria-label={t.game.toMenu}>
+          ⬅
+        </Link>
+      )}
+      {!closed && !blocked && <KidTimer className="game-timer" />}
+      {!closed && !blocked && <EndingBanner />}
+      {closed ? (
+        <ClosedGameScreen />
+      ) : blocked && status ? (
+        <TimeUpScreen time={status.time} />
+      ) : (
+        <GameHost
+          key={game.id}
+          manifest={game}
+          profile={activeChild && { id: activeChild.id, name: activeChild.name, avatar: activeChild.avatar }}
+          child={activeChild}
+          onSticker={(id) => showSticker(game, id)}
+          onExit={() => navigate('/dashboard')}
+          paused={pause}
+        />
+      )}
+      {pause && !blocked && !closed && <PauseScreen onGo={endPause} />}
+      {sticker && <StickerToast sticker={sticker} />}
     </div>
   );
 }

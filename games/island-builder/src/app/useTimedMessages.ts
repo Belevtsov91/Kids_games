@@ -21,7 +21,7 @@ export function useHint() {
  * Задания: как только новое выполнено — отмечаем его навсегда и показываем тост.
  * Тосты идут по одному, каждый несколько секунд.
  */
-export function useQuestToasts({ ready, world, stats, achieved, setAchieved }: IslandState) {
+export function useQuestToasts({ ready, world, stats, achieved, setAchieved }: IslandState, onDone?: (done: Quest[], total: number) => void) {
   const [toasts, setToasts] = useState<Quest[]>([]);
 
   useEffect(() => {
@@ -29,6 +29,7 @@ export function useQuestToasts({ ready, world, stats, achieved, setAchieved }: I
     const done = newlyDone(world, stats, achieved);
     if (!done.length) return;
     setAchieved((a) => [...a, ...done.map((q) => q.id)]);
+    onDone?.(done, achieved.length + done.length);
     setToasts((t) => [...t, ...done]);
     sound.quest();
   }, [ready, world, stats, achieved, setAchieved]);

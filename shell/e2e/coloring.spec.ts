@@ -1,5 +1,8 @@
 /// <reference lib="dom" />
 import { expect, test } from '@playwright/test';
+import { serverAwake } from './server';
+
+test.beforeEach(({ page }) => serverAwake(page));
 
 test('раскраска: цвет, отмена, защита выхода, ошибка сохранения и повтор', async ({ page }) => {
   test.setTimeout(60_000);

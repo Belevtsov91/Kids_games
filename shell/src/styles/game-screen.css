@@ -36,3 +36,34 @@
   /* Свой контекст наложения: z-index внутри игры не перекроет кнопку «В меню». */
   isolation: isolate;
 }
+
+/* Режим малыша: выход удержанием, кольцо показывает, сколько ещё держать. */
+.hold-button { touch-action: none; user-select: none; -webkit-user-select: none; border: 0; cursor: pointer; font: inherit; background: conic-gradient(#ffcc33 var(--hold, 0deg), rgba(255, 255, 255, 0.85) 0); }
+.hold-button::after { content: ''; position: absolute; inset: 4px; border-radius: inherit; background: rgba(255, 255, 255, 0.92); z-index: -1; }
+
+.game-crash { position: absolute; inset: 0; z-index: 20; display: grid; place-content: center; justify-items: center; gap: 16px; padding: 16px; background: rgba(255, 248, 231, 0.96); text-align: center; }
+.game-crash-face { font-size: 88px; }
+.game-crash p { margin: 0; font-size: 24px; font-weight: 700; }
+.game-crash-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.game-crash-actions .btn { min-width: 160px; min-height: 64px; font-size: 20px; }
+
+/* Наклейка вылетает поверх игры. */
+.sticker-toast { position: absolute; z-index: 30; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px; padding: 10px 22px 10px 12px; border-radius: 999px; background: #fff; box-shadow: 0 8px 24px rgb(0 0 0 / 0.2); font-weight: 700; font-size: 18px; transform: translateX(-50%); animation: sticker-in 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both; pointer-events: none; }
+.sticker-toast-emoji { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: #fff3c4; font-size: 34px; }
+@keyframes sticker-in { from { opacity: 0; transform: translate(-50%, 40px) scale(0.6); } }
+@media (prefers-reduced-motion: reduce) { .sticker-toast { animation: none; } }
+
+/* Удобство из настроек ребёнка для любых игр (атрибуты ставит GameHost). */
+.game-container[data-reduce-motion] *,
+.game-container[data-reduce-motion] *::before,
+.game-container[data-reduce-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+.game-container[data-big-buttons] button,
+.game-container[data-big-buttons] [role='button'] {
+  min-width: 56px;
+  min-height: 56px;
+}

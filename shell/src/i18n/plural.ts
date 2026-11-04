@@ -16,6 +16,23 @@ function years(locale: Locale, n: number): string {
   }
 }
 
+/** «20 игр», «21 гра», «20 de jocuri», «20 games». */
+export function gameCount(locale: Locale, n: number): string {
+  const d = n % 10, dd = n % 100;
+  const one = d === 1 && dd !== 11;
+  const few = d >= 2 && d <= 4 && (dd < 12 || dd > 14);
+  switch (locale) {
+    case 'ru':
+      return `${n} ${one ? 'игра' : few ? 'игры' : 'игр'}`;
+    case 'uk':
+      return `${n} ${one ? 'гра' : few ? 'гри' : 'ігор'}`;
+    case 'ro':
+      return n === 1 ? '1 joc' : n === 0 || (dd >= 1 && dd <= 19) ? `${n} jocuri` : `${n} de jocuri`;
+    case 'en':
+      return n === 1 ? '1 game' : `${n} games`;
+  }
+}
+
 /** «5 лет», «3 роки», «7 ani», «2 years». */
 export const age = (locale: Locale, n: number) => `${n} ${years(locale, n)}`;
 

@@ -1,0 +1,166 @@
+/* Диалог с жителем и журнал: квесты, питомцы, как играть. */
+
+.mv-dialog {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: max(110px, calc(env(safe-area-inset-bottom) + 100px));
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  width: min(640px, calc(100vw - 28px));
+  padding: 16px 18px;
+  border-radius: 22px;
+  border-color: #ffe7a0;
+  background: rgb(26 32 74 / 0.86);
+  transform: translateX(-50%);
+  animation: mv-rise 0.2s ease;
+}
+@keyframes mv-rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+}
+.mv-dialog-face {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff2c4, #d9a35f);
+  font-size: 32px;
+}
+.mv-dialog b {
+  color: #ffe18a;
+}
+.mv-dialog p {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.mv-dialog button {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 14px;
+  color: #23384f;
+  background: #ffe18a;
+  box-shadow: 0 4px 0 #c99b3c;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mv-modal {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(8 14 34 / 0.55);
+  backdrop-filter: blur(4px);
+}
+.mv-modal section {
+  width: min(560px, 100%);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 20px 20px;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 24px;
+  background: rgb(22 32 72 / 0.94);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.4);
+}
+.mv-modal header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mv-modal h2 {
+  margin: 0;
+  font-size: 22px;
+}
+.mv-modal header button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  color: inherit;
+  background: rgb(255 255 255 / 0.12);
+  font-size: 18px;
+  cursor: pointer;
+}
+.mv-modal h3 {
+  margin: 18px 0 8px;
+  color: #a8ddeb;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.mv-log {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mv-log li {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.07);
+}
+.mv-log li.current {
+  background: rgb(255 225 138 / 0.16);
+  box-shadow: inset 0 0 0 1px rgb(255 225 138 / 0.5);
+}
+.mv-log li.locked {
+  opacity: 0.45;
+}
+.mv-log span {
+  color: #dce9ff;
+  font-size: 13px;
+}
+.mv-log small {
+  color: #b9e8ee;
+  font-size: 12px;
+}
+.mv-pets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.mv-pets div {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.08);
+  text-align: center;
+}
+.mv-pets span {
+  font-size: 30px;
+}
+.mv-pets b {
+  font-size: 13px;
+}
+.mv-pets small {
+  color: #b9e8ee;
+  font-size: 11px;
+}
+.mv-pets .locked {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.mv-help {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  color: #dce9ff;
+  font-size: 13px;
+}

@@ -1,0 +1,40 @@
+/* Полки дашборда: «Твои миры» (по возрасту) и «Миры за облаками» (остальные — в лёгком тумане, но открываются). */
+
+.dash-shelf { padding-block: 34px 10px; }
+.dash-shelf-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 22px; }
+.dash-shelf h2 { font-size: clamp(26px, 3.4vw, 38px); text-shadow: 0 3px 18px rgba(40, 20, 90, 0.5); }
+.dash-shelf-head p { max-width: 46ch; margin: 0; color: var(--dash-ink-soft); font-weight: 600; }
+.dash-empty { margin: 0 0 20px; color: var(--dash-ink-soft); font-weight: 700; }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 268px), 1fr)); gap: 44px 28px; }
+
+.dash-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.dash-filters button {
+  min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; font: inherit; font-weight: 800; font-size: 14px;
+  color: var(--dash-ink); background: rgba(23, 21, 63, 0.45); box-shadow: inset 0 0 0 1.5px var(--dash-line); backdrop-filter: blur(8px); cursor: pointer;
+}
+.dash-filters button[aria-pressed='true'] { background: var(--dash-ink); color: #2a2050; box-shadow: none; }
+
+/* туман над мирами другого возраста: уходит при наведении */
+.dash-mist .dash-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 36px 22px; }
+.dash-mist .portal-window img { filter: saturate(0.55) brightness(0.82); }
+.dash-mist .portal:hover .portal-window img { filter: none; }
+.dash-mist .portal-window::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(200, 180, 240, 0.18), rgba(60, 40, 120, 0.35)); transition: opacity 0.4s; }
+.dash-mist .portal:hover .portal-window::after { opacity: 0; }
+.dash-mist .portal-icon { display: none; }
+.dash-mist .portal-text strong { font-size: 17px; }
+
+/* телефон: две колонки, подписи короче */
+@media (max-width: 480px) {
+  .dash-grid, .dash-mist .dash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
+  .portal-caption { gap: 8px; margin-top: 10px; padding: 0 2px; }
+  .portal-icon, .portal-go, .portal-text small { display: none; }
+  .portal-text strong, .dash-mist .portal-text strong { font-size: 15px; }
+  .portal-badges { top: 8px; left: 8px; right: 8px; }
+  .portal-badge { padding: 3px 7px; font-size: 10.5px; }
+  .portal-play { width: 52px; height: 52px; font-size: 22px; }
+  .portal-body, .portal-window, .portal-rim { border-radius: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash *, .dash *::before, .dash *::after { animation: none !important; transition: none !important; }
+}

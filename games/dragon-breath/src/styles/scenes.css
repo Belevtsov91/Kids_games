@@ -1,0 +1,71 @@
+/* Три картинки дыхания. --db-p: 0 → 1 по ходу выдоха для текущей цели. */
+
+/* Шарики: надуваются на выдохе и улетают вверх, когда вдох-выдох закончен */
+.db-scene-balloon .db-target-art {
+  transform: scale(calc(0.45 + 0.55 * var(--db-p, 0)));
+  transform-origin: 50% 100%;
+}
+
+.db-scene-balloon .db-target.is-done .db-target-art {
+  animation: db-fly 1.6s ease-in forwards;
+}
+
+/* Свечки: свеча нарисована CSS, огонёк над ней тает на выдохе, после — дымок */
+.db-scene-candles .db-target::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 40%;
+  height: 62%;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(90deg, #ffe0ea, #fff 45%, #ffd0de);
+  box-shadow: 0 4px 0 #f3b3c6;
+}
+
+.db-scene-candles .db-target-fx {
+  position: absolute;
+  top: 4%;
+  width: 18px;
+  height: 28px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 70%, #fff3a8, #ffb020 60%, #ff6a00);
+  opacity: calc(1 - var(--db-p, 0));
+  transform: scale(calc(1 - 0.6 * var(--db-p, 0))) skewX(calc(var(--db-p, 0) * 25deg));
+  animation: db-flicker 0.4s ease-in-out infinite alternate;
+}
+
+.db-scene-candles .db-target.is-done .db-target-fx {
+  opacity: 0;
+}
+
+.db-scene-candles .db-target.is-done::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 18px;
+  border-radius: 3px;
+  background: rgb(120 120 140 / 0.35);
+  animation: db-smoke 1.4s ease-out forwards;
+}
+
+/* Одуванчики: семена разлетаются, цветок бледнеет */
+.db-scene-dandelion .db-target-fx {
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 18px -10px 0 -2px #fff, -16px -6px 0 -2px #fff, 8px -22px 0 -3px #fff, -6px -24px 0 -3px #fff;
+  opacity: calc(1 - var(--db-p, 0));
+  transform: translate(calc(var(--db-p, 0) * 60px), calc(var(--db-p, 0) * -50px)) scale(calc(1 + var(--db-p, 0)));
+}
+
+.db-scene-dandelion .db-target.is-done .db-target-art {
+  opacity: 0.45;
+}
+
+.db-scene-dandelion .db-target.is-done .db-target-fx {
+  opacity: 0;
+}

@@ -1,0 +1,92 @@
+/* Витрина с тентом и три прилавка; общий каркас задания */
+
+.ls-shop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  min-height: 100%;
+  padding: 0 16px 28px;
+  text-align: center;
+}
+
+.ls-awning {
+  width: min(640px, 100%);
+  height: 70px;
+  border-radius: 0 0 24px 24px;
+  background: repeating-linear-gradient(90deg, #ff6b6b 0 48px, #fff 48px 96px);
+  box-shadow: 0 10px 18px rgb(0 0 0 / 0.12);
+  mask: radial-gradient(circle at 24px 70px, transparent 22px, #000 23px) 0 0 / 48px 100% repeat-x;
+}
+
+.ls-lead {
+  margin: 0;
+  max-width: 28ch;
+  font-size: clamp(20px, 4.4vmin, 30px);
+  font-weight: 800;
+}
+
+.ls-stations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 200px));
+  gap: 14px;
+  width: 100%;
+  justify-content: center;
+}
+
+.ls-station {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 8px;
+  border: 0;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 7px 0 #e1c79f, 0 12px 20px rgb(0 0 0 / 0.1);
+  font-size: clamp(20px, 4vmin, 28px);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.ls-station small {
+  color: var(--ls-soft);
+  font-size: 15px;
+}
+
+.ls-task {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-height: 100%;
+  padding: 4px 16px 28px;
+  text-align: center;
+}
+
+.ls-back {
+  align-self: flex-start;
+}
+
+.ls-ask {
+  margin: 0;
+  max-width: 32ch;
+  font-size: clamp(20px, 4.2vmin, 28px);
+  font-weight: 800;
+}
+
+.ls-goods {
+  font-size: clamp(44px, 10vmin, 72px);
+  line-height: 1;
+}
+
+.ls-hold.is-down {
+  transform: translateY(5px) scale(0.98);
+}
+
+@media (max-width: 560px) {
+  .ls-stations {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}

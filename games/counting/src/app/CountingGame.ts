@@ -2,15 +2,17 @@ import type { GameSdk } from '@ig/sdk';
 import { CountingAudio } from '../audio/CountingAudio';
 import { modes, type Mode } from '../game/logic';
 import { Session } from '../game/Session';
-import { LIMITS, THEMES } from '../game/themes';
-import { languages, numberWord, words, type Language } from '../i18n';
+import { THEMES } from '../game/themes';
+import { numberWord, words } from '../i18n';
 import { homeView } from '../ui/homeView';
 import { renderKeepingFocus } from '../ui/html';
 import { resultView, shellView } from '../ui/layout';
 import { playView } from '../ui/playView';
+import { pullCloud, pushCloud, reportAnswer, reportFinish } from './platform';
+import { applyPreference, promptSpeech } from './prompts';
 import { defaultPreferences, loadSaved, progressKey, saveState, type Preferences, type Progress } from './savedState';
 
-// Контроллер: состояние сессии, обработка нажатий и перерисовка экрана целиком.
+// Контроллер: сессия, нажатия, перерисовка. Озвучка — prompts.ts, сохранение — savedState.ts, платформа — platform.ts.
 
 export class CountingGame {
   private root = document.createElement('div');
@@ -35,6 +37,7 @@ export class CountingGame {
     const saved = loadSaved(sdk.storage, this.storageKey);
     if (saved) ({ prefs: this.prefs, progress: this.progress } = saved);
     else this.failedSave = true;
+    void pullCloud(sdk, this.progress).then((p) => p && !this.disposed && ((this.progress = p), this.render()));
     // Язык интерфейса и голоса при запуске — как на сайте; внутри игры его можно сменить.
     this.prefs = { ...this.prefs, language: sdk.locale, speech: sdk.locale };
     this.root.className = 'counting-game';
@@ -71,6 +74,7 @@ export class CountingGame {
 
   private save() {
     if (!saveState(this.sdk.storage, this.storageKey, this.prefs, this.progress)) this.failedSave = true;
+    pushCloud(this.sdk, this.progress);
   }
 
   private say(text: string) {
@@ -84,11 +88,7 @@ export class CountingGame {
   /** Озвучивает задание на языке речи. */
   private speakPrompt() {
     if (!this.session) return;
-    const { mode, question: q } = this.session;
-    const prompt = words[this.prefs.speech][mode];
-    if (mode === 'feed') this.say(`${prompt} ${numberWord(this.prefs.speech, q.answer)}`);
-    else if (mode === 'calculate') this.say(`${prompt} ${q.a} ${q.subtract ? '−' : '+'} ${q.b}`);
-    else this.say(prompt);
+    this.say(promptSpeech(this.session, this.prefs.speech));
   }
 
   private begin(mode: Mode) {
@@ -107,6 +107,7 @@ export class CountingGame {
   private answer(value: number) {
     const result = this.session?.answer(value);
     if (!result) return;
+    reportAnswer(this.sdk, this.mode, result === 'right');
     if (result === 'right') this.audio.reward();
     const key = result === 'right' ? 'correct' : 'retry';
     this.feedback = words[this.prefs.language][key];
@@ -124,6 +125,7 @@ export class CountingGame {
     const key = progressKey(session.mode, this.prefs);
     this.progress[key] = Math.max(this.progress[key] ?? 0, session.stars);
     this.save();
+    reportFinish(this.sdk, session.mode, session.stars, this.progress, this.prefs.limit);
     this.screen = 'result';
     this.render();
   }
@@ -131,10 +133,7 @@ export class CountingGame {
   private onChange = (event: Event) => {
     const target = event.target as HTMLSelectElement;
     if (this.screen !== 'home') return;
-    const language = languages.includes(target.value as Language) ? (target.value as Language) : null;
-    if (target.name === 'language' && language) this.prefs.language = language;
-    if (target.name === 'speech' && language) this.prefs.speech = language;
-    if (target.name === 'limit' && LIMITS.includes(Number(target.value))) this.prefs.limit = Number(target.value);
+    applyPreference(this.prefs, target.name, target.value);
     this.audio.stop();
     this.save();
     this.render();
@@ -196,7 +195,6 @@ export class CountingGame {
     renderKeepingFocus(this.root, shellView(t, body, { ...options, voiceMissing: !this.audio.hasVoice(this.prefs.speech) }));
     // Не даём ответить повторно и случайно перескочить вперёд; отзыв остаётся в той же живой области.
     if (s?.solved) this.root.querySelectorAll<HTMLButtonElement>('[data-action="check"], [data-action="food"]').forEach((b) => (b.disabled = true));
-    // Слева в шапке — кнопка «В меню» оболочки.
     this.root.querySelector<HTMLElement>('.cg-header')!.style.paddingLeft = '48px';
   }
 }

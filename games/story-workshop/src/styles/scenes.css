@@ -1,0 +1,8 @@
+/* Фоны мест для картинок комикса */
+
+.st-scene-forest .st-actors { background: linear-gradient(#d8f3c7, #9fd77f 70%, #6fb24f 70.5%); }
+.st-scene-sea .st-actors { background: linear-gradient(#cfefff, #a6e0ff 60%, #3fa4e0 60.5%, #2d84c4); }
+.st-scene-space .st-actors { background: radial-gradient(circle at 20% 25%, #fff 0 1px, transparent 2px), radial-gradient(circle at 70% 15%, #fff 0 1.5px, transparent 2.5px), linear-gradient(#1b1f4b, #3a2f7a); }
+.st-scene-castle .st-actors { background: linear-gradient(#f5e1ff, #e2c6f5 68%, #b99ad0 68.5%); }
+.st-scene-mountains .st-actors { background: linear-gradient(#dff1ff, #c3e2f7 64%, #a9c7a0 64.5%, #8fb486); }
+.st-scene-city .st-actors { background: linear-gradient(#ffe6cf, #ffd2a8 66%, #b8b8c8 66.5%, #9d9db0); }

@@ -20,7 +20,7 @@ const COLUMNS: { c: string; links: { to: string; danger?: boolean }[] }[] = [
     c: '#ff7eb6',
     links: [{ to: '/parents' }, { to: '/parents' }, { to: '/kids' }, { to: '/help' }, { to: '/delete-account', danger: true }],
   },
-  { c: '#7ee7ff', links: [{ to: '/about' }, { to: '/contact' }, { to: '/credits' }] },
+  { c: '#7ee7ff', links: [{ to: '/about' }, { to: '/contact' }, { to: '/credits' }, { to: '/games' }, { to: '/news' }] },
   { c: '#7ef09a', links: [{ to: '/privacy' }, { to: '/terms' }, { to: '/cookies' }] },
 ];
 

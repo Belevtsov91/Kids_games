@@ -6,6 +6,7 @@ import type { Mode, OrchestraContext } from '../context';
 
 export class FreeMode implements Mode {
   readonly poolSize = ANIMALS.length;
+  private hits = 0;
 
   constructor(private readonly ctx: OrchestraContext) {}
 
@@ -26,6 +27,11 @@ export class FreeMode implements Mode {
   onAnimal(animal: Animal) {
     if (this.ctx.playback.playing) this.ctx.playback.stop();
     this.ctx.hit(animal, this.ctx.soundMode);
+    // Сыграл целый концерт — наклейка и навык «музыка».
+    if (++this.hits === 30) {
+      this.ctx.progress.skill('music', true);
+      this.ctx.progress.sticker('first-concert');
+    }
   }
 
   pause() {}

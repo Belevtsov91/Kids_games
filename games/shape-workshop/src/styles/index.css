@@ -1,0 +1,7 @@
+/* Стили «Мастерской фигур». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './start.css';
+@import './build.css';
+@import './win.css';
+@import './animations.css';
