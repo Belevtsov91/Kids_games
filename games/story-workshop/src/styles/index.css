@@ -1,0 +1,6 @@
+/* Стили «Мастерской сказок». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './tale.css';
+@import './scenes.css';
+@import './animations.css';
