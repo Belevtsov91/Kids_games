@@ -20,4 +20,10 @@ export default defineManifest({
     ro: 'Forme geometrice și gândire spațială: copilul recunoaște formele și compune imagini după siluetă.',
     en: 'Shapes and spatial thinking: the child recognises shapes and builds pictures from silhouettes.',
   },
+  together: 'Называйте фигуры и цвета вслух, а потом найдите такие же дома. В свободной мастерской попросите рассказать, что получилось.',
+  togethers: {
+    uk: 'Називайте фігури й кольори вголос, а потім знайдіть такі самі вдома. У вільній майстерні попросіть розповісти, що вийшло.',
+    ro: 'Numiți formele și culorile cu voce tare, apoi căutați-le prin casă. În atelierul liber rugați copilul să povestească ce a construit.',
+    en: 'Name shapes and colours out loud, then find the same ones at home. In free build, ask what they made.',
+  },
 });

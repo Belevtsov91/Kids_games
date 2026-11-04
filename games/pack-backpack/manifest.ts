@@ -20,4 +20,10 @@ export default defineManifest({
     ro: 'Independență și logică: copilul decide ce să ia cu el în funcție de vreme și de loc.',
     en: 'Independence and logic: the child decides what to take depending on the weather and the place.',
   },
+  together: 'Перед настоящей прогулкой соберите рюкзак, как в игре, и спросите: «Зачем это брать?»',
+  togethers: {
+    uk: 'Перед справжньою прогулянкою зберіть рюкзак, як у грі, і запитайте: «Навіщо це брати?»',
+    ro: 'Înainte de o plimbare adevărată, faceți rucsacul ca în joc și întrebați: „De ce luăm asta?”',
+    en: 'Before a real outing, pack a bag like in the game and ask: “Why do we need this?”',
+  },
 });

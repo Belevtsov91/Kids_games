@@ -25,6 +25,9 @@ export interface GameManifest {
   /** Для родителя: что развивает игра, одна-две фразы. */
   about?: string;
   abouts?: Partial<Record<Locale, string>>;
+  /** Для родителя: как играть вместе с ребёнком, совет на карточке игры. */
+  together?: string;
+  togethers?: Partial<Record<Locale, string>>;
 }
 
 export const GAME_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
@@ -52,6 +55,7 @@ export function validateManifest(manifest: unknown, folder: string): string[] {
       errors.push(`${folder}: у наклеек должны быть разные id из латиницы, цифр и дефиса`);
     }
   }
+  if (m.together !== undefined && (typeof m.together !== 'string' || !m.together.trim())) errors.push(`${folder}: together должен быть непустой строкой`);
   return errors;
 }
 

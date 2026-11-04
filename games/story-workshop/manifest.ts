@@ -19,4 +19,10 @@ export default defineManifest({
     ro: 'Vorbire coerentă și imaginație: copilul alege eroul, locul și întâmplarea și spune povestea cu voce tare după trei imagini.',
     en: 'Storytelling and imagination: the child picks a hero, a place and a twist, then tells the story aloud from three pictures.',
   },
+  together: 'Будьте слушателем: спрашивайте «А что было дальше?», «А почему?». Потом нарисуйте к сказке картинку.',
+  togethers: {
+    uk: 'Будьте слухачем: питайте «А що було далі?», «А чому?». Потім намалюйте до казки малюнок.',
+    ro: 'Fiți ascultătorul: întrebați „Și apoi ce-a fost?”, „De ce?”. Apoi desenați o imagine pentru poveste.',
+    en: 'Be the listener: ask “What happened next?” and “Why?”. Then draw a picture for the story.',
+  },
 });

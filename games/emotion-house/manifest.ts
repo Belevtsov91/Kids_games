@@ -18,4 +18,10 @@ export default defineManifest({
     ro: 'Inteligență emoțională: recunoașterea emoțiilor după față și situație și alegerea a ceea ce ajută.',
     en: 'Emotional literacy: recognising feelings from faces and stories and choosing what helps.',
   },
+  together: 'Вспомните похожий случай из жизни: «А когда ты так себя чувствовал?» Назовите и свои чувства.',
+  togethers: {
+    uk: 'Пригадайте схожий випадок із життя: «А коли ти так почувався?» Назвіть і свої почуття.',
+    ro: 'Amintiți-vă o situație asemănătoare: „Când te-ai simțit așa?” Numiți și propriile emoții.',
+    en: 'Recall a similar moment from real life: “When did you feel like that?” Name your own feelings too.',
+  },
 });

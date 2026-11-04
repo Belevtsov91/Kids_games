@@ -27,6 +27,8 @@ export function GameCardPage() {
   if (!game) return <Navigate to="/games" replace />;
 
   const about = game.abouts?.[locale] ?? game.about;
+  // Совет «как играть вместе» из манифеста игры; если игра его не дала — общий.
+  const together = game.togethers?.[locale] ?? game.together ?? g.togetherText;
   return (
     <main className="wl info more-page">
       <SiteTopbar />
@@ -44,7 +46,7 @@ export function GameCardPage() {
           ) : null}
           {game.stickers?.length ? <p>{g.stickers(game.stickers.length)} {game.stickers.map((s) => s.emoji).join(' ')}</p> : null}
           <h2>{g.together}</h2>
-          <p>{g.togetherText}</p>
+          <p>{together}</p>
           <div className="more-actions">
             <Link to={me ? `/play/${game.id}` : '/register'} className="wl-btn wl-btn-primary">▶ {g.play}</Link>
             <Link to="/games" className="wl-btn wl-btn-ghost">{g.all}</Link>

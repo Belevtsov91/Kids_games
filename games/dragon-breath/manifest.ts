@@ -19,4 +19,10 @@ export default defineManifest({
     ro: 'Autoreglare: respirația liniștită îl ajută pe copil cu emoțiile puternice și înainte de somn.',
     en: 'Self-regulation: slow breathing helps the child handle worry, anger and settle before sleep.',
   },
+  together: 'Дышите вместе с дракончиком перед сном или после ссоры. Положите ладонь на живот и почувствуйте, как он поднимается.',
+  togethers: {
+    uk: 'Дихайте разом із драконом перед сном або після сварки. Покладіть долоню на живіт і відчуйте, як він піднімається.',
+    ro: 'Respirați împreună cu dragonul înainte de somn sau după o ceartă. Puneți palma pe burtică și simțiți cum se ridică.',
+    en: 'Breathe along with the dragon before bed or after an argument. Put a hand on the tummy and feel it rise.',
+  },
 });

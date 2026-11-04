@@ -19,4 +19,10 @@ export default defineManifest({
     ro: 'Memorie de lucru și atenție: cine e în ce vagon, cine a coborât și în ce ordine au călătorit.',
     en: 'Working memory and attention: who is in which carriage, who got off, and in what order they rode.',
   },
+  together: 'Играйте по очереди: кто запомнит больше вагонов? Проговаривайте вслух: «синий вагон — котик».',
+  togethers: {
+    uk: 'Грайте по черзі: хто запам’ятає більше вагонів? Проговорюйте вголос: «синій вагон — котик».',
+    ro: 'Jucați pe rând: cine ține minte mai multe vagoane? Spuneți cu voce tare: „vagonul albastru — pisica”.',
+    en: 'Take turns: who remembers more carriages? Say it out loud: “blue carriage — cat”.',
+  },
 });

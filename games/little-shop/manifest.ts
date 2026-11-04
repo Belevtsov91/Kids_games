@@ -20,4 +20,10 @@ export default defineManifest({
     ro: 'Matematica de zi cu zi: comparăm greutăți, echilibrăm cântarul, turnăm până la semn, plătim cu monede și dăm restul.',
     en: 'Everyday maths: compare weights, balance the scales, pour to the line, pay with coins and give change.',
   },
+  together: 'Будьте покупателем: «Мне яблоко за 3 монеты». Потом поиграйте в магазин с настоящими монетами.',
+  togethers: {
+    uk: 'Будьте покупцем: «Мені яблуко за 3 монети». Потім пограйтеся в магазин зі справжніми монетами.',
+    ro: 'Fiți cumpărătorul: „Vreau un măr de 3 monede”. Apoi jucați-vă de-a magazinul cu monede adevărate.',
+    en: 'Be the customer: “One apple for 3 coins, please.” Then play shop with real coins.',
+  },
 });
