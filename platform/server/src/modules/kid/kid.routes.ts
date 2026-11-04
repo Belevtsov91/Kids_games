@@ -8,6 +8,7 @@ import { notifyRequest } from '../notify/notify.js';
 // Ребёнок берётся только из сессии; родительский кабинет для этого не нужен.
 
 const MAX_REQUESTS_PER_DAY = 3;
+const MAX_OFFLINE_SECONDS = 4 * 3600;
 export const ASK_MINUTES = [5, 10, 15, 30] as const;
 
 const tzQuery = {
@@ -18,7 +19,12 @@ const tzQuery = {
 const beatBody = {
   type: 'object',
   required: ['gameId'],
-  properties: { gameId: { type: 'string', pattern: '^[a-z0-9-]{1,40}$' }, tz: { type: 'string', maxLength: 64 } },
+  properties: {
+    gameId: { type: 'string', pattern: '^[a-z0-9-]{1,40}$' },
+    tz: { type: 'string', maxLength: 64 },
+    // Секунды, сыгранные без сети (оболочка считала их сама), — засчитываются с этим пульсом.
+    offline: { type: 'integer', minimum: 0, maximum: MAX_OFFLINE_SECONDS },
+  },
   additionalProperties: false,
 } as const;
 
@@ -69,12 +75,13 @@ export const kidRoutes: FastifyPluginAsync = async (app) => {
   );
 
   /** Раз в минуту, пока игра открыта и видна. Засчитывает время с прошлого пульса, не больше минуты. */
-  app.post<{ Body: { gameId: string; tz?: string } }>('/beat', { schema: { body: beatBody } }, async (req) => {
+  app.post<{ Body: { gameId: string; tz?: string; offline?: number } }>('/beat', { schema: { body: beatBody } }, async (req) => {
     const childId = req.session!.activeChildId!;
     const now = new Date();
     const [settings, zone] = await Promise.all([settingsOf(childId), zoneOf(req.session!.parentId, req.body.tz)]);
     const before = await timeOf(childId, settings, zone, now);
-    const add = before.blocked ? 0 : beatSeconds(settings?.last_beat_at ? new Date(settings.last_beat_at) : null, now);
+    const online = before.blocked ? 0 : beatSeconds(settings?.last_beat_at ? new Date(settings.last_beat_at) : null, now);
+    const add = online + (req.body.offline ?? 0);
     if (add > 0) {
       const day = localNow(now, zone).day;
       const { data, error } = await db()

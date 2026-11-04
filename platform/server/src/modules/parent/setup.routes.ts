@@ -4,10 +4,13 @@ import { hashPassword } from '../auth/password.js';
 import { safeZone } from '../kid/timeRules.js';
 import { isWeakPin } from './gate.js';
 import { ownsChild, requireLogin, requireParent } from './parentSession.js';
+import type { GameTable } from './index.js';
 
 // Первая настройка сразу после регистрации (/setup) и выгрузка всех данных семьи (GDPR).
 // Настройка работает без задачи для взрослых, но только один раз и только в первые сутки после регистрации.
 
+/** С этого возраста ребёнка PIN в первой настройке обязателен. */
+export const PIN_REQUIRED_AGE = 7;
 const SETUP_WINDOW_MS = 24 * 60 * 60 * 1000;
 const setupBody = {
   type: 'object',
@@ -24,7 +27,7 @@ const setupBody = {
 
 type SetupBody = { childId: string; limit?: number | null; quiet?: boolean; pin?: string; tz?: string };
 
-export const setupRoutes: FastifyPluginAsync = async (app) => {
+export const setupRoutes: FastifyPluginAsync<{ gameTables: GameTable[] }> = async (app, opts) => {
   app.post<{ Body: SetupBody }>('/setup', { preHandler: requireLogin, schema: { body: setupBody } }, async (req, reply) => {
     const parentId = req.session!.parentId;
     const [{ data: parent }, { data: settings }] = await Promise.all([
@@ -35,6 +38,9 @@ export const setupRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(409).send({ error: 'Настройка уже пройдена' });
     }
     if (!(await ownsChild(parentId, req.body.childId))) return reply.code(404).send({ error: 'Профиль не найден' });
+    // С 7 лет задачу для взрослых ребёнок решит сам: без PIN кабинет и лимит не защищены.
+    const { data: child } = await db().from('ig_children').select('age').eq('id', req.body.childId).single();
+    if (!req.body.pin && (child?.age ?? 0) >= PIN_REQUIRED_AGE) return reply.code(400).send({ error: 'Нужен PIN', code: 'pinRequired' });
     if (req.body.pin && isWeakPin(req.body.pin)) return reply.code(400).send({ error: 'Слишком простой PIN', code: 'weak' });
 
     const limit = req.body.limit ?? null;
@@ -89,6 +95,10 @@ export const setupRoutes: FastifyPluginAsync = async (app) => {
       playEvents: await one('ig_play_events', 'child_id, game_id, kind, name, ok, created_at', 'child_id', ids),
       stickers: await one('ig_stickers', '*', 'child_id', ids),
       cloudSaves: await one('ig_cloud_saves', '*', 'child_id', ids),
+      // Данные игр со своим сервером: рисунки, мелодии, острова, сохранения. У каждой таблицы есть child_id.
+      games: Object.fromEntries(
+        await Promise.all(opts.gameTables.map(async ({ gameId, table }) => [`${gameId}/${table}`, await one(table, '*', 'child_id', ids)] as const)),
+      ),
     };
     return reply
       .header('Content-Disposition', `attachment; filename="interact-games-${new Date().toISOString().slice(0, 10)}.json"`)

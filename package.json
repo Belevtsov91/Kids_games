@@ -13,5 +13,8 @@
     "lint": "node tools/check-boundaries.mjs && node tools/check-file-size.mjs",
     "new-game": "node tools/create-game.mjs",
     "db:sql": "node tools/db-sql.mjs"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

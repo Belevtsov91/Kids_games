@@ -9,7 +9,12 @@ import { inboxRoutes } from './inbox.routes.js';
 import { setupRoutes } from './setup.routes.js';
 
 /** Кабинет родителя (/api/parent): вход по задаче и PIN, обзор семьи, профили детей, аккаунт. */
-export const parentRoutes: FastifyPluginAsync = async (app) => {
+export interface GameTable {
+  gameId: string;
+  table: string;
+}
+
+export const parentRoutes: FastifyPluginAsync<{ gameTables?: GameTable[] }> = async (app, opts) => {
   app.addHook('onRequest', async (_req, reply) => {
     if (!sessionsEnabled) return reply.code(503).send({ error: 'Вход временно недоступен' });
   });
@@ -19,5 +24,5 @@ export const parentRoutes: FastifyPluginAsync = async (app) => {
   await app.register(kidsRoutes);
   await app.register(progressParentRoutes);
   await app.register(inboxRoutes);
-  await app.register(setupRoutes);
+  await app.register(setupRoutes, { gameTables: opts.gameTables ?? [] });
 };

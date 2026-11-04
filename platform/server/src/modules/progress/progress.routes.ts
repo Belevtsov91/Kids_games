@@ -102,8 +102,17 @@ export const progressRoutes: FastifyPluginAsync<{ catalog: GameManifest[] }> = a
     async (req, reply) => {
       if (!games.has(req.params.gameId)) return reply.code(404).send({ error: 'Нет такой игры' });
       if (JSON.stringify(req.body.value ?? null).length > MAX_CLOUD_BYTES) return reply.code(413).send({ error: 'Слишком большое сохранение' });
+      // null — «стереть сохранение»: колонка value not null, поэтому удаляем строку.
+      if (req.body.value === null || req.body.value === undefined) {
+        const { error } = await db()
+          .from('ig_cloud_saves')
+          .delete()
+          .match({ child_id: req.session!.activeChildId!, game_id: req.params.gameId, key: req.params.key });
+        if (error) throw error;
+        return reply.code(204).send();
+      }
       const { error } = await db().from('ig_cloud_saves').upsert(
-        { child_id: req.session!.activeChildId!, game_id: req.params.gameId, key: req.params.key, value: req.body.value ?? null, updated_at: new Date().toISOString() },
+        { child_id: req.session!.activeChildId!, game_id: req.params.gameId, key: req.params.key, value: req.body.value, updated_at: new Date().toISOString() },
         { onConflict: 'child_id,game_id,key' },
       );
       if (error) throw error;

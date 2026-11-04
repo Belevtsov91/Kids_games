@@ -44,31 +44,47 @@ export async function sendWeeklyReports(catalog: GameManifest[], log: FastifyBas
   if (error) throw error;
   const titles = new Map(catalog.map((g) => [g.id, g]));
   for (const p of parents ?? []) {
-    const zone = p.timezone ?? 'UTC';
-    const local = localNow(now, zone);
-    if (!reportDue(local, p.report_sent_on)) continue;
-    const lang = mailLang(p.mail_locale);
-    const t = MAIL_TEXT[lang];
-    const [{ data: parent }, { data: kids }] = await Promise.all([
-      db().from('ig_parents').select('email').eq('id', p.parent_id).single(),
-      db().from('ig_children').select('id, name').eq('parent_id', p.parent_id).order('created_at'),
-    ]);
-    if (!parent || !kids?.length) continue;
-    const rows = (await Promise.all(kids.map((k) => childRows(k.id, k.name, zone, lang, titles)))).flat();
-    const tip = t.weekly.tips[Number(local.day.slice(8, 10)) % t.weekly.tips.length];
-    const mail = simpleMail({
-      locale: lang,
-      subject: t.weekly.subject,
-      title: t.weekly.title,
-      lines: [t.weekly.lead],
-      rows,
-      buttons: [{ label: t.weekly.open, url: `${env.appUrl}/parent` }],
-      footer: `${tip} · ${t.weekly.off}`,
-    });
-    if (mailEnabled) await sendMail({ to: parent.email, ...mail });
-    else log.info({ parentId: p.parent_id }, 'Почта не настроена: отчёт за неделю не отправлен');
-    await db().from('ig_parent_settings').update({ report_sent_on: local.day }).eq('parent_id', p.parent_id);
+    // Одна семья с ошибкой (неверная почта, сбой Brevo) не должна останавливать рассылку остальным.
+    try {
+      await sendOne(p, titles, log, now);
+    } catch (err) {
+      log.error({ err, parentId: p.parent_id }, 'Отчёт за неделю этой семье не отправлен');
+    }
   }
+}
+
+interface ParentRow {
+  parent_id: string;
+  timezone: string | null;
+  mail_locale: string | null;
+  report_sent_on: string | null;
+}
+
+async function sendOne(p: ParentRow, titles: Map<string, GameManifest>, log: FastifyBaseLogger, now: Date) {
+  const zone = p.timezone ?? 'UTC';
+  const local = localNow(now, zone);
+  if (!reportDue(local, p.report_sent_on)) return;
+  const lang = mailLang(p.mail_locale);
+  const t = MAIL_TEXT[lang];
+  const [{ data: parent }, { data: kids }] = await Promise.all([
+    db().from('ig_parents').select('email').eq('id', p.parent_id).single(),
+    db().from('ig_children').select('id, name').eq('parent_id', p.parent_id).order('created_at'),
+  ]);
+  if (!parent || !kids?.length) return;
+  const rows = (await Promise.all(kids.map((k) => childRows(k.id, k.name, zone, lang, titles)))).flat();
+  const tip = t.weekly.tips[Number(local.day.slice(8, 10)) % t.weekly.tips.length];
+  const mail = simpleMail({
+    locale: lang,
+    subject: t.weekly.subject,
+    title: t.weekly.title,
+    lines: [t.weekly.lead],
+    rows,
+    buttons: [{ label: t.weekly.open, url: `${env.appUrl}/parent` }],
+    footer: `${tip} · ${t.weekly.off}`,
+  });
+  if (mailEnabled) await sendMail({ to: parent.email, ...mail, tag: 'weekly-report' });
+  else log.info({ parentId: p.parent_id }, 'Почта не настроена: отчёт за неделю не отправлен');
+  await db().from('ig_parent_settings').update({ report_sent_on: local.day }).eq('parent_id', p.parent_id);
 }
 
 /** Запускает проверку раз в час. Возвращает функцию остановки. */

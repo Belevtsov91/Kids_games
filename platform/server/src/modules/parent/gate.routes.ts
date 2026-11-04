@@ -1,9 +1,9 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { env } from '../../config/env.js';
+import { derivedSecret } from '../../config/keys.js';
 import { db } from '../../db/index.js';
 import { verifyPassword } from '../auth/password.js';
 import { checkAnswer, issueToken, makeChallenge } from './gate.js';
-import { parentStatus, requireLogin, setUnlocked, UNLOCK_MS } from './parentSession.js';
+import { allowSwitchOnce, parentStatus, requireLogin, setUnlocked, UNLOCK_MS } from './parentSession.js';
 import { safeZone } from '../kid/timeRules.js';
 
 // Вход в кабинет: задача для взрослых, затем PIN, если он задан.
@@ -22,6 +22,8 @@ const answerBody = {
     pin: { type: 'string', pattern: '^\\d{4}$' },
     password: { type: 'string', minLength: 1, maxLength: 72 },
     tz: { type: 'string', maxLength: 64 },
+    // switch — только разрешить одну смену профиля, кабинет не открывать.
+    purpose: { type: 'string', enum: ['cabinet', 'switch'] },
   },
   additionalProperties: false,
 } as const;
@@ -32,6 +34,7 @@ interface AnswerBody {
   pin?: string;
   password?: string;
   tz?: string;
+  purpose?: 'cabinet' | 'switch';
 }
 
 async function pinRow(parentId: string) {
@@ -46,7 +49,7 @@ async function pinRow(parentId: string) {
 
 export const gateRoutes: FastifyPluginAsync = async (app) => {
   app.addHook('preHandler', requireLogin);
-  const secret = env.sessionEncryptionKey ?? '';
+  const secret = derivedSecret('gate');
 
   app.get('/status', async (req) => {
     const [until, pin] = await Promise.all([parentStatus(req), pinRow(req.session!.parentId)]);
@@ -105,6 +108,10 @@ export const gateRoutes: FastifyPluginAsync = async (app) => {
     if (!pin?.timezone && req.body.tz) patch.timezone = safeZone(req.body.tz);
     const { error } = await db().from('ig_parent_settings').upsert(patch, { onConflict: 'parent_id' });
     if (error) throw error;
+    if (req.body.purpose === 'switch') {
+      await allowSwitchOnce(req);
+      return { unlocked: false, switchAllowed: true };
+    }
     const until = new Date(Date.now() + UNLOCK_MS);
     await setUnlocked(req, until);
     return { unlocked: true, until: until.toISOString() };

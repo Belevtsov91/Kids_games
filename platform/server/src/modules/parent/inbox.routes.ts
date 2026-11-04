@@ -80,7 +80,7 @@ export const inboxRoutes: FastifyPluginAsync = async (app) => {
       const lang = mailLang(req.body.locale);
       const t = MAIL_TEXT[lang].helper;
       const mail = simpleMail({ locale: lang, subject: t.subject(parent!.display_name), title: t.title(req.body.name), lines: [t.line(parent!.display_name)], buttons: [{ label: t.open, url }], footer: 'Interact Games' });
-      void sendMail({ to: email, ...mail }).catch((err) => req.log.error({ err }, 'Не удалось отправить приглашение помощнику'));
+      void sendMail({ to: email, ...mail, tag: 'helper-invite' }).catch((err) => req.log.error({ err }, 'Не удалось отправить приглашение помощнику'));
     }
     return reply.code(201).send({ id: data.id, url });
   });

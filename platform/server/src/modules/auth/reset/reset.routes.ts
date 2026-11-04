@@ -88,7 +88,7 @@ export const resetRoutes: FastifyPluginAsync = async (app) => {
           return;
         }
         const mail = resetPasswordMail({ locale, name: parent.display_name, url, minutes: RESET_TTL_MIN });
-        await sendMail({ to: email, ...mail });
+        await sendMail({ to: email, ...mail, tag: 'password-reset' });
         log.info('Письмо для сброса пароля отправлено');
       })().catch((err) => log.error({ err }, 'Не удалось отправить письмо для сброса пароля'));
 

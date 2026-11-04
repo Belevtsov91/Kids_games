@@ -4,6 +4,8 @@ import { db } from '../../db/index.js';
 import { DUMMY_HASH, hashPassword, verifyPassword } from './password.js';
 import { createSession, destroySession, sessionsEnabled } from './session.js';
 import { resetRoutes } from './reset/reset.routes.js';
+import { parentStatus } from '../parent/parentSession.js';
+import { safeZone } from '../kid/timeRules.js';
 
 // Вход родителя. Пароль приходит только в теле запроса, хешируется здесь и нигде не логируется.
 
@@ -16,7 +18,16 @@ const registerBody = {
     email,
     password: { type: 'string', minLength: 8, maxLength: 72 },
     name: { type: 'string', minLength: 1, maxLength: 40, pattern: '\\S' },
+    // Часовой пояс браузера взрослого: по нему считаются «сегодня», лимиты и тихие часы.
+    tz: { type: 'string', maxLength: 64 },
   },
+  additionalProperties: false,
+} as const;
+
+const deleteBody = {
+  type: 'object',
+  required: ['password'],
+  properties: { password: { type: 'string', minLength: 1, maxLength: 72 } },
   additionalProperties: false,
 } as const;
 
@@ -40,7 +51,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   // «Забыли пароль?»: письмо со ссылкой и новый пароль.
   await app.register(resetRoutes);
 
-  app.post<{ Body: { email: string; password: string; name: string } }>(
+  app.post<{ Body: { email: string; password: string; name: string; tz?: string } }>(
     '/register',
     { schema: { body: registerBody }, config: strictLimit },
     async (req, reply) => {
@@ -57,6 +68,11 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
         // 23505 — почта уже занята. Не уточняем это, чтобы перебором нельзя было собирать чужие почты.
         if (error.code === '23505') return reply.code(409).send({ error: 'Не получилось зарегистрироваться с этой почтой' });
         throw error;
+      }
+      const zone = safeZone(req.body.tz);
+      if (req.body.tz && zone === req.body.tz) {
+        const { error: zoneError } = await db().from('ig_parent_settings').insert({ parent_id: data.id, timezone: zone });
+        if (zoneError) throw zoneError;
       }
       await createSession(reply, data.id);
       return reply.code(201).send({ ok: true });
@@ -88,10 +104,17 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
 
   /**
    * Удалить аккаунт родителя насовсем. Профили детей, сохранения всех игр и сессии
-   * удаляются каскадом в БД (on delete cascade). Проверку «только взрослый» делает клиент.
+   * удаляются каскадом в БД (on delete cascade). Нужны открытый кабинет и пароль аккаунта:
+   * ребёнок с устройства взрослого удалить аккаунт не может, даже решив примеры.
    */
-  app.delete('/account', { config: strictLimit }, async (req, reply) => {
+  app.delete<{ Body: { password: string } }>('/account', { schema: { body: deleteBody }, config: strictLimit }, async (req, reply) => {
     if (!req.session) return reply.code(401).send({ error: 'Нужно войти' });
+    if (!(await parentStatus(req))) return reply.code(423).send({ error: 'Кабинет родителя закрыт', locked: true });
+    const { data: parent, error: readError } = await db().from('ig_parents').select('password_hash').eq('id', req.session.parentId).single();
+    if (readError) throw readError;
+    if (!(await verifyPassword(req.body.password, parent.password_hash))) {
+      return reply.code(400).send({ error: 'Неверный пароль', code: 'password' });
+    }
     const { error } = await db().from('ig_parents').delete().eq('id', req.session.parentId);
     if (error) throw error;
     await destroySession(req, reply);

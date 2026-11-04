@@ -9,6 +9,8 @@ export interface Mail {
   subject: string;
   html: string;
   text: string;
+  /** Тег письма в статистике Brevo: password-reset, time-request, weekly-report, helper-invite. */
+  tag?: string;
 }
 
 const { mail } = env;
@@ -36,7 +38,7 @@ async function viaApi(msg: Mail) {
       subject: msg.subject,
       htmlContent: msg.html,
       textContent: msg.text,
-      tags: ['password-reset'],
+      tags: [msg.tag ?? 'other'],
     }),
     signal: AbortSignal.timeout(15_000),
   });
@@ -46,5 +48,7 @@ async function viaApi(msg: Mail) {
 export async function sendMail(msg: Mail) {
   if (!mailEnabled) throw new Error('Почта не настроена: задайте MAIL_FROM_EMAIL и SMTP_USER/SMTP_PASSWORD или BREVO_API_KEY');
   if (mail.brevoApiKey) return viaApi(msg);
-  await smtp().sendMail({ from: { name: mail.fromName, address: mail.fromEmail! }, ...msg });
+  const { tag, ...rest } = msg;
+  // Brevo SMTP принимает тег в заголовке X-Mailin-Tag.
+  await smtp().sendMail({ from: { name: mail.fromName, address: mail.fromEmail! }, headers: { 'X-Mailin-Tag': tag ?? 'other' }, ...rest });
 }

@@ -25,6 +25,33 @@ export async function setUnlocked(req: FastifyRequest, until: Date | null) {
   if (error) throw error;
 }
 
+/** Разовое разрешение взрослого на смену профиля (задача с purpose: 'switch'). Живёт минуту. */
+export const SWITCH_MS = 60 * 1000;
+
+export async function allowSwitchOnce(req: FastifyRequest) {
+  const tokenHash = tokenHashFrom(req);
+  if (!tokenHash) return;
+  const { error } = await db()
+    .from('ig_sessions')
+    .update({ switch_allowed_until: new Date(Date.now() + SWITCH_MS).toISOString() })
+    .eq('token_hash', tokenHash);
+  if (error) throw error;
+}
+
+/** Забирает разовое разрешение: true, если оно было и не истекло. Второй раз не сработает. */
+export async function takeSwitchOnce(req: FastifyRequest) {
+  const tokenHash = tokenHashFrom(req);
+  if (!tokenHash) return false;
+  const { data, error } = await db()
+    .from('ig_sessions')
+    .update({ switch_allowed_until: null })
+    .eq('token_hash', tokenHash)
+    .gt('switch_allowed_until', new Date().toISOString())
+    .select('token_hash');
+  if (error) throw error;
+  return Boolean(data?.length);
+}
+
 export async function parentStatus(req: FastifyRequest) {
   const until = await unlockedUntil(req);
   return until && until.getTime() > Date.now() ? until : null;

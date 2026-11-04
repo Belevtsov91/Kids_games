@@ -1,5 +1,5 @@
 import { db } from '../../db/index.js';
-import { kidTime, lastDays, localNow, NO_RULES, type KidTime, type TimeRules } from './timeRules.js';
+import { kidTime, lastDays, localNow, NO_RULES, safeZone, type KidTime, type TimeRules } from './timeRules.js';
 
 // Чтение настроек и времени ребёнка из БД. Общие для страниц ребёнка и кабинета родителя.
 
@@ -43,11 +43,23 @@ export async function settingsOf(childId: string): Promise<SettingsRow | null> {
   return data as SettingsRow | null;
 }
 
-/** Часовой пояс семьи: из настроек родителя, иначе тот, что прислал браузер. */
+/**
+ * Часовой пояс семьи из настроек родителя. Если его ещё нет, первый присланный браузером пояс
+ * запоминается навсегда (поменять можно только в кабинете): иначе ребёнок, сменив пояс
+ * на устройстве, получил бы «новый день» с новым лимитом или ушёл бы из тихих часов.
+ */
 export async function zoneOf(parentId: string, fallback?: string) {
   const { data, error } = await db().from('ig_parent_settings').select('timezone').eq('parent_id', parentId).maybeSingle();
   if (error) throw error;
-  return data?.timezone ?? fallback ?? 'UTC';
+  if (data?.timezone) return data.timezone;
+  const zone = safeZone(fallback);
+  if (fallback && zone === fallback) {
+    const { error: saveError } = await db()
+      .from('ig_parent_settings')
+      .upsert({ parent_id: parentId, timezone: zone }, { onConflict: 'parent_id' });
+    if (saveError) throw saveError;
+  }
+  return zone;
 }
 
 export async function usedSeconds(childId: string, day: string) {
