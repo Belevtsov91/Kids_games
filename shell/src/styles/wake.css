@@ -62,7 +62,6 @@
   font-size: 15px;
   animation: wake-hint 0.4s ease both;
 }
-/* Утром небо в сцене остаётся сиреневым, поэтому текст не темнеет: светлый текст с тенью читается и на рассвете, и без WebGL. */
 .wake.is-awake .wake-hint { background: #ffd25a; color: #3d2a00; box-shadow: 0 6px 0 #c99a1e; }
 
 .wake-dots { display: inline-flex; gap: 4px; }

@@ -71,13 +71,16 @@ test('W3, W4: спящий сервер — мишка встаёт, текст 
   server.wake();
   await expect(page.locator(wake)).toHaveClass(/is-awake/, { timeout: 10_000 });
   await expect(page.getByText(ru.awake)).toBeVisible();
-  // W4: утром текст остаётся светлым — на сиреневом небе тёмный не читался.
-  const light = await page.locator('.wake-lead').evaluate((el) => {
-    const g = globalThis as unknown as { getComputedStyle(e: unknown): { color: string } };
-    const [r, gr, b] = g.getComputedStyle(el).color.match(/\d+/g)!.map(Number);
-    return (0.2126 * r + 0.7152 * gr + 0.0722 * b) / 255;
+  // W4: небо меняется от сиреневого до светлого утра — текст светлый и лежит на тёмной подложке.
+  const look = await page.locator('.wake-lead').evaluate((el) => {
+    const g = globalThis as unknown as { getComputedStyle(e: unknown): { color: string; backgroundColor: string } };
+    const style = g.getComputedStyle(el);
+    const [r, gr, b] = style.color.match(/\d+/g)!.map(Number);
+    const alpha = Number(style.backgroundColor.match(/[\d.]+\)$/)?.[0].slice(0, -1) ?? 1);
+    return { light: (0.2126 * r + 0.7152 * gr + 0.0722 * b) / 255, backing: alpha };
   });
-  expect(light).toBeGreaterThan(0.7);
+  expect(look.light).toBeGreaterThan(0.7);
+  expect(look.backing).toBeGreaterThanOrEqual(0.4);
   await expect(page.locator(wake)).toHaveCount(0, { timeout: 15_000 });
   await expect(page).toHaveURL('/login');
   await expect(page.getByLabel('Почта')).toBeVisible();
