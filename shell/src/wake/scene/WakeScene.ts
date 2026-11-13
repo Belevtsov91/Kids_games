@@ -4,9 +4,9 @@ import { disposeThree } from '@/lib/disposeThree';
 import { applyLook } from '@/lib/threeLook';
 import type { WakeState } from '../serverStatus';
 import { phase, stepProgress } from '../progress';
-import { BEAR_SCALE, buildSleepyBear } from './bear';
-import { buildBed } from './bed';
+import { BEAR_SCALE } from './bear';
 import { applyPose } from './pose';
+import { buildPlainSet, loadModelSet, type WakeSet } from './set';
 import { buildWorld } from './world';
 import { buildZzz } from './zzz';
 
@@ -25,8 +25,10 @@ export class WakeScene {
   private camera = new THREE.PerspectiveCamera(38, 1, 0.1, 400);
   private look = new THREE.Vector3(0.35, 0.8, 0);
   private world = buildWorld(this.scene);
-  private bed = buildBed();
-  private bear = buildSleepyBear();
+  /** Мишка, кровать и остров: появляются, когда загрузилась модель (или запасной набор, если не вышло). */
+  private set: WakeSet | null = null;
+  private setAt = 0;
+  private fallback = 0;
   private zzz = buildZzz();
   private headPos = new THREE.Vector3();
   private reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,6 +38,7 @@ export class WakeScene {
   private p = 0;
   private stood = 0;
   private done = false;
+  private disposed = false;
   /** Когда последний раз потрогали мишку (секунды сцены): он смешно ворочается. */
   private pokedAt = -99;
   private canvas: HTMLCanvasElement;
@@ -52,7 +55,9 @@ export class WakeScene {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.shadowMap.enabled = true;
     applyLook(this.renderer, this.scene, 0.45);
-    this.world.island.add(this.bed.group, this.bear.root);
+    // Модель весит меньше мегабайта; если за 4 секунды не пришла или сломалась — показываем мишку из простых фигур.
+    loadModelSet().then(this.use, () => this.use(buildPlainSet()));
+    this.fallback = window.setTimeout(() => this.use(buildPlainSet()), 4000);
     this.scene.add(this.zzz.group);
     this.resize();
     addEventListener('resize', this.resize);
@@ -62,7 +67,17 @@ export class WakeScene {
     this.raf = requestAnimationFrame(this.tick);
   }
 
+  private use = (set: WakeSet) => {
+    clearTimeout(this.fallback);
+    if (this.set || this.disposed) return;
+    this.set = set;
+    this.setAt = performance.now();
+    this.world.island.add(set.group);
+  };
+
   dispose() {
+    this.disposed = true;
+    clearTimeout(this.fallback);
     cancelAnimationFrame(this.raf);
     removeEventListener('resize', this.resize);
     this.canvas.removeEventListener('pointerdown', this.poke);
@@ -106,17 +121,23 @@ export class WakeScene {
 
     const motion = this.reduce ? 0 : t;
     const morning = phase(this.p, 0.75, 1);
-    applyPose(this.bear, this.p, motion, this.stood);
-    const poke = this.reduce ? 0 : Math.max(0, 1 - (t - this.pokedAt) / 0.9);
-    if (poke > 0) {
-      const wob = Math.sin((t - this.pokedAt) * 22) * poke;
-      this.bear.root.scale.set(BEAR_SCALE * (1 + wob * 0.06), BEAR_SCALE * (1 - wob * 0.08), BEAR_SCALE * (1 + wob * 0.06));
-      this.bear.head.rotation.y += wob * 0.35;
-    } else this.bear.root.scale.setScalar(BEAR_SCALE);
-    this.bed.update(this.p, morning);
+    const set = this.set;
+    if (set) {
+      applyPose(set.bear, this.p, motion, this.stood);
+      const poke = this.reduce ? 0 : Math.max(0, 1 - (t - this.pokedAt) / 0.9);
+      if (poke > 0) {
+        const wob = Math.sin((t - this.pokedAt) * 22) * poke;
+        set.bear.root.scale.set(BEAR_SCALE * (1 + wob * 0.06), BEAR_SCALE * (1 - wob * 0.08), BEAR_SCALE * (1 + wob * 0.06));
+        set.bear.head.rotation.y += wob * 0.35;
+      } else set.bear.root.scale.setScalar(BEAR_SCALE);
+      set.update(this.p, morning);
+      // остров мягко «вырастает» при появлении
+      const k = this.reduce ? 1 : Math.min(1, (now - this.setAt) / 700);
+      set.group.scale.setScalar(1 - (1 - k) ** 3 * 0.25);
+      set.bear.head.getWorldPosition(this.headPos);
+    }
     this.world.update(motion, morning);
-    this.bear.head.getWorldPosition(this.headPos);
-    this.zzz.update(t, this.headPos, 1 - phase(this.p, 0.14, 0.3));
+    this.zzz.update(t, this.headPos, set ? 1 - phase(this.p, 0.14, 0.3) : 0);
     this.renderer.render(this.scene, this.camera);
   };
 }

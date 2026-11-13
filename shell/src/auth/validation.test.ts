@@ -19,7 +19,8 @@ describe('проверки входа и регистрации', () => {
   it('имя', () => {
     expect(checkName('А')).toBe('short');
     expect(checkName('Анна-Мария')).toBeNull();
-    expect(checkName('Мама 2')).toBeNull();
+    expect(checkName('Мама 2')).toBe('chars');
+    expect(checkName('A. Ivanova')).toBeNull();
     expect(checkName('Anna!')).toBe('chars');
     expect(checkName("--")).toBe('chars');
   });

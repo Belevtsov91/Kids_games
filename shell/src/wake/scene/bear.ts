@@ -4,19 +4,19 @@ import { soft as mat, mesh } from '@/welcome/scene/kit';
 
 export interface BearRig {
   /** Место и поворот мишки в мире. */
-  root: THREE.Group;
+  root: THREE.Object3D;
   /** Таз: наклон всего тела (лежит / сидит / стоит). */
-  hips: THREE.Group;
+  hips: THREE.Object3D;
   /** Тело над тазом: дышит. */
-  torso: THREE.Group;
-  head: THREE.Group;
-  armL: THREE.Group;
-  armR: THREE.Group;
-  legL: THREE.Group;
-  legR: THREE.Group;
-  eyes: THREE.Mesh[];
-  mouth: THREE.Mesh;
-  cap: THREE.Group;
+  torso: THREE.Object3D;
+  head: THREE.Object3D;
+  armL: THREE.Object3D;
+  armR: THREE.Object3D;
+  legL: THREE.Object3D;
+  legR: THREE.Object3D;
+  eyes: THREE.Object3D[];
+  mouth: THREE.Object3D;
+  cap: THREE.Object3D;
 }
 
 /** Мишка в мире меньше, чем в модели: так он помещается в кровать. */

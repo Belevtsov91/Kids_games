@@ -45,8 +45,8 @@ export function checkEmail(raw: string): { error: EmailError | null; hint: strin
 export function checkName(raw: string): NameError | null {
   const v = raw.trim();
   if (v.length < 2) return 'short';
-  // Как на сервере: хотя бы одна буква. Цифры и точка можно («Мама 2», «A. Ivanova»), значки — нет.
-  if (!/^[\p{L}\p{N}'’. -]+$/u.test(v) || !/\p{L}/u.test(v)) return 'chars';
+  // Как на сервере: буквы любого языка, пробел, дефис, апостроф и точка («A. Ivanova»), и хотя бы одна буква.
+  if (!/^[\p{L}'’. -]+$/u.test(v) || !/\p{L}/u.test(v)) return 'chars';
   return null;
 }
 

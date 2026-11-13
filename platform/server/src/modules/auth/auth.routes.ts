@@ -20,7 +20,7 @@ const registerBody = {
     email,
     password: { type: 'string', minLength: 8, maxLength: 72 },
     // Как на клиенте (shell/src/auth/validation.ts): хотя бы одна буква, без значков.
-    name: { type: 'string', minLength: 2, maxLength: 40, pattern: "^[\\p{L}\\p{N}'’. -]*\\p{L}[\\p{L}\\p{N}'’. -]*$" },
+    name: { type: 'string', minLength: 2, maxLength: 40, pattern: "^[\\p{L}'’. -]*\\p{L}[\\p{L}'’. -]*$" },
     // Часовой пояс браузера взрослого: по нему считаются «сегодня», лимиты и тихие часы.
     tz: { type: 'string', maxLength: 64 },
     // Галочка «согласен с условиями и политикой»: записываем, когда и с какой редакцией.

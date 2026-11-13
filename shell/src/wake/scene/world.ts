@@ -33,6 +33,21 @@ function cloudPuff(m: THREE.Material, x: number, y: number, z: number, s: number
   return g;
 }
 
+/** Запасной остров из простых фигур — когда модель из Blender не загрузилась. */
+export function buildPlainIsland() {
+  const g = new THREE.Group();
+  const base = islandBase(3.1, '#79c983', '#8a6fb0', 10);
+  base.position.y = -0.28;
+  g.add(base);
+  const trees: [THREE.Group, number, number][] = [[pine(1.5), -2.1, -1.4], [pine(1.1, '#3f9f8e'), -1.5, -2.2], [roundTree('#8fd36b'), 2.1, -1.5]];
+  trees.forEach(([tree, x, z]) => {
+    tree.position.set(x, 0, z);
+    g.add(tree);
+  });
+  [[1.9, 1.6], [-1.9, 1.2], [0.4, 2.3]].forEach(([x, z], i) => g.add(mesh(new THREE.SphereGeometry(0.12, 6, 5), mat(['#ffd25a', '#ff7eb6', '#7ee7ff'][i]), x, 0.08, z)));
+  return g;
+}
+
 export function buildWorld(scene: THREE.Scene) {
   const uniforms = { top: { value: new THREE.Color() }, hor: { value: new THREE.Color() }, bot: { value: new THREE.Color() } };
   scene.add(new THREE.Mesh(new THREE.SphereGeometry(180, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, uniforms, vertexShader: SKY_VERTEX, fragmentShader: SKY_FRAGMENT })));
@@ -42,8 +57,8 @@ export function buildWorld(scene: THREE.Scene) {
 
   // луна слева от кадра садится, солнце справа встаёт (камера смотрит в сторону -x, -z)
   const moonMat = glowMat('#fff2c4', 1.2);
-  const moon = mesh(new THREE.IcosahedronGeometry(1.1, 1), moonMat, -30, 5.5, -8.5, false);
-  const sun = mesh(new THREE.IcosahedronGeometry(2.6, 1), glowMat('#ffcf6e', 1.8), -24.5, -6, -26, false);
+  const moon = mesh(new THREE.IcosahedronGeometry(1.1, 4), moonMat, -30, 5.5, -8.5, false);
+  const sun = mesh(new THREE.IcosahedronGeometry(2.6, 4), glowMat('#ffcf6e', 1.8), -24.5, -6, -26, false);
   scene.add(moon, sun);
 
   const hemi = new THREE.HemisphereLight(NIGHT.hemi, '#3b2a66', 0.55 * Math.PI);
@@ -62,17 +77,8 @@ export function buildWorld(scene: THREE.Scene) {
   rim.position.set(-8, 5, -8);
   scene.add(hemi, key, fill, lamp, rim);
 
-  // остров: всё, что на нём, качается вместе с ним
+  // остров: всё, что на нём (набор из set.ts), качается вместе с ним
   const island = new THREE.Group();
-  const base = islandBase(3.1, '#79c983', '#8a6fb0', 10);
-  base.position.y = -0.28;
-  island.add(base);
-  const trees: [THREE.Group, number, number][] = [[pine(1.5), -2.1, -1.4], [pine(1.1, '#3f9f8e'), -1.5, -2.2], [roundTree('#8fd36b'), 2.1, -1.5]];
-  trees.forEach(([tree, x, z]) => {
-    tree.position.set(x, 0, z);
-    island.add(tree);
-  });
-  [[1.9, 1.6], [-1.9, 1.2], [0.4, 2.3]].forEach(([x, z], i) => island.add(mesh(new THREE.SphereGeometry(0.12, 6, 5), mat(['#ffd25a', '#ff7eb6', '#7ee7ff'][i]), x, 0.08, z)));
   scene.add(island);
 
   const puff = soft('#efe0f7', { roughness: 0.95, emissive: '#c9b5ff', emissiveIntensity: 0.15, transparent: true, opacity: 0.92 });
