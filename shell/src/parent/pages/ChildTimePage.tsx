@@ -3,13 +3,14 @@ import { papi } from '../api';
 import { useParent } from '../ParentShell';
 import { useParentText } from '../text';
 import { PageHead, Panel, ToggleRow } from '../ui/bits';
+import { DayLimits } from '../ui/DayLimits';
 import { QuietDay } from '../ui/QuietDay';
 import { useChild } from './useChild';
 
 const BREAKS = [0, 15, 20, 30, 45, 60];
 const BONUS = [15, 30, 60];
 
-/** Время ребёнка: лимиты будни/выходные, тихие часы, перерывы, просьбы и разовая прибавка. */
+/** Время ребёнка: лимиты будни/выходные или на каждый день, тихие часы, перерывы, просьбы и разовая прибавка. */
 export function ChildTimePage() {
   const p = useParentText();
   const tt = p.time;
@@ -73,8 +74,9 @@ export function ChildTimePage() {
       />
       <div className="pa-cols">
         <Panel title={tt.limits} lead={tt.limitsLead}>
-          {limitRow('limitWeekday', tt.weekday)}
-          {limitRow('limitWeekend', tt.weekend)}
+          {!r.limitDays && limitRow('limitWeekday', tt.weekday)}
+          {!r.limitDays && limitRow('limitWeekend', tt.weekend)}
+          <DayLimits value={r.limitDays ?? null} weekday={r.limitWeekday} weekend={r.limitWeekend} onChange={(limitDays, saveNow) => patch({ limitDays }, saveNow)} />
           <label className="pa-field">
             <span>{tt.breaks}</span>
             <select id="break-every" value={r.breakEvery} onChange={(e) => patch({ breakEvery: Number(e.target.value) })}>

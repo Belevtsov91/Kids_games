@@ -24,12 +24,26 @@ export interface Child {
   birthday?: boolean;
   /** План дня от взрослого: до трёх id игр, они наверху дашборда с галочками. */
   plan?: string[];
+  /** Замки из кабинета: войти в профиль / выйти из него можно только со взрослым. */
+  locked?: boolean;
+  exitLock?: boolean;
+}
+
+/** Новый профиль: возраст или месяц рождения «YYYY-MM»; rules: false — без правил времени по возрасту. */
+export interface NewChild {
+  name: string;
+  avatar: string;
+  age?: number;
+  birthMonth?: string;
+  rules?: boolean;
 }
 
 export interface Me {
   parent: { id: string; name: string; photo?: string | null };
   children: Child[];
   activeChildId: string | null;
+  /** Давно не играли, а детей несколько: снова спрашиваем «кто играет?». */
+  askWho?: boolean;
 }
 
 interface AuthValue {
@@ -44,7 +58,8 @@ interface AuthValue {
   /** Заново спросить сервер, кто вошёл. true — ответ получен (вошёл или нет), false — спросить не удалось. */
   refresh(): Promise<boolean>;
   logout(): Promise<void>;
-  addChild(data: Omit<Child, 'id'>): Promise<Child>;
+  /** Создаёт профиль и сразу выбирает его (одним запросом: разрешение взрослого действует один раз). */
+  addChild(data: NewChild): Promise<Child>;
   selectChild(childId: string): Promise<void>;
   /** Удалить аккаунт со всеми профилями и сохранениями. */
   deleteAccount(password: string): Promise<void>;
@@ -112,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       offline,
       activeChild: me?.children.find((c) => c.id === me.activeChildId) ?? null,
       async register(data, opts) {
-        await sendAuth('/auth/register', { ...data, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
+        await sendAuth('/auth/register', { ...data, consent: true, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
         if (!opts?.silent) await refresh();
       },
       async login(data, opts) {
@@ -125,8 +140,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setMe(null);
       },
       async addChild(data) {
-        const child = await api.post<Child>('/children', data);
-        await api.put('/children/active', { childId: child.id });
+        const child = await api.post<Child>('/children', { ...data, activate: true });
         await refresh();
         return child;
       },
@@ -135,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // язык игр, который выбрал взрослый для этого ребёнка
         const lang = me?.children.find((c) => c.id === childId)?.lang;
         if (isLocale(lang)) setLocale(lang);
-        setMe((prev) => (prev ? { ...prev, activeChildId: childId } : prev));
+        setMe((prev) => (prev ? { ...prev, activeChildId: childId, askWho: false } : prev));
       },
       async deleteAccount(password) {
         await api.delete('/auth/account', { password });

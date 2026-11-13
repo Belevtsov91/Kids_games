@@ -7,9 +7,10 @@ import { PhotoPicker } from '../ui/PhotoPicker';
 import { PageHead, Panel } from '../ui/bits';
 import { AVATARS, Stepper } from '../ui/fields';
 import { DeleteChild } from './DeleteChild';
+import { ProfileGuard } from './ProfileGuard';
 import { useChild } from './useChild';
 
-/** Профиль ребёнка: имя, возраст, аватар, фото, язык игр, удаление. */
+/** Профиль ребёнка: имя, возраст, аватар, фото, язык игр, защита профиля, удаление. */
 export function ChildProfilePage() {
   const p = useParentText();
   const { locale } = useI18n();
@@ -82,6 +83,7 @@ export function ChildProfilePage() {
             </div>
           </form>
         </Panel>
+        <ProfileGuard child={child} save={save} />
         <DeleteChild id={id} name={child.name} />
       </div>
     </>

@@ -6,7 +6,7 @@ import { useParent } from '../ParentShell';
 import { useParentText } from '../text';
 import { Panel } from '../ui/bits';
 
-/** Удаление профиля: впишите имя ребёнка — защита от случайного нажатия. */
+/** Удаление профиля: впишите имя ребёнка — защита от случайного нажатия. Профиль уходит в корзину на 30 дней. */
 export function DeleteChild({ id, name }: { id: string; name: string }) {
   const p = useParentText();
   const { toast } = useParent();
@@ -34,6 +34,7 @@ export function DeleteChild({ id, name }: { id: string; name: string }) {
         <span>{p.profile.delConfirm(name)}</span>
         <input id="kid-delete-name" autoComplete="off" value={typed} onChange={(e) => setTyped(e.target.value)} />
       </label>
+      <a className="pa-btn pa-btn-quiet" href={`/api/parent/export?child=${id}`} download>⬇ {p.delExport}</a>{' '}
       <button type="button" className="pa-btn pa-btn-danger" disabled={busy || typed.trim() !== name} onClick={() => void remove()}>
         {p.profile.delGo}
       </button>

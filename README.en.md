@@ -74,13 +74,13 @@ In dev, Vite proxies `/api/*` to `http://localhost:3000`. Server settings: copy 
 
 Create a Supabase project and fill in `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and `SESSION_ENCRYPTION_KEY` in `.env`. Without them the server still runs, but sign-in returns 503 and game APIs return 401 (no session).
 
-Platform migrations (`platform/server/migrations/001–006`) and all game migrations are combined into one script:
+Platform migrations (`platform/server/migrations/001–007`) and all game migrations are combined into one script:
 
 ```bash
 node tools/db-sql.mjs > all.sql
 ```
 
-Run the contents of `all.sql` in Supabase → SQL Editor. The script is idempotent (`create … if not exists`), so after a new migration or game you can simply run it again. Without migrations 004 and 005, skills, stickers, cloud saves, comfort settings, helpers, emails and the day plan don’t work; without 006, the one-time profile switch with an adult’s PIN doesn’t.
+Run the contents of `all.sql` in Supabase → SQL Editor. The script is idempotent (`create … if not exists`), so after a new migration or game you can simply run it again. Without migrations 004 and 005, skills, stickers, cloud saves, comfort settings, helpers, emails and the day plan don’t work; without 006, the one-time profile switch with an adult’s PIN doesn’t. Without 007 the site does not work: profile locks, the trash, per-day limits, retention and consent are read on every sign-in.
 
 ### Email
 

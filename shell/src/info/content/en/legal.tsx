@@ -39,7 +39,9 @@ export const privacy: InfoContent = {
       </p>
       <h2>How long we keep it</h2>
       <p>
-        For as long as the account exists. Login sessions are deleted after 7 days, password reset links once they expire, and detailed skill answers after
+        For as long as the account exists, but not forever. If nobody signs in for two years, we email you and delete the account with all profiles and
+        saves 30 days after that email; signing in is enough to keep everything. A deleted child profile stays in the parent area’s trash for 30 days
+        (you can restore it or erase it at once) and is then erased for good. At sign-up we record the date of your consent and the version of this policy. Login sessions are deleted after 7 days, password reset links once they expire, and detailed skill answers after
         180 days. When the account is deleted the data is erased at once, and hosting backups are overwritten within <Fill value={SITE.backupDays} />.
       </p>
       <h2>Your rights</h2>

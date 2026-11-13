@@ -5,8 +5,7 @@ import { useI18n } from '@/i18n/I18nProvider';
 import { age as ageText } from '@/i18n/plural';
 import { Face } from '@/parent/ui/Face';
 import { useKidText } from '@/kid/text';
-import { ApiError } from '@/api/client';
-import { AdultOverlay } from '@/account/AdultOverlay';
+import { adultReason, AdultOverlay, type AdultReason } from '@/account/AdultOverlay';
 
 /** Кто играет: аватарка в верхней панели, по нажатию — быстрый выбор другого профиля без ухода со страницы.
  *  logout — показать «Выйти» в меню (на телефоне, где кнопки в панели нет). */
@@ -15,7 +14,7 @@ export function ProfileMenu({ logout = false }: { logout?: boolean }) {
   const { t, locale } = useI18n();
   const k = useKidText();
   const [open, setOpen] = useState(false);
-  const [locked, setLocked] = useState<{ id: string; reason: 'limit' | 'quiet' | 'rules' } | null>(null);
+  const [locked, setLocked] = useState<{ id: string; reason: AdultReason } | null>(null);
   const box = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,9 +35,10 @@ export function ProfileMenu({ logout = false }: { logout?: boolean }) {
     try {
       await selectChild(id);
     } catch (err) {
-      // 423: у текущего ребёнка кончилось время — сменить профиль может только взрослый.
-      if (!(err instanceof ApiError) || err.status !== 423) throw err;
-      setLocked({ id, reason: err.data?.reason === 'quiet' || err.data?.reason === 'rules' ? err.data.reason : 'limit' });
+      // 423: правила времени или замок профиля — сменить профиль может только взрослый.
+      const reason = adultReason(err);
+      if (!reason) throw err;
+      setLocked({ id, reason });
     }
   };
 
@@ -57,7 +57,7 @@ export function ProfileMenu({ logout = false }: { logout?: boolean }) {
             <button key={child.id} type="button" aria-current={child.id === activeChild?.id} onClick={() => void pick(child.id)}>
               <Face photo={child.photo} avatar={child.avatar} size={34} className="dash-ava" />
               {child.name}
-              <small>{ageText(locale, child.age)}</small>
+              <small>{child.locked && child.id !== activeChild?.id ? '🔒 ' : ''}{ageText(locale, child.age)}</small>
             </button>
           ))}
           <Link to="/me" className="dash-menu-link">🙂 {k.me.open}</Link>

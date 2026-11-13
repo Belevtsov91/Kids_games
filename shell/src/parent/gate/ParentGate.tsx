@@ -10,9 +10,11 @@ const COOLDOWN_S = 30;
 /**
  * Вход в кабинет: задача для взрослых, потом PIN (если включён). Ответ проверяет только сервер.
  * purpose 'switch' — взрослый разрешает одну смену профиля, кабинет при этом не открывается.
+ * needPassword — PIN не задан, а ребёнку уже 7: вторым шагом идёт пароль аккаунта.
  */
-export function ParentGate({ hasPin, purpose, onUnlocked }: { hasPin: boolean; purpose?: 'switch'; onUnlocked: () => void }) {
+export function ParentGate({ hasPin, needPassword = false, purpose, onUnlocked }: { hasPin: boolean; needPassword?: boolean; purpose?: 'switch'; onUnlocked: () => void }) {
   const p = useParentText();
+  const twoSteps = hasPin || needPassword;
   const [task, setTask] = useState<{ challenge: Challenge; token: string } | null>(null);
   const [answer, setAnswer] = useState('');
   const [step, setStep] = useState<'puzzle' | 'pin'>('puzzle');
@@ -48,7 +50,7 @@ export function ParentGate({ hasPin, purpose, onUnlocked }: { hasPin: boolean; p
     if (!task || !answer.trim() || cooldown) return;
     const body = { token: task.token, answer: Number(answer), tz: browserZone(), ...(purpose ? { purpose } : {}) };
     try {
-      if (hasPin) {
+      if (twoSteps) {
         await papi.raw.post('/check', body);
         setError(null);
         setStep('pin');
@@ -85,7 +87,7 @@ export function ParentGate({ hasPin, purpose, onUnlocked }: { hasPin: boolean; p
         </h1>
         <div className="gate-steps" aria-hidden="true">
           <i className="on" />
-          {hasPin && <i className={step === 'pin' ? 'on' : ''} />}
+          {twoSteps && <i className={step === 'pin' ? 'on' : ''} />}
         </div>
         {step === 'puzzle' ? (
           <>
@@ -113,7 +115,7 @@ export function ParentGate({ hasPin, purpose, onUnlocked }: { hasPin: boolean; p
             </div>
           </>
         ) : (
-          task && <PinStep token={task.token} answer={Number(answer)} purpose={purpose} onUnlocked={onUnlocked} onFail={() => setShake((n) => n + 1)} />
+          task && <PinStep token={task.token} answer={Number(answer)} passwordOnly={!hasPin} purpose={purpose} onUnlocked={onUnlocked} onFail={() => setShake((n) => n + 1)} />
         )}
       </div>
     </section>

@@ -4,12 +4,13 @@ import { useAuth } from '@/auth/AuthContext';
 import { ApiError } from '@/api/client';
 import { useI18n } from '@/i18n/I18nProvider';
 import { age as ageText } from '@/i18n/plural';
-import { AdultOverlay } from '@/account/AdultOverlay';
+import { adultReason, AdultOverlay, type AdultReason } from '@/account/AdultOverlay';
 import { DashSky } from '@/dashboard/DashSky';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
 
 const AVATARS = ['🐻', '🐰', '🦊', '🐼', '🐸', '🦁', '🐯', '🐨', '🐵', '🦄', '🐙', '🐳'];
 const AGES = Array.from({ length: 13 }, (_, i) => i + 3);
+const THIS_YEAR = new Date().getFullYear();
 
 /** Кто играет: выбор профиля ребёнка и добавление нового. */
 export function ChildrenPage() {
@@ -21,14 +22,17 @@ export function ChildrenPage() {
   const [adding, setAdding] = useState(children.length === 0);
   const [avatar, setAvatar] = useState(AVATARS[0]);
   const [age, setAge] = useState(5);
+  // Месяц рождения «YYYY-MM» вместо возраста (по желанию) и правила времени по возрасту (по умолчанию включены).
+  const [birth, setBirth] = useState('');
+  const [rules, setRules] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  // Сервер ответил 423: у текущего ребёнка кончилось время, сменить профиль может только взрослый.
-  const [locked, setLocked] = useState<{ reason: 'limit' | 'quiet' | 'rules'; retry: () => void } | null>(null);
+  // Сервер ответил 423: правила времени, замок профиля или новый профиль — нужен взрослый.
+  const [locked, setLocked] = useState<{ reason: AdultReason; retry: () => void } | null>(null);
   const lockedBy = (err: unknown, retry: () => void) => {
-    if (!(err instanceof ApiError) || err.status !== 423) return false;
-    setLocked({ reason: err.data?.reason === 'quiet' || err.data?.reason === 'rules' ? err.data.reason : 'limit', retry });
-    return true;
+    const reason = adultReason(err);
+    if (reason) setLocked({ reason, retry });
+    return Boolean(reason);
   };
 
   const pick = async (childId: string) => {
@@ -50,7 +54,7 @@ export function ChildrenPage() {
     setBusy(true);
     setError(null);
     try {
-      await addChild({ name, age, avatar });
+      await addChild({ name, avatar, rules, ...(birth ? { birthMonth: birth } : { age }) });
       navigate('/dashboard');
     } catch (err) {
       setBusy(false);
@@ -87,6 +91,7 @@ export function ChildrenPage() {
               <span className="child-avatar">{child.avatar}</span>
               <span>{child.name}</span>
               <span className="child-age">{ageText(locale, child.age)}</span>
+              {child.locked && child.id !== me?.activeChildId && <span className="child-lock" title={c.lockedBadge} aria-label={c.lockedBadge}>🔒</span>}
             </button>
           ))}
           {!adding && (
@@ -110,12 +115,18 @@ export function ChildrenPage() {
             <legend>{c.age}</legend>
             <div className="age-picker">
               {AGES.map((a) => (
-                <button type="button" key={a} aria-pressed={a === age} onClick={() => setAge(a)}>
+                <button type="button" key={a} aria-pressed={!birth && a === age} disabled={Boolean(birth)} onClick={() => setAge(a)}>
                   {a}
                 </button>
               ))}
             </div>
           </fieldset>
+
+          <label className="child-birth">
+            {c.birth}
+            <input type="month" min={`${THIS_YEAR - 16}-01`} max={`${THIS_YEAR - 2}-12`} value={birth} onChange={(e) => setBirth(e.target.value)} />
+            <small>{c.birthHint}</small>
+          </label>
 
           <fieldset>
             <legend>{c.avatar}</legend>
@@ -127,6 +138,10 @@ export function ChildrenPage() {
               ))}
             </div>
           </fieldset>
+
+          <label className="child-rules">
+            <input type="checkbox" checked={rules} onChange={(e) => setRules(e.target.checked)} /> <span>{c.rulesOn}</span>
+          </label>
 
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="child-form-actions">

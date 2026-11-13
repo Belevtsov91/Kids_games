@@ -4,11 +4,12 @@ import { useParentText } from '../text';
 import { KidCard } from '../ui/KidCard';
 import { PageHead } from '../ui/bits';
 import { useLoad } from '../ui/useLoad';
+import { TrashPanel } from './TrashPanel';
 
-/** Список детей: карточки и «Добавить ребёнка». */
+/** Список детей: карточки, «Добавить ребёнка» и корзина удалённых профилей. */
 export function KidsPage() {
   const p = useParentText();
-  const { data } = useLoad(() => papi.get<Overview>('/overview'), []);
+  const { data, reload } = useLoad(() => papi.get<Overview>('/overview'), []);
   return (
     <>
       <PageHead eyebrow={p.overview.eyebrow} title={p.kids.title} lead={p.kids.lead}>
@@ -19,6 +20,7 @@ export function KidsPage() {
           <KidCard key={k.id} child={k} />
         ))}
       </div>
+      <TrashPanel onChange={() => void reload()} />
     </>
   );
 }

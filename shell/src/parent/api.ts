@@ -21,6 +21,9 @@ export interface ChildCard {
   comfort: { musicVolume: number; effectsVolume: number; reduceMotion: boolean; bigButtons: boolean };
   /** План дня: до трёх id игр. */
   plan: string[];
+  /** Замки: вход в профиль и выход из него только со взрослым. */
+  locked: boolean;
+  exitLock: boolean;
 }
 
 export interface SkillsReport {

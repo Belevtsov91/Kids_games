@@ -1,0 +1,23 @@
+/* Логика профилей: замок на карточке, месяц рождения и правила в форме нового профиля, лимит по дням, корзина. */
+.child-card { position: relative; }
+.child-lock { position: absolute; top: 14px; right: 16px; font-size: 22px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(10, 6, 40, 0.6)); }
+.child-form .child-birth small { font-weight: 600; color: var(--dash-ink-soft); }
+.child-form .age-picker button:disabled { opacity: 0.4; cursor: default; }
+.child-form label.child-rules { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; font-weight: 700; cursor: pointer; }
+.child-form label.child-rules input { width: 22px; height: 22px; min-height: 0; margin: 2px 0 0; padding: 0; box-shadow: none; accent-color: var(--dash-gold); }
+
+.pa-days { display: grid; gap: 6px; margin-top: 8px; }
+.pa-day { display: grid; grid-template-columns: 34px 1fr 92px; align-items: center; gap: 10px; }
+.pa-day b { font-size: 14px; }
+.pa-day input[type='range'] { width: 100%; }
+.pa-day output { text-align: right; font-size: 14px; font-weight: 700; color: var(--dash-ink-soft); }
+
+.pa-trash { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pa-trash li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.06); }
+.pa-trash li > div { flex: 1 1 160px; display: grid; }
+.pa-trash small { color: var(--dash-ink-soft); }
+
+.pa-checks { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.pa-field .pa-checks label { display: inline-grid; grid-template-columns: 20px auto; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; }
+.pa-field .pa-checks label input { width: 20px; height: 20px; min-height: 0; margin: 0; padding: 0; box-shadow: none; accent-color: var(--dash-gold); }
+.pa-note { margin: 8px 0 0; font-size: 14px; color: var(--dash-ink-soft); }

@@ -9,6 +9,7 @@
 | [login.md](login.md) | Вход `/login` | L1–L12 | `shell/e2e/login.spec.ts` |
 | [register.md](register.md) | Регистрация `/register` | R1–R11 | `shell/e2e/register.spec.ts` |
 | [forgot-reset.md](forgot-reset.md) | `/forgot` и `/reset` | F1–F9 | `shell/e2e/recover.spec.ts` |
+| [profiles.md](profiles.md) | Профили детей: «Кто играет?» и кабинет | K1–K14 | `shell/e2e/profiles.spec.ts`, `platform/server/tests/profiles.test.ts` |
 
 Автотест называется по ID кейса (`test('L5: …')`), поэтому кейс легко найти в отчёте Playwright.
 

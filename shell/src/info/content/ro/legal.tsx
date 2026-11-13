@@ -39,7 +39,9 @@ export const privacy: InfoContent = {
       </p>
       <h2>Cât timp le păstrăm</h2>
       <p>
-        Cât timp există contul. Sesiunile se șterg după 7 zile, linkurile de resetare a parolei după expirare, iar răspunsurile detaliate pe abilități după
+        Cât timp există contul, dar nu la nesfârșit. Dacă nimeni nu intră în cont timp de doi ani, trimitem un e-mail și, la 30 de zile după el, ștergem
+        contul cu toate profilurile și salvările; e de ajuns să intri ca totul să rămână. Un profil de copil șters stă 30 de zile în coșul din cont
+        (poate fi restaurat sau șters imediat), apoi dispare definitiv. La înregistrare notăm data acordului și versiunea acestei politici. Sesiunile se șterg după 7 zile, linkurile de resetare a parolei după expirare, iar răspunsurile detaliate pe abilități după
         180 de zile. După ștergerea contului datele dispar imediat, iar copiile de rezervă ale găzduirii se suprascriu în <Fill value={SITE.backupDays} />.
       </p>
       <h2>Drepturile tale</h2>

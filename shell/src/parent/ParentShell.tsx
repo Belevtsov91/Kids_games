@@ -34,7 +34,7 @@ export function ParentShell() {
   const p = useParentText();
   const { refresh } = useAuth();
   const navigate = useNavigate();
-  const [state, setState] = useState<{ open: boolean; hasPin: boolean } | null>(null);
+  const [state, setState] = useState<{ open: boolean; hasPin: boolean; needPassword?: boolean } | null>(null);
   const [until, setUntil] = useState(0);
   const [now, setNow] = useState(Date.now());
   const [message, setMessage] = useState<string | null>(null);
@@ -42,8 +42,8 @@ export function ParentShell() {
 
   const load = useCallback(async () => {
     try {
-      const s = await papi.raw.get<{ unlocked: boolean; until: string | null; hasPin: boolean }>('/status');
-      setState({ open: s.unlocked, hasPin: s.hasPin });
+      const s = await papi.raw.get<{ unlocked: boolean; until: string | null; hasPin: boolean; needPassword?: boolean }>('/status');
+      setState({ open: s.unlocked, hasPin: s.hasPin, needPassword: s.needPassword });
       if (s.until) setUntil(new Date(s.until).getTime());
     } catch {
       setState({ open: false, hasPin: false });
@@ -139,6 +139,7 @@ export function ParentShell() {
           <main className="dash-wrap">
             <ParentGate
               hasPin={state.hasPin}
+              needPassword={state.needPassword}
               onUnlocked={() => {
                 setUntil(Date.now() + OPEN_MS);
                 setState({ ...state, open: true });

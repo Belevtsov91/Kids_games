@@ -103,7 +103,11 @@ export const en: Dict = {
     tooMany: 'You cannot add more profiles.',
     saving: 'Saving…',
     done: 'Done',
-    locked: { rules: 'This profile has a time limit. Only a grown-up can switch profiles.', limit: 'Time is up for today. Only a grown-up can switch profiles.', quiet: "It's quiet time now. Only a grown-up can switch profiles.", adult: "I'm a grown-up", back: 'Back' },
+    rulesOn: 'Time rules for this age: a daily limit and quiet hours. You can change them in the parent area.',
+    birth: 'Birth month (optional)',
+    birthHint: 'Then the age grows by itself.',
+    lockedBadge: 'Grown-up only',
+    locked: { rules: 'This profile has a time limit. Only a grown-up can switch profiles.', limit: 'Time is up for today. Only a grown-up can switch profiles.', quiet: "It's quiet time now. Only a grown-up can switch profiles.", exit: 'Only a grown-up can leave this profile.', locked: 'This profile is protected. Only a grown-up can enter it.', create: 'Only a grown-up can add a new profile.', adult: "I'm a grown-up", back: 'Back' },
   },
   menu: {
     changeProfile: 'Switch profile',

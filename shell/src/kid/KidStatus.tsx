@@ -17,6 +17,8 @@ export interface KidTime {
 export interface KidRules {
   limitWeekday: number | null;
   limitWeekend: number | null;
+  /** Свой лимит на каждый день: 7 чисел с воскресенья, 0 — без лимита. */
+  limitDays?: number[] | null;
   quietFrom: string | null;
   quietTo: string | null;
   breakEvery: number;

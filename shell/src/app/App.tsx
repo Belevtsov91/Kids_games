@@ -23,7 +23,7 @@ import { GameCardPage, GamesPage } from '@/more/pages/GameCardPage';
 import { NewsPage } from '@/more/pages/NewsPage';
 import { WakeGate } from '@/wake/WakeGate';
 
-/** Закрытые страницы: без входа — на /login; без профиля ребёнка — на /children. */
+/** Закрытые страницы: без входа — на /login; без профиля ребёнка или после долгого перерыва — на /children. */
 function Private({ children, needChild = false }: { children: ReactNode; needChild?: boolean }) {
   const { me, offline, activeChild } = useAuth();
   const { t } = useI18n();
@@ -32,7 +32,7 @@ function Private({ children, needChild = false }: { children: ReactNode; needChi
   if (me === undefined) return typeof navigator !== 'undefined' && !navigator.onLine ? <OfflineScreen /> : <Loading label={t.common.loading} />;
   // После входа вернём туда, куда шли (глубокая ссылка на игру, кабинет и т. п.).
   if (!me) return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
-  if (needChild && !activeChild) return <Navigate to="/children" replace />;
+  if (needChild && (!activeChild || me.askWho)) return <Navigate to="/children" replace />;
   return children;
 }
 

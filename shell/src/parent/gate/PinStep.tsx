@@ -5,9 +5,9 @@ import { useParentText } from '../text';
 import { PinPad } from '../ui/PinPad';
 
 /** Шаг 2: PIN. «Забыли PIN?» и блокировка после 5 ошибок — вход паролем аккаунта. */
-export function PinStep({ token, answer, purpose, onUnlocked, onFail }: { token: string; answer: number; purpose?: 'switch'; onUnlocked: () => void; onFail: () => void }) {
+export function PinStep({ token, answer, passwordOnly = false, purpose, onUnlocked, onFail }: { token: string; answer: number; passwordOnly?: boolean; purpose?: 'switch'; onUnlocked: () => void; onFail: () => void }) {
   const p = useParentText();
-  const [mode, setMode] = useState<'pin' | 'password'>('pin');
+  const [mode, setMode] = useState<'pin' | 'password'>(passwordOnly ? 'password' : 'pin');
   const [error, setError] = useState<string | null>(null);
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -38,7 +38,7 @@ export function PinStep({ token, answer, purpose, onUnlocked, onFail }: { token:
     };
     return (
       <form className="pa-form" onSubmit={submit}>
-        <p className="gate-lead">{error ?? p.gate.pinLead}</p>
+        <p className="gate-lead">{error ?? (passwordOnly ? p.gatePassword : p.gate.pinLead)}</p>
         <label className="pa-field">
           <span>{p.gate.password}</span>
           <input id="gate-password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} autoFocus />

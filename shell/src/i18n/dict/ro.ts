@@ -103,7 +103,11 @@ export const ro: Dict = {
     tooMany: 'Nu mai poți adăuga profiluri.',
     saving: 'Salvăm…',
     done: 'Gata',
-    locked: { rules: 'Acest profil are o limită de timp. Doar un adult poate schimba profilul.', limit: 'Timpul de azi s-a terminat. Doar un adult poate schimba profilul.', quiet: 'Acum sunt orele de liniște. Doar un adult poate schimba profilul.', adult: 'Sunt adult', back: 'Înapoi' },
+    rulesOn: 'Reguli de timp după vârstă: limită pe zi și ore de liniște. Le poți schimba în cont.',
+    birth: 'Luna nașterii (opțional)',
+    birthHint: 'Atunci vârsta va crește singură.',
+    lockedBadge: 'Doar cu un adult',
+    locked: { rules: 'Acest profil are o limită de timp. Doar un adult poate schimba profilul.', limit: 'Timpul de azi s-a terminat. Doar un adult poate schimba profilul.', quiet: 'Acum sunt orele de liniște. Doar un adult poate schimba profilul.', exit: 'Doar un adult poate ieși din acest profil.', locked: 'Acest profil este protejat. Doar un adult poate intra în el.', create: 'Doar un adult poate adăuga un profil nou.', adult: 'Sunt adult', back: 'Înapoi' },
   },
   menu: {
     changeProfile: 'Schimbă profilul',

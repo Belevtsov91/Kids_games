@@ -35,7 +35,7 @@ export function OverviewPage() {
   };
 
   const family = kids[0]?.week.map((d, i) => ({ day: d.day, minutes: kids.reduce((s, k) => s + (k.week[i]?.minutes ?? 0), 0) })) ?? [];
-  const showPinTip = account && !account.hasPin && kids.some((k) => k.age >= 8);
+  const showPinTip = account && !account.hasPin && kids.some((k) => k.age >= 7);
 
   return (
     <>

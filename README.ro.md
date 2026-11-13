@@ -74,13 +74,13 @@ corepack pnpm build       # lint + tipuri + build shell
 
 Creați un proiect Supabase și completați în `.env` `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` și `SESSION_ENCRYPTION_KEY`. Fără ele serverul merge, dar intrarea răspunde 503, iar API-ul jocurilor 401 (fără sesiune).
 
-Migrările platformei (`platform/server/migrations/001–006`) și ale tuturor jocurilor se adună într-un singur script:
+Migrările platformei (`platform/server/migrations/001–007`) și ale tuturor jocurilor se adună într-un singur script:
 
 ```bash
 node tools/db-sql.mjs > all.sql
 ```
 
-Conținutul `all.sql` se rulează în Supabase → SQL Editor. Scriptul e idempotent (`create … if not exists`): după o migrare sau un joc nou poate fi rulat din nou. Fără migrările 004 și 005 nu funcționează abilitățile, abțibildurile, salvările în cloud, confortul, ajutoarele, e-mailurile și planul zilei; fără 006 — schimbarea unică a profilului cu PIN-ul adultului.
+Conținutul `all.sql` se rulează în Supabase → SQL Editor. Scriptul e idempotent (`create … if not exists`): după o migrare sau un joc nou poate fi rulat din nou. Fără migrările 004 și 005 nu funcționează abilitățile, abțibildurile, salvările în cloud, confortul, ajutoarele, e-mailurile și planul zilei; fără 006 — schimbarea unică a profilului cu PIN-ul adultului. Fără 007 site-ul nu funcționează: blocările de profil, coșul, limita pe zile, termenul de păstrare și acordul se citesc la fiecare intrare.
 
 ### E-mail
 

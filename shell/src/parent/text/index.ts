@@ -12,14 +12,18 @@ import { ru3, type ParentTextC } from './ru3';
 import { uk3 } from './uk3';
 import { ro3 } from './ro3';
 import { en3 } from './en3';
+import { ru4, type ParentTextD } from './ru4';
+import { uk4 } from './uk4';
+import { ro4 } from './ro4';
+import { en4 } from './en4';
 
-export type ParentText = ParentTextA & ParentTextB & ParentTextC;
+export type ParentText = ParentTextA & ParentTextB & ParentTextC & ParentTextD;
 
 const TEXTS: Record<Locale, ParentText> = {
-  ru: { ...ru, ...ru2, ...ru3 },
-  uk: { ...uk, ...uk2, ...uk3 },
-  ro: { ...ro, ...ro2, ...ro3 },
-  en: { ...en, ...en2, ...en3 },
+  ru: { ...ru, ...ru2, ...ru3, ...ru4 },
+  uk: { ...uk, ...uk2, ...uk3, ...uk4 },
+  ro: { ...ro, ...ro2, ...ro3, ...ro4 },
+  en: { ...en, ...en2, ...en3, ...en4 },
 };
 
 /** Тексты кабинета родителя на языке сайта. */

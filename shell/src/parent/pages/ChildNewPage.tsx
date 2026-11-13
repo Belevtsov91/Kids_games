@@ -9,11 +9,11 @@ import { papi } from '../api';
 import { useParent } from '../ParentShell';
 import { useParentText } from '../text';
 import { PhotoPicker } from '../ui/PhotoPicker';
-import { PageHead, Panel } from '../ui/bits';
+import { PageHead, Panel, ToggleRow } from '../ui/bits';
 import { AVATARS, Stepper } from '../ui/fields';
 import { fitsAge } from './access';
 
-/** Новый профиль ребёнка из кабинета: имя, возраст, аватар и (по желанию) фото. */
+/** Новый профиль ребёнка из кабинета: имя, возраст или месяц рождения, аватар, правила по возрасту и (по желанию) фото. */
 export function ChildNewPage() {
   const p = useParentText();
   const n = p.newChild;
@@ -25,8 +25,12 @@ export function ChildNewPage() {
   const [age, setAge] = useState(5);
   const [avatar, setAvatar] = useState(AVATARS[0]);
   const [photo, setPhoto] = useState<string | null>(null);
+  const [birth, setBirth] = useState('');
+  const [rules, setRules] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  const thisYear = new Date().getFullYear();
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,7 +38,7 @@ export function ChildNewPage() {
     setBusy(true);
     setError(null);
     try {
-      const child = await api.post<{ id: string }>('/children', { name: name.trim(), age, avatar });
+      const child = await api.post<{ id: string }>('/children', { name: name.trim(), avatar, rules, ...(birth ? { birthMonth: birth } : { age }) });
       if (photo) await papi.patch(`/children/${child.id}`, { photo });
       await refresh();
       toast(p.saved);
@@ -56,9 +60,15 @@ export function ChildNewPage() {
           </label>
           <div className="pa-field">
             <span>{p.profile.age}</span>
-            <Stepper value={age} min={3} max={15} label={ageText(locale, age)} onChange={setAge} />
-            <small>{n.games(games.filter((g) => fitsAge(g, age)).length, games.length)}</small>
+            {!birth && <Stepper value={age} min={3} max={15} label={ageText(locale, age)} onChange={setAge} />}
+            {!birth && <small>{n.games(games.filter((g) => fitsAge(g, age)).length, games.length)}</small>}
           </div>
+          <label className="pa-field">
+            <span>{p.newKid.birth}</span>
+            <input id="new-kid-birth" type="month" min={`${thisYear - 16}-01`} max={`${thisYear - 2}-12`} value={birth} onChange={(e) => setBirth(e.target.value)} />
+            <small>{p.newKid.birthLead}</small>
+          </label>
+          <ToggleRow id="new-kid-rules" label={p.newKid.rules} hint={p.newKid.rulesLead} checked={rules} onChange={setRules} />
           <fieldset className="pa-field">
             <legend>{p.profile.avatar}</legend>
             <div className="pa-avatars">
