@@ -91,7 +91,7 @@ export async function loadSession(req: FastifyRequest): Promise<Session | null> 
 export async function setActiveChild(req: FastifyRequest, childId: string | null) {
   const tokenHash = tokenHashFrom(req);
   if (!tokenHash) return;
-  const { error } = await db().from('ig_sessions').update({ active_child_id: childId }).eq('token_hash', tokenHash);
+  const { error } = await db().from('ig_sessions').update({ active_child_id: childId, child_seen_at: new Date().toISOString() }).eq('token_hash', tokenHash);
   if (error) throw error;
 }
 

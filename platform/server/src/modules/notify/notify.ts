@@ -11,6 +11,9 @@ import { answerToken } from './answerToken.js';
 
 export const answerSecret = () => derivedSecret('answer');
 
+/** Помощник видит просьбы этого ребёнка? Пустой список — помощник для всех детей семьи. */
+export const helperSees = (childIds: string[] | null | undefined, childId: string) => !childIds?.length || childIds.includes(childId);
+
 /**
  * Письмо о просьбе ребёнка: взрослому (если не выключил) и помощникам семьи, у которых есть почта.
  * Кнопки во всех письмах одинаковые: подписанный ответ работает без входа, отвечает тот, кто первый.
@@ -21,11 +24,11 @@ export async function notifyRequest(childId: string, requestId: string, minutes:
   const [{ data: parent }, { data: settings }, { data: helpers }] = await Promise.all([
     db().from('ig_parents').select('email').eq('id', child.parent_id).maybeSingle(),
     db().from('ig_parent_settings').select('notify_requests, mail_locale').eq('parent_id', child.parent_id).maybeSingle(),
-    db().from('ig_helpers').select('email').eq('parent_id', child.parent_id).not('email', 'is', null),
+    db().from('ig_helpers').select('email, child_ids').eq('parent_id', child.parent_id).not('email', 'is', null),
   ]);
   const recipients = [
     ...(parent && settings?.notify_requests !== false ? [parent.email] : []),
-    ...(helpers ?? []).map((h) => h.email as string),
+    ...(helpers ?? []).filter((h) => helperSees(h.child_ids, childId)).map((h) => h.email as string),
   ].filter((email, i, all) => email && all.indexOf(email) === i);
   if (!recipients.length) return;
   const lang = mailLang(settings?.mail_locale);
@@ -48,12 +51,12 @@ export async function notifyRequest(childId: string, requestId: string, minutes:
 }
 
 /** Ответить на просьбу (из письма или от помощника). Возвращает итог для страницы ответа. */
-export async function answerRequest(requestId: string, approve: boolean, parentId?: string) {
+export async function answerRequest(requestId: string, approve: boolean, parentId?: string, childIds?: string[] | null) {
   const { data: request, error } = await db().from('ig_time_requests').select('id, child_id, minutes, status').eq('id', requestId).maybeSingle();
   if (error) throw error;
   if (!request) return { status: 'gone' as const };
   const { data: child } = await db().from('ig_children').select('name, parent_id').eq('id', request.child_id).maybeSingle();
-  if (!child || (parentId && child.parent_id !== parentId)) return { status: 'gone' as const };
+  if (!child || (parentId && child.parent_id !== parentId) || !helperSees(childIds, request.child_id)) return { status: 'gone' as const };
   if (request.status !== 'pending') return { status: 'gone' as const, name: child.name };
   const { error: uError } = await db()
     .from('ig_time_requests')

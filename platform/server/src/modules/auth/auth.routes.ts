@@ -6,6 +6,8 @@ import { createSession, destroySession, sessionsEnabled } from './session.js';
 import { resetRoutes } from './reset/reset.routes.js';
 import { parentStatus } from '../parent/parentSession.js';
 import { safeZone } from '../kid/timeRules.js';
+import { shouldAskWho } from '../children/profileRules.js';
+import { childSeenAt, POLICY_VERSION, touchParent } from './presence.js';
 
 // Вход родителя. Пароль приходит только в теле запроса, хешируется здесь и нигде не логируется.
 
@@ -21,6 +23,8 @@ const registerBody = {
     name: { type: 'string', minLength: 2, maxLength: 40, pattern: "^[\\p{L}\\p{N}'’. -]*\\p{L}[\\p{L}\\p{N}'’. -]*$" },
     // Часовой пояс браузера взрослого: по нему считаются «сегодня», лимиты и тихие часы.
     tz: { type: 'string', maxLength: 64 },
+    // Галочка «согласен с условиями и политикой»: записываем, когда и с какой редакцией.
+    consent: { type: 'boolean' },
   },
   additionalProperties: false,
 } as const;
@@ -52,7 +56,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   // «Забыли пароль?»: письмо со ссылкой и новый пароль.
   await app.register(resetRoutes);
 
-  app.post<{ Body: { email: string; password: string; name: string; tz?: string } }>(
+  app.post<{ Body: { email: string; password: string; name: string; tz?: string; consent?: boolean } }>(
     '/register',
     { schema: { body: registerBody }, config: strictLimit },
     async (req, reply) => {
@@ -63,6 +67,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
           email: normalizeEmail(req.body.email),
           password_hash: await hashPassword(req.body.password),
           display_name: req.body.name.trim(),
+          ...(req.body.consent ? { consent_at: new Date().toISOString(), policy_version: POLICY_VERSION } : {}),
         })
         .select('id')
         .single();
@@ -133,30 +138,36 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   app.get('/me', async (req, reply) => {
     if (!req.session) return reply.code(401).send({ error: 'Нужно войти' });
     const [{ data: parent, error: parentError }, { data: children, error: childrenError }] = await Promise.all([
-      db().from('ig_parents').select('id, display_name').eq('id', req.session.parentId).single(),
+      db().from('ig_parents').select('id, display_name, last_seen_at').eq('id', req.session.parentId).single(),
       db()
         .from('ig_children')
         .select('id, name, age, avatar')
         .eq('parent_id', req.session.parentId)
+        .is('deleted_at', null)
         .order('created_at'),
     ]);
     if (parentError) throw parentError;
     if (childrenError) throw childrenError;
     // Фото и язык ребёнка задаёт родитель в кабинете (ig_child_settings).
     const ids = (children ?? []).map((c) => c.id);
-    const [{ data: extra, error: extraError }, { data: own, error: ownError }] = await Promise.all([
+    const [{ data: extra, error: extraError }, { data: own, error: ownError }, seenAt] = await Promise.all([
       ids.length
         ? db().from('ig_child_settings').select(CHILD_EXTRA).in('child_id', ids)
         : Promise.resolve({ data: [] as ChildExtra[], error: null }),
       db().from('ig_parent_settings').select('photo').eq('parent_id', req.session.parentId).maybeSingle(),
+      childSeenAt(req),
+      touchParent(req.session.parentId, parent?.last_seen_at),
     ]);
     if (extraError) throw extraError;
     if (ownError) throw ownError;
-    const byId = new Map((extra ?? []).map((e) => [e.child_id, e]));
+    const byId = new Map((extra ?? []).map((e) => [e.child_id, e as ChildExtra]));
+    const active = req.session.activeChildId ? byId.get(req.session.activeChildId) : undefined;
     return {
       parent: { id: parent.id, name: parent.display_name, photo: own?.photo ?? null },
       children: (children ?? []).map((c) => childView(c, byId.get(c.id) as ChildExtra | undefined)),
       activeChildId: req.session.activeChildId,
+      // После долгого перерыва оболочка снова спрашивает «кто играет?», чтобы время не записалось не тому ребёнку.
+      askWho: Boolean(req.session.activeChildId) && shouldAskWho({ childCount: ids.length, exitLock: active?.exit_lock ?? false, seenAt: [seenAt, active?.last_beat_at] }),
     };
   });
 };

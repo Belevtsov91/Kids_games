@@ -4,6 +4,8 @@ export interface TimeRules {
   /** Минут в день по будням и выходным; null — без ограничения. */
   limitWeekday: number | null;
   limitWeekend: number | null;
+  /** Свой лимит на каждый день: 7 чисел с воскресенья по субботу, 0 — без лимита. null — будни/выходные. */
+  limitDays?: number[] | null;
   /** «HH:MM»; оба null — тихих часов нет. */
   quietFrom: string | null;
   quietTo: string | null;
@@ -75,6 +77,13 @@ export function inQuiet(rules: Pick<TimeRules, 'quietFrom' | 'quietTo'>, minutes
 
 export const isWeekend = (weekday: number) => weekday === 0 || weekday === 6;
 
+/** Лимит минут на этот день недели без прибавок; null — без ограничения. */
+export function dayLimit(rules: Pick<TimeRules, 'limitWeekday' | 'limitWeekend' | 'limitDays'>, weekday: number) {
+  const own = rules.limitDays?.length === 7 ? rules.limitDays[weekday] : null;
+  if (own !== null && own !== undefined) return own === 0 ? null : own;
+  return isWeekend(weekday) ? rules.limitWeekend : rules.limitWeekday;
+}
+
 export interface KidTime {
   day: string;
   /** Лимит на сегодня с прибавками; null — без ограничения. */
@@ -89,7 +98,7 @@ export interface KidTime {
 }
 
 export function kidTime(rules: TimeRules, usedSeconds: number, bonusMinutes: number, local: LocalNow): KidTime {
-  const base = isWeekend(local.weekday) ? rules.limitWeekend : rules.limitWeekday;
+  const base = dayLimit(rules, local.weekday);
   const limit = base === null ? null : base + bonusMinutes;
   const usedMinutes = Math.floor(usedSeconds / 60);
   const remaining = limit === null ? null : Math.max(0, limit - usedMinutes);

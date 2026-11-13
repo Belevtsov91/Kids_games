@@ -5,6 +5,7 @@ import { verifyPassword } from '../auth/password.js';
 import { checkAnswer, issueToken, makeChallenge } from './gate.js';
 import { allowSwitchOnce, parentStatus, requireLogin, setUnlocked, UNLOCK_MS } from './parentSession.js';
 import { safeZone } from '../kid/timeRules.js';
+import { passwordNeeded } from './pinPolicy.js';
 
 // Вход в кабинет: задача для взрослых, затем PIN, если он задан.
 // 5 неверных PIN подряд — PIN заблокирован на 15 минут, войти можно только паролем.
@@ -53,7 +54,9 @@ export const gateRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/status', async (req) => {
     const [until, pin] = await Promise.all([parentStatus(req), pinRow(req.session!.parentId)]);
-    return { unlocked: Boolean(until), until: until?.toISOString() ?? null, hasPin: Boolean(pin?.pin_hash) };
+    const hasPin = Boolean(pin?.pin_hash);
+    // needPassword: PIN не задан, а ребёнку уже 7 — после задачи спросим пароль аккаунта.
+    return { unlocked: Boolean(until), until: until?.toISOString() ?? null, hasPin, needPassword: await passwordNeeded(req.session!.parentId, hasPin) };
   });
 
   app.post('/challenge', async (req) => {
@@ -74,8 +77,10 @@ export const gateRoutes: FastifyPluginAsync = async (app) => {
     if (result !== 'ok') return reply.code(400).send({ error: 'Ответ неверный', code: result });
 
     const pin = await pinRow(parentId);
-    if (pin?.pin_hash) {
-      // «Забыли PIN?» — вместо PIN подходит пароль аккаунта.
+    const needPassword = await passwordNeeded(parentId, Boolean(pin?.pin_hash));
+    if (needPassword && !req.body.password) return reply.code(400).send({ error: 'Нужен пароль', code: 'passwordNeeded' });
+    if (pin?.pin_hash || needPassword) {
+      // «Забыли PIN?» — вместо PIN подходит пароль аккаунта. Без PIN при ребёнке от 7 лет пароль обязателен.
       if (req.body.password) {
         const { data, error } = await db().from('ig_parents').select('password_hash').eq('id', parentId).single();
         if (error) throw error;
@@ -83,13 +88,13 @@ export const gateRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({ error: 'Неверный пароль', code: 'password' });
         }
       } else {
-        const lockedUntil = pin.pin_locked_until ? new Date(pin.pin_locked_until) : null;
+        const lockedUntil = pin?.pin_locked_until ? new Date(pin.pin_locked_until) : null;
         if (lockedUntil && lockedUntil.getTime() > Date.now()) {
           return reply.code(429).send({ error: 'PIN заблокирован', code: 'pinLocked', until: lockedUntil.toISOString() });
         }
         if (!req.body.pin) return reply.code(400).send({ error: 'Нужен PIN', code: 'pinNeeded' });
-        if (!(await verifyPassword(req.body.pin, pin.pin_hash))) {
-          const failed = pin.pin_failed + 1;
+        if (!(await verifyPassword(req.body.pin, pin!.pin_hash))) {
+          const failed = pin!.pin_failed + 1;
           const locked = failed >= PIN_TRIES;
           await db()
             .from('ig_parent_settings')

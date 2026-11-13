@@ -37,6 +37,9 @@ const patchBody = {
     effectsVolume: { type: 'integer', minimum: 0, maximum: 100 },
     reduceMotion: { type: 'boolean' },
     bigButtons: { type: 'boolean' },
+    locked: { type: 'boolean' },
+    exitLock: { type: 'boolean' },
+    limitDays: { type: ['array', 'null'], minItems: 7, maxItems: 7, items: { type: 'integer', minimum: 0, maximum: 600 } },
     dayPlan: { type: 'array', maxItems: 3, uniqueItems: true, items: { type: 'string', pattern: '^[a-z0-9-]{1,40}$' } },
   },
   additionalProperties: false,
@@ -61,6 +64,9 @@ interface PatchBody {
   reduceMotion?: boolean;
   bigButtons?: boolean;
   dayPlan?: string[];
+  locked?: boolean;
+  exitLock?: boolean;
+  limitDays?: number[] | null;
 }
 
 /** Поле запроса → колонка ig_child_settings. */
@@ -79,6 +85,9 @@ const SETTINGS_FIELDS: [keyof PatchBody, string][] = [
   ['reduceMotion', 'reduce_motion'],
   ['bigButtons', 'big_buttons'],
   ['dayPlan', 'day_plan'],
+  ['locked', 'locked'],
+  ['exitLock', 'exit_lock'],
+  ['limitDays', 'limit_days'],
 ];
 
 const gameParams = {
@@ -137,10 +146,12 @@ export const kidsRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
-  /** Удалить профиль ребёнка: сохранения всех игр, рисунки и время удаляются каскадом. */
+  /** Удалить профиль: 30 дней он лежит в корзине (trash.routes.ts), потом чистка стирает его каскадом. */
   app.delete<{ Params: { id: string } }>('/children/:id', { schema: { params: idParams } }, async (req, reply) => {
-    const { error } = await db().from('ig_children').delete().eq('id', req.params.id);
+    const { error } = await db().from('ig_children').update({ deleted_at: new Date().toISOString() }).eq('id', req.params.id);
     if (error) throw error;
+    // Ни одно устройство семьи не остаётся в удалённом профиле.
+    await db().from('ig_sessions').update({ active_child_id: null }).eq('active_child_id', req.params.id);
     return reply.code(204).send();
   });
 

@@ -18,7 +18,7 @@ const mailBody = {
 const helperBody = {
   type: 'object',
   required: ['name'],
-  properties: { name: { type: 'string', minLength: 1, maxLength: 40, pattern: '\\S' }, email: { type: 'string', format: 'email', maxLength: 254 }, locale: { type: 'string', enum: [...MAIL_LANGS] } },
+  properties: { name: { type: 'string', minLength: 1, maxLength: 40, pattern: '\\S' }, email: { type: 'string', format: 'email', maxLength: 254 }, childIds: { type: 'array', maxItems: 10, uniqueItems: true, items: { type: 'string', format: 'uuid' } }, locale: { type: 'string', enum: [...MAIL_LANGS] } },
   additionalProperties: false,
 } as const;
 const idParams = { type: 'object', required: ['id'], properties: { id: { type: 'string', format: 'uuid' } } } as const;
@@ -29,7 +29,7 @@ export const inboxRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/inbox', async (req) => {
     const parentId = req.session!.parentId;
-    const { data: kids } = await db().from('ig_children').select('id, name').eq('parent_id', parentId);
+    const { data: kids } = await db().from('ig_children').select('id, name').eq('parent_id', parentId).is('deleted_at', null);
     const ids = (kids ?? []).map((k) => k.id);
     const since = new Date(Date.now() - 14 * 86_400_000).toISOString().slice(0, 10);
     const [{ data: requests, error }, { data: settings }] = await Promise.all([
@@ -56,21 +56,27 @@ export const inboxRoutes: FastifyPluginAsync = async (app) => {
   });
 
   app.get('/helpers', async (req) => {
-    const { data, error } = await db().from('ig_helpers').select('id, name, email, created_at, last_used_at').eq('parent_id', req.session!.parentId).order('created_at');
+    const { data, error } = await db().from('ig_helpers').select('id, name, email, created_at, last_used_at, child_ids').eq('parent_id', req.session!.parentId).order('created_at');
     if (error) throw error;
     return data ?? [];
   });
 
   /** Новая ссылка помощника. Токен показываем один раз; в БД только хеш. */
-  app.post<{ Body: { name: string; email?: string; locale?: string } }>('/helpers', { schema: { body: helperBody } }, async (req, reply) => {
+  app.post<{ Body: { name: string; email?: string; childIds?: string[]; locale?: string } }>('/helpers', { schema: { body: helperBody } }, async (req, reply) => {
     const parentId = req.session!.parentId;
     const { count } = await db().from('ig_helpers').select('id', { count: 'exact', head: true }).eq('parent_id', parentId);
     if ((count ?? 0) >= MAX_HELPERS) return reply.code(409).send({ error: `Не больше ${MAX_HELPERS} помощников` });
+    // Помощник только для выбранных детей; без списка — для всех. Чужих детей в список не пускаем.
+    const childIds = req.body.childIds?.length ? req.body.childIds : null;
+    if (childIds) {
+      const { data: own } = await db().from('ig_children').select('id').eq('parent_id', parentId).is('deleted_at', null).in('id', childIds);
+      if ((own?.length ?? 0) !== childIds.length) return reply.code(404).send({ error: 'Профиль не найден' });
+    }
     const token = randomBytes(32).toString('base64url');
     const email = req.body.email?.trim().toLowerCase() ?? null;
     const { data, error } = await db()
       .from('ig_helpers')
-      .insert({ parent_id: parentId, name: req.body.name.trim(), email, token_hash: hashHelperToken(token) })
+      .insert({ parent_id: parentId, name: req.body.name.trim(), email, token_hash: hashHelperToken(token), child_ids: childIds })
       .select('id')
       .single();
     if (error) throw error;

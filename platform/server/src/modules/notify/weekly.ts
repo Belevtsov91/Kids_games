@@ -68,7 +68,7 @@ async function sendOne(p: ParentRow, titles: Map<string, GameManifest>, log: Fas
   const t = MAIL_TEXT[lang];
   const [{ data: parent }, { data: kids }] = await Promise.all([
     db().from('ig_parents').select('email').eq('id', p.parent_id).single(),
-    db().from('ig_children').select('id, name').eq('parent_id', p.parent_id).order('created_at'),
+    db().from('ig_children').select('id, name').eq('parent_id', p.parent_id).is('deleted_at', null).order('created_at'),
   ]);
   if (!parent || !kids?.length) return;
   const rows = (await Promise.all(kids.map((k) => childRows(k.id, k.name, zone, lang, titles)))).flat();

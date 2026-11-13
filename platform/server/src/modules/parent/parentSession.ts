@@ -69,9 +69,10 @@ export async function requireParent(req: FastifyRequest, reply: FastifyReply) {
   await setUnlocked(req, new Date(Date.now() + UNLOCK_MS));
 }
 
-/** Ребёнок принадлежит этому родителю? parent_id только из сессии. */
-export async function ownsChild(parentId: string, childId: string) {
-  const { data, error } = await db().from('ig_children').select('id').eq('id', childId).eq('parent_id', parentId).maybeSingle();
+/** Ребёнок принадлежит этому родителю? parent_id только из сессии. Профиль в корзине — только с `deleted`. */
+export async function ownsChild(parentId: string, childId: string, deleted = false) {
+  const q = db().from('ig_children').select('id').eq('id', childId).eq('parent_id', parentId);
+  const { data, error } = await (deleted ? q.not('deleted_at', 'is', null) : q.is('deleted_at', null)).maybeSingle();
   if (error) throw error;
   return Boolean(data);
 }

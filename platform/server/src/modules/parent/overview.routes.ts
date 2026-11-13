@@ -48,6 +48,8 @@ async function childCard(child: ChildRow, zone: string) {
       bigButtons: settings?.big_buttons ?? false,
     },
     plan: settings?.day_plan ?? [],
+    locked: settings?.locked ?? false,
+    exitLock: settings?.exit_lock ?? false,
     lang: settings?.lang ?? null,
     photo: settings?.photo ?? null,
     rules: rulesOf(settings),
@@ -68,6 +70,7 @@ export const overviewRoutes: FastifyPluginAsync = async (app) => {
       .from('ig_children')
       .select('id, name, age, avatar')
       .eq('parent_id', parentId)
+      .is('deleted_at', null)
       .order('created_at');
     if (error) throw error;
     const cards = await Promise.all((children ?? []).map((c) => childCard(c, zone)));
@@ -93,6 +96,7 @@ export const overviewRoutes: FastifyPluginAsync = async (app) => {
       .select('id, name, age, avatar')
       .eq('id', req.params.id)
       .eq('parent_id', parentId)
+      .is('deleted_at', null)
       .maybeSingle();
     if (error) throw error;
     if (!child) return reply.code(404).send({ error: 'Профиль не найден' });

@@ -7,6 +7,7 @@ import { kidsRoutes } from './kids.routes.js';
 import { progressParentRoutes } from './progress.routes.js';
 import { inboxRoutes } from './inbox.routes.js';
 import { setupRoutes } from './setup.routes.js';
+import { trashRoutes } from './trash.routes.js';
 
 /** Кабинет родителя (/api/parent): вход по задаче и PIN, обзор семьи, профили детей, аккаунт. */
 export interface GameTable {
@@ -24,5 +25,6 @@ export const parentRoutes: FastifyPluginAsync<{ gameTables?: GameTable[] }> = as
   await app.register(kidsRoutes);
   await app.register(progressParentRoutes);
   await app.register(inboxRoutes);
+  await app.register(trashRoutes);
   await app.register(setupRoutes, { gameTables: opts.gameTables ?? [] });
 };

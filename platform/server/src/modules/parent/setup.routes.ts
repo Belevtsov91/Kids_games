@@ -2,6 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { db } from '../../db/index.js';
 import { hashPassword } from '../auth/password.js';
 import { safeZone } from '../kid/timeRules.js';
+import { PIN_REQUIRED_AGE } from '../children/profileRules.js';
 import { isWeakPin } from './gate.js';
 import { ownsChild, requireLogin, requireParent } from './parentSession.js';
 import type { GameTable } from './index.js';
@@ -9,8 +10,6 @@ import type { GameTable } from './index.js';
 // Первая настройка сразу после регистрации (/setup) и выгрузка всех данных семьи (GDPR).
 // Настройка работает без задачи для взрослых, но только один раз и только в первые сутки после регистрации.
 
-/** С этого возраста ребёнка PIN в первой настройке обязателен. */
-export const PIN_REQUIRED_AGE = 7;
 const SETUP_WINDOW_MS = 24 * 60 * 60 * 1000;
 const setupBody = {
   type: 'object',
@@ -24,6 +23,8 @@ const setupBody = {
   },
   additionalProperties: false,
 } as const;
+
+const exportQuery = { type: 'object', properties: { child: { type: 'string', format: 'uuid' } } } as const;
 
 type SetupBody = { childId: string; limit?: number | null; quiet?: boolean; pin?: string; tz?: string };
 
@@ -51,6 +52,8 @@ export const setupRoutes: FastifyPluginAsync<{ gameTables: GameTable[] }> = asyn
         limit_weekend: limit === null ? null : Math.min(600, Math.round(limit * 1.5)),
         quiet_from: req.body.quiet ? '21:00' : null,
         quiet_to: req.body.quiet ? '07:00' : null,
+        // Взрослый отказался и от лимита, и от тихих часов — не напоминаем и о перерывах.
+        ...(limit === null && !req.body.quiet ? { break_every: 0 } : {}),
         updated_at: new Date().toISOString(),
       },
       { onConflict: 'child_id' },
@@ -71,7 +74,7 @@ export const setupRoutes: FastifyPluginAsync<{ gameTables: GameTable[] }> = asyn
   });
 
   /** Все данные семьи на платформе одним JSON. Хеши пароля, PIN и токенов не отдаём. */
-  app.get('/export', { preHandler: requireParent }, async (req, reply) => {
+  app.get<{ Querystring: { child?: string } }>('/export', { preHandler: requireParent, schema: { querystring: exportQuery } }, async (req, reply) => {
     const parentId = req.session!.parentId;
     const one = async (table: string, columns: string, key: string, value: string | string[]) => {
       const q = db().from(table).select(columns);
@@ -79,14 +82,17 @@ export const setupRoutes: FastifyPluginAsync<{ gameTables: GameTable[] }> = asyn
       if (error) throw error;
       return data ?? [];
     };
-    const parent = await one('ig_parents', 'id, email, display_name, created_at', 'id', parentId);
-    const children = (await one('ig_children', 'id, name, age, avatar, created_at', 'parent_id', parentId)) as unknown as { id: string }[];
+    const parent = await one('ig_parents', 'id, email, display_name, created_at, consent_at, policy_version, last_seen_at', 'id', parentId);
+    // ?child=<id> — только один ребёнок (например, перед удалением профиля). Профили из корзины тоже выгружаются.
+    const all = (await one('ig_children', 'id, name, age, avatar, created_at, deleted_at', 'parent_id', parentId)) as unknown as { id: string }[];
+    const children = req.query.child ? all.filter((c) => c.id === req.query.child) : all;
+    if (req.query.child && !children.length) return reply.code(404).send({ error: 'Профиль не найден' });
     const ids = children.map((c) => c.id);
     const body = {
       exportedAt: new Date().toISOString(),
       parent: parent[0] ?? null,
       parentSettings: (await one('ig_parent_settings', 'photo, timezone, weekly_report, notify_requests, mail_locale, onboarded', 'parent_id', parentId))[0] ?? null,
-      helpers: await one('ig_helpers', 'name, email, created_at, last_used_at', 'parent_id', parentId),
+      helpers: await one('ig_helpers', 'name, email, child_ids, created_at, last_used_at', 'parent_id', parentId),
       children,
       childSettings: await one('ig_child_settings', '*', 'child_id', ids),
       gameAccess: await one('ig_child_game_access', '*', 'child_id', ids),

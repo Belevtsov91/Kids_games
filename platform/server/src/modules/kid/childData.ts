@@ -20,16 +20,20 @@ export interface SettingsRow {
   reduce_motion?: boolean;
   big_buttons?: boolean;
   day_plan?: string[] | null;
+  locked?: boolean;
+  exit_lock?: boolean;
+  limit_days?: number[] | null;
 }
 
 const SETTINGS_COLUMNS =
-  'lang, photo, limit_weekday, limit_weekend, quiet_from, quiet_to, break_every, can_ask, last_beat_at, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons, day_plan';
+  'lang, photo, limit_weekday, limit_weekend, quiet_from, quiet_to, break_every, can_ask, last_beat_at, toddler, birth_month, music_volume, effects_volume, reduce_motion, big_buttons, day_plan, locked, exit_lock, limit_days';
 
 export const rulesOf = (row: SettingsRow | null): TimeRules =>
   row
     ? {
         limitWeekday: row.limit_weekday,
         limitWeekend: row.limit_weekend,
+        limitDays: row.limit_days ?? null,
         quietFrom: row.quiet_from?.slice(0, 5) ?? null,
         quietTo: row.quiet_to?.slice(0, 5) ?? null,
         breakEvery: row.break_every,
