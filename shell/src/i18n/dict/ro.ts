@@ -35,7 +35,7 @@ export const ro: Dict = {
     text: 'Patru jocuri cu care e cel mai bine să începi. Atinge un card și zburăm până la insula lui.',
     open: 'Deschide lumea →',
   },
-  more: { title: 'Și încă șase jocuri', text: 'Pentru cei mai mici și pentru cei care învață literele și cifrele.' },
+  more: { title: 'Și încă', text: 'Desenăm, numărăm, învățăm litere și emoții. Alegeți vârsta și vă arătăm jocurile potrivite.', all: 'Toate', ageFrom: (n: number) => `${n}+` },
   parentsNote: {
     title: 'Pentru părinți',
     text: 'Contul îl creează un adult, iar copiii își aleg profilul și se joacă.',
@@ -49,7 +49,7 @@ export const ro: Dict = {
   },
   footer: {
     badges: ['Fără reclame', 'Sigur pentru copii', 'Fără chat cu străini', 'Merge pe telefon'],
-    brand: 'Zece jocuri pentru copii de la 3 la 15 ani: desenăm, construim, numărăm și salvăm Valea Lunii. Fără reclame și fără chat.',
+    brand: 'Jocuri pentru copii de la 3 la 15 ani: desenăm, construim, numărăm și salvăm Valea Lunii. Fără reclame și fără chat.',
     games: 'Jocuri',
     allGames: 'Toate jocurile',
     columns: [

@@ -1,5 +1,6 @@
 /* Стили оболочки: общие и по экранам. Порядок как в исходном файле: более поздние правила перекрывают ранние. */
 @import './base.css';
+@import './tokens.css';
 @import './menu.css';
 @import './game-screen.css';
 @import './controls.css';
@@ -8,12 +9,14 @@
 @import './welcome-hero.css';
 @import './lang-switch.css';
 @import './welcome-sections.css';
+@import './welcome-polish.css';
 @import './footer.css';
 @import './info.css';
 @import './auth.css';
 @import './auth-card.css';
 @import './auth-form.css';
 @import './auth-recover.css';
+@import './auth-polish.css';
 @import './children.css';
 @import './account.css';
 @import './dashboard.css';
@@ -28,3 +31,4 @@
 @import './more.css';
 @import './family.css';
 @import './wake.css';
+@import './nav-polish.css';

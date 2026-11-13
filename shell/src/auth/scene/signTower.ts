@@ -21,7 +21,7 @@ function signTexture() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     let size = 74;
-    const font = () => `900 ${size}px system-ui, "Arial Black", sans-serif`;
+    const font = () => `900 ${size}px "Nunito Variable", system-ui, "Arial Black", sans-serif`;
     ctx.font = font();
     while (ctx.measureText(text).width > 470 && size > 30) {
       size -= 4;

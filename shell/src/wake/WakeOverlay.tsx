@@ -57,13 +57,19 @@ export default function WakeOverlay({ state, fading = false }: { state: WakeStat
     <div ref={hostRef} className={`wake${leaving || fading ? ' is-leaving' : ''}${awake ? ' is-awake' : ''}`} role="status" aria-live="polite">
       <canvas ref={canvasRef} className="wake-canvas" aria-label={text.scene} />
       <div className="wake-text">
-        <h1 className="wake-title">{text.title[state.reason]}</h1>
-        <p className="wake-lead">{text.lead[state.reason]}</p>
-        <p className="wake-hint" key={hint}>
-          <span className="wake-dots" aria-hidden="true"><i /><i /><i /></span>
-          {hint}
-        </p>
+        <div className="wake-card">
+          <h1 className="wake-title" key={awake ? 'up' : 'sleep'}>{awake ? text.awakeTitle : text.title[state.reason]}</h1>
+          <p className="wake-lead">{text.lead[state.reason]}</p>
+          <p className="wake-hint" key={hint}>
+            <span className="wake-dots" aria-hidden="true"><i /><i /><i /></span>
+            {hint}
+          </p>
+        </div>
       </div>
+      <div className="wake-progress" aria-hidden="true">
+        <span style={{ transform: `scaleX(${awake ? 1 : Math.min(0.92, 1 - Math.exp(-elapsed / 22))})` }} />
+      </div>
+      <p className="wake-adult">{text.adult}</p>
     </div>
   );
 }

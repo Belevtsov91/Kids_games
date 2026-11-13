@@ -1,5 +1,7 @@
 /** 3D-сцена стартовой страницы: рендер, вращение, наведение и клик по островам, подписи. */
 import * as THREE from 'three';
+import { disposeThree } from '@/lib/disposeThree';
+import { applyLook } from '@/lib/threeLook';
 import { ALL_IDS, SMALL_IDS, isBig, type BigId, type ShowcaseId } from '../showcase';
 import { buildArchipelago, labelHeight } from './archipelago';
 import { CameraRig } from './cameraRig';
@@ -50,13 +52,15 @@ export class WelcomeScene {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 0.98;
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    applyLook(this.renderer, this.scene, 0.4);
     this.scene.add(this.arch.root);
     this.resize();
 
     addEventListener('resize', this.resize);
     canvas.addEventListener('pointerdown', this.onDown);
     addEventListener('pointerup', this.onUp);
+    // телефон забрал касание под прокрутку: вращение не должно «залипнуть»
+    addEventListener('pointercancel', this.onCancel);
     addEventListener('pointermove', this.onMove);
     this.observer = new IntersectionObserver(([e]) => (this.visible = e.isIntersecting));
     this.observer.observe(host);
@@ -73,11 +77,9 @@ export class WelcomeScene {
     removeEventListener('resize', this.resize);
     this.canvas.removeEventListener('pointerdown', this.onDown);
     removeEventListener('pointerup', this.onUp);
+    removeEventListener('pointercancel', this.onCancel);
     removeEventListener('pointermove', this.onMove);
-    this.scene.traverse((o) => {
-      if (o instanceof THREE.Mesh) o.geometry.dispose();
-    });
-    this.renderer.dispose();
+    disposeThree(this.scene, this.renderer);
   }
 
   private resize = () => {
@@ -113,6 +115,10 @@ export class WelcomeScene {
     const click = Math.abs(e.clientX - this.drag.startX) < 6 && performance.now() - this.drag.at < 400;
     this.drag = null;
     if (click && e.target === this.canvas) this.opts.onPick(this.pick(e));
+  };
+
+  private onCancel = () => {
+    this.drag = null;
   };
 
   private onMove = (e: PointerEvent) => {

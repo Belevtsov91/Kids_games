@@ -1,0 +1,38 @@
+/* Общие токены оболочки: фирменный шрифт, движение, глубина. Экранные наборы (--wl-*, --dash-*, --au-*)
+   берут шрифт отсюда, чтобы бренд выглядел одинаково на Windows, Mac, iPhone и Android. */
+
+:root {
+  --font-display: 'Nunito Variable', 'Nunito', ui-rounded, system-ui, sans-serif;
+  --font-body: 'Nunito Variable', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* пружинка для «игрушечных» нажатий и мягкий выход для появления */
+  --ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077 24.6%, 1.084 27.4%, 1.07 30.4%, 0.981 42.7%, 0.976 46.2%, 0.996 58.9%, 1.003 70.3%, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --glow-gold: 0 0 0 1px rgba(255, 210, 90, 0.25), 0 18px 50px -12px rgba(255, 186, 73, 0.55);
+}
+
+body { font-family: var(--font-body); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+
+.wl h1, .wl h2, .au h1, .au h2, .dash h1, .dash h2, .wake-title { font-variation-settings: 'wght' 900; letter-spacing: -0.015em; }
+
+/* Плавные переходы между страницами (View Transitions): старая страница тает, новая всплывает. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out 0.28s var(--ease-out) both; }
+::view-transition-new(root) { animation: vt-in 0.42s var(--ease-out) both; }
+@keyframes vt-out { to { opacity: 0; transform: scale(0.985); filter: blur(4px); } }
+@keyframes vt-in { from { opacity: 0; transform: scale(1.015); filter: blur(6px); } }
+
+/* Мишка-лого и аватары «перелетают» между страницами как один и тот же предмет. */
+.vt-logo { view-transition-name: brand-logo; }
+.vt-avatar { view-transition-name: kid-avatar; }
+::view-transition-group(brand-logo), ::view-transition-group(kid-avatar) { animation-duration: 0.5s; animation-timing-function: var(--ease-out); }
+
+/* Пока спрашиваем сервер: пульсирующий знак вместо голого текста. */
+.loading { display: grid; place-items: center; align-content: center; gap: 14px; min-height: 60vh; color: rgba(255, 248, 236, 0.8); font-weight: 800; }
+.loading-mark { width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(145deg, #ffd25a, #ff9f43); box-shadow: 0 6px 0 #c9771c, 0 18px 40px rgba(255, 159, 67, 0.4); animation: loading-bob 1.2s var(--ease-out) infinite alternate; }
+@keyframes loading-bob { from { transform: translateY(0) rotate(-6deg); } to { transform: translateY(-10px) rotate(6deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(*) { animation: none !important; }
+  .loading-mark { animation: none; }
+}

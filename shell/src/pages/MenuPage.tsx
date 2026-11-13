@@ -68,7 +68,7 @@ export function MenuPage() {
         {/* Малышу не нужны кнопки, которые выкидывают из сайта: язык и выход — у взрослого в кабинете. */}
         {!toddler && <LanguageSwitch className="dash-lang" />}
         <KidTimer />
-        <ProfileMenu />
+        <ProfileMenu logout={!toddler} />
         {!toddler && (
           <button type="button" className="dash-chip dash-logout" onClick={() => void logout()}>
             {t.common.logout}

@@ -12,7 +12,7 @@
   --au-ink-soft: #cfc8f2;
   --au-line: rgba(255, 255, 255, 0.14);
   --au-field: rgba(255, 255, 255, 0.08);
-  --au-display: 'Segoe UI Black', 'Arial Black', ui-rounded, system-ui, sans-serif;
+  --au-display: var(--font-display);
   position: relative;
   min-height: 100%;
   background: var(--au-night);

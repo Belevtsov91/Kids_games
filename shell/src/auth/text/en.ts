@@ -40,6 +40,7 @@ export const en: AuthText = {
   registerWin: (name: string) => `Account created, ${name}!`,
   registerWinText: 'Your island is ready. Now let’s add a kid’s profile.',
   next: 'Continue',
+  nextFailed: 'Couldn’t reach the server. Please try again.',
   forgot: {
     link: 'Forgot password?',
     title: ['Lost your ', 'key?'],

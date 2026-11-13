@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { useI18n } from '@/i18n/I18nProvider';
 import { BIG_IDS, showcaseGame } from '@/welcome/showcase';
-import { SITE } from '../site';
+import { isPlaceholder, SITE } from '../site';
 import { CopyEmail } from './CopyEmail';
 import { GameLink } from './GameLink';
 
@@ -76,13 +76,16 @@ export function SiteFooter() {
           })}
         </div>
 
-        <div className="ft-contact">
-          <div>
-            <h2>{f.contactTitle}</h2>
-            <p>{f.contactText}</p>
+        {/* Почта задаётся в VITE_SITE_EMAIL; пока её нет, заглушку «[help@…]» посетителям не показываем. */}
+        {!isPlaceholder(SITE.email) && (
+          <div className="ft-contact">
+            <div>
+              <h2>{f.contactTitle}</h2>
+              <p>{f.contactText}</p>
+            </div>
+            <CopyEmail />
           </div>
-          <CopyEmail />
-        </div>
+        )}
 
         <div className="ft-bottom">
           <span>© {SITE.year} {SITE.name}. {f.rights}</span>

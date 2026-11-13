@@ -40,6 +40,7 @@ export const ro: AuthText = {
   registerWin: (name: string) => `Cont creat, ${name}!`,
   registerWinText: 'Insula e gata. Acum adăugăm profilul copilului.',
   next: 'Continuă',
+  nextFailed: 'Nu am putut contacta serverul. Încercați din nou.',
   forgot: {
     link: 'Ați uitat parola?',
     title: ['Ai pierdut ', 'cheia?'],

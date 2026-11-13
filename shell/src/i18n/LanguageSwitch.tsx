@@ -1,5 +1,5 @@
 import { useI18n } from './I18nProvider';
-import { LOCALE_LABELS, LOCALE_NAMES, LOCALES } from './locale';
+import { LOCALE_LABELS, LOCALE_NAMES, LOCALES, type Locale } from './locale';
 
 /** Переключатель языка: RU · UA · RO · EN. Выбор сразу применяется ко всему сайту и запоминается. */
 export function LanguageSwitch({ className }: { className?: string }) {
@@ -20,6 +20,14 @@ export function LanguageSwitch({ className }: { className?: string }) {
           {LOCALE_LABELS[l]}
         </button>
       ))}
+      {/* На телефоне в верхней панели вместо четырёх кнопок — системный список: одна узкая «таблетка» 🌐 RU. */}
+      <select className="lang-switch-select" value={locale} aria-label={t.common.language} onChange={(e) => setLocale(e.target.value as Locale)}>
+        {LOCALES.map((l) => (
+          <option key={l} value={l} lang={l}>
+            {LOCALE_LABELS[l]} · {LOCALE_NAMES[l]}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

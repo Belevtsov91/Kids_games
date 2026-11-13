@@ -35,12 +35,14 @@ export interface Me {
 interface AuthValue {
   /** undefined — ещё спрашиваем сервер, null — не вошёл. */
   me: Me | null | undefined;
+  /** Последний вопрос «кто вошёл» не дошёл до сервера из-за сети: показываем «нет сети», а не вход. */
+  offline: boolean;
   activeChild: Child | null;
   /** silent — не обновлять «кто вошёл» сразу: страница сначала доиграет анимацию, потом вызовет refresh(). */
   register(data: { name: string; email: string; password: string }, opts?: { silent?: boolean }): Promise<void>;
   login(data: { email: string; password: string }, opts?: { silent?: boolean }): Promise<void>;
-  /** Заново спросить сервер, кто вошёл. */
-  refresh(): Promise<void>;
+  /** Заново спросить сервер, кто вошёл. true — ответ получен (вошёл или нет), false — спросить не удалось. */
+  refresh(): Promise<boolean>;
   logout(): Promise<void>;
   addChild(data: Omit<Child, 'id'>): Promise<Child>;
   selectChild(childId: string): Promise<void>;
@@ -54,13 +56,15 @@ async function fetchMe(): Promise<Me | null> {
   try {
     return await api.get<Me>('/auth/me');
   } catch (err) {
-    if (err instanceof ApiError && (err.status === 401 || err.status === 503)) return null;
+    // Только 401 значит «не вошёл». 503 и прочие ошибки ничего не говорят о сессии: вошедшего не выкидываем.
+    if (err instanceof ApiError && err.status === 401) return null;
     throw err;
   }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [me, setMe] = useState<Me | null | undefined>(undefined);
+  const [offline, setOffline] = useState(false);
   const { setLocale } = useI18n();
 
   // 401/503 — точно не вошёл (fetchMe вернёт null). Любая другая ошибка (500, сеть после повтора) ничего не говорит
@@ -68,8 +72,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => {
     try {
       setMe(await fetchMe());
-    } catch {
+      setOffline(false);
+      return true;
+    } catch (err) {
+      setOffline(!(err instanceof ApiError) && typeof navigator !== 'undefined' && !navigator.onLine);
       setMe((prev) => prev ?? null);
+      return false;
+    }
+  }, []);
+
+  // Сеть вернулась: снова спрашиваем, кто вошёл.
+  useEffect(() => {
+    const back = () => void refresh();
+    addEventListener('online', back);
+    return () => removeEventListener('online', back);
+  }, [refresh]);
+
+  /**
+   * POST входа или регистрации не повторяется сам (он мог уже пройти). Если ответа не было —
+   * спрашиваем /auth/me: вдруг сервер всё сделал, а ответ потерялся по дороге.
+   */
+  const sendAuth = useCallback(async (path: string, body: unknown) => {
+    try {
+      await api.post(path, body);
+    } catch (err) {
+      const lost = !(err instanceof ApiError) || err.status >= 502;
+      if (lost && (await fetchMe().catch(() => null))) return;
+      throw err;
     }
   }, []);
 
@@ -80,13 +109,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthValue>(
     () => ({
       me,
+      offline,
       activeChild: me?.children.find((c) => c.id === me.activeChildId) ?? null,
       async register(data, opts) {
-        await api.post('/auth/register', { ...data, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
+        await sendAuth('/auth/register', { ...data, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
         if (!opts?.silent) await refresh();
       },
       async login(data, opts) {
-        await api.post('/auth/login', data);
+        await sendAuth('/auth/login', data);
         if (!opts?.silent) await refresh();
       },
       refresh,
@@ -112,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setMe(null);
       },
     }),
-    [me, refresh, setLocale],
+    [me, offline, refresh, sendAuth, setLocale],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -28,6 +28,8 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
   // колбэки сцены читают свежие пропсы через ref, чтобы не пересоздавать сцену
   const handlers = useRef({ onFocus, onThumbnails });
   handlers.current = { onFocus, onThumbnails };
+  const focusedRef = useRef(focused);
+  focusedRef.current = focused;
 
   useEffect(() => {
     let alive = true;
@@ -43,6 +45,8 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
           onThumbnails: (th) => handlers.current.onThumbnails(th),
         });
         sceneRef.current = scene;
+        // остров могли выбрать, пока грузился three.js: камера подлетает сразу
+        scene.setFocus(focusedRef.current);
       })
       .catch((err: unknown) => {
         console.warn('3D-сцена недоступна', err);
@@ -80,25 +84,22 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
             </h1>
             <p className="wl-lead">{h.lead}</p>
             <div className="wl-actions">
-              <Link to={me ? '/dashboard' : '/register'} className="wl-btn wl-btn-primary">{me ? t.common.toGames : t.common.start}</Link>
+              <Link to={me ? '/dashboard' : '/register'} className={`wl-btn wl-btn-primary${me === undefined ? ' is-pending' : ''}`}>{me ? t.common.toGames : t.common.start}</Link>
               <a href="#worlds" className="wl-btn wl-btn-ghost">{h.seeGames}</a>
             </div>
             <LanguageSwitch className="wl-lang" />
-            {!me && <p className="wl-note">{h.note}</p>}
+            {me === null && <p className="wl-note">{h.note}</p>}
           </div>
         </div>
       </div>
 
       <div className="wl-mobile-cta">
-        <div className="wl-lang-row">
-          <LanguageSwitch />
-        </div>
         {me ? (
           <Link to="/dashboard" className="wl-btn wl-btn-primary">{t.common.toGames}</Link>
         ) : (
           <>
-            <Link to="/register" className="wl-btn wl-btn-primary">{t.common.start}</Link>
-            <Link to="/login" className="wl-btn wl-btn-ghost">{t.common.login}</Link>
+            <Link to="/register" className={`wl-btn wl-btn-primary${me === undefined ? ' is-pending' : ''}`}>{t.common.start}</Link>
+            {me === null && <Link to="/login" className="wl-btn wl-btn-ghost">{t.common.login}</Link>}
           </>
         )}
       </div>

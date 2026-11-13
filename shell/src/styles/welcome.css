@@ -10,7 +10,7 @@
   --wl-ink: #fff8ec;
   --wl-ink-soft: #cfc8f2;
   --wl-line: rgba(255, 255, 255, 0.14);
-  --wl-display: 'Segoe UI Black', 'Arial Black', ui-rounded, system-ui, sans-serif;
+  --wl-display: var(--font-display);
   min-height: 100%;
   background: var(--wl-night);
   color: var(--wl-ink);

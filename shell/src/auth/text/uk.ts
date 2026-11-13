@@ -40,6 +40,7 @@ export const uk: AuthText = {
   registerWin: (name: string) => `Акаунт створено, ${name}!`,
   registerWinText: 'Острів готовий. Тепер додамо профіль дитини.',
   next: 'Продовжити',
+  nextFailed: 'Не вдалося зв’язатися із сервером. Спробуйте ще раз.',
   forgot: {
     link: 'Забули пароль?',
     title: ['Загубили ', 'ключ?'],

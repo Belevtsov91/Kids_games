@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { Face } from './ui/Face';
 import { useParentText } from './text';
@@ -7,6 +7,8 @@ import { useParentText } from './text';
 export function ParentNav() {
   const p = useParentText();
   const { me } = useAuth();
+  // На телефоне ссылок на детей нет, поэтому «Дети» подсвечиваются и на странице конкретного ребёнка.
+  const inKid = useLocation().pathname.startsWith('/parent/kids/');
   return (
     <nav className="pa-nav" aria-label={p.overview.eyebrow}>
       {me && (
@@ -16,10 +18,10 @@ export function ParentNav() {
         </div>
       )}
       <NavLink to="/parent" end className="pa-nav-link">
-        <span aria-hidden="true">🏠</span> {p.nav.overview}
+        <span aria-hidden="true">🏠</span> <span className="pa-nav-text">{p.nav.overview}</span>
       </NavLink>
-      <NavLink to="/parent/kids" end className="pa-nav-link">
-        <span aria-hidden="true">👨‍👩‍👧</span> {p.nav.kids}
+      <NavLink to="/parent/kids" end className={({ isActive }) => `pa-nav-link${isActive ? ' active' : inKid ? ' pa-nav-under' : ''}`}>
+        <span aria-hidden="true">👨‍👩‍👧</span> <span className="pa-nav-text">{p.nav.kids}</span>
       </NavLink>
       <div className="pa-nav-kids">
         {me?.children.map((c) => (
@@ -29,13 +31,13 @@ export function ParentNav() {
         ))}
       </div>
       <NavLink to="/parent/inbox" className="pa-nav-link">
-        <span aria-hidden="true">📬</span> {p.nav3.inbox}
+        <span aria-hidden="true">📬</span> <span className="pa-nav-text">{p.nav3.inbox}</span>
       </NavLink>
       <NavLink to="/parent/family" className="pa-nav-link">
-        <span aria-hidden="true">👵</span> {p.nav3.family}
+        <span aria-hidden="true">👵</span> <span className="pa-nav-text">{p.nav3.family}</span>
       </NavLink>
       <NavLink to="/parent/account" className="pa-nav-link">
-        <span aria-hidden="true">🔐</span> {p.nav.account}
+        <span aria-hidden="true">🔐</span> <span className="pa-nav-text">{p.nav.account}</span>
       </NavLink>
     </nav>
   );

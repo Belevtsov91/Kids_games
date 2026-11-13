@@ -10,7 +10,7 @@
   --dash-ink-soft: #d9d2f7;
   --dash-line: rgba(255, 255, 255, 0.16);
   --dash-glass: rgba(30, 24, 80, 0.42);
-  --dash-display: 'Segoe UI Black', 'Arial Black', ui-rounded, system-ui, sans-serif;
+  --dash-display: var(--font-display);
   position: relative;
   min-height: 100%;
   overflow-x: hidden;

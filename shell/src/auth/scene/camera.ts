@@ -22,7 +22,7 @@ export function buildCamera() {
     const phone = w <= WIDE;
     // на телефоне остров в верхней части экрана, на десктопе — левее карточки
     if (phone) {
-      dist = Math.max(1, 8.6 / (0.65 * camera.aspect * 12.6));
+      dist = Math.max(1, 8.6 / (0.78 * camera.aspect * 12.6));
       camera.setViewOffset(w, h, 0, h * 0.27, w, h);
     } else {
       dist = Math.max(1, 1.35 / camera.aspect);

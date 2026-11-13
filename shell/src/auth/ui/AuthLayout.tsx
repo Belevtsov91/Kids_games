@@ -23,7 +23,8 @@ const pageOf = (path: string): Page => (['register', 'forgot', 'reset'] as const
 export function AuthLayout() {
   const { t } = useI18n();
   const text = useAuthText();
-  const page = pageOf(useLocation().pathname);
+  const location = useLocation();
+  const page = pageOf(location.pathname);
   const mode: AuthMode = page === 'register' ? 'register' : 'login';
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -49,6 +50,12 @@ export function AuthLayout() {
         sceneRef.current?.win();
         cardRef.current?.classList.add('is-won');
       },
+      reset(mode) {
+        fxRef.current = initialFx(mode);
+        sceneRef.current?.set(fxRef.current);
+        sceneRef.current?.reset();
+        cardRef.current?.classList.remove('is-won');
+      },
       letter: (ch) => sceneRef.current?.letter(ch),
       setName: (name) => sceneRef.current?.setName(name),
       say(line, ms = 2600) {
@@ -67,16 +74,19 @@ export function AuthLayout() {
     if (!canvasRef.current || !hostRef.current) return;
     let scene: AuthScene | null = null;
     let alive = true;
-    void import('../scene/AuthScene').then(({ AuthScene }) => {
-      if (!alive || !canvasRef.current || !hostRef.current) return;
-      try {
-        scene = new AuthScene(canvasRef.current, hostRef.current, fxRef.current.mode, () => bubbleRef.current);
-        scene.set(fxRef.current);
-        sceneRef.current = scene;
-      } catch {
-        setNoWebgl(true);
-      }
-    });
+    import('../scene/AuthScene')
+      .then(({ AuthScene }) => {
+        if (!alive || !canvasRef.current || !hostRef.current) return;
+        try {
+          scene = new AuthScene(canvasRef.current, hostRef.current, fxRef.current.mode, () => bubbleRef.current);
+          scene.set(fxRef.current);
+          sceneRef.current = scene;
+        } catch {
+          setNoWebgl(true);
+        }
+      })
+      // чанк не загрузился (новый деплой, моргнула сеть): страница работает и без сцены
+      .catch(() => alive && setNoWebgl(true));
     return () => {
       alive = false;
       scene?.dispose();
@@ -84,15 +94,19 @@ export function AuthLayout() {
     };
   }, []);
 
+  // Смена страницы: сцена начинает с чистого листа (без льда, «думает» и победы прошлой формы), карточка переворачивается.
   const first = useRef(true);
+  const textRef = useRef(text);
+  textRef.current = text;
   useEffect(() => {
-    fx.set({ mode, focus: null, peek: false });
+    fx.reset(mode);
     if (!first.current) replay(cardRef.current, 'is-flipping');
-    const line = { login: text.say.helloLogin, register: text.say.helloRegister, forgot: text.forgot.say.hello, reset: text.forgot.say.reset }[page];
+    const say = textRef.current.say, forgot = textRef.current.forgot.say;
+    const line = { login: say.helloLogin, register: say.helloRegister, forgot: forgot.hello, reset: forgot.reset }[page];
     const hello = setTimeout(() => fx.say(line, 3400), first.current ? 1900 : 300);
     first.current = false;
     return () => clearTimeout(hello);
-  }, [page, mode, fx, text]);
+  }, [page, mode, fx]);
 
   return (
     <AuthFxContext.Provider value={fx}>
@@ -118,8 +132,8 @@ export function AuthLayout() {
               {page === 'login' || page === 'register' ? (
                 <nav className="au-tabs" data-mode={mode} aria-label={t.common.login}>
                   <span className="au-tabs-pill" aria-hidden="true" />
-                  <NavLink to="/login" replace>{t.common.login}</NavLink>
-                  <NavLink to="/register" replace>{t.common.register}</NavLink>
+                  <NavLink to="/login" replace state={location.state}>{t.common.login}</NavLink>
+                  <NavLink to="/register" replace state={location.state}>{t.common.register}</NavLink>
                 </nav>
               ) : (
                 <Link to="/login" replace className="au-back">← {text.forgot.back}</Link>

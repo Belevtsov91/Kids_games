@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { FxState } from '../scene/state';
+import type { AuthMode, FxState } from '../scene/state';
 
 /** Что формы могут попросить у 3D-сцены и карточки. Без WebGL всё это просто ничего не делает. */
 export interface AuthFx {
@@ -8,6 +8,8 @@ export interface AuthFx {
   wrong(): void;
   /** Успех: ключ, открытая дверь, конфетти. */
   win(): void;
+  /** Новая страница: состояние сцены и карточки как при загрузке. */
+  reset(mode: AuthMode): void;
   letter(ch: string): void;
   setName(name: string): void;
   /** Реплика мишки в облачке. */

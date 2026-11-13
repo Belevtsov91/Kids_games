@@ -1,6 +1,6 @@
 /** Мишка-страж: следит за курсором и вводом, закрывает глаза на пароле, мотает головой при ошибке, прыгает при успехе. */
 import * as THREE from 'three';
-import { mat, mesh } from '@/welcome/scene/kit';
+import { soft as mat, mesh } from '@/welcome/scene/kit';
 import { bounceDrop, damp, type AuthMode, type Frame } from './state';
 
 const SPOT: Record<AuthMode, THREE.Vector3> = { login: new THREE.Vector3(-1.25, 0.28, 0.75), register: new THREE.Vector3(0.75, 0.28, 1.25) };
@@ -8,8 +8,8 @@ const SPOT: Record<AuthMode, THREE.Vector3> = { login: new THREE.Vector3(-1.25, 
 function arm(body: THREE.Group, side: number, fur: THREE.Material, light: THREE.Material) {
   const p = new THREE.Group();
   p.position.set(side * 0.55, 1.2, 0);
-  p.add(mesh(new THREE.CylinderGeometry(0.14, 0.13, 0.6, 8), fur, 0, -0.3, 0));
-  p.add(mesh(new THREE.SphereGeometry(0.16, 8, 6), light, 0, -0.66, 0));
+  p.add(mesh(new THREE.CylinderGeometry(0.14, 0.13, 0.6, 20), fur, 0, -0.3, 0));
+  p.add(mesh(new THREE.SphereGeometry(0.16, 24, 18), light, 0, -0.66, 0));
   body.add(p);
   return p;
 }
@@ -21,37 +21,37 @@ export function buildBear(mode: AuthMode) {
   group.rotation.y = 0.35;
   const body = new THREE.Group();
   group.add(body);
-  body.add(mesh(new THREE.SphereGeometry(0.62, 14, 12), fur, 0, 0.85, 0));
-  body.add(mesh(new THREE.SphereGeometry(0.42, 12, 10), light, 0, 0.8, 0.3));
-  const scarf = mesh(new THREE.TorusGeometry(0.4, 0.1, 6, 14), mat('#ff7eb6'), 0, 1.33, 0);
+  body.add(mesh(new THREE.SphereGeometry(0.62, 28, 24), fur, 0, 0.85, 0));
+  body.add(mesh(new THREE.SphereGeometry(0.42, 24, 20), light, 0, 0.8, 0.3));
+  const scarf = mesh(new THREE.TorusGeometry(0.4, 0.1, 12, 28), mat('#ff7eb6'), 0, 1.33, 0);
   scarf.rotation.x = Math.PI / 2;
   body.add(scarf);
 
   const head = new THREE.Group();
   head.position.y = 1.78;
   body.add(head);
-  head.add(mesh(new THREE.SphereGeometry(0.52, 16, 14), fur));
+  head.add(mesh(new THREE.SphereGeometry(0.52, 32, 28), fur));
   const eyes: THREE.Mesh[] = [];
   [-1, 1].forEach((s) => {
-    head.add(mesh(new THREE.SphereGeometry(0.17, 10, 8), fur, s * 0.38, 0.4, 0));
-    head.add(mesh(new THREE.SphereGeometry(0.09, 8, 6), light, s * 0.38, 0.4, 0.08));
-    const eye = mesh(new THREE.SphereGeometry(0.07, 10, 8), dark, s * 0.18, 0.08, 0.45);
+    head.add(mesh(new THREE.SphereGeometry(0.17, 24, 18), fur, s * 0.38, 0.4, 0));
+    head.add(mesh(new THREE.SphereGeometry(0.09, 24, 18), light, s * 0.38, 0.4, 0.08));
+    const eye = mesh(new THREE.SphereGeometry(0.07, 24, 18), dark, s * 0.18, 0.08, 0.45);
     head.add(eye);
     eyes.push(eye);
-    head.add(mesh(new THREE.SphereGeometry(0.022, 6, 5), mat('#ffffff', { emissive: '#ffffff', emissiveIntensity: 0.6 }), s * 0.18 + 0.02, 0.11, 0.51, false));
+    head.add(mesh(new THREE.SphereGeometry(0.022, 24, 18), mat('#ffffff', { emissive: '#ffffff', emissiveIntensity: 0.6 }), s * 0.18 + 0.02, 0.11, 0.51, false));
   });
-  head.add(mesh(new THREE.SphereGeometry(0.2, 10, 8), light, 0, -0.1, 0.42));
-  head.add(mesh(new THREE.SphereGeometry(0.07, 8, 6), dark, 0, -0.03, 0.6));
+  head.add(mesh(new THREE.SphereGeometry(0.2, 24, 18), light, 0, -0.1, 0.42));
+  head.add(mesh(new THREE.SphereGeometry(0.07, 24, 18), dark, 0, -0.03, 0.6));
   const cheeks = [-1, 1].map((s) => {
-    const c = mesh(new THREE.SphereGeometry(0.075, 8, 6), mat('#ff8fa8'), s * 0.32, -0.12, 0.38);
+    const c = mesh(new THREE.SphereGeometry(0.075, 24, 18), mat('#ff8fa8'), s * 0.32, -0.12, 0.38);
     head.add(c);
     return c;
   });
-  const mouth = mesh(new THREE.TorusGeometry(0.06, 0.016, 4, 10, Math.PI), dark, 0, -0.17, 0.58, false);
+  const mouth = mesh(new THREE.TorusGeometry(0.06, 0.016, 12, 24, Math.PI), dark, 0, -0.17, 0.58, false);
   mouth.rotation.z = Math.PI;
   head.add(mouth);
   const armL = arm(body, -1, fur, light), armR = arm(body, 1, fur, light);
-  [-1, 1].forEach((s) => body.add(mesh(new THREE.SphereGeometry(0.22, 10, 8), fur, s * 0.3, 0.22, 0.25)));
+  [-1, 1].forEach((s) => body.add(mesh(new THREE.SphereGeometry(0.22, 24, 18), fur, s * 0.3, 0.22, 0.25)));
 
   let blink = 2;
 

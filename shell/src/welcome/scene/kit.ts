@@ -22,6 +22,14 @@ export function mat(color: string, opts: MatOpts = {}): THREE.MeshStandardMateri
   return m;
 }
 
+/**
+ * Гладкий «пластилиновый» материал для персонажей, облаков и игрушек: мягкие блики вместо граней.
+ * Острова, камни и ёлки остаются гранёными — так видно, где персонаж, а где декорация.
+ */
+export function soft(color: string, opts: MatOpts = {}): THREE.MeshStandardMaterial {
+  return mat(color, { flatShading: false, roughness: 0.62, ...opts });
+}
+
 /** Светящийся материал (окна, фонари, светлячки). Не кешируется: яркость анимируется. */
 export const glowMat = (color: string, intensity = 1.6) =>
   new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: intensity, roughness: 0.4, flatShading: true });
@@ -131,7 +139,7 @@ export function letterTexture(ch: string, bg: string, fg: string): THREE.CanvasT
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 128, 128);
   ctx.fillStyle = fg;
-  ctx.font = '900 92px system-ui, "Arial Black", sans-serif';
+  ctx.font = '900 92px "Nunito Variable", system-ui, "Arial Black", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(ch, 64, 70);

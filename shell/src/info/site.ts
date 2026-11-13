@@ -6,7 +6,7 @@ export const SITE = {
   /** Страна, по законам которой работает сайт. */
   country: '[страна]',
   /** Почта поддержки и вопросов о данных. */
-  email: '[help@ваш-домен]',
+  email: (import.meta.env.VITE_SITE_EMAIL as string | undefined) || '[help@ваш-домен]',
   /** Регион базы данных Supabase, например «ЕС (Франкфурт)». */
   dbRegion: '[регион базы Supabase]',
   /** Дата текущей редакции документов. */
@@ -16,7 +16,7 @@ export const SITE = {
   /** За сколько перезаписываются резервные копии хостинга. */
   backupDays: '[срок, например 30 дней]',
   year: 2026,
-} as const;
+};
 
 /** Страница ещё содержит заглушку из SITE (показываем подсказку для владельца). */
 export const isPlaceholder = (value: string) => value.startsWith('[');

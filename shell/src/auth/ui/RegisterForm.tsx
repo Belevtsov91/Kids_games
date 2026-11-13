@@ -80,7 +80,6 @@ export function RegisterForm() {
       fx.win();
       fx.say(text.say.winRegister, 3500);
       setDone(true);
-      setTimeout(() => void refresh(), 3000);
     } catch (err) {
       fx.set({ thinking: false });
       setBusy(false);
@@ -92,7 +91,7 @@ export function RegisterForm() {
     }
   };
 
-  if (done) return <SuccessPane icon="🏝️" title={text.registerWin(v.name.trim())} lead={text.registerWinText} onNext={() => void refresh()} />;
+  if (done) return <SuccessPane icon="🏝️" title={text.registerWin(v.name.trim())} lead={text.registerWinText} onNext={refresh} autoMs={3000} />;
 
   return (
     <section className="au-pane">

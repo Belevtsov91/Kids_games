@@ -84,7 +84,6 @@ export function ResetForm() {
       fx.win();
       fx.say(text.say.winLogin, 3500);
       setPhase('done');
-      setTimeout(() => void refresh(), 2800);
     } catch (err) {
       fx.set({ thinking: false });
       setBusy(false);
@@ -94,7 +93,14 @@ export function ResetForm() {
     }
   };
 
-  if (phase === 'done') return <SuccessPane icon="🗝️" title={f.doneTitle} lead={f.doneText} onNext={() => void refresh()} />;
+  // /reset открыт и вошедшему: после смены пароля сами уходим дальше, а не ждём GuestOnly.
+  const afterReset = async () => {
+    const ok = await refresh();
+    if (ok) navigate('/dashboard', { replace: true });
+    return ok;
+  };
+
+  if (phase === 'done') return <SuccessPane icon="🗝️" title={f.doneTitle} lead={f.doneText} onNext={afterReset} autoMs={2800} />;
   if (phase === 'gone')
     return (
       <section className="au-pane au-success" aria-live="polite">

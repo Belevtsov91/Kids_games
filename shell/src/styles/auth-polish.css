@@ -1,0 +1,68 @@
+/* Вход и регистрация, слой «2030»: тоньше стекло со световой кромкой, пружинные вкладки и кнопка,
+   регистрация помещается в экран ноутбука, на телефоне сцена уступает место клавиатуре. */
+
+.au-card {
+  border: 0;
+  background:
+    radial-gradient(120% 60% at 0% 0%, rgba(169, 155, 255, 0.18), transparent 60%),
+    linear-gradient(160deg, rgba(52, 44, 128, 0.72), rgba(23, 21, 63, 0.82));
+  box-shadow: var(--glass-edge), 0 40px 90px -30px rgba(8, 6, 30, 0.8);
+  backdrop-filter: blur(22px) saturate(1.4);
+}
+/* световая кромка, которая медленно обходит карточку */
+.au-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--au-edge, 0deg), transparent 0 70%, rgba(255, 210, 90, 0.7) 80%, rgba(126, 231, 255, 0.6) 88%, transparent 96%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: au-edge 7s linear infinite;
+  pointer-events: none;
+}
+@property --au-edge { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes au-edge { to { --au-edge: 360deg; } }
+
+.au-tabs { background: rgba(0, 0, 0, 0.26); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3); }
+.au-tabs-pill { background: linear-gradient(180deg, #ffe07e, #ffc93c); transition: transform 0.55s var(--ease-spring); }
+.au-control { transition: box-shadow 0.25s, background 0.25s, transform 0.4s var(--ease-spring); }
+.au-control:focus-within { transform: translateY(-1px); }
+.au-submit { background: linear-gradient(180deg, #ffe07e, #ffc93c); transition: transform 0.45s var(--ease-spring), box-shadow 0.2s, filter 0.2s; }
+.au-submit:hover { filter: brightness(1.05); transform: translateY(-2px); }
+.au-submit:active { transform: translateY(4px) scale(0.99); transition-duration: 0.08s; }
+.au-bubble { box-shadow: 0 12px 30px rgba(23, 21, 63, 0.35), inset 0 -2px 0 rgba(0, 0, 0, 0.06); }
+
+/* карточка не прилипает к краю экрана */
+@media (min-width: 881px) {
+  .au-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); padding-right: max(56px, 5vw, env(safe-area-inset-right, 0px)); }
+}
+
+/* Ноутбук 1440×900 и ниже по высоте: регистрация целиком в экране, без прокрутки к кнопке. */
+@media (min-width: 881px) and (max-height: 960px) {
+  .au-layout { padding-top: 76px; padding-bottom: 16px; }
+  .au-card { padding: 18px 24px 20px; }
+  .au-tabs { margin-bottom: 14px; }
+  .au-tabs a { padding: 8px; }
+  .au-pane h1 { font-size: 26px; }
+  .au-lead-text { margin: 6px 0 12px; font-size: 14px; line-height: 1.4; }
+  .au-form { gap: 10px; }
+  .au-field > label:not(.au-check) { margin-bottom: 4px; font-size: 13px; }
+  .au-control input { padding-block: 11px; }
+  .au-meter { margin-top: 8px; }
+  .au-rules { margin-top: 6px; font-size: 12px; }
+}
+
+/* Телефон: сцена сверху короче, а когда человек печатает — карточка поднимается к шапке. */
+@media (max-width: 880px) {
+  .au-layout { padding-top: calc(30vh + 36px); transition: padding-top 0.5s var(--ease-out); }
+  .au:has(.au-card input:focus) .au-layout { padding-top: 84px; }
+  .au:has(.au-card input:focus) .au-bubble { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .au-card::before { animation: none; }
+  .au-layout { transition: none; }
+}

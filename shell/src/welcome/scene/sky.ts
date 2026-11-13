@@ -1,6 +1,7 @@
 /** Закатное небо, звёзды, свет, облака и море облаков внизу. */
 import * as THREE from 'three';
-import { mat, mesh, type Updater } from './kit';
+import { puffyCloud } from '@/lib/threeLook';
+import { mat, soft, type Updater } from './kit';
 
 const SKY_VERTEX = 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
 const SKY_FRAGMENT = `uniform vec3 top; uniform vec3 hor; uniform vec3 bot; varying vec3 vP;
@@ -11,10 +12,8 @@ void main(){ float h = vP.y;
 }`;
 
 function cloud(scale: number): THREE.Group {
-  const g = new THREE.Group();
-  const m = mat('#ffffff', { roughness: 1 });
-  const parts: [number, number, number, number][] = [[0, 0, 0, 1], [0.8, 0.1, 0.1, 0.75], [-0.8, 0, 0, 0.7], [0.35, 0.4, 0, 0.65], [-0.3, 0.35, 0.2, 0.6]];
-  parts.forEach(([x, y, z, r]) => g.add(mesh(new THREE.IcosahedronGeometry(r, 0), m, x, y, z, false)));
+  const m = soft('#ffffff', { roughness: 0.95, emissive: '#ffd9ee', emissiveIntensity: 0.18 });
+  const g = puffyCloud(m, [[0, 0, 0, 1], [0.85, -0.05, 0.1, 0.72], [-0.85, -0.05, 0, 0.68], [0.35, 0.42, 0, 0.66], [-0.3, 0.38, 0.2, 0.6], [1.45, -0.2, 0, 0.45], [-1.4, -0.2, 0.05, 0.42]]);
   g.scale.setScalar(scale);
   return g;
 }
@@ -72,7 +71,7 @@ export function addSky(scene: THREE.Scene): SkyParts {
   });
 
   // море облаков внизу
-  const sea = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), mat('#f3d3ea', { roughness: 1 }), 260);
+  const sea = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 3), mat('#f3d3ea', { roughness: 1, flatShading: false, emissive: '#ffb7d5', emissiveIntensity: 0.12 }), 260);
   const d = new THREE.Object3D();
   for (let i = 0; i < 260; i++) {
     const a = Math.random() * Math.PI * 2, r = 10 + Math.random() * 70;

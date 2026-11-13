@@ -24,30 +24,86 @@
 }
 .wake-title {
   margin: 0 0 10px;
-  font-family: 'Segoe UI Black', 'Arial Black', ui-rounded, system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(28px, 5vw, 46px);
   line-height: 1.05;
   text-shadow: 0 4px 24px rgba(20, 10, 60, 0.55);
 }
 .wake-lead {
   margin: 0 auto 14px;
-  max-width: 460px;
+  max-width: 440px;
   color: #e4defc;
   font-size: clamp(15px, 2.2vw, 17px);
   line-height: 1.45;
   text-shadow: 0 2px 12px rgba(20, 10, 60, 0.6);
 }
-/* Небо в сцене меняется от ночного до светлого персикового утра: под светлый текст кладём тёмную подложку,
-   чтобы он читался на любом небе и без WebGL. */
-.wake-title, .wake-lead {
+/* Текст — одна стеклянная карточка: читается на любом небе (от ночи до персикового утра) и без WebGL. */
+.wake-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 4px 14px;
-  border-radius: 18px;
-  background: rgba(23, 21, 63, 0.5);
-  backdrop-filter: blur(6px);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 18px 22px 16px;
+  border-radius: 28px;
+  background: rgba(23, 21, 63, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px -20px rgba(10, 6, 40, 0.7);
+  backdrop-filter: blur(14px) saturate(1.3);
+  animation: wake-card 0.8s var(--ease-out, ease) both;
 }
+.wake-title { animation: wake-hint 0.5s ease both; }
+@keyframes wake-card { from { opacity: 0; transform: translateY(-12px) scale(0.97); filter: blur(6px); } }
+
+/* мягкая полоска «солнце встаёт»: растёт по времени ожидания, а не по выдуманным процентам */
+.wake-progress {
+  position: absolute;
+  left: 50%;
+  bottom: calc(46px + env(safe-area-inset-bottom, 0px));
+  width: min(260px, 60vw);
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateX(-50%);
+}
+.wake-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #a99bff, #ffb5d6, #ffd25a);
+  box-shadow: 0 0 16px rgba(255, 210, 90, 0.6);
+  transform-origin: left;
+  transition: transform 1s var(--ease-out, ease);
+}
+.wake-adult {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  width: min(520px, calc(100% - 32px));
+  margin: 0;
+  color: rgba(255, 248, 236, 0.62);
+  font-size: 12px;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+/* пока качается 3D-чанк: луна, а не пустой кадр */
+.wake-moon {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffbe6, #ffe9a8 60%, #f5cf6a);
+  box-shadow: 0 0 80px 20px rgba(255, 233, 168, 0.35);
+  transform: translate(-50%, -50%);
+  animation: wake-moon 3s ease-in-out infinite alternate;
+}
+@keyframes wake-moon { to { transform: translate(-50%, -54%); box-shadow: 0 0 110px 30px rgba(255, 233, 168, 0.45); } }
+.wake-plain .wake-text { top: 50%; transform: translate(-50%, -50%); }
+
 .wake-hint {
   display: inline-flex;
   align-items: center;

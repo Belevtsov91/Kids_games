@@ -1,6 +1,7 @@
 /** Мир вокруг кровати: небо от ночи к рассвету, звёзды, луна и солнце, свет, летающий остров и облака. */
 import * as THREE from 'three';
-import { glowMat, islandBase, mat, mesh, pine, roundTree } from '@/welcome/scene/kit';
+import { puffyCloud } from '@/lib/threeLook';
+import { glowMat, islandBase, mat, mesh, pine, roundTree, soft } from '@/welcome/scene/kit';
 
 const SKY_VERTEX = 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
 const SKY_FRAGMENT = `uniform vec3 top; uniform vec3 hor; uniform vec3 bot; varying vec3 vP;
@@ -26,10 +27,7 @@ function stars() {
 }
 
 function cloudPuff(m: THREE.Material, x: number, y: number, z: number, s: number) {
-  const g = new THREE.Group();
-  [[0, 0, 0, 1], [0.8, 0.1, 0, 0.7], [-0.75, 0, 0.1, 0.65], [0.3, 0.4, 0, 0.6]].forEach(([cx, cy, cz, r]) =>
-    g.add(mesh(new THREE.IcosahedronGeometry(r, 0), m, cx, cy, cz, false)),
-  );
+  const g = puffyCloud(m, [[0, 0, 0, 1], [0.8, 0.05, 0, 0.72], [-0.78, 0, 0.1, 0.66], [0.3, 0.42, 0, 0.62], [1.35, -0.15, 0, 0.42]]);
   g.position.set(x, y, z);
   g.scale.setScalar(s);
   return g;
@@ -55,7 +53,14 @@ export function buildWorld(scene: THREE.Scene) {
   key.shadow.mapSize.set(1024, 1024);
   Object.assign(key.shadow.camera, { left: -5, right: 5, top: 5, bottom: -5, near: 1, far: 30 });
   key.shadow.bias = -0.001;
-  scene.add(hemi, key);
+  // мягкий фронтальный свет со стороны камеры и тёплый ночник у изголовья: ночью мишку видно, а не силуэт
+  const fill = new THREE.DirectionalLight('#c9c2ff', 0.9 * Math.PI);
+  fill.position.set(8, 4, 6);
+  const lamp = new THREE.PointLight('#ffc27a', 6, 6, 1.6);
+  lamp.position.set(-0.6, 1.6, 1.2);
+  const rim = new THREE.DirectionalLight('#9a7bff', 0.8 * Math.PI);
+  rim.position.set(-8, 5, -8);
+  scene.add(hemi, key, fill, lamp, rim);
 
   // остров: всё, что на нём, качается вместе с ним
   const island = new THREE.Group();
@@ -70,7 +75,7 @@ export function buildWorld(scene: THREE.Scene) {
   [[1.9, 1.6], [-1.9, 1.2], [0.4, 2.3]].forEach(([x, z], i) => island.add(mesh(new THREE.SphereGeometry(0.12, 6, 5), mat(['#ffd25a', '#ff7eb6', '#7ee7ff'][i]), x, 0.08, z)));
   scene.add(island);
 
-  const puff = mat('#e9d6f2', { roughness: 1, transparent: true, opacity: 0.9 });
+  const puff = soft('#efe0f7', { roughness: 0.95, emissive: '#c9b5ff', emissiveIntensity: 0.15, transparent: true, opacity: 0.92 });
   const clouds = [cloudPuff(puff, -6, -2.5, -4, 1.3), cloudPuff(puff, 6.5, -1.5, -6, 1.6), cloudPuff(puff, 4, -4, 3, 1), cloudPuff(puff, -5, -5, 3, 1.2)];
   clouds.forEach((c) => scene.add(c));
 
@@ -88,6 +93,8 @@ export function buildWorld(scene: THREE.Scene) {
     key.color.copy(blend(NIGHT.key, DAWN.key, morning));
     key.intensity = (1 + morning * 0.9) * Math.PI;
     key.position.set(-6 + morning * 14, 10, 6);
+    fill.intensity = (0.9 - morning * 0.4) * Math.PI;
+    lamp.intensity = 6 * (1 - morning) + Math.sin(t * 2.1) * 0.25 * (1 - morning);
     sky.m.opacity = (1 - morning) * (0.75 + Math.sin(t * 1.5) * 0.15);
     moon.position.y = 5.5 - morning * 12;
     moonMat.emissiveIntensity = 1.2 * (1 - morning);

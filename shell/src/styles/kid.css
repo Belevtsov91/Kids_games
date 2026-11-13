@@ -50,7 +50,7 @@
   box-shadow: 0 30px 80px rgba(8, 6, 30, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18); animation: kid-pop 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
 @keyframes kid-pop { from { opacity: 0; transform: translateY(30px) scale(0.94); } }
-.kid-rest-card h1 { margin: 0; font-family: 'Segoe UI Black', 'Arial Black', system-ui, sans-serif; font-size: clamp(28px, 5vw, 40px); }
+.kid-rest-card h1 { margin: 0; font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); }
 .kid-rest-card p { margin: 0; color: var(--dash-ink-soft); font-size: 17px; }
 .kid-rest-card .kid-ask { width: 100%; text-align: left; padding: 14px; border-radius: 18px; background: rgba(0, 0, 0, 0.2); }
 .kid-rest-bear { font-size: 84px; line-height: 1; animation: kid-float 3s ease-in-out infinite; }

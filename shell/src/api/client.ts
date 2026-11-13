@@ -20,7 +20,22 @@ export class ApiError extends Error {
 /** Так отвечает прокси, когда сервер спит или упал: ответ не от нашего кода. */
 const GATEWAY = new Set([502, 503, 504]);
 
-async function request<T>(url: string, init?: RequestInit, retry = true): Promise<T> {
+/** Повторять после ожидания можно только то, что безопасно отправить дважды. POST мог уже выполниться. */
+const IDEMPOTENT = new Set(['GET', 'HEAD', 'PUT', 'DELETE']);
+
+/**
+ * Ответ 5xx от прокси, а не от нашего сервера: наш сервер на ошибки всегда отвечает JSON с полем error
+ * (например 503 «вход временно недоступен»). Такой ответ — это сервер не спит, а честно отказывает.
+ */
+async function fromGateway(res: Response): Promise<boolean> {
+  if (!GATEWAY.has(res.status)) return false;
+  const type = res.headers.get('content-type') ?? '';
+  if (!type.includes('application/json')) return true;
+  const body = (await res.clone().json().catch(() => null)) as { error?: unknown } | null;
+  return typeof body?.error !== 'string';
+}
+
+async function request<T>(url: string, init?: RequestInit, retry = IDEMPOTENT.has((init?.method ?? 'GET').toUpperCase())): Promise<T> {
   let res: Response;
   try {
     res = await fetch(url, {
@@ -30,14 +45,16 @@ async function request<T>(url: string, init?: RequestInit, retry = true): Promis
       headers: init?.body ? { 'Content-Type': 'application/json', ...init.headers } : init?.headers,
     });
   } catch (err) {
-    // Сервер не ответил вовсе: будим его (мишка поверх страницы) и повторяем запрос один раз.
-    if (!retry || init?.signal?.aborted || !navigator.onLine) throw err;
+    // Сервер не ответил вовсе: будим его (мишка поверх страницы) и повторяем безопасный запрос один раз.
+    if (init?.signal?.aborted || !navigator.onLine) throw err;
     await waitForServer('lost');
+    if (!retry) throw err;
     return request<T>(url, init, false);
   }
-  if (retry && GATEWAY.has(res.status)) {
+  if (await fromGateway(res)) {
+    // Сервер спит: будим (мишка поверх страницы). Безопасный запрос повторяем, POST — нет: он мог уже пройти.
     await waitForServer('lost');
-    return request<T>(url, init, false);
+    if (retry) return request<T>(url, init, false);
   }
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as ({ error?: string } & Record<string, unknown>) | null;

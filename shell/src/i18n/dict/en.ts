@@ -35,7 +35,7 @@ export const en: Dict = {
     text: 'Four games that are best to start with. Tap a card and we will fly to its island.',
     open: 'Open world →',
   },
-  more: { title: 'And six more games', text: 'For the youngest players and for those learning letters and numbers.' },
+  more: { title: 'Plus', text: 'Draw, count, learn letters and feelings. Pick an age and we’ll show what fits.', all: 'All', ageFrom: (n: number) => `${n}+` },
   parentsNote: {
     title: 'For parents',
     text: 'A grown-up creates the account, and kids pick their own profile and play.',
@@ -49,7 +49,7 @@ export const en: Dict = {
   },
   footer: {
     badges: ['No ads', 'Safe for kids', 'No chats with strangers', 'Works on phones'],
-    brand: 'Ten games for kids aged 3 to 15: we draw, build, count and save Moon Valley. No ads and no chats.',
+    brand: 'Games for kids aged 3 to 15: we draw, build, count and save Moon Valley. No ads and no chats.',
     games: 'Games',
     allGames: 'All games',
     columns: [

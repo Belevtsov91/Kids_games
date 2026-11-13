@@ -8,9 +8,10 @@ import { useKidText } from '@/kid/text';
 import { ApiError } from '@/api/client';
 import { AdultOverlay } from '@/account/AdultOverlay';
 
-/** Кто играет: аватарка в верхней панели, по нажатию — быстрый выбор другого профиля без ухода со страницы. */
-export function ProfileMenu() {
-  const { me, activeChild, selectChild } = useAuth();
+/** Кто играет: аватарка в верхней панели, по нажатию — быстрый выбор другого профиля без ухода со страницы.
+ *  logout — показать «Выйти» в меню (на телефоне, где кнопки в панели нет). */
+export function ProfileMenu({ logout = false }: { logout?: boolean }) {
+  const { me, activeChild, selectChild, logout: signOut } = useAuth();
   const { t, locale } = useI18n();
   const k = useKidText();
   const [open, setOpen] = useState(false);
@@ -62,6 +63,12 @@ export function ProfileMenu() {
           <Link to="/me" className="dash-menu-link">🙂 {k.me.open}</Link>
           <Link to="/children" className="dash-menu-link">{t.menu.changeProfile}</Link>
           <Link to="/parent" className="dash-menu-link" data-testid="to-parent">🔒 {k.me.parents}</Link>
+          {/* На телефоне кнопка «Выйти» уходит из верхней панели сюда, чтобы панель осталась в одну строку. */}
+          {logout && (
+            <button type="button" className="dash-menu-link dash-menu-logout" onClick={() => void signOut()}>
+              {t.common.logout}
+            </button>
+          )}
         </div>
       )}
       {locked && (

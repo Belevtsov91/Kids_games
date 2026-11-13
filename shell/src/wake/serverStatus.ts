@@ -69,6 +69,13 @@ export function waitForServer(reason: WakeReason): Promise<void> {
     const show = setTimeout(() => fallAsleep(reason), SHOW_AFTER_MS);
     let delay = RETRY_MIN_MS;
     while (!(await ping())) {
+      // Пропала сеть: будить некого, сайт сам покажет «нет сети». Вернётся сеть — спросим заново.
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        clearTimeout(show);
+        set({ ...state, phase: 'up' });
+        addEventListener('online', () => void waitForServer(reason), { once: true });
+        return;
+      }
       fallAsleep(reason);
       await sleep(delay);
       delay = Math.min(delay * 1.6, RETRY_MAX_MS);

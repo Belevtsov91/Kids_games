@@ -34,7 +34,8 @@ export function LoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
 
   const em = checkEmail(email);
-  const passErr = !pass ? text.passEmpty : pass.length < LIMITS.passMin ? text.passShort : null;
+  // На входе только «не пусто»: старый пароль мог быть короче нынешних правил, решает сервер.
+  const passErr = !pass ? text.passEmpty : null;
   const emailMsg = touched.email && em.error ? text.email[em.error] : null;
   const passMsg = touched.pass ? passErr : null;
 
@@ -82,7 +83,6 @@ export function LoginForm() {
       fx.win();
       fx.say(text.say.winLogin, 3500);
       setDone(true);
-      setTimeout(() => void refresh(), 2600);
     } catch (err) {
       fx.set({ thinking: false, gems: 0 });
       setBusy(false);
@@ -101,7 +101,7 @@ export function LoginForm() {
     }
   };
 
-  if (done) return <SuccessPane icon="🗝️" title={text.loginWin} lead={text.loginWinText} onNext={() => void refresh()} />;
+  if (done) return <SuccessPane icon="🗝️" title={text.loginWin} lead={text.loginWinText} onNext={refresh} autoMs={2600} />;
 
   return (
     <section className="au-pane">

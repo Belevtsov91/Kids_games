@@ -1,8 +1,10 @@
 /** 3D-сцена «Мишка просыпается»: рендер, камера и ход пробуждения по состоянию сервера. */
 import * as THREE from 'three';
+import { disposeThree } from '@/lib/disposeThree';
+import { applyLook } from '@/lib/threeLook';
 import type { WakeState } from '../serverStatus';
 import { phase, stepProgress } from '../progress';
-import { buildSleepyBear } from './bear';
+import { BEAR_SCALE, buildSleepyBear } from './bear';
 import { buildBed } from './bed';
 import { applyPose } from './pose';
 import { buildWorld } from './world';
@@ -34,6 +36,9 @@ export class WakeScene {
   private p = 0;
   private stood = 0;
   private done = false;
+  /** Когда последний раз потрогали мишку (секунды сцены): он смешно ворочается. */
+  private pokedAt = -99;
+  private canvas: HTMLCanvasElement;
 
   private host: HTMLElement;
   private opts: WakeSceneOptions;
@@ -41,26 +46,33 @@ export class WakeScene {
   constructor(canvas: HTMLCanvasElement, host: HTMLElement, opts: WakeSceneOptions) {
     this.host = host;
     this.opts = opts;
+    this.canvas = canvas;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    applyLook(this.renderer, this.scene, 0.45);
     this.world.island.add(this.bed.group, this.bear.root);
     this.scene.add(this.zzz.group);
     this.resize();
     addEventListener('resize', this.resize);
+    // пока ждём, можно тыкать в мишку: ожидание превращается в маленькую игру
+    canvas.addEventListener('pointerdown', this.poke);
+    canvas.style.cursor = 'pointer';
     this.raf = requestAnimationFrame(this.tick);
   }
 
   dispose() {
     cancelAnimationFrame(this.raf);
     removeEventListener('resize', this.resize);
-    this.scene.traverse((o) => {
-      if (o instanceof THREE.Mesh || o instanceof THREE.Points || o instanceof THREE.Sprite) o.geometry.dispose();
-    });
-    this.renderer.dispose();
+    this.canvas.removeEventListener('pointerdown', this.poke);
+    disposeThree(this.scene, this.renderer);
   }
+
+  private poke = () => {
+    this.pokedAt = (performance.now() - this.start) / 1000;
+    navigator.vibrate?.(20);
+  };
 
   private resize = () => {
     const w = this.host.clientWidth || 1, h = this.host.clientHeight || 1;
@@ -95,6 +107,12 @@ export class WakeScene {
     const motion = this.reduce ? 0 : t;
     const morning = phase(this.p, 0.75, 1);
     applyPose(this.bear, this.p, motion, this.stood);
+    const poke = this.reduce ? 0 : Math.max(0, 1 - (t - this.pokedAt) / 0.9);
+    if (poke > 0) {
+      const wob = Math.sin((t - this.pokedAt) * 22) * poke;
+      this.bear.root.scale.set(BEAR_SCALE * (1 + wob * 0.06), BEAR_SCALE * (1 - wob * 0.08), BEAR_SCALE * (1 + wob * 0.06));
+      this.bear.head.rotation.y += wob * 0.35;
+    } else this.bear.root.scale.setScalar(BEAR_SCALE);
     this.bed.update(this.p, morning);
     this.world.update(motion, morning);
     this.bear.head.getWorldPosition(this.headPos);

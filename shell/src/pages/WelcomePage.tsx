@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BigId, ShowcaseId } from '@/welcome/showcase';
 import { WelcomeHero } from '@/welcome/components/WelcomeHero';
 import { WorldShelf } from '@/welcome/components/WorldShelf';
@@ -12,10 +12,32 @@ export function WelcomePage() {
   const [focused, setFocused] = useState<ShowcaseId | null>(null);
   const [thumbs, setThumbs] = useState<Partial<Record<BigId, string>>>({});
 
+  const pending = useRef<() => void>(() => undefined);
+  useEffect(() => () => pending.current(), []);
+
+  // Подлёт к острову начинается, когда страница докрутилась наверх (scrollend), с запасным таймером.
   const openFromShelf = useCallback((id: BigId) => {
+    pending.current();
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-    window.setTimeout(() => setFocused(id), reduce ? 0 : 450);
+    if (reduce || window.scrollY < 4) return setFocused(id);
+    let done = false;
+    const go = () => {
+      if (done) return;
+      done = true;
+      cleanup();
+      setFocused(id);
+    };
+    const timer = window.setTimeout(go, 900);
+    const cleanup = () => {
+      clearTimeout(timer);
+      removeEventListener('scrollend', go);
+    };
+    pending.current = () => {
+      done = true;
+      cleanup();
+    };
+    addEventListener('scrollend', go, { once: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   return (

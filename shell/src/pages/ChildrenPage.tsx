@@ -1,10 +1,12 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type CSSProperties, type FormEvent } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { ApiError } from '@/api/client';
 import { useI18n } from '@/i18n/I18nProvider';
 import { age as ageText } from '@/i18n/plural';
 import { AdultOverlay } from '@/account/AdultOverlay';
+import { DashSky } from '@/dashboard/DashSky';
+import { LanguageSwitch } from '@/i18n/LanguageSwitch';
 
 const AVATARS = ['🐻', '🐰', '🦊', '🐼', '🐸', '🦁', '🐯', '🐨', '🐵', '🦄', '🐙', '🐳'];
 const AGES = Array.from({ length: 13 }, (_, i) => i + 3);
@@ -62,25 +64,26 @@ export function ChildrenPage() {
   if (me && children.length === 0 && !locked) return <Navigate to="/setup" replace />;
 
   return (
-    <main className="children">
-      <header className="topbar">
-        <span className="topbar-greeting">
-          <Link to="/" className="topbar-back" aria-label={t.common.home} title={t.common.home}>
-            ←
-          </Link>
-          {c.hello(me?.parent.name ?? '')}
-        </span>
-        <button className="btn btn-small" onClick={() => void logout()}>
+    <div className="dash kid-pick">
+      <DashSky />
+      <header className="dash-top dash-wrap">
+        <Link to="/" className="dash-logo vt-logo" aria-label={t.common.home}>
+          <span className="dash-logo-mark" aria-hidden="true">🐻</span>
+          <span className="dash-logo-name">Interact Games</span>
+        </Link>
+        <LanguageSwitch className="dash-lang" />
+        <button type="button" className="dash-chip" onClick={() => void logout()}>
           {t.common.logout}
         </button>
       </header>
-
+    <main className="children dash-wrap">
+      <span className="dash-eyebrow">{c.hello(me?.parent.name ?? '')}</span>
       <h1>{c.title}</h1>
 
       {children.length > 0 && (
         <div className="child-grid">
-          {children.map((child) => (
-            <button key={child.id} className="child-card" onClick={() => void pick(child.id)}>
+          {children.map((child, i) => (
+            <button key={child.id} className="child-card" style={{ '--i': i } as CSSProperties} onClick={() => void pick(child.id)}>
               <span className="child-avatar">{child.avatar}</span>
               <span>{child.name}</span>
               <span className="child-age">{ageText(locale, child.age)}</span>
@@ -128,11 +131,11 @@ export function ChildrenPage() {
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="child-form-actions">
             {children.length > 0 && (
-              <button type="button" className="btn btn-secondary" onClick={() => setAdding(false)}>
+              <button type="button" className="dash-btn dash-btn-ghost" onClick={() => setAdding(false)}>
                 {t.common.cancel}
               </button>
             )}
-            <button className="btn btn-primary" disabled={busy}>
+            <button className="dash-btn dash-btn-primary" disabled={busy}>
               {busy ? c.saving : c.done}
             </button>
           </div>
@@ -151,5 +154,6 @@ export function ChildrenPage() {
         />
       )}
     </main>
+    </div>
   );
 }

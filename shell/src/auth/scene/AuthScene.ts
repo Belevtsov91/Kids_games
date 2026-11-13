@@ -1,5 +1,7 @@
 /** 3D-сцена страниц входа и регистрации: остров с мишкой-стражем и волшебной дверью. Форма управляет ею через set/wrong/win. */
 import * as THREE from 'three';
+import { disposeThree } from '@/lib/disposeThree';
+import { applyLook } from '@/lib/threeLook';
 import { addSky } from '@/welcome/scene/sky';
 import { buildAmbient } from './ambient';
 import { buildBear } from './bear';
@@ -61,6 +63,7 @@ export class AuthScene {
   private pointerX = 0;
   private pointerY = 0;
   private raf = 0;
+  private confettiAt = 0;
   private parts: Parts;
   private canvas: HTMLCanvasElement;
   private host: HTMLElement;
@@ -76,7 +79,7 @@ export class AuthScene {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 0.92;
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    applyLook(this.renderer, this.scene, 0.4);
     this.scene.add(this.world);
     this.world.add(this.island);
     this.parts = buildParts(this.scene, this.world, this.island, this.pop, mode);
@@ -107,7 +110,8 @@ export class AuthScene {
     this.fireIn = 1.2;
     const { celebrate, bear, gate } = this.parts;
     celebrate.startKey(bear.paw, gate.lock, this.fx.mode === 'register');
-    setTimeout(() => {
+    clearTimeout(this.confettiAt);
+    this.confettiAt = window.setTimeout(() => {
       if (!this.won) return;
       const at = gate.group.localToWorld(new THREE.Vector3(0, 1.4, 0));
       this.parts.particles.confetti(at);
@@ -117,6 +121,9 @@ export class AuthScene {
 
   reset() {
     this.won = false;
+    this.winAt = -99;
+    this.errAt = -99;
+    clearTimeout(this.confettiAt);
   }
 
   /** Буква из поля почты летит в почтовый ящик. */
@@ -130,12 +137,10 @@ export class AuthScene {
 
   dispose() {
     cancelAnimationFrame(this.raf);
+    clearTimeout(this.confettiAt);
     removeEventListener('resize', this.resize);
     removeEventListener('pointermove', this.onPointer);
-    this.scene.traverse((o) => {
-      if (o instanceof THREE.Mesh || o instanceof THREE.Points) o.geometry.dispose();
-    });
-    this.renderer.dispose();
+    disposeThree(this.scene, this.renderer);
   }
 
   private onPointer = (e: PointerEvent) => {

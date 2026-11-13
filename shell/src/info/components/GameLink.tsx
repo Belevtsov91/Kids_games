@@ -12,9 +12,10 @@ interface Props {
 /** Ссылка на игру: кто вошёл — сразу в игру (или в меню), гость — на регистрацию. */
 export function GameLink({ gameId, className, children }: Props) {
   const { me } = useAuth();
-  const to = me ? (gameId ? `/play/${gameId}` : '/dashboard') : '/register';
+  const target = gameId ? `/play/${gameId}` : '/dashboard';
+  // Гость после регистрации вернётся к выбранной игре.
   return (
-    <Link to={to} className={className}>
+    <Link to={me ? target : '/register'} state={me ? undefined : { from: target }} className={className}>
       {children}
     </Link>
   );
