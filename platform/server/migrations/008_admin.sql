@@ -141,6 +141,21 @@ alter table public.ig_sessions add column if not exists device text check (devic
 -- В какой игре был последний «пульс» ребёнка: для списка «играют сейчас».
 alter table public.ig_child_settings add column if not exists last_game text check (last_game is null or last_game ~ '^[a-z0-9-]{1,40}$');
 
+-- Размер наших таблиц (только ig_*) и всей базы — для раздела «Здоровье». Вызывает только сервер.
+create or replace function public.ig_admin_table_sizes()
+returns table (name text, bytes bigint, row_estimate bigint)
+language sql security definer set search_path = pg_catalog
+as $$
+  select c.relname::text, pg_total_relation_size(c.oid), greatest(c.reltuples, 0)::bigint
+  from pg_class c join pg_namespace n on n.oid = c.relnamespace
+  where n.nspname = 'public' and c.relkind = 'r' and c.relname like 'ig\_%'
+  order by 2 desc;
+$$;
+create or replace function public.ig_admin_db_size()
+returns bigint language sql security definer set search_path = pg_catalog
+as $$ select pg_database_size(current_database()); $$;
+revoke all on function public.ig_admin_table_sizes(), public.ig_admin_db_size() from public, anon, authenticated;
+
 alter table public.ig_admins enable row level security;
 alter table public.ig_admin_sessions enable row level security;
 alter table public.ig_admin_devices enable row level security;

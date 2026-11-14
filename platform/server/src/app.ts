@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
@@ -23,6 +25,7 @@ import { startCleanup } from './modules/jobs/cleanup.js';
 import { adminRoutes } from './modules/admin/index.js';
 import { adminEnabled } from './modules/admin/adminSession.js';
 import { logError } from './modules/admin/collect.js';
+import { sitePublicRoutes } from './modules/admin/public.routes.js';
 
 export async function buildApp(options: { gamesDir?: string; logger?: boolean; jobs?: boolean } = {}) {
   // trustProxy: за Vercel → Render настоящий адрес посетителя приходит в X-Forwarded-For (см. TRUST_PROXY).
@@ -69,7 +72,14 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean; j
       Boolean(req.session && /^[0-9a-f-]{36}$/i.test(childId) && (await parentStatus(req)) && (await ownsChild(req.session.parentId, childId)));
   });
 
-  const games = await loadGames(options.gamesDir ?? env.gamesDir, (message) => app.log.error(message));
+  const gamesDir = options.gamesDir ?? env.gamesDir;
+  const games = await loadGames(gamesDir, (message) => app.log.error(message));
+  const catalog = games.map((g) => g.manifest);
+  // Для админки: у каких игр есть серверная часть и загрузилась ли она.
+  const gameStatus = games.map((g) => {
+    const hasServer = existsSync(join(gamesDir, g.manifest.id, 'server', 'index.ts'));
+    return { id: g.manifest.id, title: g.manifest.title, hasServer, serverOk: !hasServer || Boolean(g.plugin) };
+  });
 
   // Все маршруты под /api — так же проксирует Vite в dev.
   await app.register(
@@ -84,12 +94,14 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean; j
       await api.register(errorsRoutes);
       await api.register(publicNotifyRoutes);
       await api.register(catalogRoutes, { prefix: '/games', catalog: games.map((g) => g.manifest) });
-      await api.register(jobsRoutes, { prefix: '/jobs', catalog: games.map((g) => g.manifest) });
+      await api.register(jobsRoutes, { prefix: '/jobs', catalog, games: gameStatus });
+      await api.register(sitePublicRoutes);
       // Админка владельца: только если задан ADMIN_EMAILS. Без него маршрутов /api/admin нет.
       if (adminEnabled) {
         await api.register(adminRoutes, {
           prefix: '/admin',
-          catalog: games.map((g) => g.manifest),
+          catalog,
+          games: gameStatus,
           gameTables: games.flatMap((g) => g.tables.map((table) => ({ gameId: g.manifest.id, table }))),
         });
       }
