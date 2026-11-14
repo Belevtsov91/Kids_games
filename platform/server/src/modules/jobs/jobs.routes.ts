@@ -5,6 +5,7 @@ import { env } from '../../config/env.js';
 import { supabase } from '../../db/index.js';
 import { sendWeeklyReports } from '../notify/weekly.js';
 import { cleanup } from './cleanup.js';
+import { tracked } from './tracked.js';
 
 // Задачи по расписанию снаружи (Render Cron Job, Vercel Cron, cron-job.org): бесплатный Render
 // засыпает, и setInterval внутри сервера в воскресенье вечером может не сработать.
@@ -27,13 +28,13 @@ export const jobsRoutes: FastifyPluginAsync<{ catalog: GameManifest[] }> = async
 
   /** Раз в час: отчёт за неделю (сам решит, кому пора: воскресенье после 18:00 по времени семьи). */
   app.post('/hourly', async (req) => {
-    await sendWeeklyReports(opts.catalog, req.log);
+    await tracked('weekly-report', () => sendWeeklyReports(opts.catalog, req.log));
     return { ok: true };
   });
 
   /** Раз в сутки: чистка просроченного. */
   app.post('/daily', async (req) => {
-    await cleanup(req.log);
+    await tracked('cleanup', () => cleanup(req.log));
     return { ok: true };
   });
 };

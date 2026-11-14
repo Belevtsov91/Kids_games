@@ -20,6 +20,9 @@ import { supabase } from './db/index.js';
 import { startWeeklyReports } from './modules/notify/weekly.js';
 import { jobsRoutes } from './modules/jobs/jobs.routes.js';
 import { startCleanup } from './modules/jobs/cleanup.js';
+import { adminRoutes } from './modules/admin/index.js';
+import { adminEnabled } from './modules/admin/adminSession.js';
+import { logError } from './modules/admin/collect.js';
 
 export async function buildApp(options: { gamesDir?: string; logger?: boolean; jobs?: boolean } = {}) {
   // trustProxy: за Vercel → Render настоящий адрес посетителя приходит в X-Forwarded-For (см. TRUST_PROXY).
@@ -43,7 +46,10 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean; j
   // Подробности ошибок БД и сервера наружу не отдаём, только в лог.
   app.setErrorHandler((err: { statusCode?: number; message?: string }, req, reply) => {
     const status = err.statusCode && err.statusCode < 500 ? err.statusCode : 500;
-    if (status >= 500) req.log.error({ err }, 'request failed');
+    if (status >= 500) {
+      req.log.error({ err }, 'request failed');
+      logError('server', `${req.method} ${req.routeOptions?.url ?? req.url.split('?')[0]}`, err.message ?? 'Ошибка сервера');
+    }
     reply.code(status).send({ error: status >= 500 ? 'Ошибка сервера' : (err.message ?? 'Неверный запрос') });
   });
 
@@ -52,8 +58,10 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean; j
   app.decorateRequest('canParentView', null);
   app.addHook('onRequest', async (req, reply) => {
     // Защита от CSRF поверх SameSite: изменяющие запросы принимаем только со своего сайта.
+    // У /api/admin свой список адресов: с основного сайта в админку писать нельзя, и наоборот.
     const origin = req.headers.origin;
-    if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && origin && !env.corsOrigins.includes(origin)) {
+    const allowed = req.url.startsWith('/api/admin/') ? env.admin.origins : env.corsOrigins;
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && origin && !allowed.includes(origin)) {
       return reply.code(403).send({ error: 'Запрос с чужого сайта' });
     }
     req.session = await loadSession(req);
@@ -77,6 +85,14 @@ export async function buildApp(options: { gamesDir?: string; logger?: boolean; j
       await api.register(publicNotifyRoutes);
       await api.register(catalogRoutes, { prefix: '/games', catalog: games.map((g) => g.manifest) });
       await api.register(jobsRoutes, { prefix: '/jobs', catalog: games.map((g) => g.manifest) });
+      // Админка владельца: только если задан ADMIN_EMAILS. Без него маршрутов /api/admin нет.
+      if (adminEnabled) {
+        await api.register(adminRoutes, {
+          prefix: '/admin',
+          catalog: games.map((g) => g.manifest),
+          gameTables: games.flatMap((g) => g.tables.map((table) => ({ gameId: g.manifest.id, table }))),
+        });
+      }
 
       // Игры: каждая в своём префиксе и в своей инкапсуляции Fastify, друг друга не видят.
       // БД игре даём только к её таблицам ig_game_<id>_*.

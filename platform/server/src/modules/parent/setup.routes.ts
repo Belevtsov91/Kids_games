@@ -6,6 +6,7 @@ import { PIN_REQUIRED_AGE } from '../children/profileRules.js';
 import { isWeakPin } from './gate.js';
 import { ownsChild, requireLogin, requireParent } from './parentSession.js';
 import type { GameTable } from './index.js';
+import { exportFamily } from './exportData.js';
 
 // Первая настройка сразу после регистрации (/setup) и выгрузка всех данных семьи (GDPR).
 // Настройка работает без задачи для взрослых, но только один раз и только в первые сутки после регистрации.
@@ -75,37 +76,8 @@ export const setupRoutes: FastifyPluginAsync<{ gameTables: GameTable[] }> = asyn
 
   /** Все данные семьи на платформе одним JSON. Хеши пароля, PIN и токенов не отдаём. */
   app.get<{ Querystring: { child?: string } }>('/export', { preHandler: requireParent, schema: { querystring: exportQuery } }, async (req, reply) => {
-    const parentId = req.session!.parentId;
-    const one = async (table: string, columns: string, key: string, value: string | string[]) => {
-      const q = db().from(table).select(columns);
-      const { data, error } = Array.isArray(value) ? await q.in(key, value.length ? value : ['00000000-0000-0000-0000-000000000000']) : await q.eq(key, value);
-      if (error) throw error;
-      return data ?? [];
-    };
-    const parent = await one('ig_parents', 'id, email, display_name, created_at, consent_at, policy_version, last_seen_at', 'id', parentId);
-    // ?child=<id> — только один ребёнок (например, перед удалением профиля). Профили из корзины тоже выгружаются.
-    const all = (await one('ig_children', 'id, name, age, avatar, created_at, deleted_at', 'parent_id', parentId)) as unknown as { id: string }[];
-    const children = req.query.child ? all.filter((c) => c.id === req.query.child) : all;
-    if (req.query.child && !children.length) return reply.code(404).send({ error: 'Профиль не найден' });
-    const ids = children.map((c) => c.id);
-    const body = {
-      exportedAt: new Date().toISOString(),
-      parent: parent[0] ?? null,
-      parentSettings: (await one('ig_parent_settings', 'photo, timezone, weekly_report, notify_requests, mail_locale, onboarded', 'parent_id', parentId))[0] ?? null,
-      helpers: await one('ig_helpers', 'name, email, child_ids, created_at, last_used_at', 'parent_id', parentId),
-      children,
-      childSettings: await one('ig_child_settings', '*', 'child_id', ids),
-      gameAccess: await one('ig_child_game_access', '*', 'child_id', ids),
-      playDaily: await one('ig_play_daily', '*', 'child_id', ids),
-      timeRequests: await one('ig_time_requests', '*', 'child_id', ids),
-      playEvents: await one('ig_play_events', 'child_id, game_id, kind, name, ok, created_at', 'child_id', ids),
-      stickers: await one('ig_stickers', '*', 'child_id', ids),
-      cloudSaves: await one('ig_cloud_saves', '*', 'child_id', ids),
-      // Данные игр со своим сервером: рисунки, мелодии, острова, сохранения. У каждой таблицы есть child_id.
-      games: Object.fromEntries(
-        await Promise.all(opts.gameTables.map(async ({ gameId, table }) => [`${gameId}/${table}`, await one(table, '*', 'child_id', ids)] as const)),
-      ),
-    };
+    const body = await exportFamily(req.session!.parentId, opts.gameTables, req.query.child);
+    if (!body) return reply.code(404).send({ error: 'Профиль не найден' });
     return reply
       .header('Content-Disposition', `attachment; filename="interact-games-${new Date().toISOString().slice(0, 10)}.json"`)
       .type('application/json; charset=utf-8')

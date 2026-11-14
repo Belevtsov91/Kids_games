@@ -8,6 +8,7 @@ import { parentStatus } from '../parent/parentSession.js';
 import { safeZone } from '../kid/timeRules.js';
 import { shouldAskWho } from '../children/profileRules.js';
 import { childSeenAt, POLICY_VERSION, touchParent } from './presence.js';
+import { FROZEN, isFrozen, logLoginFailure, noteDevice } from '../admin/collect.js';
 
 // Вход родителя. Пароль приходит только в теле запроса, хешируется здесь и нигде не логируется.
 
@@ -103,9 +104,15 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
         .maybeSingle();
       if (error) throw error;
       const ok = await verifyPassword(req.body.password, parent?.password_hash ?? DUMMY_HASH);
-      if (!parent || !ok) return reply.code(401).send({ error: 'Неверная почта или пароль' });
+      if (!parent || !ok) {
+        logLoginFailure(req.body.email, Boolean(parent), req.ip);
+        return reply.code(401).send({ error: 'Неверная почта или пароль' });
+      }
+      // Аккаунт заморожен владельцем сайта: пароль верный, но войти нельзя.
+      if (await isFrozen(parent.id)) return reply.code(403).send(FROZEN);
 
       await createSession(reply, parent.id);
+      noteDevice(parent.id, req.headers['user-agent']);
       return { ok: true };
     },
   );

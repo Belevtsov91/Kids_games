@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { logError } from '../admin/collect.js';
 
 // Падения игр в браузере: только в лог сервера, без данных о ребёнке и без таблиц.
 const body = {
@@ -14,6 +15,8 @@ export const errorsRoutes: FastifyPluginAsync = async (app) => {
     { schema: { body }, config: { rateLimit: { max: 20, timeWindow: '1 minute' } } },
     async (req, reply) => {
       req.log.warn({ path: req.body.path, message: req.body.message }, 'ошибка в игре (браузер)');
+      // И в журнал ошибок для админки владельца (без данных о ребёнке).
+      logError('client', req.body.path, req.body.message);
       return reply.code(204).send();
     },
   );

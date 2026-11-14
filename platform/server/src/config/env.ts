@@ -8,6 +8,8 @@ export function parseTrustProxy(value: string | undefined): boolean | number {
   return Number.isInteger(hops) && hops >= 0 ? hops : false;
 }
 
+const list = (value: string | undefined) => (value ?? '').split(',').map((v) => v.trim()).filter(Boolean);
+
 export const env = {
   host: process.env.HOST ?? '0.0.0.0',
   port: Number(process.env.PORT ?? 3000),
@@ -40,6 +42,19 @@ export const env = {
     brevoApiKey: process.env.BREVO_API_KEY,
     fromEmail: process.env.MAIL_FROM_EMAIL ?? process.env.SMTP_FROM_EMAIL,
     fromName: process.env.MAIL_FROM_NAME ?? 'Interact Games',
+  },
+  /**
+   * Админка владельца (/api/admin). Пусто ADMIN_EMAILS — маршрутов нет вообще, сайт работает как раньше.
+   * ADMIN_ORIGIN — адрес сайта админки (несколько через запятую): изменяющие запросы к /api/admin только оттуда.
+   * ADMIN_SETUP_TOKEN — разовый секрет первой настройки (пароль + код из приложения); после настройки его можно убрать.
+   */
+  admin: {
+    emails: list(process.env.ADMIN_EMAILS).map((e) => e.toLowerCase()),
+    origins: list(process.env.ADMIN_ORIGIN).map((o) => o.replace(/\/+$/, '')),
+    setupToken: process.env.ADMIN_SETUP_TOKEN,
+    /** Тревоги и утренняя сводка в Telegram: токен бота и id чата. Без них тревоги только в админке. */
+    telegramToken: process.env.TELEGRAM_BOT_TOKEN,
+    telegramChat: process.env.TELEGRAM_CHAT_ID,
   },
   isProduction: process.env.NODE_ENV === 'production',
   /** Папка с играми; по умолчанию games/ в корне репозитория. */

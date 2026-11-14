@@ -1,3 +1,4 @@
+import { noteBeat } from '../admin/collect.js';
 import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 import { db } from '../../db/index.js';
 import { accessOf, rulesOf, settingsOf, statsOf, timeOf, zoneOf } from './childData.js';
@@ -101,6 +102,7 @@ export const kidRoutes: FastifyPluginAsync = async (app) => {
       .from('ig_child_settings')
       .upsert({ child_id: childId, last_beat_at: now.toISOString() }, { onConflict: 'child_id' });
     if (error) throw error;
+    noteBeat(childId, req.body.gameId);
     return statusOf(childId, req.session!.parentId, req.body.tz);
   });
 

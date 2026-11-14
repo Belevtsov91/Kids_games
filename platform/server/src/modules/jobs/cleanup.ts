@@ -1,6 +1,7 @@
 import type { FastifyBaseLogger } from 'fastify';
 import { db } from '../../db/index.js';
 import { purgeTrash, sweepInactive } from './retention.js';
+import { tracked } from './tracked.js';
 
 // Чистка раз в сутки: просроченные сессии и ссылки сброса пароля (раньше удалялись, только когда
 // тот же родитель входил снова), старые события игр — таблица ig_play_events растёт на каждый ответ ребёнка,
@@ -17,6 +18,8 @@ export async function cleanup(log: FastifyBaseLogger, now = new Date()) {
     db().from('ig_password_resets').delete().lt('expires_at', iso),
     db().from('ig_play_events').delete().lt('created_at', eventsBefore),
     purgeTrash(now),
+    // Аккаунты, которые владелец поставил на удаление: 7 дней на отмену прошли.
+    db().from('ig_parents').delete().lt('delete_after', iso),
   ];
   const results = await Promise.all(steps);
   for (const { error } of results) if (error) log.error({ err: error }, 'Чистка БД: шаг не удался');
@@ -27,7 +30,7 @@ const DAY = 24 * 60 * 60 * 1000;
 
 /** Чистка в самом сервере раз в сутки (если сервер не засыпает). Возвращает функцию остановки. */
 export function startCleanup(log: FastifyBaseLogger) {
-  const run = () => void cleanup(log).catch((err) => log.error({ err }, 'Чистка БД не удалась'));
+  const run = () => void tracked('cleanup', () => cleanup(log)).catch((err) => log.error({ err }, 'Чистка БД не удалась'));
   const id = setInterval(run, DAY);
   setTimeout(run, 5 * 60_000);
   return () => clearInterval(id);

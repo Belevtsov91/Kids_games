@@ -1,10 +1,11 @@
 import { createHash, randomBytes } from 'node:crypto';
-import type { FastifyPluginAsync } from 'fastify';
+import type { FastifyBaseLogger, FastifyPluginAsync } from 'fastify';
 import { env } from '../../../config/env.js';
 import { db } from '../../../db/index.js';
 import { mailEnabled, sendMail } from '../../../mail/mailer.js';
 import { hashPassword, isWeakPassword, WEAK_PASSWORD } from '../password.js';
 import { createSession } from '../session.js';
+import { FROZEN, isFrozen } from '../../admin/collect.js';
 import { resetPasswordMail } from './email/template.js';
 import { MAIL_LOCALES, mailLocale } from './email/text.js';
 
@@ -53,6 +54,32 @@ async function findReset(token: string): Promise<string | null> {
   return data.parent_id as string;
 }
 
+/**
+ * Новая ссылка сброса пароля и письмо с ней. Старые ссылки родителя перестают работать.
+ * false — почта не настроена (в разработке ссылка уходит в лог). Этим же пользуется админка владельца.
+ */
+export async function sendResetLink(parent: { id: string; display_name: string }, email: string, locale: ReturnType<typeof mailLocale>, log: FastifyBaseLogger) {
+  const token = randomBytes(32).toString('base64url');
+  const now = Date.now();
+  // У родителя одна живая ссылка: старые удаляем, заодно и просроченные у всех.
+  await db().from('ig_password_resets').delete().eq('parent_id', parent.id);
+  await db().from('ig_password_resets').delete().lt('expires_at', new Date(now).toISOString());
+  const { error: insertError } = await db()
+    .from('ig_password_resets')
+    .insert({ token_hash: hashResetToken(token), parent_id: parent.id, expires_at: new Date(now + RESET_TTL_MIN * 60_000).toISOString() });
+  if (insertError) throw insertError;
+
+  const url = `${env.appUrl}/reset#${token}`;
+  if (!mailEnabled) {
+    // Только в разработке: почта не настроена, ссылку можно взять из лога сервера.
+    log.warn({ url }, 'Почта не настроена (SMTP_* / BREVO_API_KEY): ссылка для сброса пароля');
+    return false;
+  }
+  const mail = resetPasswordMail({ locale, name: parent.display_name, url, minutes: RESET_TTL_MIN });
+  await sendMail({ to: email, ...mail, tag: 'password-reset' });
+  return true;
+}
+
 export const resetRoutes: FastifyPluginAsync = async (app) => {
   /**
    * Отправить письмо со ссылкой. Ответ всегда один и тот же, есть такая почта или нет:
@@ -71,24 +98,7 @@ export const resetRoutes: FastifyPluginAsync = async (app) => {
         const { data: parent, error } = await db().from('ig_parents').select('id, display_name').eq('email', email).maybeSingle();
         if (error) throw error;
         if (!parent) return;
-        const token = randomBytes(32).toString('base64url');
-        const now = Date.now();
-        // У родителя одна живая ссылка: старые удаляем, заодно и просроченные у всех.
-        await db().from('ig_password_resets').delete().eq('parent_id', parent.id);
-        await db().from('ig_password_resets').delete().lt('expires_at', new Date(now).toISOString());
-        const { error: insertError } = await db()
-          .from('ig_password_resets')
-          .insert({ token_hash: hashResetToken(token), parent_id: parent.id, expires_at: new Date(now + RESET_TTL_MIN * 60_000).toISOString() });
-        if (insertError) throw insertError;
-
-        const url = `${env.appUrl}/reset#${token}`;
-        if (!mailEnabled) {
-          // Только в разработке: почта не настроена, ссылку можно взять из лога сервера.
-          log.warn({ url }, 'Почта не настроена (SMTP_* / BREVO_API_KEY): ссылка для сброса пароля');
-          return;
-        }
-        const mail = resetPasswordMail({ locale, name: parent.display_name, url, minutes: RESET_TTL_MIN });
-        await sendMail({ to: email, ...mail, tag: 'password-reset' });
+        if (!(await sendResetLink(parent, email, locale, log))) return;
         log.info('Письмо для сброса пароля отправлено');
       })().catch((err) => log.error({ err }, 'Не удалось отправить письмо для сброса пароля'));
 
@@ -129,6 +139,8 @@ export const resetRoutes: FastifyPluginAsync = async (app) => {
       await db().from('ig_password_resets').delete().eq('parent_id', parentId);
       // Кто-то мог войти со старым паролем: выходим со всех устройств.
       await db().from('ig_sessions').delete().eq('parent_id', parentId);
+      // Замороженный аккаунт: пароль сменён, но входа нет.
+      if (await isFrozen(parentId)) return reply.code(403).send(FROZEN);
       await createSession(reply, parentId);
       return { ok: true };
     },

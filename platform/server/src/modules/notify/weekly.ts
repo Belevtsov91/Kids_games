@@ -1,3 +1,4 @@
+import { tracked } from '../jobs/tracked.js';
 import type { FastifyBaseLogger } from 'fastify';
 import type { GameManifest } from '@ig/sdk/manifest';
 import { env } from '../../config/env.js';
@@ -89,7 +90,7 @@ async function sendOne(p: ParentRow, titles: Map<string, GameManifest>, log: Fas
 
 /** Запускает проверку раз в час. Возвращает функцию остановки. */
 export function startWeeklyReports(catalog: GameManifest[], log: FastifyBaseLogger) {
-  const run = () => void sendWeeklyReports(catalog, log).catch((err) => log.error({ err }, 'Отчёт за неделю не отправлен'));
+  const run = () => void tracked('weekly-report', () => sendWeeklyReports(catalog, log)).catch((err) => log.error({ err }, 'Отчёт за неделю не отправлен'));
   const id = setInterval(run, HOUR);
   setTimeout(run, 60_000);
   return () => clearInterval(id);

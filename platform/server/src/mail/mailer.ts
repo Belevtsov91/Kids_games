@@ -3,6 +3,7 @@
 // Ключи никогда не логируем и не отдаём наружу.
 import nodemailer, { type Transporter } from 'nodemailer';
 import { env } from '../config/env.js';
+import { logMail } from '../modules/admin/collect.js';
 
 export interface Mail {
   to: string;
@@ -45,7 +46,18 @@ async function viaApi(msg: Mail) {
   if (!res.ok) throw new Error(`Brevo API ${res.status}: ${(await res.text()).slice(0, 300)}`);
 }
 
+/** Отправка с записью в журнал писем (ig_mail_log): кому, какое, ушло или нет. Текст письма не хранится. */
 export async function sendMail(msg: Mail) {
+  try {
+    await deliver(msg);
+    logMail(msg.to, msg.tag, msg.subject, true);
+  } catch (err) {
+    logMail(msg.to, msg.tag, msg.subject, false, err);
+    throw err;
+  }
+}
+
+async function deliver(msg: Mail) {
   if (!mailEnabled) throw new Error('Почта не настроена: задайте MAIL_FROM_EMAIL и SMTP_USER/SMTP_PASSWORD или BREVO_API_KEY');
   if (mail.brevoApiKey) return viaApi(msg);
   const { tag, ...rest } = msg;
