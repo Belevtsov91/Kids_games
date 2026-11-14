@@ -154,6 +154,7 @@ export class WelcomeScene {
     const target = this.focused
       ? { pos: this.arch.worlds[this.focused].getWorldPosition(new THREE.Vector3()), small: (SMALL_IDS as readonly string[]).includes(this.focused) }
       : null;
+    this.rig.scroll = this.reduce ? 0 : Math.min(scrollY / Math.max(innerHeight, 1), 1);
     this.rig.update(target, this.reduce);
     this.cinema.render();
     this.placeLabels();

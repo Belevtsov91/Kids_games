@@ -5,6 +5,7 @@ import { BIG_IDS, showcaseGame } from '@/welcome/showcase';
 import { isPlaceholder, SITE } from '../site';
 import { CopyEmail } from './CopyEmail';
 import { GameLink } from './GameLink';
+import { Plush } from '@/ui/Plush';
 
 /** Значки над подвалом: иконка и цвет; подписи берутся из словаря по порядку. */
 const BADGES = [
@@ -45,7 +46,7 @@ export function SiteFooter() {
         <div className="ft-main">
           <div className="ft-brand">
             <Link to="/" className="wl-logo">
-              <span className="wl-logo-mark" aria-hidden="true">🐻</span>
+              <span className="wl-logo-mark" aria-hidden="true"><Plush value="🐻" /></span>
               {SITE.name}
             </Link>
             <p>{f.brand}</p>

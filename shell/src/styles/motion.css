@@ -1,0 +1,26 @@
+/* Живой интерфейс (lib/motion.ts): свечение за курсором, наклон и блик карточек.
+   Класс .fx-on ставится только при мыши и без «меньше движения», поэтому на телефонах этих правил нет. */
+
+.fx-glow {
+  position: fixed; left: -260px; top: -260px; z-index: 1; width: 520px; height: 520px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 214, 140, 0.15), rgba(255, 126, 182, 0.06) 42%, transparent 68%);
+  mix-blend-mode: screen; opacity: 0; transition: opacity 0.5s ease; will-change: transform;
+}
+.fx-glow.is-on { opacity: 1; }
+/* В игре и во взрослом кабинете свечение не нужно. */
+body:has(.game-screen) .fx-glow, body:has(.pa) .fx-glow { display: none; }
+
+.fx-on .child-card::after, .fx-on .kid-tile::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.3), transparent 55%);
+}
+.fx-on .fx-tilt::after { opacity: 1; }
+.fx-on .child-card.fx-tilt {
+  transform: perspective(900px) translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1.03);
+  transition: transform 0.14s ease-out, box-shadow 0.3s;
+}
+.fx-on .child-card.fx-tilt .child-avatar { transform: translateZ(0) translate(calc((var(--mx, 50%) - 50%) * 0.12), calc((var(--my, 50%) - 50%) * 0.12)) scale(1.06); }
+.fx-on .kid-tile.fx-tilt {
+  transform: perspective(900px) translateY(-5px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.14s ease-out;
+}

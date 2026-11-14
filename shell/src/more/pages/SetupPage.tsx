@@ -7,6 +7,7 @@ import { DashSky } from '@/dashboard/DashSky';
 import { useI18n } from '@/i18n/I18nProvider';
 import { AVATARS } from '@/parent/ui/fields';
 import { useMoreText } from '../text';
+import { Plush } from '@/ui/Plush';
 
 const LIMITS = [null, 30, 45, 60, 90] as const;
 const AGES = Array.from({ length: 13 }, (_, i) => i + 3);
@@ -86,7 +87,7 @@ export function SetupPage() {
               {AGES.map((a) => <button key={a} type="button" aria-pressed={a === age} onClick={() => setAge(a)}>{a}</button>)}
             </div>
             <div className="setup-chips setup-avatars" role="group" aria-label={t.children.avatar}>
-              {AVATARS.map((a) => <button key={a} type="button" aria-pressed={a === avatar} onClick={() => setAvatar(a)}>{a}</button>)}
+              {AVATARS.map((a) => <button key={a} type="button" aria-pressed={a === avatar} aria-label={a} onClick={() => setAvatar(a)}><Plush value={a} /></button>)}
             </div>
             {error && <p className="form-error" role="alert">{error}</p>}
             <button className="dash-btn dash-btn-primary" disabled={busy}>{s.next} →</button>

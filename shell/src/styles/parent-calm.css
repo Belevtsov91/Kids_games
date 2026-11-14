@@ -1,0 +1,43 @@
+/* Кабинет родителя: спокойная взрослая тема. Детский закат с облаками остаётся детям,
+   здесь глубокий синий фон, нейтральные стеклянные карточки и тонкие иконки (parent/ui/NavIcon.tsx). */
+
+.pa {
+  --dash-night: #0e1322;
+  --dash-gold: #f2c766;
+  --dash-ink: #eef1f8;
+  --dash-ink-soft: #a9b2c8;
+  --dash-line: rgba(255, 255, 255, 0.1);
+  --dash-glass: rgba(22, 28, 48, 0.7);
+  --pa-card: linear-gradient(165deg, rgba(36, 44, 74, 0.94), rgba(21, 27, 47, 0.96));
+  --pa-shadow: 0 14px 34px rgba(3, 6, 18, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.pa .dash-sky {
+  background:
+    radial-gradient(1100px 620px at 82% -12%, rgba(92, 116, 204, 0.3), transparent 62%),
+    radial-gradient(900px 560px at -6% 104%, rgba(54, 150, 152, 0.16), transparent 62%),
+    linear-gradient(180deg, #0e1322 0%, #131a30 100%);
+}
+.pa .dash-sun, .pa .dash-clouds, .pa .dash-sky::after { display: none; }
+.pa .dash-stars { opacity: 0.3; }
+
+.pa .pa-panel { border-radius: 20px; background: rgba(21, 27, 47, 0.8); box-shadow: inset 0 0 0 1px var(--dash-line); }
+.pa .pa-tile, .pa .pa-kid { background: var(--pa-card); box-shadow: var(--pa-shadow); border-radius: 20px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.pa .pa-tile:hover, .pa .pa-kid:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(3, 6, 18, 0.5), inset 0 0 0 1px rgba(242, 199, 102, 0.4); }
+.pa .pa-request { background: rgba(242, 199, 102, 0.08); box-shadow: inset 0 0 0 1px rgba(242, 199, 102, 0.34); border-radius: 18px; }
+.pa .gate-card, .pa .pa-modal-card { background: var(--pa-card); box-shadow: 0 30px 80px rgba(3, 6, 18, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+.pa .gate-note { background: rgba(21, 27, 47, 0.7); }
+.pa .pa-head h1 { letter-spacing: -0.01em; }
+.pa .face-adult { background: linear-gradient(160deg, #7f8fd8, #46549e); }
+
+.pa-ico { flex: none; opacity: 0.9; }
+.pa .pa-nav-link { border-radius: 12px; font-weight: 700; }
+.pa .pa-nav-link.active { color: var(--dash-ink); background: rgba(255, 255, 255, 0.08); box-shadow: inset 3px 0 0 var(--dash-gold); }
+.pa .pa-nav-link.active .pa-ico { color: var(--dash-gold); opacity: 1; }
+
+@media (max-width: 640px) {
+  .pa .pa-nav { background: rgba(17, 22, 40, 0.9); }
+  .pa .pa-nav-link.active { box-shadow: none; color: var(--dash-gold); background: rgba(242, 199, 102, 0.12); }
+  .pa .pa-nav-under { background: rgba(242, 199, 102, 0.12); }
+  .pa .pa-nav-link .pa-ico { width: 24px; height: 24px; transition: transform 0.35s var(--ease-spring, ease-out); }
+  .pa .pa-nav-link.active .pa-ico { transform: translateY(-2px) scale(1.12); }
+}

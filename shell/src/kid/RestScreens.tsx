@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { AskTime } from './AskTime';
 import type { KidTime } from './KidStatus';
 import { useKidText } from './text';
+import { Plush } from '@/ui/Plush';
 
 /** Экран вместо игры, когда время кончилось или идут тихие часы. Игра уже закрыта и сохранилась. */
 export function TimeUpScreen({ time }: { time: KidTime }) {
@@ -10,7 +11,7 @@ export function TimeUpScreen({ time }: { time: KidTime }) {
   return (
     <div className="kid-rest" role="alertdialog" aria-labelledby="rest-title" data-testid="time-up">
       <div className="kid-rest-card">
-        <span className="kid-rest-bear" aria-hidden="true">{quiet ? '🌙' : '🐻'}</span>
+        <span className="kid-rest-bear" aria-hidden="true">{quiet ? '🌙' : <Plush value="🐻" />}</span>
         <h1 id="rest-title">{quiet ? k.timeUp.quietTitle : k.timeUp.limitTitle}</h1>
         <p>{quiet ? k.timeUp.quietText(time.quietTo ?? '') : k.timeUp.limitText}</p>
         {!quiet && <AskTime />}

@@ -7,6 +7,7 @@ import { age as ageText } from '@/i18n/plural';
 import { adultReason, AdultOverlay, type AdultReason } from '@/account/AdultOverlay';
 import { DashSky } from '@/dashboard/DashSky';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
+import { Plush } from '@/ui/Plush';
 
 const AVATARS = ['🐻', '🐰', '🦊', '🐼', '🐸', '🦁', '🐯', '🐨', '🐵', '🦄', '🐙', '🐳'];
 const AGES = Array.from({ length: 13 }, (_, i) => i + 3);
@@ -72,7 +73,7 @@ export function ChildrenPage() {
       <DashSky />
       <header className="dash-top dash-wrap">
         <Link to="/" className="dash-logo vt-logo" aria-label={t.common.home}>
-          <span className="dash-logo-mark" aria-hidden="true">🐻</span>
+          <span className="dash-logo-mark" aria-hidden="true"><Plush value="🐻" /></span>
           <span className="dash-logo-name">Interact Games</span>
         </Link>
         <LanguageSwitch className="dash-lang" />
@@ -88,7 +89,7 @@ export function ChildrenPage() {
         <div className="child-grid">
           {children.map((child, i) => (
             <button key={child.id} className="child-card" style={{ '--i': i } as CSSProperties} onClick={() => void pick(child.id)}>
-              <span className="child-avatar">{child.avatar}</span>
+              <span className="child-avatar"><Plush value={child.avatar} /></span>
               <span>{child.name}</span>
               <span className="child-age">{ageText(locale, child.age)}</span>
               {child.locked && child.id !== me?.activeChildId && <span className="child-lock" title={c.lockedBadge} aria-label={c.lockedBadge}>🔒</span>}
@@ -96,7 +97,7 @@ export function ChildrenPage() {
           ))}
           {!adding && (
             <button className="child-card child-card-add" onClick={() => setAdding(true)}>
-              <span className="child-avatar">➕</span>
+              <span className="child-avatar">+</span>
               <span>{c.add}</span>
             </button>
           )}
@@ -133,7 +134,7 @@ export function ChildrenPage() {
             <div className="avatar-picker">
               {AVATARS.map((a) => (
                 <button type="button" key={a} aria-pressed={a === avatar} aria-label={a} onClick={() => setAvatar(a)}>
-                  {a}
+                  <Plush value={a} />
                 </button>
               ))}
             </div>

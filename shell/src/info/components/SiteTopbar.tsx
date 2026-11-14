@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { useI18n } from '@/i18n/I18nProvider';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
+import { Plush } from '@/ui/Plush';
 
 /** Верхняя панель для страниц, открытых всем: гостю — вход и регистрация, вошедшему — назад к играм. */
 export function SiteTopbar() {
@@ -11,7 +12,7 @@ export function SiteTopbar() {
     <header className="wl-topbar">
       <div className="wl-wrap">
         <Link to="/" className="wl-logo">
-          <span className="wl-logo-mark" aria-hidden="true">🐻</span>
+          <span className="wl-logo-mark" aria-hidden="true"><Plush value="🐻" /></span>
           Interact Games
         </Link>
         <nav className="wl-nav">

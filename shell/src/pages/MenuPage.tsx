@@ -18,6 +18,7 @@ import { useKidStatus } from '@/kid/KidStatus';
 import { KidTimer } from '@/kid/KidTimer';
 import { isToddler } from '@/kid/toddler';
 import { useMoreText } from '@/more/text';
+import { Plush } from '@/ui/Plush';
 
 type Filter = 'all' | GameManifest['kind'];
 const FILTERS: Filter[] = ['all', '3d', '2d'];
@@ -62,7 +63,7 @@ export function MenuPage() {
       <SeasonDecor calm={Boolean(activeChild?.comfort?.reduceMotion)} />
       <header className="dash-top dash-wrap">
         <Link to="/" className="dash-logo" aria-label={t.common.home}>
-          <span className="dash-logo-mark" aria-hidden="true">🐻</span>
+          <span className="dash-logo-mark" aria-hidden="true"><Plush value="🐻" /></span>
           <span className="dash-logo-name">Interact Games</span>
         </Link>
         {/* Малышу не нужны кнопки, которые выкидывают из сайта: язык и выход — у взрослого в кабинете. */}

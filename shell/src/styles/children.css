@@ -55,7 +55,7 @@
 
 .child-card-add { background: rgba(255, 255, 255, 0.04); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.28); }
 .child-card-add { outline: 2px dashed rgba(255, 255, 255, 0.28); outline-offset: -10px; }
-.child-card-add .child-avatar { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25); font-size: 44px; }
+.child-card-add .child-avatar { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25); font-size: 56px; font-weight: 700; line-height: 1; color: var(--dash-ink); }
 
 .child-form {
   display: flex;

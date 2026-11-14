@@ -4,6 +4,7 @@ import { doneToday, markToday } from './daily';
 import { dayPart, decorOf } from './season';
 import { useFamilyText } from './text';
 import { loadVoice } from './voice';
+import { Plush } from '@/ui/Plush';
 
 const LANG = { ru: 'ru-RU', uk: 'uk-UA', ro: 'ro-RO', en: 'en-GB' } as const;
 
@@ -64,7 +65,7 @@ export function Mascot({ childId, name, plan, played, note }: Props) {
   return (
     <div className="mascot" data-testid="mascot">
       <button type="button" className={`mascot-bear${voice && !heard ? ' has-voice' : ''}`} onClick={speak} aria-label={f.label} title={f.tap}>
-        🐻
+        <Plush value="🐻" />
       </button>
       <p className="mascot-bubble" aria-live="polite">
         <b>{hello}</b> {line}

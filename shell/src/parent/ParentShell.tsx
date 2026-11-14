@@ -10,6 +10,8 @@ import { ParentGate } from './gate/ParentGate';
 import { HandOver } from './HandOver';
 import { ParentNav } from './ParentNav';
 import { useParentText } from './text';
+import { Plush } from '@/ui/Plush';
+import { NavIcon } from './ui/NavIcon';
 
 const OPEN_MS = 15 * 60 * 1000;
 
@@ -107,7 +109,7 @@ export function ParentShell() {
         <DashSky />
         <header className="dash-top dash-wrap pa-top">
           <Link to={state?.open ? '/parent' : '/dashboard'} className="dash-logo">
-            <span className="dash-logo-mark" aria-hidden="true">🐻</span>
+            <span className="dash-logo-mark" aria-hidden="true"><Plush value="🐻" /></span>
             <span className="pa-logo-text">
               <small>{p.gate.eyebrow}</small>
               <span className="dash-logo-name">Interact Games</span>
@@ -122,7 +124,7 @@ export function ParentShell() {
                 <button type="button" onClick={() => void lock()}>{p.bar.lock}</button>
               </span>
               <button type="button" className="dash-chip" onClick={() => setHandOver(true)}>
-                🎮 <span className="pa-hide-sm">{p.bar.handOver}</span>
+                <NavIcon name="pad" /> <span className="pa-hide-sm">{p.bar.handOver}</span>
               </button>
             </>
           )}

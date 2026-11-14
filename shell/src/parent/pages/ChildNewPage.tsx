@@ -12,6 +12,7 @@ import { PhotoPicker } from '../ui/PhotoPicker';
 import { PageHead, Panel, ToggleRow } from '../ui/bits';
 import { AVATARS, Stepper } from '../ui/fields';
 import { fitsAge } from './access';
+import { Plush } from '@/ui/Plush';
 
 /** Новый профиль ребёнка из кабинета: имя, возраст или месяц рождения, аватар, правила по возрасту и (по желанию) фото. */
 export function ChildNewPage() {
@@ -74,7 +75,7 @@ export function ChildNewPage() {
             <div className="pa-avatars">
               {AVATARS.map((a) => (
                 <button key={a} type="button" aria-pressed={a === avatar} aria-label={a} onClick={() => setAvatar(a)}>
-                  {a}
+                  <Plush value={a} />
                 </button>
               ))}
             </div>

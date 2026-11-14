@@ -6,6 +6,7 @@ import type { AuthScene } from '../scene/AuthScene';
 import { initialFx, type AuthMode, type FxState } from '../scene/state';
 import { useAuthText } from '../text';
 import { AuthFxContext, type AuthFx } from './fxContext';
+import { Plush } from '@/ui/Plush';
 
 // Общая рамка /login и /register: 3D-остров на весь экран, карточка с вкладками и формой.
 // Сцена одна на обе страницы: при переключении вкладки мишка просто переходит на другое место.
@@ -118,7 +119,7 @@ export function AuthLayout() {
         <div className="au-bubble" ref={bubbleRef} aria-hidden="true" />
         <header className="au-top">
           <Link to="/" className="au-logo" aria-label="Interact Games">
-            <span className="au-logo-mark" aria-hidden="true">🐻</span>
+            <span className="au-logo-mark" aria-hidden="true"><Plush value="🐻" /></span>
             <span className="au-logo-text">Interact Games</span>
           </Link>
           <div className="au-top-right">

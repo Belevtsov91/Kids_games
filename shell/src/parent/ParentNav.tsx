@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router';
 import { useAuth } from '@/auth/AuthContext';
 import { Face } from './ui/Face';
+import { NavIcon } from './ui/NavIcon';
 import { useParentText } from './text';
 
 /** Разделы кабинета: слева на компьютере, лентой сверху на телефоне. */
@@ -18,10 +19,10 @@ export function ParentNav() {
         </div>
       )}
       <NavLink to="/parent" end className="pa-nav-link">
-        <span aria-hidden="true">🏠</span> <span className="pa-nav-text">{p.nav.overview}</span>
+        <NavIcon name="home" /> <span className="pa-nav-text">{p.nav.overview}</span>
       </NavLink>
       <NavLink to="/parent/kids" end className={({ isActive }) => `pa-nav-link${isActive ? ' active' : inKid ? ' pa-nav-under' : ''}`}>
-        <span aria-hidden="true">👨‍👩‍👧</span> <span className="pa-nav-text">{p.nav.kids}</span>
+        <NavIcon name="kids" /> <span className="pa-nav-text">{p.nav.kids}</span>
       </NavLink>
       <div className="pa-nav-kids">
         {me?.children.map((c) => (
@@ -31,13 +32,13 @@ export function ParentNav() {
         ))}
       </div>
       <NavLink to="/parent/inbox" className="pa-nav-link">
-        <span aria-hidden="true">📬</span> <span className="pa-nav-text">{p.nav3.inbox}</span>
+        <NavIcon name="inbox" /> <span className="pa-nav-text">{p.nav3.inbox}</span>
       </NavLink>
       <NavLink to="/parent/family" className="pa-nav-link">
-        <span aria-hidden="true">👵</span> <span className="pa-nav-text">{p.nav3.family}</span>
+        <NavIcon name="family" /> <span className="pa-nav-text">{p.nav3.family}</span>
       </NavLink>
       <NavLink to="/parent/account" className="pa-nav-link">
-        <span aria-hidden="true">🔐</span> <span className="pa-nav-text">{p.nav.account}</span>
+        <NavIcon name="lock" /> <span className="pa-nav-text">{p.nav.account}</span>
       </NavLink>
     </nav>
   );

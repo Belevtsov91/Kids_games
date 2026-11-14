@@ -41,3 +41,4 @@ desktop.ini
 
 # Временные файлы
 .claude-tmp/
+__pycache__/

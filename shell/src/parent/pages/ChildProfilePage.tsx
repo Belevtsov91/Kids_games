@@ -9,6 +9,7 @@ import { AVATARS, Stepper } from '../ui/fields';
 import { DeleteChild } from './DeleteChild';
 import { ProfileGuard } from './ProfileGuard';
 import { useChild } from './useChild';
+import { Plush } from '@/ui/Plush';
 
 /** Профиль ребёнка: имя, возраст, аватар, фото, язык игр, защита профиля, удаление. */
 export function ChildProfilePage() {
@@ -61,7 +62,7 @@ export function ChildProfilePage() {
               <div className="pa-avatars">
                 {AVATARS.map((a) => (
                   <button key={a} type="button" aria-pressed={a === form.avatar} aria-label={a} onClick={() => set({ avatar: a })}>
-                    {a}
+                    <Plush value={a} />
                   </button>
                 ))}
               </div>

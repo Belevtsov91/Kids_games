@@ -12,6 +12,8 @@ export interface CameraTarget {
 export class CameraRig {
   readonly camera = new THREE.PerspectiveCamera(36, 1, 0.1, 400);
   mobile = false;
+  /** Прокрутка первого экрана, 0…1: камера поднимается и подлетает к архипелагу. */
+  scroll = 0;
   private w = 1;
   private h = 1;
   private home = { dist: 24, height: 10 };
@@ -51,12 +53,19 @@ export class CameraRig {
       sx = m ? 0 : -0.2; // остров левее, справа карточка
       sy = m ? -0.2 : 0; // на телефоне остров выше, снизу шторка
     } else {
-      pos = new THREE.Vector3(0, this.home.height, this.home.dist);
+      pos = new THREE.Vector3(0, this.home.height * (1 + 0.5 * this.scroll), this.home.dist * (1 - 0.16 * this.scroll));
       look = new THREE.Vector3(0, 0.4, 0);
       sx = m ? 0 : 0.2; // архипелаг правее, слева заголовок
       sy = m ? 0.17 : 0; // на телефоне ниже заголовка
     }
-    const k = instant || this.first ? 1 : target ? 0.06 : 0.05;
+    // Первое появление: камера прилетает издалека, а не стоит на месте.
+    const intro = this.first && !instant && !target;
+    if (intro) {
+      this.pos.copy(pos).multiplyScalar(1.45);
+      this.look.copy(look);
+      this.shift.set(sx, sy);
+    }
+    const k = instant || (this.first && !intro) ? 1 : target ? 0.06 : 0.05;
     this.first = false;
     this.pos.lerp(pos, k);
     this.look.lerp(look, k);

@@ -1,6 +1,7 @@
 // Звёзды в верхней половине неба и светлячки над облаками. Один canvas на весь экран, без three.js.
 interface Star { x: number; y: number; r: number; p: number }
 interface Fly { x: number; y: number; vx: number; vy: number; p: number }
+interface Shot { x: number; y: number; vx: number; vy: number; life: number }
 
 export function startStarfield(canvas: HTMLCanvasElement): () => void {
   const ctx = canvas.getContext('2d');
@@ -8,6 +9,8 @@ export function startStarfield(canvas: HTMLCanvasElement): () => void {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let w = 0, h = 0, raf = 0;
   let stars: Star[] = [], flies: Fly[] = [];
+  // падающая звезда: изредка чиркает по верхней части неба
+  let shot: Shot | null = null, nextShot = 2500;
 
   const size = () => {
     const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -43,6 +46,28 @@ export function startStarfield(canvas: HTMLCanvasElement): () => void {
       ctx.beginPath();
       ctx.arc(f.x, f.y, 9, 0, 7);
       ctx.fill();
+    }
+    if (!reduce) {
+      if (!shot && t > nextShot) shot = { x: w * (0.15 + Math.random() * 0.7), y: h * Math.random() * 0.22, vx: (Math.random() < 0.5 ? -1 : 1) * (5 + Math.random() * 3), vy: 2.2 + Math.random() * 1.5, life: 1 };
+      if (shot) {
+        const tail = ctx.createLinearGradient(shot.x, shot.y, shot.x - shot.vx * 14, shot.y - shot.vy * 14);
+        tail.addColorStop(0, `rgba(255,250,230,${(0.9 * shot.life).toFixed(3)})`);
+        tail.addColorStop(1, 'rgba(255,250,230,0)');
+        ctx.strokeStyle = tail;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(shot.x, shot.y);
+        ctx.lineTo(shot.x - shot.vx * 14, shot.y - shot.vy * 14);
+        ctx.stroke();
+        shot.x += shot.vx;
+        shot.y += shot.vy;
+        shot.life -= 0.018;
+        if (shot.life <= 0) {
+          shot = null;
+          nextShot = t + 5000 + Math.random() * 7000;
+        }
+      }
     }
     if (!reduce && !document.hidden) raf = requestAnimationFrame(draw);
   };
