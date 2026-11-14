@@ -1,5 +1,6 @@
 /** 3D-сцена «Мишка просыпается»: рендер, камера и ход пробуждения по состоянию сервера. */
 import * as THREE from 'three';
+import { createCinema, type Cinema } from '@/lib/cinema';
 import { disposeThree } from '@/lib/disposeThree';
 import { applyLook } from '@/lib/threeLook';
 import type { WakeState } from '../serverStatus';
@@ -21,6 +22,7 @@ const WAVE_S = 1.4;
 
 export class WakeScene {
   private renderer: THREE.WebGLRenderer;
+  private cinema!: Cinema;
   private scene = new THREE.Scene();
   private camera = new THREE.PerspectiveCamera(38, 1, 0.1, 400);
   private look = new THREE.Vector3(0.35, 0.8, 0);
@@ -59,6 +61,7 @@ export class WakeScene {
     loadModelSet().then(this.use, () => this.use(buildPlainSet()));
     this.fallback = window.setTimeout(() => this.use(buildPlainSet()), 4000);
     this.scene.add(this.zzz.group);
+    this.cinema = createCinema(this.renderer, this.scene, this.camera, { focus: 0.45, blur: 2.6 });
     this.resize();
     addEventListener('resize', this.resize);
     // пока ждём, можно тыкать в мишку: ожидание превращается в маленькую игру
@@ -81,6 +84,7 @@ export class WakeScene {
     cancelAnimationFrame(this.raf);
     removeEventListener('resize', this.resize);
     this.canvas.removeEventListener('pointerdown', this.poke);
+    this.cinema.dispose();
     disposeThree(this.scene, this.renderer);
   }
 
@@ -92,6 +96,7 @@ export class WakeScene {
   private resize = () => {
     const w = this.host.clientWidth || 1, h = this.host.clientHeight || 1;
     this.renderer.setSize(w, h, false);
+    this.cinema?.setSize(w, h);
     const aspect = w / h;
     // На узком экране отъезжаем дальше и опускаем сцену под текст сверху.
     const far = aspect < 0.8 ? 1.9 : aspect < 1.2 ? 1.45 : 1.15;
@@ -138,6 +143,6 @@ export class WakeScene {
     }
     this.world.update(motion, morning);
     this.zzz.update(t, this.headPos, set ? 1 - phase(this.p, 0.14, 0.3) : 0);
-    this.renderer.render(this.scene, this.camera);
+    this.cinema.render();
   };
 }

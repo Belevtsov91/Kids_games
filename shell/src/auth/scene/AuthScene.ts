@@ -1,5 +1,6 @@
 /** 3D-сцена страниц входа и регистрации: остров с мишкой-стражем и волшебной дверью. Форма управляет ею через set/wrong/win. */
 import * as THREE from 'three';
+import { createCinema, type Cinema } from '@/lib/cinema';
 import { disposeThree } from '@/lib/disposeThree';
 import { applyLook } from '@/lib/threeLook';
 import { addSky } from '@/welcome/scene/sky';
@@ -48,6 +49,7 @@ type Parts = ReturnType<typeof buildParts>;
 
 export class AuthScene {
   private renderer: THREE.WebGLRenderer;
+  private cinema!: Cinema;
   private scene = new THREE.Scene();
   private world = new THREE.Group();
   private island = new THREE.Group();
@@ -83,6 +85,7 @@ export class AuthScene {
     this.scene.add(this.world);
     this.world.add(this.island);
     this.parts = buildParts(this.scene, this.world, this.island, this.pop, mode);
+    this.cinema = createCinema(this.renderer, this.scene, this.parts.camera.camera, { focus: 0.5, blur: 2.4 });
     this.resize();
     addEventListener('resize', this.resize);
     addEventListener('pointermove', this.onPointer);
@@ -127,19 +130,16 @@ export class AuthScene {
   }
 
   /** Буква из поля почты летит в почтовый ящик. */
-  letter(ch: string) {
-    this.parts.mailbox.fly(ch, this.parts.camera.camera);
-  }
+  letter = (ch: string) => this.parts.mailbox.fly(ch, this.parts.camera.camera);
 
-  setName(name: string) {
-    this.parts.signTower.setName(name);
-  }
+  setName = (name: string) => this.parts.signTower.setName(name);
 
   dispose() {
     cancelAnimationFrame(this.raf);
     clearTimeout(this.confettiAt);
     removeEventListener('resize', this.resize);
     removeEventListener('pointermove', this.onPointer);
+    this.cinema.dispose();
     disposeThree(this.scene, this.renderer);
   }
 
@@ -151,6 +151,7 @@ export class AuthScene {
   private resize = () => {
     const w = this.host.clientWidth || 1, h = this.host.clientHeight || 1;
     this.renderer.setSize(w, h, false);
+    this.cinema?.setSize(w, h);
     this.parts.camera.resize(w, h);
   };
 
@@ -182,7 +183,7 @@ export class AuthScene {
       p.particles.firework(at, FIREWORK_COLORS[Math.floor(Math.random() * 5)]);
     }
     p.camera.update(f, this.pointerY);
-    this.renderer.render(this.scene, p.camera.camera);
+    this.cinema.render();
     this.placeBubble();
   };
 

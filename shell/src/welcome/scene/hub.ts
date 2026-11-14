@@ -1,10 +1,20 @@
 /** Центральный остров: мишка-талисман машет лапой, шарики и указатель. */
 import * as THREE from 'three';
+import { kitBear } from '@/lib/kitModels';
 import { islandBase, mat, mesh, type Built } from './kit';
 
 const BALLOONS = ['#ff7eb6', '#ffd25a', '#7ee7ff', '#7ef09a'];
 
 function bear() {
+  const kit = kitBear();
+  if (kit) {
+    // плюшевый Тёпа из Blender: правая лапа поднята и машет
+    const g = new THREE.Group();
+    g.add(kit.body);
+    g.position.y = 0.28;
+    kit.armL.rotation.z = -0.4;
+    return { g, head: kit.head, armR: kit.armR, up: Math.PI };
+  }
   const fur = mat('#b8743c'), light = mat('#f0c48c'), dark = mat('#2a1a12');
   const g = new THREE.Group();
   g.add(mesh(new THREE.SphereGeometry(0.62, 12, 10), fur, 0, 0.85, 0));
@@ -34,7 +44,7 @@ function bear() {
   g.add(armR);
   for (const s of [-1, 1]) g.add(mesh(new THREE.SphereGeometry(0.22, 10, 8), fur, s * 0.3, 0.25, 0.25));
   g.position.y = 0.28;
-  return { g, head, armR };
+  return { g, head, armR, up: 0 };
 }
 
 export function buildHub(): Built {
@@ -66,7 +76,7 @@ export function buildHub(): Built {
   return {
     group,
     update: (t) => {
-      b.armR.rotation.z = -0.35 + Math.sin(t * 5) * 0.45;
+      b.armR.rotation.z = b.up - 0.35 + Math.sin(t * 5) * 0.45;
       b.head.rotation.z = Math.sin(t * 2.5) * 0.08;
       b.head.rotation.y = Math.sin(t * 0.9) * 0.25;
       b.g.position.y = 0.28 + Math.abs(Math.sin(t * 2.5)) * 0.06;

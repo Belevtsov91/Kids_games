@@ -74,8 +74,8 @@ export function AuthLayout() {
     if (!canvasRef.current || !hostRef.current) return;
     let scene: AuthScene | null = null;
     let alive = true;
-    import('../scene/AuthScene')
-      .then(({ AuthScene }) => {
+    Promise.all([import('../scene/AuthScene'), import('@/lib/kitModels').then((m) => m.loadKit())])
+      .then(([{ AuthScene }]) => {
         if (!alive || !canvasRef.current || !hostRef.current) return;
         try {
           scene = new AuthScene(canvasRef.current, hostRef.current, fxRef.current.mode, () => bubbleRef.current);

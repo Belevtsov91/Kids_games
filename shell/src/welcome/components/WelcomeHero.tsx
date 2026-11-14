@@ -35,8 +35,9 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
     let alive = true;
     let scene: WelcomeScene | null = null;
     // three.js грузится отдельным чанком, чтобы не тормозить остальные страницы
-    import('../scene/WelcomeScene')
-      .then(({ WelcomeScene }) => {
+    // вместе со сценой ждём набор моделей из Blender (не дольше трёх секунд: без него сцена соберётся из простых фигур)
+    Promise.all([import('../scene/WelcomeScene'), import('@/lib/kitModels').then((m) => m.loadKit())])
+      .then(([{ WelcomeScene }]) => {
         if (!alive || !canvasRef.current || !heroRef.current) return;
         scene = new WelcomeScene(canvasRef.current, heroRef.current, {
           onPick: (id) => handlers.current.onFocus(id),

@@ -1,5 +1,6 @@
 /** 3D-сцена стартовой страницы: рендер, вращение, наведение и клик по островам, подписи. */
 import * as THREE from 'three';
+import { createCinema, type Cinema } from '@/lib/cinema';
 import { disposeThree } from '@/lib/disposeThree';
 import { applyLook } from '@/lib/threeLook';
 import { ALL_IDS, SMALL_IDS, isBig, type BigId, type ShowcaseId } from '../showcase';
@@ -19,6 +20,7 @@ export interface WelcomeSceneOptions {
 
 export class WelcomeScene {
   private renderer: THREE.WebGLRenderer;
+  private cinema!: Cinema;
   private scene = new THREE.Scene();
   private rig = new CameraRig();
   private arch = buildArchipelago();
@@ -54,6 +56,7 @@ export class WelcomeScene {
     this.renderer.shadowMap.enabled = true;
     applyLook(this.renderer, this.scene, 0.4);
     this.scene.add(this.arch.root);
+    this.cinema = createCinema(this.renderer, this.scene, this.rig.camera, { focus: 0.52, blur: 2.6 });
     this.resize();
 
     addEventListener('resize', this.resize);
@@ -79,6 +82,7 @@ export class WelcomeScene {
     removeEventListener('pointerup', this.onUp);
     removeEventListener('pointercancel', this.onCancel);
     removeEventListener('pointermove', this.onMove);
+    this.cinema.dispose();
     disposeThree(this.scene, this.renderer);
   }
 
@@ -86,6 +90,7 @@ export class WelcomeScene {
     this.w = this.host.clientWidth || 1;
     this.h = this.host.clientHeight || 1;
     this.renderer.setSize(this.w, this.h, false);
+    this.cinema?.setSize(this.w, this.h);
     this.rig.resize(this.w, this.h);
   };
 
@@ -150,7 +155,7 @@ export class WelcomeScene {
       ? { pos: this.arch.worlds[this.focused].getWorldPosition(new THREE.Vector3()), small: (SMALL_IDS as readonly string[]).includes(this.focused) }
       : null;
     this.rig.update(target, this.reduce);
-    this.renderer.render(this.scene, this.rig.camera);
+    this.cinema.render();
     this.placeLabels();
     if (this.frame === 3) this.opts.onThumbnails(renderThumbnails(this.scene, this.arch.worlds, this.sky.clouds));
   };

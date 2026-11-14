@@ -4,9 +4,7 @@
 """
 import math
 import os
-import subprocess
 import sys
-import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,6 +13,7 @@ import bpy  # noqa: E402
 from bear import build_bear  # noqa: E402
 from bed import build_blanket, build_shade, build_soft, build_wood  # noqa: E402
 from island import build_island  # noqa: E402
+from export import export_glb  # noqa: E402
 from lib import pivot  # noqa: E402
 from paint import bake_ao  # noqa: E402
 
@@ -49,14 +48,7 @@ def main():
     bake_ao([island, wood, soft], [shade], 0.8, 0.8, 160)
     bake_ao([blanket], [], 0.6, 0.3)
     pivot(blanket)
-    raw = os.path.join(tempfile.mkdtemp(), 'wake.raw.glb')
-    bpy.ops.export_scene.gltf(
-        filepath=raw, export_format='GLB', export_texcoords=False, export_normals=True, export_vertex_color='MATERIAL',
-        export_all_vertex_colors=False, export_cameras=False, export_lights=False, export_animations=False, export_yup=True,
-    )
-    # сжатие: квантование и meshopt (в 3–4 раза меньше); three.js распаковывает встроенным MeshoptDecoder
-    subprocess.run(['npx', '-y', '@gltf-transform/cli@4', 'meshopt', raw, os.path.abspath(OUT), '--level', 'medium'], check=True)
-    print('wake.glb:', os.path.getsize(os.path.abspath(OUT)) // 1024, 'KB;', sum(len(o.data.vertices) for o in bpy.data.objects if o.type == 'MESH'), 'vertices')
+    export_glb(OUT)
     if '--preview' in sys.argv:
         bpy.data.objects['BlanketMesh'].hide_render = True
         preview(sys.argv[sys.argv.index('--preview') + 1], bear)

@@ -1,11 +1,12 @@
 /** Мишка-страж: следит за курсором и вводом, закрывает глаза на пароле, мотает головой при ошибке, прыгает при успехе. */
 import * as THREE from 'three';
+import { kitBear, type BearParts } from '@/lib/kitModels';
 import { soft as mat, mesh } from '@/welcome/scene/kit';
 import { bounceDrop, damp, type AuthMode, type Frame } from './state';
 
 const SPOT: Record<AuthMode, THREE.Vector3> = { login: new THREE.Vector3(-1.25, 0.28, 0.75), register: new THREE.Vector3(0.75, 0.28, 1.25) };
 
-function arm(body: THREE.Group, side: number, fur: THREE.Material, light: THREE.Material) {
+function arm(body: THREE.Object3D, side: number, fur: THREE.Material, light: THREE.Material) {
   const p = new THREE.Group();
   p.position.set(side * 0.55, 1.2, 0);
   p.add(mesh(new THREE.CylinderGeometry(0.14, 0.13, 0.6, 20), fur, 0, -0.3, 0));
@@ -14,13 +15,10 @@ function arm(body: THREE.Group, side: number, fur: THREE.Material, light: THREE.
   return p;
 }
 
-export function buildBear(mode: AuthMode) {
+/** Запасной мишка из простых фигур — когда набор из Blender не загрузился. */
+function plainBear(): BearParts {
   const fur = mat('#b8743c'), light = mat('#f0c48c'), dark = mat('#2a1a12');
-  const group = new THREE.Group();
-  group.position.copy(SPOT[mode]);
-  group.rotation.y = 0.35;
   const body = new THREE.Group();
-  group.add(body);
   body.add(mesh(new THREE.SphereGeometry(0.62, 28, 24), fur, 0, 0.85, 0));
   body.add(mesh(new THREE.SphereGeometry(0.42, 24, 20), light, 0, 0.8, 0.3));
   const scarf = mesh(new THREE.TorusGeometry(0.4, 0.1, 12, 28), mat('#ff7eb6'), 0, 1.33, 0);
@@ -52,6 +50,15 @@ export function buildBear(mode: AuthMode) {
   head.add(mouth);
   const armL = arm(body, -1, fur, light), armR = arm(body, 1, fur, light);
   [-1, 1].forEach((s) => body.add(mesh(new THREE.SphereGeometry(0.22, 24, 18), fur, s * 0.3, 0.22, 0.25)));
+  return { body, head, armL, armR, eyes, mouth, cheeks };
+}
+
+export function buildBear(mode: AuthMode) {
+  const group = new THREE.Group();
+  group.position.copy(SPOT[mode]);
+  group.rotation.y = 0.35;
+  const { body, head, armL, armR, eyes, mouth, cheeks } = kitBear() ?? plainBear();
+  group.add(body);
 
   let blink = 2;
 

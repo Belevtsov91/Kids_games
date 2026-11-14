@@ -1,5 +1,7 @@
-/** Общие детали low-poly сцены: материалы, меши, основа острова, деревья, свечение. */
+/** Общие детали сцен: материалы, меши, основа острова, деревья, свечение. Остров и деревья берутся
+ *  из набора Blender (lib/kitModels), а если он не загрузился — собираются из простых фигур. */
 import * as THREE from 'three';
+import { kitPart } from '@/lib/kitModels';
 
 /** Обновление анимации, вызывается каждый кадр со временем в секундах. */
 export type Updater = (t: number) => void;
@@ -58,6 +60,15 @@ export function jitter<T extends THREE.BufferGeometry>(geo: T, amount: number, k
 /** Летающий остров: верх, слой земли, каменный конус и пара камушков под ним. */
 export function islandBase(r: number, top: string, rock: string, seg = 9): THREE.Group {
   const g = new THREE.Group();
+  // гладкая основа из Blender: трава с мягкой кромкой, земля, скала с уступами (первый ребёнок — верх острова)
+  const grass = kitPart('KitIslandTop', top), soil = kitPart('KitIslandSoil', '#b07a52'), stone = kitPart('KitIslandRock', rock);
+  if (grass && soil && stone) {
+    grass.scale.set(r, 1, r);
+    soil.scale.set(r, 1, r);
+    stone.scale.setScalar(r);
+    stone.position.y = -0.75;
+    return g.add(grass, soil, stone);
+  }
   g.add(mesh(jitter(new THREE.CylinderGeometry(r, r * 0.94, 0.55, seg, 1), 0.12, true), mat(top)));
   g.add(mesh(jitter(new THREE.CylinderGeometry(r * 0.95, r * 0.85, 0.5, seg, 1), 0.15), mat('#b07a52'), 0, -0.5, 0));
   const cone = new THREE.ConeGeometry(r * 0.86, r * 1.5, seg, 3);
@@ -72,6 +83,11 @@ export function islandBase(r: number, top: string, rock: string, seg = 9): THREE
 
 export function pine(height = 1.4, color = '#4fb3a1'): THREE.Group {
   const g = new THREE.Group();
+  const trunk = kitPart('KitPineTrunk'), leaves = kitPart('KitPineLeaves', color);
+  if (trunk && leaves) {
+    leaves.scale.y = (0.8 + 0.64 * height) / 1.44;
+    return g.add(trunk, leaves);
+  }
   g.add(mesh(new THREE.CylinderGeometry(0.06, 0.09, 0.4, 5), mat('#7a5230'), 0, 0.2, 0));
   for (let i = 0; i < 3; i++) g.add(mesh(new THREE.ConeGeometry(0.42 - 0.1 * i, 0.6, 6), mat(color), 0, 0.5 + i * 0.32 * height, 0));
   return g;
@@ -79,6 +95,8 @@ export function pine(height = 1.4, color = '#4fb3a1'): THREE.Group {
 
 export function roundTree(color = '#6fcf6a'): THREE.Group {
   const g = new THREE.Group();
+  const trunk = kitPart('KitTreeTrunk'), leaves = kitPart('KitTreeLeaves', color);
+  if (trunk && leaves) return g.add(trunk, leaves);
   g.add(mesh(new THREE.CylinderGeometry(0.05, 0.08, 0.45, 5), mat('#7a5230'), 0, 0.22, 0));
   g.add(mesh(new THREE.IcosahedronGeometry(0.32, 0), mat(color), 0, 0.6, 0));
   return g;
