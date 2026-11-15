@@ -1,0 +1,104 @@
+.at-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: max(14px, env(safe-area-inset-top)) 16px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.at-hero {
+  position: relative;
+  width: min(100%, 560px);
+}
+
+.at-hero-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 28px;
+  box-shadow: 0 10px 30px rgb(30 60 120 / 0.25);
+}
+
+.at-hero .at-tepa {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  right: 12px;
+}
+
+.at-lead {
+  margin: 4px 0 0;
+  font-size: clamp(20px, 4vmin, 30px);
+  font-weight: 800;
+  text-align: center;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.at-routes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.at-route {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 150px;
+  padding: 14px 10px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--at-card);
+  box-shadow: 0 5px 0 #c9d7ee, 0 8px 18px rgb(30 60 120 / 0.15);
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.15s;
+}
+
+.at-route:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+
+.at-route:disabled {
+  cursor: default;
+  opacity: 0.65;
+  filter: grayscale(0.6);
+}
+
+.at-route.is-home { background: linear-gradient(#fff, #fff4dc); }
+.at-route.is-europe { background: linear-gradient(#fff, #e3eeff); }
+.at-route.is-world { background: linear-gradient(#fff, #e3f7e6); }
+
+.at-route-icon { font-size: 42px; line-height: 1; }
+.at-route-name { font-size: clamp(18px, 3vmin, 24px); font-weight: 800; }
+.at-route-hint { color: var(--at-soft); font-size: 14px; line-height: 1.25; }
+.at-route-stars { color: #ffb400; font-size: 24px; letter-spacing: 2px; }
+
+.at-start-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.at-visited {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.8);
+  font-weight: 700;
+}
+
+@media (max-width: 620px) {
+  .at-routes { grid-template-columns: 1fr; }
+  .at-route { min-height: 0; display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: 'icon name stars' 'icon hint hint'; text-align: left; column-gap: 12px; }
+  .at-route-icon { grid-area: icon; }
+  .at-route-name { grid-area: name; }
+  .at-route-hint { grid-area: hint; }
+  .at-route-stars { grid-area: stars; }
+}

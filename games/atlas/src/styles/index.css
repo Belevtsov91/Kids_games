@@ -1,0 +1,6 @@
+/* Стили «Путешественника». Все классы с префиксом at-, чтобы не задеть оболочку и другие игры. */
+@import './base.css';
+@import './start.css';
+@import './play.css';
+@import './globe.css';
+@import './result.css';

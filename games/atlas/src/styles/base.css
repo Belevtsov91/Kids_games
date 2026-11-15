@@ -1,0 +1,101 @@
+.at {
+  --at-ink: #23304a;
+  --at-soft: #5a6785;
+  --at-accent: #ff7a59;
+  --at-accent-dark: #e65a38;
+  --at-sky: #5b9dff;
+  --at-card: #ffffff;
+  --at-right: #3dbb6a;
+  --at-wrong: #ff5d5d;
+  --at-tap: 52px;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--at-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(150% 40% at 50% 118%, #a6dc78 0 45%, transparent 46%),
+    linear-gradient(#7fb8ff, #cde9ff 55%, #eef8ff);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.at-big {
+  --at-tap: 68px;
+}
+
+.at [hidden] {
+  display: none !important;
+}
+
+:where(.at) button {
+  font: inherit;
+  color: inherit;
+}
+
+.at-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.at-btn {
+  min-height: var(--at-tap);
+  padding: 10px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #c9d7ee, 0 6px 14px rgb(30 60 120 / 0.15);
+  font-weight: 800;
+  font-size: clamp(16px, 2.6vmin, 20px);
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+.at-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #c9d7ee;
+}
+
+.at-btn-main,
+.at-next {
+  background: var(--at-accent);
+  color: #fff !important;
+  box-shadow: 0 4px 0 var(--at-accent-dark), 0 6px 14px rgb(230 90 56 / 0.3);
+}
+
+.at-btn:focus-visible,
+.at-option:focus-visible,
+.at-route:focus-visible {
+  outline: 4px solid #ffd447;
+  outline-offset: 3px;
+}
+
+.at-back {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  min-height: 44px;
+  padding: 6px 16px;
+  z-index: 2;
+}
+
+.at-flag-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.at-calm *,
+.at-calm *::before,
+.at-calm *::after {
+  animation: none !important;
+  transition: none !important;
+}
