@@ -17,7 +17,7 @@ export interface Level {
   maxTime: number;
 }
 
-const HOME: Body = { kind: 'home', x: 110, y: 510, r: 34, mu: 30000, color: '#a59cff' };
+const HOME: Body = { kind: 'home', x: 110, y: 510, r: 34, mu: 80000, color: '#a59cff' };
 const home = (x = HOME.x, y = HOME.y): Body => ({ ...HOME, x, y });
 const target = (x: number, y: number, r = 30, mu = 400000, orbit?: Orbit): Body => ({ kind: 'target', x, y, r, mu, color: '#4fc3ff', orbit });
 const planet = (x: number, y: number, r: number, mu: number, color: string, ring = false, orbit?: Orbit): Body => ({ kind: 'planet', x, y, r, mu, color, ring, orbit });

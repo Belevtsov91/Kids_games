@@ -19,13 +19,16 @@ export interface Flight {
   status: FlightStatus;
 }
 
+/** Игровое время идёт медленнее настоящего, а у цели с неистраченным тормозом — совсем замедленно. */
+export const TIME_SCALE = 0.65;
+const SLOW_MO = 0.3;
 /** Ракете ближе этого к кристаллу — подобрала. */
 export const PICK_RADIUS = 18;
 /** Вылет дальше этого за край — потерялась в космосе. */
 const MARGIN = 220;
 const TRAIL_EVERY = 8;
 
-export const captureRadius = (level: Level) => target(level).r * 4;
+export const captureRadius = (level: Level) => target(level).r * 5;
 export const target = (level: Level) => level.bodies.find((b) => b.kind === 'target')!;
 export const home = (level: Level) => level.bodies.find((b) => b.kind === 'home')!;
 
@@ -96,6 +99,10 @@ export const burn = (f: Flight): boolean => {
   f.ship = { pos: f.ship.pos, vel: { x: f.ship.vel.x * BRAKE, y: f.ship.vel.y * BRAKE } };
   return true;
 };
+
+/** Во сколько раз игровое время медленнее настоящего сейчас: у цели замедляем, чтобы успеть затормозить. */
+export const timeScale = (f: Flight, level: Level) =>
+  f.burns > 0 && dist(f.ship.pos, bodyAt(target(level), f.t)) < captureRadius(level) ? SLOW_MO : TIME_SCALE;
 
 /** Пунктир-подсказка: первые level.preview секунд будущего пути. */
 export const previewPath = (level: Level, angle: number, power: number): Vec[] => {
