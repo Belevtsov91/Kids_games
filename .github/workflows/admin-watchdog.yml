@@ -1,0 +1,73 @@
+# Сторож сайта для админки владельца.
+# Каждые 5 минут: жив ли бэкенд на Render (заодно не даёт ему уснуть) и запуск проверок здоровья,
+# которые сами шлют тревогу в Telegram. Если бэкенд не отвечает вовсе, тревогу шлёт этот workflow.
+# Плюс по расписанию: еженедельные отчёты (каждый час), ночная чистка и утренняя сводка.
+#
+# Настройка в GitHub → Settings → Secrets and variables → Actions:
+#   Variables: API_URL = https://kids-games-api.onrender.com
+#   Secrets:   CRON_SECRET, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+# Расписание GitHub запускает только из основной ветки: заработает после слияния.
+name: admin-watchdog
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # пульс и проверки
+    - cron: '7 * * * *'     # еженедельные отчёты (сервер сам выбирает, кому пора)
+    - cron: '17 1 * * *'    # ночная чистка, 03:17 по Кишинёву
+    - cron: '3 6 * * *'     # утренняя сводка, 08:03 по Кишинёву (зимой)
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: admin-watchdog-${{ github.event.schedule }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      API: ${{ vars.API_URL }}
+      CRON: ${{ secrets.CRON_SECRET }}
+      TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+      SCHEDULE: ${{ github.event.schedule }}
+    steps:
+      - name: Check settings
+        run: |
+          if [ -z "$API" ] || [ -z "$CRON" ]; then echo "::warning::API_URL или CRON_SECRET не заданы"; exit 0; fi
+
+      - name: Pulse
+        if: env.SCHEDULE == '*/5 * * * *' || github.event_name == 'workflow_dispatch'
+        run: |
+          [ -z "$API" ] && exit 0
+          ok=0
+          # Render на бесплатном тарифе просыпается до минуты: две попытки.
+          for i in 1 2; do
+            if curl -fsS --max-time 75 "$API/api/health" > /dev/null; then ok=1; break; fi
+            sleep 20
+          done
+          if [ "$ok" = 0 ]; then
+            echo "::error::Бэкенд не отвечает"
+            # Не чаще раза в 30 минут, пока лежит.
+            if [ -n "$TG_TOKEN" ] && [ $(( $(date +%-M) % 30 )) -lt 5 ]; then
+              curl -fsS "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
+                --data-urlencode "chat_id=$TG_CHAT" \
+                --data-urlencode "text=🔴 Сайт не отвечает: $API/api/health ($(date -u +%H:%M) UTC)" > /dev/null || true
+            fi
+            exit 1
+          fi
+          curl -fsS --max-time 60 -X POST -H "x-cron-secret: $CRON" "$API/api/jobs/health" > /dev/null
+
+      - name: Weekly reports
+        if: env.SCHEDULE == '7 * * * *'
+        run: '[ -z "$API" ] || curl -fsS --max-time 120 -X POST -H "x-cron-secret: $CRON" "$API/api/jobs/hourly"'
+
+      - name: Nightly cleanup
+        if: env.SCHEDULE == '17 1 * * *'
+        run: '[ -z "$API" ] || curl -fsS --max-time 120 -X POST -H "x-cron-secret: $CRON" "$API/api/jobs/daily"'
+
+      - name: Morning digest
+        if: env.SCHEDULE == '3 6 * * *'
+        run: '[ -z "$API" ] || curl -fsS --max-time 120 -X POST -H "x-cron-secret: $CRON" "$API/api/jobs/digest"'
