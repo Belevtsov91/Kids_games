@@ -6,6 +6,7 @@ import { simpleMail } from '../../mail/layout.js';
 import { mailEnabled, sendMail } from '../../mail/mailer.js';
 import { MAIL_TEXT, mailLang } from '../../mail/texts.js';
 import { answerToken } from './answerToken.js';
+import { pushToParent } from './push.js';
 
 // Письмо родителю, когда ребёнок просит время. Кнопки отвечают сразу, без входа (подписанная ссылка).
 
@@ -30,10 +31,23 @@ export async function notifyRequest(childId: string, requestId: string, minutes:
     ...(parent && settings?.notify_requests !== false ? [parent.email] : []),
     ...(helpers ?? []).filter((h) => helperSees(h.child_ids, childId)).map((h) => h.email as string),
   ].filter((email, i, all) => email && all.indexOf(email) === i);
-  if (!recipients.length) return;
   const lang = mailLang(settings?.mail_locale);
   const t = MAIL_TEXT[lang];
-  const link = (approve: boolean) => `${env.appUrl}/answer#${answerToken(answerSecret(), requestId, approve)}`;
+  const token = (approve: boolean) => answerToken(answerSecret(), requestId, approve);
+  const link = (approve: boolean) => `${env.appUrl}/answer#${token(approve)}`;
+  // Push на устройства взрослого, где он включил уведомления: быстрее письма, с теми же кнопками.
+  void pushToParent(child.parent_id, {
+    title: t.request.subject(child.name, minutes),
+    body: t.request.line(child.name, minutes),
+    tag: `request-${requestId}`,
+    url: '/parent/inbox',
+    actions: [
+      { action: 'allow', title: t.request.allow(minutes), token: token(true) },
+      { action: 'deny', title: t.request.deny, token: token(false) },
+    ],
+    done: { approved: t.answered.approved(child.name, minutes), denied: t.answered.denied(child.name), gone: t.answered.gone },
+  }, log).catch((err) => log.error({ err }, 'Не удалось отправить push о просьбе'));
+  if (!recipients.length) return;
   const mail = simpleMail({
     locale: lang,
     subject: t.request.subject(child.name, minutes),

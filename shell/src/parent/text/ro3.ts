@@ -58,6 +58,9 @@ export const ro3: ParentTextC = {
     notifyLead: 'Cu butoanele „Permite” și „Nu azi” — poți răspunde direct din e-mail.',
     weekly: 'Raport săptămânal duminica',
     weeklyLead: 'Cât s-a jucat, la ce, ce a învățat și un sfat.',
+    push: 'Notificări pe acest dispozitiv',
+    pushLead: 'Cererea vine imediat, cu butoanele „Permite” și „Nu azi”. Gratuit și mai rapid decât e-mailul.',
+    pushState: { denied: 'Notificările sunt blocate în setările browserului. Permite-le pentru acest site și revino aici.', unsupported: 'Acest browser nu poate primi notificări.', install: 'Pe iPhone și iPad: apasă „Partajează” → „Adaugă pe ecranul principal”, deschide site-ul de acolo și activează aici.', disabled: 'Notificările nu sunt încă configurate pe server.' },
   },
   family: {
     title: 'Familia',

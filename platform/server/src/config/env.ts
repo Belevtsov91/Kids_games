@@ -56,6 +56,15 @@ export const env = {
     telegramToken: process.env.TELEGRAM_BOT_TOKEN,
     telegramChat: process.env.TELEGRAM_CHAT_ID,
   },
+  /**
+   * Push-уведомления взрослому (Web Push). Ключи: npx web-push generate-vapid-keys.
+   * VAPID_SUBJECT — mailto: или https: адрес владельца сайта. Без ключей push выключен, письма работают как раньше.
+   */
+  push: {
+    publicKey: process.env.VAPID_PUBLIC_KEY,
+    privateKey: process.env.VAPID_PRIVATE_KEY,
+    subject: process.env.VAPID_SUBJECT ?? 'mailto:admin@example.com',
+  },
   isProduction: process.env.NODE_ENV === 'production',
   /** Папка с играми; по умолчанию games/ в корне репозитория. */
   gamesDir: process.env.GAMES_DIR ?? fileURLToPath(new URL('../../../../games', import.meta.url)),

@@ -34,7 +34,7 @@ export const privacy: InfoContent = {
       <p>So the parent can log in and set time rules, the child can pick their profile, and games remember progress on every device. No ads, no third-party analytics, no profiling.</p>
       <h2>Where the data is stored and who sees it</h2>
       <p>
-        The database is Supabase (Postgres), region <Fill value={SITE.dbRegion} />. The site is hosted on Vercel, the server on Render, and emails are sent by Brevo.
+        The database is Supabase (Postgres), region <Fill value={SITE.dbRegion} />. The site is hosted on Vercel, the server on Render, and emails are sent by Brevo. If an adult turns on notifications, they are delivered by the browser’s push service (Google, Mozilla, Apple or Microsoft); the text is encrypted and the service cannot read it.
         These companies process data only on our instructions. We do not share or sell data to anyone else.
       </p>
       <h2>Site owner access</h2>

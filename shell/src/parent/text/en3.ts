@@ -58,6 +58,9 @@ export const en3: ParentTextC = {
     notifyLead: 'With “Allow” and “Not today” buttons, so you can answer straight from your inbox.',
     weekly: 'Weekly report on Sundays',
     weeklyLead: 'How long they played, what, what they learned, and one tip.',
+    push: 'Notifications on this device',
+    pushLead: 'Requests arrive instantly, with “Allow” and “Not today” buttons. Free and faster than email.',
+    pushState: { denied: 'Notifications are blocked in your browser settings. Allow them for this site and come back here.', unsupported: 'This browser can’t receive notifications.', install: 'On iPhone and iPad: tap Share → Add to Home Screen, open the site from there and turn this on.', disabled: 'Notifications aren’t set up on the server yet.' },
   },
   family: {
     title: 'Family',

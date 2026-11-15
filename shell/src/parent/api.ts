@@ -76,7 +76,7 @@ export const papi = {
   post: <T>(path: string, body: unknown) => call(() => raw.post<T>(path, body)),
   put: <T>(path: string, body: unknown) => call(() => raw.put<T>(path, body)),
   patch: <T>(path: string, body: unknown) => call(() => raw.patch<T>(path, body)),
-  delete: (path: string) => call(() => raw.delete(path)),
+  delete: (path: string, body?: unknown) => call(() => raw.delete(path, body)),
 };
 
 export const browserZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;

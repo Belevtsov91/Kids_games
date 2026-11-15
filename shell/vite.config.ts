@@ -24,6 +24,8 @@ export default defineConfig(({ mode }) => ({
         globIgnores: ['**/react-three-rapier*.js', '**/three.module*.js', '**/*-cover-*.png'],
         // /api — всегда сервер: без этого навигация на /api/parent/export получила бы index.html из кэша.
         navigateFallbackDenylist: [/^\/api\//],
+        // Push-уведомления взрослому (просьбы о времени): обработчики push и нажатий — в public/push-sw.js.
+        importScripts: ['push-sw.js'],
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/assets/'),

@@ -34,7 +34,7 @@ export const privacy: InfoContent = {
       <p>Ca părintele să se poată autentifica și seta timpul, copilul să-și aleagă profilul, iar jocurile să țină minte progresul pe toate dispozitivele. Fără reclame, fără analiză terță, fără profilare.</p>
       <h2>Unde se păstrează datele și cine le vede</h2>
       <p>
-        Baza de date este Supabase (Postgres), regiunea <Fill value={SITE.dbRegion} />. Site-ul e găzduit pe Vercel, serverul pe Render, iar emailurile le trimite Brevo.
+        Baza de date este Supabase (Postgres), regiunea <Fill value={SITE.dbRegion} />. Site-ul e găzduit pe Vercel, serverul pe Render, iar emailurile le trimite Brevo. Dacă adultul pornește notificările, ele sunt livrate de serviciul push al browserului (Google, Mozilla, Apple sau Microsoft); textul e criptat și serviciul nu îl poate citi.
         Aceste companii prelucrează datele doar la cererea noastră. Nu transmitem și nu vindem datele nimănui altcuiva.
       </p>
       <h2>Accesul proprietarului site-ului</h2>

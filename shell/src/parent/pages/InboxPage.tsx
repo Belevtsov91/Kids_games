@@ -5,6 +5,7 @@ import { useParent } from '../ParentShell';
 import { useParentText } from '../text';
 import { PageHead, Panel, ToggleRow } from '../ui/bits';
 import { useLoad } from '../ui/useLoad';
+import { PushRow } from './PushPanel';
 
 interface Inbox {
   requests: { id: string; child_id: string; minutes: number; status: 'pending' | 'approved' | 'denied'; created_at: string }[];
@@ -68,6 +69,7 @@ export function InboxPage() {
         </Panel>
         {data && (
           <Panel title={b.mail}>
+            <PushRow />
             <ToggleRow id="notify-requests" label={b.notify} hint={b.notifyLead} checked={data.mail.notifyRequests} onChange={(v) => void setMail({ notifyRequests: v })} />
             <ToggleRow id="weekly-report" label={b.weekly} hint={b.weeklyLead} checked={data.mail.weeklyReport} onChange={(v) => void setMail({ weeklyReport: v })} />
           </Panel>
