@@ -1,0 +1,61 @@
+/* Выбор главы */
+
+.sr-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-height: 100%;
+  padding: 8px 16px 28px;
+}
+
+.sr-hero {
+  width: clamp(110px, 24vmin, 180px);
+  animation: sr-hop 1.6s ease-in-out infinite;
+}
+
+.sr-lead {
+  margin: 0;
+  max-width: 560px;
+  font-size: clamp(20px, 4vmin, 28px);
+  font-weight: 800;
+  text-align: center;
+}
+
+.sr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  width: min(760px, 100%);
+}
+
+.sr-chapter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 12px;
+  border: 0;
+  border-radius: 28px;
+  background: var(--sr-tile);
+  box-shadow: 0 6px 0 #d8cbb4, 0 10px 20px rgb(0 0 0 / 0.1);
+  font-size: clamp(18px, 3.4vmin, 24px);
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sr-chapter:active {
+  transform: translateY(3px);
+}
+
+.sr-chapter-art {
+  font-size: clamp(48px, 10vmin, 72px);
+  line-height: 1;
+}
+
+.sr-stars {
+  color: #ffb020;
+  font-size: 26px;
+  letter-spacing: 2px;
+}
