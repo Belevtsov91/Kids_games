@@ -1,0 +1,156 @@
+/* Кухня: слева Тёпа и заказ, в центре пицца, справа нож, начинки и кнопки. На телефоне — столбиком. */
+
+.pz-kitchen {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(280px, 1.4fr) minmax(240px, 1fr);
+  gap: 16px;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+}
+
+.pz-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.pz-col-pizza {
+  align-items: center;
+}
+
+.pz-talk {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.pz-chef svg {
+  display: block;
+  width: 84px;
+  height: auto;
+}
+
+.pz-chef {
+  flex: none;
+  animation: pz-bob 2.6s ease-in-out infinite;
+}
+
+.pz-bubble {
+  position: relative;
+  flex: 1;
+  margin: 0 0 24px;
+  padding: 10px 14px;
+  border-radius: 18px 18px 18px 4px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+  font-size: clamp(15px, 2.4vmin, 18px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.pz-bubble:empty {
+  visibility: hidden;
+}
+
+.pz-panel-title {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.pz-knife,
+.pz-tray {
+  padding: 12px;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 0.85);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.08);
+}
+
+.pz-knife-note {
+  margin: 0;
+  color: var(--pz-soft);
+  font-weight: 700;
+}
+
+.pz-knife-row,
+.pz-tray-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pz-chip,
+.pz-topping {
+  min-width: 48px;
+  height: 48px;
+  border: 3px solid transparent;
+  border-radius: 14px;
+  background: #fff3e4;
+  font-size: 20px;
+  font-weight: 900;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.pz-topping {
+  font-size: 26px;
+  background: color-mix(in srgb, var(--pz-sauce, #eee) 35%, #fff);
+}
+
+.pz-chip.is-on,
+.pz-topping.is-on {
+  border-color: var(--pz-accent);
+  box-shadow: 0 0 0 3px rgb(255 122 61 / 0.25);
+  transform: translateY(-2px);
+}
+
+.pz-knife-slot.is-nudge {
+  animation: pz-shake 0.5s ease;
+}
+
+.pz-col-tools .pz-actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
+  .pz-kitchen {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+  }
+
+  /* Тёпа с подсказкой прилипает сверху, чтобы ответ был виден и у кнопки «В печь». */
+  .pz-col-order {
+    display: contents;
+  }
+
+  .pz-talk {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 4px 0;
+    background: linear-gradient(#ffcfa9 75%, transparent);
+  }
+
+  .pz-chef svg {
+    width: 56px;
+  }
+
+  .pz-bubble {
+    margin-bottom: 8px;
+  }
+
+  .pz-col-pizza {
+    order: 1;
+  }
+
+
+  .pz-col-tools {
+    order: 2;
+  }
+
+  .pz-col-tools .pz-actions {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,62 @@
+/* Анимации */
+
+@keyframes pz-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pz-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pz-hop {
+  0%, 100% { translate: 0 0; }
+  40% { translate: 0 -18%; }
+}
+
+@keyframes pz-shake {
+  0%, 100% { translate: 0 0; }
+  25% { translate: -8px 0; }
+  50% { translate: 8px 0; }
+  75% { translate: -4px 0; }
+}
+
+@keyframes pz-boing {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.25, 0.85); }
+  70% { transform: scale(0.92, 1.1); }
+}
+
+@keyframes pz-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 196 0 / 0.9); }
+  50% { box-shadow: 0 0 0 10px rgb(255 196 0 / 0.25); }
+}
+
+@keyframes pz-fade {
+  from { opacity: 0; }
+}
+
+@keyframes pz-bake {
+  0% { transform: scale(1); filter: none; }
+  40% { transform: scale(0.82) translateY(-6%); filter: brightness(1.15) saturate(1.2); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 12px #ffb347); }
+}
+
+@keyframes pz-flicker {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.15) translateY(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pz-hero,
+  .pz-chef,
+  .pz-flame,
+  .pz-board.is-shake,
+  .pz-kitchen.is-served .pz-pizza,
+  .pz-knife-slot.is-nudge {
+    animation: none;
+    transition: none;
+  }
+}
+

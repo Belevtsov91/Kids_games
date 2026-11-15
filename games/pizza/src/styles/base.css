@@ -1,0 +1,95 @@
+/* Основа. Все классы с префиксом pz-, чтобы не задеть оболочку и другие игры. */
+
+.pz {
+  --pz-ink: #2b2d42;
+  --pz-soft: #5c6178;
+  --pz-accent: #ff7a3d;
+  --pz-accent-dark: #e85d1f;
+  --pz-tile: #fff8ec;
+  --pz-tile-alt: #ffeccc;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--pz-ink);
+  font-family: ui-rounded, 'SF Pro Rounded', 'Segoe UI Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse 70% 30% at 50% 108%, #a7d96b 0 60%, #8cc552 60.5% 100%, transparent 100.5%),
+    radial-gradient(ellipse 20% 8% at 8% 22%, #fff9 0 99%, transparent 100%),
+    radial-gradient(ellipse 16% 6% at 90% 14%, #fff8 0 99%, transparent 100%),
+    linear-gradient(#ffd3b0, #ffbf94);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pz [hidden] {
+  display: none !important;
+}
+
+:where(.pz) button {
+  font: inherit;
+  color: inherit;
+}
+
+.pz-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 4px calc(max(12px, env(safe-area-inset-left)) + 64px);
+}
+
+.pz-title {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(20px, 4.2vmin, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #fff;
+}
+
+.pz-badge:empty {
+  display: none;
+}
+
+.pz-badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.12);
+  font-weight: 800;
+  font-size: clamp(14px, 2.6vmin, 18px);
+  white-space: nowrap;
+}
+
+.pz-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.pz-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Удобство от взрослого: меньше движения и крупные кнопки */
+.pz.pz-calm *,
+.pz.pz-calm *::before,
+.pz.pz-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.pz.pz-big button {
+  zoom: 1.15;
+}

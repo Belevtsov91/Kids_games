@@ -1,0 +1,9 @@
+/* Стили «Пиццерии дробей». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './start.css';
+@import './kitchen.css';
+@import './ticket.css';
+@import './pizza.css';
+@import './win.css';
+@import './animations.css';
