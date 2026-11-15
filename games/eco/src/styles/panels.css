@@ -1,0 +1,181 @@
+.eco-meter,
+.eco-chart-box {
+  padding: 10px 12px;
+  border-radius: var(--eco-radius);
+  background: var(--eco-card);
+}
+.eco-meter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+.eco-meter-label,
+.eco-chart-title {
+  font-size: 0.85em;
+  font-weight: 800;
+  color: var(--eco-soft);
+  margin-bottom: 4px;
+}
+.eco-meter-bar {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  background: #e8ecf5;
+}
+.eco-meter-bar::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--eco-ink);
+}
+.eco-meter-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  transition: width 0.3s, left 0.3s;
+}
+.eco-meter-fill.is-plus {
+  background: var(--eco-green);
+}
+.eco-meter-fill.is-minus {
+  background: #ffa94d;
+}
+.eco-meter-fill.is-dark {
+  background: var(--eco-red);
+}
+.eco-meter-nums {
+  margin-top: 4px;
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+.eco-meter-battery {
+  text-align: center;
+}
+.eco-gauge {
+  position: relative;
+  width: 56px;
+  height: 48px;
+  margin: 0 auto;
+  border-radius: 10px;
+  background: #e8ecf5;
+  overflow: hidden;
+}
+.eco-gauge-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #5be36b;
+  transition: height 0.3s;
+}
+.eco-gauge-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.8em;
+  font-weight: 800;
+}
+.eco-chart-svg {
+  height: auto !important;
+}
+.eco-ch-night {
+  fill: #dfe3f4;
+}
+.eco-ch-dark {
+  fill: rgba(255, 93, 108, 0.3);
+}
+.eco-ch-sun {
+  fill: var(--eco-sun);
+}
+.eco-ch-wind {
+  fill: var(--eco-wind);
+}
+.eco-ch-demand {
+  fill: none;
+  stroke: var(--eco-ink);
+  stroke-width: 2.5;
+}
+.eco-ch-charge {
+  fill: none;
+  stroke: var(--eco-green);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+}
+.eco-ch-cursor {
+  fill: none;
+  stroke: #ff7a59;
+  stroke-width: 2;
+}
+.eco-ch-label {
+  font-size: 10px;
+  fill: var(--eco-soft);
+}
+.eco-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+  font-size: 0.8em;
+}
+.eco-legend i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: -6px;
+  border-radius: 3px;
+}
+.eco-legend .sun {
+  background: var(--eco-sun);
+}
+.eco-legend .wind {
+  background: var(--eco-wind);
+}
+.eco-legend .demand {
+  height: 3px;
+  background: var(--eco-ink);
+}
+.eco-legend .charge {
+  height: 3px;
+  background: var(--eco-green);
+}
+.eco-palette {
+  display: flex;
+  gap: 8px;
+}
+.eco-tool {
+  display: grid;
+  grid-template-columns: 40px auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 16px;
+  background: var(--eco-card);
+  border: 3px solid transparent !important;
+  text-align: left;
+}
+.eco-tool.is-active {
+  border-color: var(--eco-green) !important;
+  background: #f0ffe9;
+}
+.eco-tool.is-poor {
+  opacity: 0.5;
+}
+.eco-tool-art {
+  grid-row: span 2;
+  height: 40px;
+  border-radius: 10px;
+  background: #cfe9ff;
+}
+.eco-tool-name {
+  font-weight: 800;
+}
+.eco-tool-cost {
+  font-size: 0.85em;
+}

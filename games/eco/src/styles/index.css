@@ -1,0 +1,6 @@
+/* «Эко-город». Все классы с префиксом eco-, чтобы не задеть оболочку и другие игры. */
+@import './base.css';
+@import './menu.css';
+@import './play.css';
+@import './island.css';
+@import './panels.css';
