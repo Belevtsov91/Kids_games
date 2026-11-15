@@ -1,0 +1,203 @@
+/* Программа: команды, блоки «повтори» и «если», палитра и кнопки */
+
+.rk-program {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(480px, 100%);
+  padding: 14px;
+  border-radius: 28px;
+  background: rgb(255 255 255 / 0.88);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.1);
+}
+
+.rk-program-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 40px;
+}
+
+.rk-counter {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.rk-tip {
+  color: var(--rk-soft);
+  font-size: 13px;
+}
+
+.rk-code,
+.rk-block-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.rk-code {
+  min-height: 60px;
+  padding: 6px;
+  border-radius: 18px;
+  outline: 3px solid transparent;
+}
+
+.rk-code.is-target,
+.rk-block.is-target {
+  outline: 3px solid #ffc94a;
+}
+
+.rk-chip,
+.rk-slot {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.rk-chip {
+  border: 0;
+  background: #fff;
+  box-shadow: 0 4px 0 #cfd6e6;
+  cursor: pointer;
+}
+
+.rk-slot {
+  border: 3px dashed #cfd6e6;
+}
+
+.rk-chip.is-active,
+.rk-block.is-active > .rk-block-head {
+  background: #ffe27a;
+  transform: translateY(-3px);
+}
+
+.rk-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 120px;
+  padding: 6px;
+  border-radius: 16px;
+  background: #ffe9cf;
+}
+
+.rk-block.is-if {
+  background: #dcf3d6;
+}
+
+.rk-block-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 12px;
+}
+
+.rk-block-icon,
+.rk-block-param,
+.rk-block-del {
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 0 rgb(0 0 0 / 0.12);
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.rk-block-icon {
+  width: 44px;
+}
+
+.rk-block-param {
+  min-width: 48px;
+  padding: 0 8px;
+  color: var(--rk-accent-dark);
+}
+
+.rk-block-del {
+  width: 32px;
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--rk-soft);
+}
+
+.rk-block-body {
+  min-height: 48px;
+  padding: 4px 4px 4px 10px;
+  border-left: 4px solid rgb(0 0 0 / 0.12);
+}
+
+.rk-empty {
+  align-self: center;
+  color: var(--rk-soft);
+  font-size: 13px;
+}
+
+.rk-palette {
+  display: grid;
+  grid-template-columns: repeat(var(--rk-tools, 3), 1fr);
+  gap: 10px;
+}
+
+.rk-tool {
+  min-height: 64px;
+  border: 0;
+  border-radius: 20px;
+  background: #e7f3ff;
+  box-shadow: 0 5px 0 #b9d6f5;
+  font-size: 34px;
+  font-weight: 900;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.rk-tool.is-loop {
+  background: #ffe9cf;
+  box-shadow: 0 5px 0 #f2c48f;
+}
+
+.rk-tool.is-if {
+  background: #dcf3d6;
+  box-shadow: 0 5px 0 #a9d99c;
+}
+
+.rk-tool:active {
+  transform: translateY(3px);
+}
+
+.rk-tool:disabled {
+  opacity: 0.4;
+}
+
+.rk-chip.is-hint,
+.rk-tool.is-hint {
+  animation: rk-pulse 1s ease-in-out infinite;
+}
+
+.rk-tools {
+  display: flex;
+  gap: 10px;
+}
+
+.rk-tools .rk-btn-play {
+  flex: 1;
+}
+
+.rk-program.is-busy :is(.rk-tool, .rk-btn-soft) {
+  opacity: 0.5;
+}
+
+.rk-program.is-busy :is(.rk-tool, .rk-btn-soft, .rk-code) {
+  pointer-events: none;
+}
+
+.rk-tools .rk-btn-play {
+  white-space: nowrap;
+}

@@ -1,0 +1,159 @@
+/* Остров: клетки на CSS-сетке, робот, посылки и друзья поверх по координатам --rk-x / --rk-y */
+
+.rk-play {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 28px;
+  min-height: 100%;
+  padding: 8px 16px 24px;
+}
+
+.rk-board {
+  --rk-cell: min(calc((100vw - 56px) / var(--rk-cols)), calc(44vh / var(--rk-rows)), 84px);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--rk-cols), var(--rk-cell));
+  grid-template-rows: repeat(var(--rk-rows), var(--rk-cell));
+  padding: 10px;
+  border-radius: 28px;
+  background: #8fcf5a;
+  box-shadow: inset 0 -10px 0 #9b6a3c, 0 14px 28px rgb(40 90 140 / 0.25);
+}
+
+.rk-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 1px;
+  border-radius: 8px;
+  background: var(--rk-tile);
+  font-size: calc(var(--rk-cell) * 0.62);
+}
+
+.rk-cell.is-alt {
+  background: var(--rk-tile-alt);
+}
+
+.rk-cell.is-water {
+  background: #7cc8f2;
+}
+
+.rk-wave {
+  font-size: calc(var(--rk-cell) * 0.36);
+  opacity: 0.7;
+}
+
+.rk-tree {
+  filter: drop-shadow(0 4px 2px rgb(0 0 0 / 0.2));
+}
+
+.rk-item,
+.rk-robot {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: grid;
+  place-items: center;
+  width: var(--rk-cell);
+  height: var(--rk-cell);
+  font-size: calc(var(--rk-cell) * 0.56);
+  transform: translate(calc(var(--rk-x) * var(--rk-cell)), calc(var(--rk-y) * var(--rk-cell)));
+  pointer-events: none;
+}
+
+.rk-parcel {
+  transition: opacity 0.25s, scale 0.25s;
+}
+
+.rk-parcel.is-picked {
+  opacity: 0;
+  scale: 1.6;
+}
+
+.rk-friend {
+  font-size: calc(var(--rk-cell) * 0.66);
+}
+
+.rk-heart {
+  position: absolute;
+  right: 2%;
+  top: 0;
+  font-size: calc(var(--rk-cell) * 0.32);
+  font-style: normal;
+  opacity: 0;
+  scale: 0.3;
+  transition: opacity 0.3s, scale 0.3s;
+}
+
+.rk-friend.is-served {
+  animation: rk-boing 0.6s ease 2;
+}
+
+.rk-friend.is-served .rk-heart {
+  opacity: 1;
+  scale: 1;
+}
+
+.rk-robot {
+  z-index: 2;
+  transition: transform 0.34s cubic-bezier(.4,1.4,.6,1);
+}
+
+.rk-robot-face {
+  font-size: calc(var(--rk-cell) * 0.62);
+  filter: drop-shadow(0 6px 4px rgb(0 0 0 / 0.25));
+}
+
+/* Стрелка «куда смотрит робот» вращается вокруг центра клетки */
+.rk-facing {
+  position: absolute;
+  inset: 0;
+  transition: rotate 0.3s ease;
+}
+
+.rk-pointer {
+  position: absolute;
+  top: -2%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  translate: -50% 0;
+  border-left: calc(var(--rk-cell) * 0.14) solid transparent;
+  border-right: calc(var(--rk-cell) * 0.14) solid transparent;
+  border-bottom: calc(var(--rk-cell) * 0.18) solid #ff7a3d;
+  filter: drop-shadow(0 1px 0 #fff);
+}
+
+.rk-bag {
+  position: absolute;
+  right: -4%;
+  bottom: 0;
+  font-size: calc(var(--rk-cell) * 0.24);
+  white-space: nowrap;
+}
+
+.rk-robot.is-bump .rk-robot-face {
+  display: inline-block;
+  animation: rk-shake 0.45s ease;
+}
+
+.rk-robot.is-happy .rk-robot-face {
+  display: inline-block;
+  animation: rk-hop 0.6s ease 3;
+}
+
+/* На узком экране остров прилипает сверху: робот виден, даже когда программа длинная */
+@media (max-width: 720px) {
+  .rk-play {
+    padding-top: 0;
+  }
+
+  .rk-board {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    --rk-cell: min(calc((100vw - 56px) / var(--rk-cols)), calc(34vh / var(--rk-rows)), 72px);
+  }
+}
