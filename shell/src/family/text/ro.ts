@@ -17,6 +17,18 @@ export const ro: FamilyText = {
     tap: 'Apasă pe ursuleț și îți spune din nou.',
     label: 'Ursulețul Tiopa',
   },
+  quest: {
+    title: 'Misiunea zilei',
+    task: (game: string, m: number) => `Joacă ${m} min „${game}”`,
+    left: (m: number) => `Mai sunt ${m} min`,
+    done: 'Misiune îndeplinită! Tiopa se bucură.',
+    go: 'Joacă',
+    streak: (n: number) => `Zile la rând: ${n}`,
+    toGift: (n: number) => `Mai sunt zile până la cadoul lui Tiopa: ${n}`,
+    calm: 'Ai sărit o zi? Nu-i nimic: cadourile se strâng oricum.',
+    gifts: 'Lucrurile lui Tiopa',
+    items: ['fular', 'pălărie', 'ochelari', 'fundiță', 'coroană', 'rucsac', 'zmeu', 'balon', 'steluță', 'bicicletă', 'chitară', 'rachetă'],
+  },
   plan: {
     title: 'Planul de azi',
     done: 'Jucat',

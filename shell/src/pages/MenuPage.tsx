@@ -10,6 +10,7 @@ import { FeaturedPortal, GamePortal } from '@/dashboard/Portal';
 import { ProfileMenu } from '@/dashboard/ProfileMenu';
 import { lastGame } from '@/dashboard/lastPlayed';
 import { listToday } from '@/family/daily';
+import { DailyQuest } from '@/family/DailyQuest';
 import { DayPlan } from '@/family/DayPlan';
 import { Mascot } from '@/family/Mascot';
 import { OfflineTask } from '@/family/OfflineTask';
@@ -105,6 +106,7 @@ export function MenuPage() {
           <section className="family-row dash-wrap">
             <Mascot childId={activeChild.id} name={activeChild.name} plan={plan.length} played={playedPlan} note={note} />
             <DayPlan plan={plan} played={played} onPlay={play} />
+            <DailyQuest games={available} onPlay={play} />
             {last && <OfflineTask childId={activeChild.id} game={last} onDone={setNote} />}
           </section>
         )}

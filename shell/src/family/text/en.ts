@@ -17,6 +17,18 @@ export const en: FamilyText = {
     tap: 'Tap the bear and he will say it again.',
     label: 'Tyopa the bear',
   },
+  quest: {
+    title: 'Quest of the day',
+    task: (game: string, m: number) => `Play “${game}” for ${m} min`,
+    left: (m: number) => `${m} min to go`,
+    done: 'Quest done! Tyopa is happy.',
+    go: 'Play',
+    streak: (n: number) => `Days in a row: ${n}`,
+    toGift: (n: number) => `Days until Tyopa’s next gift: ${n}`,
+    calm: 'Missed a day? That’s fine: gifts still add up.',
+    gifts: 'Tyopa’s things',
+    items: ['scarf', 'hat', 'glasses', 'bow', 'crown', 'backpack', 'kite', 'balloon', 'little star', 'bike', 'guitar', 'rocket'],
+  },
   plan: {
     title: "Today's plan",
     done: 'Played',

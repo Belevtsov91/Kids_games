@@ -4,6 +4,7 @@ import { db } from '../../db/index.js';
 import { accessOf, rulesOf, settingsOf, statsOf, timeOf, zoneOf } from './childData.js';
 import { beatSeconds, localNow } from './timeRules.js';
 import { notifyRequest } from '../notify/notify.js';
+import { questRoutes } from './quest.routes.js';
 
 // Страницы ребёнка: сколько осталось играть, «пульс» игры, просьба о времени, своя статистика.
 // Ребёнок берётся только из сессии; родительский кабинет для этого не нужен.
@@ -70,6 +71,7 @@ async function statusOf(childId: string, parentId: string, tz?: string) {
 
 export const kidRoutes: FastifyPluginAsync = async (app) => {
   app.addHook('preHandler', requireChild);
+  await app.register(questRoutes);
 
   app.get<{ Querystring: { tz?: string } }>('/status', { schema: { querystring: tzQuery } }, async (req) =>
     statusOf(req.session!.activeChildId!, req.session!.parentId, req.query.tz),
