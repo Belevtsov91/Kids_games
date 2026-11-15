@@ -1,0 +1,5 @@
+/* «Который час». Все классы с префиксом wc-, чтобы не задеть оболочку и другие игры. */
+@import './base.css';
+@import './scene.css';
+@import './tower.css';
+@import './screens.css';
