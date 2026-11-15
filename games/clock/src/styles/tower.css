@@ -1,0 +1,32 @@
+/* Башня и стрелки. Стрелки вращаются вокруг центра циферблата (150, 190 в координатах SVG). */
+.wc-tower {
+  position: absolute;
+  left: max(4vw, 12vmin); bottom: 16vmin;
+  height: min(68vh, 82vmin); aspect-ratio: 300 / 440;
+  filter: drop-shadow(0 8px 10px rgba(59, 42, 74, 0.18));
+}
+.wc-tower.is-live { cursor: grab; }
+.wc-nums text, .wc-mins text {
+  text-anchor: middle; dominant-baseline: central;
+  font-family: ui-rounded, 'Nunito', system-ui, sans-serif; font-weight: 800;
+}
+.wc-nums text { font-size: 22px; fill: #3b2a4a; }
+.wc-mins text { font-size: 11px; fill: #fff; }
+.wc-hand {
+  transform-box: view-box;
+  transform-origin: 150px 190px;
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.6, 1);
+}
+.wc-hand-hour rect:first-child { fill: #3b2a4a; }
+.wc-hand-minute rect:first-child { fill: #e2554f; }
+.wc-hit { fill: transparent; }
+.wc-tower.is-live .wc-hand { transition-duration: 0.12s; }
+.wc-hand.is-grabbed rect:first-child { filter: drop-shadow(0 0 4px #ffd23f); }
+.wc-hand.is-flash rect:first-child { animation: wc-flash 0.6s ease 3; }
+@keyframes wc-flash {
+  50% { fill: #ffb800; }
+}
+
+@media (orientation: portrait) {
+  .wc-tower { left: 50%; transform: translateX(-50%); top: 9vh; bottom: auto; height: min(52vh, 120vw); }
+}

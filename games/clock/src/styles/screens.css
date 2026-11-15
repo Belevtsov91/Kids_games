@@ -1,0 +1,32 @@
+/* Экран выбора уровня и экран конца дня. */
+.wc-screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3vmin; padding: 4vmin;
+  background: linear-gradient(#ffd6a8, #fff3e0);
+}
+.wc-finale { background: linear-gradient(#2f3470, #6a5ea8); color: #fff; }
+.wc-days {
+  font-size: var(--wc-font); font-weight: 800;
+  background: rgba(255, 255, 255, 0.7); color: var(--wc-ink);
+  border-radius: 99px; padding: 1vmin 3vmin;
+}
+.wc-bear-start { width: 34vmin; height: 40vmin; }
+.wc-levels {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.4vmin;
+  width: min(92vw, 110vmin);
+}
+.wc-level {
+  min-height: var(--wc-btn); border-radius: 3vmin; padding: 1vmin 2vmin;
+  background: #fff; font-size: var(--wc-font); font-weight: 800;
+  box-shadow: 0 6px 0 #e2cdb8, 0 10px 18px rgba(59, 42, 74, 0.15);
+}
+.wc-level.is-current { background: var(--wc-accent); color: #fff; box-shadow: 0 6px 0 #d9774d; animation: wc-bob 2.4s ease-in-out infinite; }
+.wc-level.is-locked { opacity: 0.5; }
+.wc-prizes { display: flex; gap: 2vmin; font-size: 10vmin; min-height: 10vmin; }
+.wc-prize { animation: wc-pop 0.6s ease both; }
+.wc-prize:nth-child(2) { animation-delay: 0.2s; }
+.wc-prize:nth-child(3) { animation-delay: 0.4s; }
+.wc-prize:nth-child(4) { animation-delay: 0.6s; }
+.wc-finale-text { margin: 0; font-size: var(--wc-font); font-weight: 800; text-align: center; max-width: 90vw; }
+.wc-buttons { display: flex; gap: 4vmin; }
