@@ -1,0 +1,21 @@
+/* Телефон и «меньше движения». */
+@media (max-width: 760px) {
+  .cp-modes { grid-template-columns: 1fr; }
+  .cp-mode { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .cp-mode-about { flex-basis: 100%; }
+  .cp-hero { max-height: 30vh; }
+  .cp-bear { font-size: 34px; }
+  .cp-bubble { font-size: 15px; }
+  .cp-tile { width: 38px; height: 44px; font-size: 22px; }
+  .cp-choices { grid-template-columns: 1fr; }
+  .cp-lighthouse { height: min(200px, 28vh); transform: scale(.85); }
+  .cp-round { gap: 14px; }
+}
+@media (max-height: 520px) and (min-aspect-ratio: 4/3) {
+  .cp-hero { display: none; }
+  .cp-round { flex-wrap: nowrap; }
+}
+.cp-root.is-calm *, .cp-root.is-calm *::before, .cp-root.is-calm *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .cp-root *, .cp-root *::before, .cp-root *::after { animation: none !important; transition-duration: 0s !important; }
+}

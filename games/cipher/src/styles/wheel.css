@@ -1,0 +1,17 @@
+/* Колесо Цезаря: золотой обод с буквами шифровки и бирюзовый диск с настоящими буквами. */
+.cp-wheel-box { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 0 1 auto; }
+.cp-wheel { width: min(78vw, 46vh, 360px); height: auto; filter: drop-shadow(0 8px 0 #0004); }
+.cp-wheel-rim { fill: var(--gold); stroke: #e0a92a; stroke-width: 4; }
+.cp-wheel-tick { fill: none; stroke: #b07e10; stroke-width: 10; opacity: .35; }
+.cp-wheel-out { fill: var(--ink); font-weight: 800; }
+.cp-wheel-out.is-marked { fill: #7a2fd0; font-weight: 900; paint-order: stroke; stroke: #fff6; stroke-width: 5px; }
+.cp-wheel-inner { transform-box: view-box; transform-origin: 50% 50%; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
+.cp-wheel-disc { fill: var(--sea); stroke: #2f9a7c; stroke-width: 4; }
+.cp-wheel-in { fill: #fff; font-weight: 800; }
+.cp-wheel-pin { fill: var(--red); }
+.cp-wheel-pointer { fill: var(--red); }
+.cp-wheel-controls { display: flex; align-items: center; gap: 14px; }
+.cp-shift { min-width: 110px; text-align: center; font-weight: 800; font-size: 18px; background: #ffffff22; padding: 8px 12px; border-radius: 12px; }
+.cp-key { font-size: 20px; font-weight: 800; padding: 4px 14px; border-radius: 999px; background: #ffe9a8; }
+.cp-key.is-lost { background: #ffd3d8; }
+.cp-wheel-round.is-solved .cp-tile.is-plain { background: #b8f5d6; }

@@ -1,0 +1,47 @@
+/* Мешок писем: шапка с прогрессом, Тёпа с подсказкой, письмо, карточка разгадки, итог. */
+.cp-progress { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 14px; font-weight: 700; }
+.cp-dots { display: flex; gap: 5px; }
+.cp-dots span { width: 12px; height: 12px; border-radius: 50%; background: #ffffff40; }
+.cp-dots span.is-done { background: var(--lamp); }
+
+.cp-teller { display: flex; align-items: center; gap: 16px; width: min(100%, 960px); align-self: center; }
+.cp-teller .cp-bubble { flex: 1; }
+
+.cp-stage { position: relative; flex: 1; display: flex; justify-content: center; min-height: 0; }
+.cp-round { display: flex; gap: 20px; align-items: center; justify-content: center; width: min(100%, 960px); flex-wrap: wrap; }
+.cp-side { display: flex; flex-direction: column; gap: 14px; align-items: stretch; flex: 1 1 300px; max-width: 460px; }
+.cp-envelope {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 20px;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 6px 0 #0003;
+  position: relative;
+}
+
+.cp-reveal { position: absolute; inset: 0; display: grid; place-items: center; background: #140f3dcc; animation: cp-fade .25s ease-out; z-index: 2; border-radius: 20px; }
+.cp-reveal-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 32px; border-radius: 24px; background: var(--paper); color: var(--ink); text-align: center; animation: cp-pop .35s cubic-bezier(.2, 1.6, .4, 1); }
+.cp-reveal-card p { margin: 0 0 6px; font-size: 18px; font-weight: 700; }
+.cp-reveal-emoji { font-size: 72px; line-height: 1; }
+.cp-reveal-word { font-size: 34px; font-weight: 900; letter-spacing: 3px; }
+
+.cp-done { align-items: center; justify-content: center; }
+.cp-done-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 28px 36px; border-radius: 28px; background: var(--paper); color: var(--ink); text-align: center; box-shadow: 0 10px 30px #0006; max-width: 440px; }
+.cp-done-card h2 { margin: 0; font-size: 28px; }
+.cp-done-card p { margin: 0; font-size: 17px; }
+.cp-done-mail { font-size: 72px; line-height: 1; }
+.cp-stars { display: flex; gap: 6px; font-size: 40px; }
+.cp-stars span { filter: grayscale(1) opacity(.35); }
+.cp-stars span.is-on { filter: none; animation: cp-pop .4s backwards; }
+.cp-stars span:nth-child(2) { animation-delay: .12s; }
+.cp-stars span:nth-child(3) { animation-delay: .24s; }
+.cp-done-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+.cp-done-actions .cp-ghost { background: #6a4fd022; color: var(--ink); }
+
+@keyframes cp-fade { from { opacity: 0; } }
+@keyframes cp-pop { from { transform: scale(.6); opacity: 0; } }
+@keyframes cp-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }

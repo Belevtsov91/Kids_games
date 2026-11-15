@@ -1,0 +1,8 @@
+/* Стили Тайной почты. Все классы с префиксом cp-. Порядок важен: адаптив и «меньше движения» в конце. */
+@import './base.css';
+@import './menu.css';
+@import './bag.css';
+@import './wheel.css';
+@import './lighthouse.css';
+@import './riddle.css';
+@import './responsive.css';
