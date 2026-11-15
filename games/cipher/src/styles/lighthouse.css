@@ -1,0 +1,26 @@
+/* Маяк: красно-белая башня, лампа загорается на каждый сигнал. */
+.cp-lh-scene { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 0 0 auto; }
+.cp-lighthouse { position: relative; width: 120px; height: min(300px, 40vh); display: flex; flex-direction: column; align-items: center; }
+.cp-lh-roof { width: 0; height: 0; border-left: 46px solid transparent; border-right: 46px solid transparent; border-bottom: 40px solid var(--red); z-index: 1; }
+.cp-lamp { width: 76px; height: 50px; background: #6a5d9e; border-radius: 8px; transition: background .05s, box-shadow .05s; z-index: 1; }
+.cp-lh-tower { flex: 1; width: 96px; display: flex; flex-direction: column; clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%); }
+.cp-lh-tower span { flex: 1; background: #fff; }
+.cp-lh-tower span:nth-child(odd) { background: var(--red); }
+.cp-beam { position: absolute; top: 44px; left: 50%; width: 460px; height: 70px; transform: translateX(-50%); background: radial-gradient(ellipse at center, #fff0a0aa 0, transparent 70%); opacity: 0; transition: opacity .05s; pointer-events: none; }
+.cp-lighthouse.is-on .cp-lamp { background: var(--lamp); box-shadow: 0 0 40px 14px #ffe066cc; }
+.cp-lighthouse.is-on .cp-beam { opacity: 1; }
+.cp-legend { font-size: 14px; opacity: .8; text-align: center; }
+
+.cp-signal { font-size: 36px; font-weight: 900; letter-spacing: 6px; min-height: 44px; color: var(--violet-dark); transition: opacity .2s; }
+.cp-signal.is-waiting { opacity: .25; }
+.cp-envelope .cp-ghost { background: #6a4fd01a; color: var(--ink); font-size: 16px; }
+.cp-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cp-letter { width: calc(var(--tap) + 14px); height: calc(var(--tap) + 14px); padding: 0; font-size: 30px; }
+.cp-letter.is-wrong, .cp-choice.is-wrong { background: #ffd3d8; opacity: .55; animation: cp-shake .3s; }
+
+.cp-book { background: #ffffff1a; border-radius: 16px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.cp-book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 4px 10px; }
+.cp-book-grid.is-full { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); font-size: 14px; }
+.cp-book-row { display: flex; gap: 8px; align-items: baseline; font-size: 18px; }
+.cp-book-row b { min-width: 20px; color: var(--lamp); }
+.cp-book-row span { letter-spacing: 2px; }

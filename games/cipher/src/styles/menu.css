@@ -1,0 +1,31 @@
+/* Почта: картинка острова, Тёпа и три режима. */
+.cp-hero { position: relative; border-radius: 24px; overflow: hidden; flex: none; max-height: 42vh; aspect-ratio: 3 / 2; align-self: center; width: min(100%, 640px); box-shadow: 0 10px 30px #0005; }
+.cp-hero-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cp-hero-say { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 14px; }
+.cp-hero-say .cp-bubble { flex: 1; }
+
+.cp-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: min(100%, 960px); align-self: center; }
+.cp-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  border: 0;
+  border-radius: 22px;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 5px 0 #0003;
+  cursor: pointer;
+  transition: transform .15s;
+}
+.cp-mode:hover { transform: translateY(-3px) rotate(-.5deg); }
+.cp-mode-wheel { background: linear-gradient(160deg, #fff6e6, #ffe9a8); }
+.cp-mode-lighthouse { background: linear-gradient(160deg, #fff6e6, #ffd3d8); }
+.cp-mode-riddle { background: linear-gradient(160deg, #fff6e6, #c9f3e4); }
+.cp-mode-icon { font-size: 40px; }
+.cp-mode-name { font-size: 20px; font-weight: 800; }
+.cp-mode-about { font-size: 15px; line-height: 1.35; opacity: .85; flex: 1; }
+.cp-mode-meta { display: flex; justify-content: space-between; width: 100%; font-size: 14px; margin-top: 4px; }
