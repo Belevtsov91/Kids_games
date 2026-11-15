@@ -1,0 +1,102 @@
+/* Верхняя панель: название, транспорт, действия. */
+
+.st-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 12px 20px;
+}
+
+.st-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.25);
+}
+
+.st-transport,
+.st-actions,
+.st-tempo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.st-actions {
+  margin-left: auto;
+}
+
+.st-btn,
+.st-select {
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 1px solid var(--panel-edge);
+  border-radius: 14px;
+  background: var(--panel);
+  font-weight: 800;
+  box-shadow: 0 3px 0 rgb(0 0 0 / 0.3);
+  transition: transform 0.08s, background 0.15s;
+}
+
+.st-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.3);
+}
+
+.st-select option {
+  color: #222;
+}
+
+.st-round {
+  width: var(--tap);
+  padding: 0;
+  font-size: 1.3rem;
+}
+
+.st-play {
+  min-width: 120px;
+  background: var(--teal);
+  color: var(--night);
+}
+
+.st-play.is-on {
+  background: var(--gold);
+}
+
+.st-rec.is-on {
+  background: var(--pink);
+  animation: st-blink 1s steps(2, start) infinite;
+}
+
+.st-toggle.is-on,
+.st-share.is-on {
+  background: var(--blue);
+}
+
+.st-accent {
+  background: var(--pink);
+}
+
+.st-danger.is-sure {
+  background: #e2455f;
+}
+
+.st-bpm {
+  min-width: 82px;
+  text-align: center;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.st-notes {
+  color: var(--muted);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes st-blink {
+  to { opacity: 0.65; }
+}

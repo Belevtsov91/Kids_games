@@ -1,0 +1,64 @@
+/* Тёпа в наушниках и облачко с подсказкой. */
+
+.st-tyopa {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.st-bear {
+  position: relative;
+  flex: 0 0 auto;
+  width: 132px;
+  height: 132px;
+  cursor: pointer;
+  transform-origin: 50% 90%;
+}
+
+.st-bear img {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.35));
+}
+
+.st-phones {
+  position: absolute;
+  left: 14%;
+  top: 2%;
+  width: 72%;
+  pointer-events: none;
+}
+
+.st-phones svg {
+  display: block;
+  width: 100%;
+}
+
+.st-bear.is-bob {
+  animation: st-bob 0.22s ease-out;
+}
+
+.st-bubble {
+  position: relative;
+  flex: 1;
+  margin: 0 0 30px;
+  padding: 10px 14px;
+  border-radius: 16px 16px 16px 4px;
+  background: #fff;
+  color: var(--night);
+  font-weight: 800;
+  line-height: 1.3;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+}
+
+.st-bubble.is-new {
+  animation: st-pop 0.25s ease-out;
+}
+
+@keyframes st-bob {
+  40% { transform: translateY(5px) rotate(-3deg); }
+}
+
+@keyframes st-pop {
+  from { transform: scale(0.92); }
+}

@@ -1,0 +1,94 @@
+/* Планшет и телефон: пульт сверху, редактор под ним, вся студия прокручивается. */
+
+@media (max-width: 860px) {
+  .st-root {
+    overflow-y: auto;
+    grid-template-rows: auto auto;
+  }
+
+  .st-main {
+    grid-template-columns: minmax(0, 1fr);
+    overflow: visible;
+    padding: 4px 16px 24px;
+  }
+
+  .st-left {
+    max-width: 460px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .st-actions {
+    margin-left: 0;
+  }
+
+  .st-cell {
+    height: 26px;
+  }
+
+  .st-bear {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 520px) {
+  .st-top {
+    padding: 10px 16px;
+  }
+
+  .st-title {
+    width: 100%;
+    font-size: 1.2rem;
+  }
+
+  .st-bear {
+    width: 76px;
+    height: 76px;
+  }
+
+  .st-bubble {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .st-pads {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .st-pad-name {
+    font-size: 0.8rem;
+  }
+
+  .st-matrix {
+    padding: 10px;
+  }
+
+  .st-row {
+    grid-template-columns: 52px repeat(16, minmax(14px, 1fr));
+    gap: 2px;
+  }
+
+  .st-row-label {
+    font-size: 0.7rem;
+    padding: 0 4px;
+    border-left-width: 4px;
+  }
+
+  .st-cell {
+    height: auto;
+    aspect-ratio: 1;
+    min-height: 14px;
+    border-radius: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-root *,
+  .st-root *::before,
+  .st-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
