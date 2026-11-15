@@ -50,6 +50,15 @@ export interface Family {
 export interface Game {
   id: string; title: string; emoji: string; kind: string; ages: { min: number; max: number }; skills: string[]; stickers: number;
   hasServer: boolean; serverOk: boolean; disabled: boolean; minutes: number; players: number; levels: number; answers: number; rightShare: number | null;
+  /** Где бросают чаще всего: level '' — до первого уровня; null — никто не бросил. */
+  quit: DropoffWorst | null;
+}
+
+export interface DropoffWorst { level: string; quit: number; share: number }
+export interface Dropoff {
+  players: number; active: number; quitBeforeFirst: number;
+  levels: { name: string; reached: number; quit: number }[];
+  worst: DropoffWorst | null;
 }
 
 export interface Retention {

@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { shellPrecache } from './precache.ts';
 
 /** Адрес сайта для превью ссылок (Open Graph любит абсолютные ссылки): VITE_SITE_URL, иначе относительные. */
 function siteUrl(mode: string): Plugin {
@@ -9,19 +10,22 @@ function siteUrl(mode: string): Plugin {
   return { name: 'site-url', transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', url) };
 }
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  const precache = shellPrecache();
+  return {
   plugins: [
     siteUrl(mode),
     react(),
+    precache.plugin,
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       workbox: {
-        // Заранее кэшируем только лёгкое (оболочка, 2D-игры, обложки). Тяжёлые 3D-куски (Rapier ~2,4 МБ)
-        // кэшируются при первом запуске игры (runtimeCaching ниже), а не качаются всем при первом визите.
+        // Заранее кэшируем только оболочку (см. precache.ts): с 30 играми полный precache весил ~22 МБ.
+        // Код и картинки игр кэшируются при первом запуске игры (runtimeCaching ниже).
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,svg,png,webp,ico,wasm}'],
-        globIgnores: ['**/react-three-rapier*.js', '**/three.module*.js', '**/*-cover-*.png'],
+        manifestTransforms: [precache.transform],
         // /api — всегда сервер: без этого навигация на /api/parent/export получила бы index.html из кэша.
         navigateFallbackDenylist: [/^\/api\//],
         // Push-уведомления взрослому (просьбы о времени): обработчики push и нажатий — в public/push-sw.js.
@@ -61,4 +65,5 @@ export default defineConfig(({ mode }) => ({
   test: {
     include: ['src/**/*.test.ts'],
   },
-}));
+  };
+});

@@ -18,7 +18,13 @@ const GAMES = [
 ].map(([id, emoji, title, min, max], i) => ({
   id, emoji, title, kind: 'local', ages: { min, max }, skills: ['logic'], stickers: 6, hasServer: id === 'chess', serverOk: true,
   disabled: false, minutes: 900 - i * 120, players: 40 - i * 5, levels: 300 - i * 40, answers: 800 - i * 90, rightShare: 0.6 + i * 0.05,
+  quit: i % 3 === 2 ? null : { level: i % 3 ? '' : String(3 + i), quit: 6 - i, share: 15 + i * 2 },
 }));
+const dropoff = (id) => {
+  const seed = id.length;
+  const levels = Array.from({ length: 8 }, (_, i) => ({ name: String(i + 1), reached: Math.max(1, 38 - i * (3 + seed % 3) - (i >= 3 ? 6 : 0)), quit: i === 3 ? 7 : (i + seed) % 3 }));
+  return { players: 40, active: 12, quitBeforeFirst: 2, levels, worst: { level: '4', quit: 7, share: 18 } };
+};
 const names = ['Анна', 'Олег', 'Ирина', 'Mihai', 'Olena', 'Sarah', 'Дмитрий', 'Ana', 'Тарас', 'Елена', 'John', 'Мария'];
 const FAMILIES = names.map((name, i) => ({
   id: uid(i + 1), name, email: `${name[0].toLowerCase()}***@gmail.com`, children: (i % 3) + 1, locale: ['ru', 'uk', 'ro', 'en'][i % 4],
@@ -81,6 +87,7 @@ const routes = [
   ['GET', /^\/overview$/, (_, q) => overview(Number(q.get('days') ?? 7))],
   ['GET', /^\/health$/, health],
   ['GET', /^\/games$/, () => GAMES.map((g) => ({ ...g, disabled: flags.disabled_games.includes(g.id) }))],
+  ['GET', /^\/games\/(\w+)\/dropoff$/, (_, __, m) => dropoff(m[1])],
   ['POST', /^\/games\/(\w+)\/(disable|enable)$/, (_, __, m) => ((flags.disabled_games = m[2] === 'disable' ? [...flags.disabled_games, m[1]] : flags.disabled_games.filter((x) => x !== m[1])), {})],
   ['GET', /^\/families$/, (_, q) => {
     const s = (q.get('q') ?? '').toLowerCase();
