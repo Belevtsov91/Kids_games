@@ -1,24 +1,28 @@
-/* Основа: цвета двух тем, шрифт, кнопки, поля. Тема: как в системе, либо выбранная вручную (data-theme на <html>). */
+/* Основа: тёплая палитра (мёд, ель, кофе, весна) в двух темах, шрифт, кнопки, поля. Тема: как в системе, либо выбранная вручную (data-theme на <html>). */
 :root {
-  --bg: #eef1f4; --panel: #fff; --panel2: #f6f8fa; --fg: #18212b; --muted: #5c6876; --line: #d9dfe6;
-  --accent: #1f5fbf; --accent-soft: #e3edfb; --on-accent: #fff;
-  --ok: #1a7f4e; --ok-soft: #e0f3e8; --warn: #a86400; --warn-soft: #fbefd6; --bad: #b3261e; --bad-soft: #fbe4e2;
+  --bg: #FCF1DC; --panel: #FFF9EE; --panel2: #F6E7CB; --fg: #43281A; --muted: #8A5A3B; --line: #EAD5B0;
+  --accent: #F0A830; --accent-ink: #94560A; --accent-soft: #FBE3B4; --on-accent: #43281A;
+  --head: #3E5B3A; --rail: #3E5B3A; --rail-fg: #EFE4C8; --rail-muted: #C3CDAE; --rail-hover: #4A6A45; --chart: #A9B83E;
+  --ok: #4F7A2A; --ok-soft: #E6EDD2; --warn: #9C560C; --warn-soft: #FBE2BE; --bad: #A8401F; --bad-soft: #F7DACC; --info: #7A8A6A;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
   color-scheme: light;
 }
+/* Тёмная тема — кофейная: те же янтарь, оливка и ель, но на тёмно-коричневом. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0f1419; --panel: #182029; --panel2: #1e2833; --fg: #e4e9ef; --muted: #93a0af; --line: #2a3643;
-    --accent: #6ea4f4; --accent-soft: #1c2f4a; --on-accent: #0f1419;
-    --ok: #5ccb8f; --ok-soft: #17321f; --warn: #e6b052; --warn-soft: #3a2c10; --bad: #f08a82; --bad-soft: #3d1b19;
+    --bg: #221A13; --panel: #30261C; --panel2: #3A2E22; --fg: #F6E6C8; --muted: #CBAA82; --line: #4A3C2C;
+    --accent: #F0A830; --accent-ink: #F0A830; --accent-soft: #4A3820; --on-accent: #2A1A0C;
+    --head: #B9CFA4; --rail: #1B140E; --rail-fg: #F6E6C8; --rail-muted: #B8A27F; --rail-hover: #30261C; --chart: #A9B83E;
+    --ok: #8DBA5A; --ok-soft: #2E3720; --warn: #F0A040; --warn-soft: #44301A; --bad: #E2805E; --bad-soft: #45251B; --info: #A3B091;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0f1419; --panel: #182029; --panel2: #1e2833; --fg: #e4e9ef; --muted: #93a0af; --line: #2a3643;
-  --accent: #6ea4f4; --accent-soft: #1c2f4a; --on-accent: #0f1419;
-  --ok: #5ccb8f; --ok-soft: #17321f; --warn: #e6b052; --warn-soft: #3a2c10; --bad: #f08a82; --bad-soft: #3d1b19;
+  --bg: #221A13; --panel: #30261C; --panel2: #3A2E22; --fg: #F6E6C8; --muted: #CBAA82; --line: #4A3C2C;
+  --accent: #F0A830; --accent-ink: #F0A830; --accent-soft: #4A3820; --on-accent: #2A1A0C;
+  --head: #B9CFA4; --rail: #1B140E; --rail-fg: #F6E6C8; --rail-muted: #B8A27F; --rail-hover: #30261C; --chart: #A9B83E;
+  --ok: #8DBA5A; --ok-soft: #2E3720; --warn: #F0A040; --warn-soft: #44301A; --bad: #E2805E; --bad-soft: #45251B; --info: #A3B091;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -31,7 +35,8 @@ h1, h2, h3, p { margin: 0; }
 
 .btn { border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 6px 11px; cursor: pointer; font-weight: 500; }
 .btn:hover:not(:disabled) { border-color: var(--accent); }
-.btn.pri { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.pri:hover:not(:disabled) { filter: brightness(1.05); }
+.btn.pri { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
 .btn.dng { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--line)); }
 .btn.sm { padding: 3px 8px; font-size: 12.5px; }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
@@ -52,7 +57,7 @@ textarea.inp { width: 100%; resize: vertical; }
 .d-up { color: var(--ok); }
 .d-dn { color: var(--bad); }
 
-.modal { position: fixed; inset: 0; background: rgba(10, 15, 20, .55); display: grid; place-items: center; z-index: 20; padding: 16px; }
+.modal { position: fixed; inset: 0; background: rgba(34, 22, 12, .55); display: grid; place-items: center; z-index: 20; padding: 16px; }
 .modal .box { background: var(--panel); border-radius: 10px; padding: 18px; max-width: 440px; width: 100%; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--line); max-height: 90vh; overflow: auto; }
 .modal .box.wide { max-width: 720px; }
 .modal h2 { font-size: 16px; }
