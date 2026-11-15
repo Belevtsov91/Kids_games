@@ -1,0 +1,5 @@
+/* Стили «Звёздного штурмана». Все классы с префиксом sn-, чтобы не задеть оболочку и другие игры. */
+@import './base.css';
+@import './map.css';
+@import './mission.css';
+@import './overlay.css';
