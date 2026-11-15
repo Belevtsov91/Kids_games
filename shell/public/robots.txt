@@ -1,0 +1,12 @@
+# Открыты документы, каталог игр и «Что нового»; кабинет, профили и API не индексируем.
+User-agent: *
+Disallow: /api/
+Disallow: /parent
+Disallow: /children
+Disallow: /setup
+Disallow: /dashboard
+Disallow: /play/
+Disallow: /me
+Disallow: /answer
+Disallow: /helper
+Disallow: /reset

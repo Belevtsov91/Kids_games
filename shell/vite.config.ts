@@ -1,10 +1,17 @@
 import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+/** Адрес сайта для превью ссылок (Open Graph любит абсолютные ссылки): VITE_SITE_URL, иначе относительные. */
+function siteUrl(mode: string): Plugin {
+  const url = (loadEnv(mode, process.cwd(), 'VITE_').VITE_SITE_URL ?? '').replace(/\/$/, '');
+  return { name: 'site-url', transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', url) };
+}
+
+export default defineConfig(({ mode }) => ({
   plugins: [
+    siteUrl(mode),
     react(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -52,4 +59,4 @@ export default defineConfig({
   test: {
     include: ['src/**/*.test.ts'],
   },
-});
+}));

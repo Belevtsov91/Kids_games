@@ -16,6 +16,7 @@ import { isToddler } from '@/kid/toddler';
 import { ClosedGameScreen, PauseScreen, TimeUpScreen } from '@/kid/RestScreens';
 import { useGameOff } from '@/site/SiteFlags';
 import { GameOffScreen } from '@/site/GameOffScreen';
+import { useNoZoom } from './useNoZoom';
 
 export function GamePage() {
   const { gameId } = useParams();
@@ -25,6 +26,7 @@ export function GamePage() {
   const { status } = useKidStatus();
   const game = findGame(gameId);
   const { sticker, showSticker } = useStickerToast();
+  useNoZoom();
 
   // Игру закрыл взрослый, кончилось время или тихие часы — игра не запускается (или закрывается).
   // Владелец выключил игру для всех (админка) — свой экран «игра отдыхает».
