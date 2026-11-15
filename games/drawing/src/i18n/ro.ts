@@ -6,6 +6,7 @@ export const ro: Texts = {
   save: { idle: 'Salvează', saving: 'Salvez…', saved: 'Salvat', failed: 'Nu s-a salvat' },
   savedToast: 'Desenul e în album ⭐',
   failedToast: 'Nu s-a putut salva. Verifică internetul.',
+  albumFull: 'Albumul e plin. Șterge un desen vechi ca să-l salvezi pe cel nou.',
   coloring: 'Cărți de colorat',
   undo: 'Anulează',
   clear: 'Șterge tot',

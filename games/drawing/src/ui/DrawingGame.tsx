@@ -3,7 +3,7 @@ import type { GameSdk } from '@ig/sdk';
 import { DrawingEngine } from '../engine/DrawingEngine';
 import { palette, tools, type BrushTool } from '../tools';
 import { sound } from '../audio/sound';
-import { drawingsApi } from '../api/drawings';
+import { drawingsApi, isAlbumFull } from '../api/drawings';
 import { rewardSaved } from '../api/rewards';
 import { drawingTitle, tr } from '../i18n';
 import { Gallery } from './Gallery';
@@ -23,6 +23,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
   const [color, setColor] = useState(palette[0]);
   const [canUndo, setCanUndo] = useState(false);
   const [save, setSave] = useState<SaveState>('idle');
+  const [albumFull, setAlbumFull] = useState(false);
   const [gallery, setGallery] = useState(false);
   const [coloring, setColoring] = useState(false);
   const saveTimer = useRef<number | undefined>(undefined);
@@ -66,12 +67,14 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
     const engine = engineRef.current;
     if (!engine || engine.isEmpty || save === 'saving') return;
     flash('saving');
+    setAlbumFull(false);
     try {
       await api.save(drawingTitle(), await engine.exportPng());
       sound.play('save');
       flash('saved');
       void rewardSaved(sdk, api, 'drawing');
-    } catch {
+    } catch (err) {
+      setAlbumFull(isAlbumFull(err));
       flash('failed');
     }
   };
@@ -90,7 +93,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
     <div className="drawing">
       <div ref={hostRef} className="drawing-canvas" inert={coloring || undefined} aria-hidden={coloring || undefined} />
       {save === 'saved' && <div className="drawing-toast">{tx.savedToast}</div>}
-      {save === 'failed' && <div className="drawing-toast is-error">{tx.failedToast}</div>}
+      {save === 'failed' && <div className="drawing-toast is-error">{albumFull ? tx.albumFull : tx.failedToast}</div>}
       <div className="drawing-toolbar" inert={coloring || undefined} aria-hidden={coloring || undefined}>
         <div className="drawing-row">
           <button onClick={() => setColoring(true)} aria-label={tx.coloring} title={tx.coloring}><img src={paletteArt} alt="" style={{ width: '90%', height: '90%' }} /></button>

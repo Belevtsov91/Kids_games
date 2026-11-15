@@ -1,13 +1,14 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { childIdOf, requireChild, type GameServerOptions } from '@ig/sdk/server';
 import { createDrawingsRepository, type Drawing } from './repository.js';
+import { ALBUM_FULL, MAX_DRAWINGS_PER_CHILD, MAX_IMAGE_CHARS } from '../src/limits.js';
 
 const createBody = {
   type: 'object',
   required: ['image'],
   properties: {
     title: { type: 'string', maxLength: 80, default: 'Без названия' },
-    image: { type: 'string', pattern: '^data:image/png;base64,' },
+    image: { type: 'string', pattern: '^data:image/png;base64,', maxLength: MAX_IMAGE_CHARS },
   },
   additionalProperties: false,
 } as const;
@@ -29,10 +30,14 @@ export const drawingsRoutes: FastifyPluginAsync<GameServerOptions> = async (app,
 
   app.post<{ Body: Pick<Drawing, 'title' | 'image'> }>(
     '/',
-    // Картинки бывают тяжёлыми: лимит тела выше стандартного 1 МБ.
-    { schema: { body: createBody }, bodyLimit: 10 * 1024 * 1024 },
+    // Картинка больше стандартного 1 МБ, но не больше лимита рисунка (плюс запас на название).
+    { schema: { body: createBody }, bodyLimit: MAX_IMAGE_CHARS + 64 * 1024 },
     async (req, reply) => {
-      const drawing = await drawingsRepository.create({ ...req.body, profileId: childIdOf(req)! });
+      const profileId = childIdOf(req)!;
+      if ((await drawingsRepository.count(profileId)) >= MAX_DRAWINGS_PER_CHILD) {
+        return reply.code(409).send({ error: 'Album is full', code: ALBUM_FULL, limit: MAX_DRAWINGS_PER_CHILD });
+      }
+      const drawing = await drawingsRepository.create({ ...req.body, profileId });
       return reply.code(201).send({ id: drawing.id, createdAt: drawing.createdAt });
     },
   );

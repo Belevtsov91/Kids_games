@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { isAlbumFull } from '../api/drawings';
 import { ColoringEngine, type ColoringTool } from '../engine/ColoringEngine';
 import { palette } from '../tools';
 import { coloringPages, type ColoringPage } from './coloringPages';
@@ -17,7 +18,7 @@ export function ColoringStudio({ onClose, onSave }: Props) {
   const [sheetWidth, setSheetWidth] = useState(0);
   const [dirty, setDirty] = useState(false);
   const [canUndo, setCanUndo] = useState(false);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'saving' | 'saved' | 'error' | 'load-error'>('ready');
+  const [status, setStatus] = useState<'loading' | 'ready' | 'saving' | 'saved' | 'error' | 'full' | 'load-error'>('ready');
   const [leave, setLeave] = useState<'catalog' | 'close' | 'menu' | null>(null);
   const menuLink = useRef<HTMLAnchorElement | null>(null);
   const bypassExit = useRef(false);
@@ -71,7 +72,7 @@ export function ColoringStudio({ onClose, onSave }: Props) {
     if (!page || !engineRef.current || status === 'saving') return;
     setStatus('saving');
     try { await onSave(pageTitle(page), engineRef.current.exportPng()); setDirty(false); setStatus('saved'); }
-    catch { setStatus('error'); }
+    catch (err) { setStatus(isAlbumFull(err) ? 'full' : 'error'); }
   };
   const locked = status === 'loading' || status === 'saving' || status === 'load-error';
   return (
@@ -89,7 +90,7 @@ export function ColoringStudio({ onClose, onSave }: Props) {
           <output>{Math.round(zoom * 100)}%</output>
           <button onClick={() => void save()} disabled={locked}>{status === 'saving' ? s.saving : s.save}</button>
         </div>
-        <p className="coloring-status" role="status">{status === 'loading' ? s.loading : status === 'load-error' ? s.loadError : status === 'error' ? s.error : status === 'saved' ? s.saved : s.help}</p>
+        <p className="coloring-status" role="status">{status === 'loading' ? s.loading : status === 'load-error' ? s.loadError : status === 'error' ? s.error : status === 'full' ? tr().albumFull : status === 'saved' ? s.saved : s.help}</p>
         <div ref={scrollRef} className="coloring-scroll" tabIndex={0} aria-label={s.sheet}>
           <div className="coloring-sheet" style={{ width: sheetWidth ? `${sheetWidth * zoom}px` : '100%' }}>
             <canvas ref={canvasRef} aria-label={s.canvas(pageTitle(page))} style={{ pointerEvents: locked || leave ? 'none' : 'auto' }} />

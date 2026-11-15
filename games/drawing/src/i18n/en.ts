@@ -6,6 +6,7 @@ export const en: Texts = {
   save: { idle: 'Save', saving: 'Saving…', saved: 'Saved', failed: 'Not saved' },
   savedToast: 'Drawing added to the album ⭐',
   failedToast: 'Could not save. Check the internet.',
+  albumFull: 'The album is full. Delete an old picture to save a new one.',
   coloring: 'Colouring pages',
   undo: 'Undo',
   clear: 'Clear',

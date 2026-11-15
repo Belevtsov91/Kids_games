@@ -20,6 +20,8 @@ export interface DrawingsRepository {
   list(profileId: string): Promise<DrawingSummary[]>;
   /** Отдаёт рисунок, только если он принадлежит этому профилю. */
   get(id: string, profileId: string): Promise<Drawing | null>;
+  /** Сколько рисунков у профиля (для лимита альбома). */
+  count(profileId: string): Promise<number>;
   create(data: Pick<Drawing, 'profileId' | 'title' | 'image'>): Promise<Drawing>;
   /** Удаляет, только если рисунок принадлежит этому профилю. */
   remove(id: string, profileId: string): Promise<boolean>;
@@ -40,6 +42,7 @@ function memoryRepository(): DrawingsRepository {
       const drawing = drawings.get(id);
       return drawing?.profileId === profileId ? drawing : null;
     },
+    count: async (profileId) => [...drawings.values()].filter((d) => d.profileId === profileId).length,
     async create(data) {
       const drawing: Drawing = { id: randomUUID(), createdAt: new Date().toISOString(), ...data };
       drawings.set(drawing.id, drawing);
@@ -82,6 +85,11 @@ function dbRepository(db: GameDb): DrawingsRepository {
         .maybeSingle();
       if (error) throw error;
       return data ? { ...summaryOf(data as Row), image: (data as Row).image! } : null;
+    },
+    async count(profileId) {
+      const { count, error } = await db.from(TABLE).select('id', { count: 'exact', head: true }).eq('child_id', profileId);
+      if (error) throw error;
+      return count ?? 0;
     },
     async create({ profileId, title, image }) {
       const { data, error } = await db

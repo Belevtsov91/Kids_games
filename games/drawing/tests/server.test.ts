@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import Fastify from 'fastify';
 import drawingServer from '../server';
+import { ALBUM_FULL, MAX_DRAWINGS_PER_CHILD, MAX_IMAGE_CHARS } from '../src/limits';
 
 const PNG = 'data:image/png;base64,iVBORw0KGgo=';
 
@@ -54,5 +55,25 @@ describe('API рисовалки', () => {
   it('отклоняет не-PNG', async () => {
     const res = await app.inject({ method: 'POST', url: '/drawings', headers: as('c1'), payload: { image: 'hello' } });
     expect(res.statusCode).toBe(400);
+  });
+
+  it('отклоняет слишком большую картинку', async () => {
+    const image = PNG + 'A'.repeat(MAX_IMAGE_CHARS);
+    const res = await app.inject({ method: 'POST', url: '/drawings', headers: as('big'), payload: { image } });
+    expect([400, 413]).toContain(res.statusCode);
+    expect((await app.inject({ url: '/drawings', headers: as('big') })).json()).toEqual([]);
+  });
+
+  it('альбом полон — 409, пока ребёнок не удалит старый рисунок', async () => {
+    const post = () => app.inject({ method: 'POST', url: '/drawings', headers: as('full'), payload: { image: PNG } });
+    for (let i = 0; i < MAX_DRAWINGS_PER_CHILD; i++) expect((await post()).statusCode).toBe(201);
+    const refused = await post();
+    expect(refused.statusCode).toBe(409);
+    expect(refused.json()).toMatchObject({ code: ALBUM_FULL, limit: MAX_DRAWINGS_PER_CHILD });
+    // У другого ребёнка свой лимит.
+    expect((await app.inject({ method: 'POST', url: '/drawings', headers: as('other'), payload: { image: PNG } })).statusCode).toBe(201);
+    const [oldest] = (await app.inject({ url: '/drawings', headers: as('full') })).json().slice(-1);
+    expect((await app.inject({ method: 'DELETE', url: `/drawings/${oldest.id}`, headers: as('full') })).statusCode).toBe(204);
+    expect((await post()).statusCode).toBe(201);
   });
 });

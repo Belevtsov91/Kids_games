@@ -1,3 +1,5 @@
+// Без eval: сайт отдаётся с CSP без 'unsafe-eval', и Pixi берёт готовые шейдеры из этого модуля.
+import 'pixi.js/unsafe-eval';
 import { Application, Assets, Container, Graphics, Rectangle, Sprite, type FederatedPointerEvent, type PointData } from 'pixi.js';
 import type { BrushTool } from '../tools';
 import { CANVAS_BACKGROUND } from './constants';
