@@ -1,0 +1,38 @@
+// Тексты: русский (образец формы для остальных языков).
+export const ru = {
+  title: 'Путешественник',
+  lead: (name?: string) => (name ? `${name}, куда полетим с Тёпой?` : 'Куда полетим с Тёпой?'),
+  regions: { home: 'Дом', europe: 'Европа', world: 'Весь мир' },
+  regionHints: { home: 'Молдова, Украина, Румыния', europe: 'Соседи и вся Европа', world: 'Все материки' },
+  locked: 'Сначала получи звезду на прошлом маршруте',
+  atlas: '🌍 Атлас',
+  atlasHint: 'Крути глобус пальцем и нажимай на точки-столицы',
+  back: '‹ Назад',
+  next: 'Дальше ▶',
+  again: '🔁 Ещё раз',
+  toMap: '🗺️ К маршрутам',
+  step: (n: number, of: number) => `Вопрос ${n} из ${of}`,
+  ask: {
+    flag: () => 'Чей это флаг?',
+    flagOf: (c: string) => `Найди флаг: ${c}`,
+    capital: (c: string) => `Какая столица у страны «${c}»?`,
+    capitalOf: (cap: string) => `${cap} — столица какой страны?`,
+    city: (city: string) => `Город ${city} — в какой стране?`,
+    globe: (c: string) => `Найди на глобусе: ${c}`,
+  },
+  marker: (n: number) => `Метка ${n}`,
+  right: 'Верно!',
+  wrong: 'Не совсем.',
+  fact: (c: string, cap: string) => `${c}: столица — ${cap}`,
+  cityFact: (city: string, c: string) => `${city} — город, страна: ${c}`,
+  result: (correct: number, total: number) => `Верных ответов: ${correct} из ${total}`,
+  resultTitle: (stars: number): string => (stars === 3 ? 'Великий путешественник!' : stars ? 'Хороший полёт!' : 'Попробуем ещё раз?'),
+  capital: 'Столица',
+  visited: (n: number, of: number) => `Посещено стран: ${n} из ${of}`,
+  tepaHello: 'Я Тёпа! Летим на воздушном шаре?',
+  tepaRight: ['Ура, правильно!', 'Отлично!', 'Ты настоящий штурман!', 'Летим дальше!'],
+  tepaWrong: 'Ничего, запомним вместе.',
+  ending: 'Скоро отдых. Долетим маршрут и приземлимся.',
+};
+
+export type Texts = typeof ru;

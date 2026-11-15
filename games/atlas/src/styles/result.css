@@ -1,0 +1,29 @@
+.at-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(35 48 74 / 0.45);
+  z-index: 3;
+}
+
+.at-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 420px);
+  padding: 26px 22px;
+  border-radius: 30px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.25);
+  animation: at-pop 0.4s;
+}
+
+.at-result-balloon { font-size: 56px; animation: at-float 3s ease-in-out infinite; }
+.at-result-title { margin: 0; font-size: 28px; }
+.at-result-stars { color: #ffb400; font-size: 44px; letter-spacing: 4px; }
+.at-result-text { margin: 0 0 8px; font-size: 18px; color: var(--at-soft); }
+.at-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
