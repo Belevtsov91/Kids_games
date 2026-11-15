@@ -37,6 +37,17 @@ export const privacy: InfoContent = {
         The database is Supabase (Postgres), region <Fill value={SITE.dbRegion} />. The site is hosted on Vercel, the server on Render, and emails are sent by Brevo.
         These companies process data only on our instructions. We do not share or sell data to anyone else.
       </p>
+      <h2>Site owner access</h2>
+      <p>
+        The site is run by its owner (see “Who is responsible for the data”). The owner has a separate admin panel: sign-in with a password and a one-time
+        code from an authenticator app, and an email is sent whenever it is opened from a new device. In the panel the owner sees the list of families
+        (the adult’s email and name, children’s names and ages, sign-in dates, settings) and service logs: emails sent, errors, failed sign-ins.
+      </p>
+      <p>
+        At a family’s request or when the rules are broken, the owner can send a password reset link, reset the PIN, end sessions, export the data,
+        freeze or delete the account. Children’s photos and drawings are hidden in the panel and open only with a separate click, for support or to
+        check a complaint. Every such action and every view is recorded in a log kept for one year. The owner uses this data only to run and protect the site.
+      </p>
       <h2>How long we keep it</h2>
       <p>
         For as long as the account exists, but not forever. If nobody signs in for two years, we email you and delete the account with all profiles and

@@ -37,6 +37,18 @@ export const privacy: InfoContent = {
         Baza de date este Supabase (Postgres), regiunea <Fill value={SITE.dbRegion} />. Site-ul e găzduit pe Vercel, serverul pe Render, iar emailurile le trimite Brevo.
         Aceste companii prelucrează datele doar la cererea noastră. Nu transmitem și nu vindem datele nimănui altcuiva.
       </p>
+      <h2>Accesul proprietarului site-ului</h2>
+      <p>
+        Site-ul este administrat de proprietarul său (vezi „Cine răspunde de date”). Acesta are un panou de serviciu separat: intrare cu parolă și cod
+        unic din aplicație, iar la intrarea de pe un dispozitiv nou primește un e-mail. În panou proprietarul vede lista familiilor (e-mailul și numele
+        adultului, numele și vârsta copiilor, datele de intrare, setările) și jurnalele de serviciu: e-mailuri trimise, erori, intrări nereușite.
+      </p>
+      <p>
+        La cererea familiei sau în caz de încălcare a regulilor, proprietarul poate trimite un link pentru schimbarea parolei, reseta PIN-ul, încheia
+        sesiunile, exporta datele, îngheța sau șterge contul. Fotografiile și desenele copiilor sunt ascunse în panou și se deschid doar printr-o apăsare
+        separată, pentru asistență sau verificarea unei plângeri. Fiecare astfel de acțiune și fiecare vizualizare se înregistrează într-un jurnal păstrat
+        un an. Proprietarul folosește aceste date doar pentru funcționarea și protecția site-ului.
+      </p>
       <h2>Cât timp le păstrăm</h2>
       <p>
         Cât timp există contul, dar nu la nesfârșit. Dacă nimeni nu intră în cont timp de doi ani, trimitem un e-mail și, la 30 de zile după el, ștergem
