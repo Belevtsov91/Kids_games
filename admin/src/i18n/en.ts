@@ -16,7 +16,7 @@ export const en: Dict = {
   'day.0': 'Sun', 'day.1': 'Mon', 'day.2': 'Tue', 'day.3': 'Wed', 'day.4': 'Thu', 'day.5': 'Fri', 'day.6': 'Sat',
   'period.1': 'Today', 'period.7': '7 days', 'period.30': '30 days', 'period.365': 'Year',
   'danger.word': 'Type the word {word}', 'danger.code': 'Authenticator code', 'danger.codeHint': 'A 6-digit code is required',
-  'word.delete': 'УДАЛИТЬ', 'word.freeze': 'ЗАМОРОЗИТЬ', 'word.reset': 'СБРОСИТЬ', 'word.disable': 'ВЫКЛЮЧИТЬ', 'word.close': 'ЗАКРЫТЬ',
+  'word.delete': 'УДАЛИТЬ', 'word.freeze': 'ЗАМОРОЗИТЬ', 'word.reset': 'СБРОСИТЬ', 'word.disable': 'ВЫКЛЮЧИТЬ', 'word.close': 'ЗАКРЫТЬ',  // i18n-ok: слово подтверждения сверяет сервер, оно одно на всех языках
   'err.readonly': 'Read-only mode is on', 'err.confirm': 'The word does not match', 'err.code': 'Wrong code. Wait for a new one',
   'err.mail': 'Mail is not configured, nothing was sent', 'err.emailTaken': 'This email belongs to another family', 'err.timezone': 'Unknown time zone',
   'err.deleting': 'Account is scheduled for deletion: cancel it first', 'err.full': 'The family already has 10 profiles',

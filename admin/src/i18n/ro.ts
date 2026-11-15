@@ -16,7 +16,7 @@ export const ro: Dict = {
   'day.0': 'Du', 'day.1': 'Lu', 'day.2': 'Ma', 'day.3': 'Mi', 'day.4': 'Jo', 'day.5': 'Vi', 'day.6': 'Sâ',
   'period.1': 'Azi', 'period.7': '7 zile', 'period.30': '30 de zile', 'period.365': 'An',
   'danger.word': 'Scrieți cuvântul {word}', 'danger.code': 'Cod din aplicație', 'danger.codeHint': 'Este necesar un cod din 6 cifre',
-  'word.delete': 'УДАЛИТЬ', 'word.freeze': 'ЗАМОРОЗИТЬ', 'word.reset': 'СБРОСИТЬ', 'word.disable': 'ВЫКЛЮЧИТЬ', 'word.close': 'ЗАКРЫТЬ',
+  'word.delete': 'УДАЛИТЬ', 'word.freeze': 'ЗАМОРОЗИТЬ', 'word.reset': 'СБРОСИТЬ', 'word.disable': 'ВЫКЛЮЧИТЬ', 'word.close': 'ЗАКРЫТЬ',  // i18n-ok: слово подтверждения сверяет сервер, оно одно на всех языках
   'err.readonly': 'Modul „doar citire” este pornit', 'err.confirm': 'Cuvântul nu se potrivește', 'err.code': 'Cod greșit. Așteptați un cod nou',
   'err.mail': 'E-mailul nu este configurat, nu s-a trimis nimic', 'err.emailTaken': 'Acest e-mail aparține altei familii', 'err.timezone': 'Fus orar necunoscut',
   'err.deleting': 'Contul este în curs de ștergere: anulați întâi ștergerea', 'err.full': 'Familia are deja 10 profiluri',
