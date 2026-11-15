@@ -15,6 +15,7 @@ import { Mascot } from '@/family/Mascot';
 import { OfflineTask } from '@/family/OfflineTask';
 import { SeasonDecor } from '@/family/SeasonDecor';
 import { useKidStatus } from '@/kid/KidStatus';
+import { useGameOff } from '@/site/SiteFlags';
 import { KidTimer } from '@/kid/KidTimer';
 import { isToddler } from '@/kid/toddler';
 import { useMoreText } from '@/more/text';
@@ -39,10 +40,12 @@ export function MenuPage() {
   const more = useMoreText();
 
   const { status } = useKidStatus();
+  const gameOff = useGameOff();
   const access = status?.access ?? {};
   const age = activeChild?.age;
   // Взрослый может закрыть игру (её не видно) или поднять игру не по возрасту в «Твои миры».
-  const visible = games.filter((g) => access[g.id] !== false);
+  // Игры, выключенные владельцем в админке, не видны никому.
+  const visible = games.filter((g) => access[g.id] !== false && !gameOff(g.id));
   const fits = (g: GameManifest) => access[g.id] === true || age === undefined || (g.ages.min <= age && age <= g.ages.max);
   const available = visible.filter(fits);
   const others = visible.filter((g) => !fits(g));

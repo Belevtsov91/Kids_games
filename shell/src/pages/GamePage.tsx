@@ -14,6 +14,8 @@ import { HoldButton } from '@/kid/HoldButton';
 import { StickerToast, useStickerToast } from '@/kid/StickerToast';
 import { isToddler } from '@/kid/toddler';
 import { ClosedGameScreen, PauseScreen, TimeUpScreen } from '@/kid/RestScreens';
+import { useGameOff } from '@/site/SiteFlags';
+import { GameOffScreen } from '@/site/GameOffScreen';
 
 export function GamePage() {
   const { gameId } = useParams();
@@ -25,7 +27,9 @@ export function GamePage() {
   const { sticker, showSticker } = useStickerToast();
 
   // Игру закрыл взрослый, кончилось время или тихие часы — игра не запускается (или закрывается).
-  const closed = Boolean(game && status?.access[game.id] === false);
+  // Владелец выключил игру для всех (админка) — свой экран «игра отдыхает».
+  const off = useGameOff()(game?.id ?? '');
+  const closed = off || Boolean(game && status?.access[game.id] === false);
   const blocked = status?.time.blocked ?? null;
   const { pause, endPause } = usePlayClock(game?.id, Boolean(game) && !closed && !blocked);
 
@@ -58,7 +62,9 @@ export function GamePage() {
       )}
       {!closed && !blocked && <KidTimer className="game-timer" />}
       {!closed && !blocked && <EndingBanner />}
-      {closed ? (
+      {off ? (
+        <GameOffScreen />
+      ) : closed ? (
         <ClosedGameScreen />
       ) : blocked && status ? (
         <TimeUpScreen time={status.time} />

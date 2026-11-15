@@ -22,6 +22,8 @@ import { SetupPage } from '@/more/pages/SetupPage';
 import { GameCardPage, GamesPage } from '@/more/pages/GameCardPage';
 import { NewsPage } from '@/more/pages/NewsPage';
 import { WakeGate } from '@/wake/WakeGate';
+import { SiteFlagsProvider } from '@/site/SiteFlags';
+import { SiteGate } from '@/site/SiteGate';
 
 /** Закрытые страницы: без входа — на /login; без профиля ребёнка или после долгого перерыва — на /children. */
 function Private({ children, needChild = false }: { children: ReactNode; needChild?: boolean }) {
@@ -65,8 +67,10 @@ export function App() {
   return (
     <I18nProvider>
       <WakeGate>
+        <SiteFlagsProvider>
         <AuthProvider>
           <BrowserRouter>
+            <SiteGate>
             <Routes>
               <Route path="/" element={<WelcomePage />} />
               {/* Одна 3D-сцена на обе страницы: вкладки переключают форму, а остров остаётся. */}
@@ -104,8 +108,10 @@ export function App() {
               <Route path="/news" element={<NewsPage />} />
               <Route path="*" element={<LostPage />} />
             </Routes>
+            </SiteGate>
           </BrowserRouter>
         </AuthProvider>
+        </SiteFlagsProvider>
       </WakeGate>
     </I18nProvider>
   );

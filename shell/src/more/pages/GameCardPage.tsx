@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router';
 import { findGame, games } from '@/catalog/catalog';
+import { useGameOff } from '@/site/SiteFlags';
 import { covers } from '@/catalog/covers';
 import { useAuth } from '@/auth/AuthContext';
 import { gameTitle, useI18n } from '@/i18n/I18nProvider';
@@ -62,7 +63,8 @@ export function GameCardPage() {
 export function GamesPage() {
   const g = useMoreText().game;
   const { locale } = useI18n();
-  const sorted = [...games].sort((a, b) => a.ages.min - b.ages.min);
+  const gameOff = useGameOff();
+  const sorted = games.filter((g) => !gameOff(g.id)).sort((a, b) => a.ages.min - b.ages.min);
   return (
     <main className="wl info more-page">
       <SiteTopbar />
