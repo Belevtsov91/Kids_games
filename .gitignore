@@ -42,3 +42,6 @@ desktop.ini
 # Временные файлы
 .claude-tmp/
 __pycache__/
+
+# Снимки Playwright MCP
+.playwright-mcp/
