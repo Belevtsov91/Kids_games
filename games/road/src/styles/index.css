@@ -1,0 +1,8 @@
+/* Стили «Безопасной дороги». Порядок важен: более поздние правила перекрывают ранние. */
+@import './base.css';
+@import './buttons.css';
+@import './menu.css';
+@import './scene.css';
+@import './panel.css';
+@import './done.css';
+@import './animations.css';
