@@ -1,4 +1,4 @@
-import type { GameSdk } from '@ig/sdk';
+import { ageOf, type GameSdk } from '@ig/sdk';
 import { CountingAudio } from '../audio/CountingAudio';
 import { modes, type Mode } from '../game/logic';
 import { Session } from '../game/Session';
@@ -17,7 +17,7 @@ import { defaultPreferences, loadSaved, progressKey, saveState, type Preferences
 export class CountingGame {
   private root = document.createElement('div');
   private audio = new CountingAudio();
-  private prefs: Preferences = defaultPreferences();
+  private prefs: Preferences;
   private progress: Progress = {};
   private screen: 'home' | 'play' | 'result' = 'home';
   private session: Session | null = null;
@@ -34,9 +34,9 @@ export class CountingGame {
     private sdk: GameSdk,
   ) {
     this.storageKey = `v1:${sdk.profile?.id ?? 'guest'}`;
-    const saved = loadSaved(sdk.storage, this.storageKey);
-    if (saved) ({ prefs: this.prefs, progress: this.progress } = saved);
-    else this.failedSave = true;
+    const saved = loadSaved(sdk.storage, this.storageKey, ageOf(sdk.profile));
+    ({ prefs: this.prefs, progress: this.progress } = saved ?? { prefs: defaultPreferences(ageOf(sdk.profile)), progress: {} });
+    if (!saved) this.failedSave = true;
     void pullCloud(sdk, this.progress).then((p) => p && !this.disposed && ((this.progress = p), this.render()));
     // Язык интерфейса и голоса при запуске — как на сайте; внутри игры его можно сменить.
     this.prefs = { ...this.prefs, language: sdk.locale, speech: sdk.locale };

@@ -166,7 +166,7 @@ Jocul primește de la înveliș doar SDK-ul:
 
 | Câmp | Ce este |
 |---|---|
-| `manifest`, `profile`, `locale` | manifestul, copilul (sau `null`), limba site-ului |
+| `manifest`, `profile`, `locale` | manifestul, copilul (sau `null`; `profile.age` — vârsta în ani, pentru dificultatea de start: `byAge`, `ageOf`), limba site-ului |
 | `api` | cereri doar spre prefixul propriu `/api/games/<id>` |
 | `storage` | localStorage cu cheile jocului și ale copilului, copie în cloudul platformei |
 | `cloud` | salvări pe serverul platformei pe copil (pentru jocuri fără server propriu), până la 64 KB pe cheie |

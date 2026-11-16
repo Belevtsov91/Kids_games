@@ -83,6 +83,7 @@ export class RepeatMode implements Mode {
     ctx.audio.oops();
     ctx.stage.shake(animal.id);
     ctx.stage.setBubble('🙈', tr().oops);
+    ctx.say(tr().oops);
     this.phase = 'bravo';
     ctx.root.dataset.listening = 'true';
     ctx.playback.later(() => this.listenAgain(), 1300);
@@ -115,6 +116,8 @@ export class RepeatMode implements Mode {
     const praise = tr().praise;
     const [icon, text] = BUBBLES()[phase] ?? ['🎉', praise[Math.floor(Math.random() * praise.length)]];
     this.ctx.stage.setBubble(icon, text);
+    // «Слушай…» не озвучиваем: в это время играет фраза оркестра.
+    if (phase !== 'listen') this.ctx.say(text);
     this.updateDots();
     const again = this.ctx.panel.querySelector<HTMLButtonElement>('.ao-again');
     if (again) {

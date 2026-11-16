@@ -3,6 +3,7 @@ import type { Texts } from './ru';
 
 export const ro: Texts = {
   drawing: 'Desen',
+  voice: { hello: 'Desenează cu degetul! Jos sunt creioane, culori și pagini de colorat.', coloring: 'Alege o pagină de colorat. Atinge o zonă și ea se colorează.' },
   save: { idle: 'Salvează', saving: 'Salvez…', saved: 'Salvat', failed: 'Nu s-a salvat' },
   savedToast: 'Desenul e în album ⭐',
   failedToast: 'Nu s-a putut salva. Verifică internetul.',

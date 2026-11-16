@@ -3,6 +3,7 @@ import type { Texts } from './ru';
 
 export const en: Texts = {
   drawing: 'Drawing',
+  voice: { hello: 'Draw with your finger! Pencils, colours and colouring pages are at the bottom.', coloring: 'Pick a colouring page. Tap an area and it fills with colour.' },
   save: { idle: 'Save', saving: 'Saving…', saved: 'Saved', failed: 'Not saved' },
   savedToast: 'Drawing added to the album ⭐',
   failedToast: 'Could not save. Check the internet.',

@@ -1,6 +1,7 @@
 import { ANIMALS, type Animal } from '../../game/animals';
 import { beatButton, soundToggle, syncBeat } from '../../ui/controls';
 import type { Mode, OrchestraContext } from '../context';
+import { tr } from '../../i18n';
 
 // «Играть»: свободная игра, можно включить ритм-секцию.
 
@@ -13,6 +14,7 @@ export class FreeMode implements Mode {
   enter() {
     const { ctx } = this;
     ctx.stage.setBubble(null);
+    ctx.say(tr().voice.free);
     ctx.panel.append(
       soundToggle(ctx.soundMode, (mode) => {
         ctx.setSoundMode(mode);

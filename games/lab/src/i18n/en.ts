@@ -7,6 +7,7 @@ export const en: Texts = {
   stars: 'Stars',
   level: 'Challenge',
   locked: 'Finish the previous challenge first',
+  startHere: 'Start here',
   goal: 'Build a machine so the ball lights the bulb.',
   run: 'Go',
   reset: 'Again',

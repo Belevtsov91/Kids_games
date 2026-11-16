@@ -4,6 +4,7 @@ import type { Texts } from './ru';
 export const ro: Texts = {
   animals: { bear: 'Ursuleț', cow: 'Văcuță', frog: 'Broscuță', dog: 'Cățeluș', cat: 'Pisicuță', elephant: 'Elefănțel', bird: 'Păsărică' },
   modes: { free: 'Cântă', record: 'Înregistrare', repeat: 'Repetă' },
+  voice: { free: 'Apasă pe animale — ele cântă muzică!', record: 'Apasă butonul roșu și cântă melodia ta.' },
   mode: 'Mod',
   sound: 'Sunet',
   music: 'Muzică',

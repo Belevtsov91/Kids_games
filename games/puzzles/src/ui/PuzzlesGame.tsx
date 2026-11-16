@@ -17,7 +17,7 @@ import '../styles/puzzles.css';
 
 export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
   const library = useMemo(() => openLibrary(sdk.profile?.id ?? null), [sdk]);
-  const sound = useMemo(() => createSound(() => sdk.audio.muted), [sdk]);
+  const sound = useMemo(() => createSound(() => sdk.audio.muted, { lang: sdk.locale, volume: sdk.comfort?.effectsVolume }), [sdk]);
   const view = useViewport();
   const game = usePuzzle(sdk, sound, view);
   const { puzzle, grid, pieces, board, complete } = game;
@@ -34,6 +34,11 @@ export function PuzzlesGame({ sdk }: { sdk: GameSdk }) {
       .catch(() => game.setMessage(tr().libraryFailed));
   }, [library]);
   useEffect(() => () => sound.dispose(), [sound]);
+  // Подсказки звучат голосом: малыши ещё не читают. «Отлично!» после каждой детали не повторяем.
+  useEffect(() => {
+    if (game.message !== tr().good) sound.say(game.message);
+  }, [game.message, sound]);
+  useEffect(() => sdk.audio.onMuteChange((muted) => muted && sound.stopVoice()), [sdk, sound]);
   useEffect(() => {
     if (!confirmRestart) return;
     const timer = window.setTimeout(() => setConfirmRestart(false), 3000);

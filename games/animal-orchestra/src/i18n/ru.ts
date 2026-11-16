@@ -2,6 +2,7 @@
 export const ru = {
   animals: { bear: 'Мишка', cow: 'Коровка', frog: 'Лягушка', dog: 'Пёсик', cat: 'Котик', elephant: 'Слоник', bird: 'Птичка' } as Record<string, string>,
   modes: { free: 'Играть', record: 'Запись', repeat: 'Повтори' },
+  voice: { free: 'Нажимай на зверей — они играют музыку!', record: 'Нажми красную кнопку и сыграй свою мелодию.' },
   mode: 'Режим',
   sound: 'Звук',
   music: 'Музыка',

@@ -4,6 +4,7 @@ import { ColoringEngine, type ColoringTool } from '../engine/ColoringEngine';
 import { palette } from '../tools';
 import { coloringPages, type ColoringPage } from './coloringPages';
 import { pageTitle, tr } from '../i18n';
+import { sound } from '../audio/sound';
 import '../styles/coloring.css';
 
 interface Props { onClose(): void; onSave(title: string, image: string): Promise<void> }
@@ -29,6 +30,9 @@ export function ColoringStudio({ onClose, onSave }: Props) {
   const confirmRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => { closeRef.current?.focus(); }, []);
+  // Голосом: что делать на выборе раскраски, название листа и итог сохранения.
+  useEffect(() => sound.say(page ? pageTitle(page) : tr().voice.coloring), [page]);
+  useEffect(() => { if (status === 'saved' || status === 'error') sound.say(status === 'saved' ? s.saved : s.error); }, [status, s]);
   useEffect(() => { if (leave) confirmRef.current?.focus(); }, [leave]);
   useEffect(() => {
     const viewport = scrollRef.current;

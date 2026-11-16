@@ -3,6 +3,7 @@ import type { ToolId } from '../tools/types';
 
 export const ru = {
   drawing: 'Рисунок',
+  voice: { hello: 'Рисуй пальцем! Внизу — карандаши, цвета и раскраски.', coloring: 'Выбери раскраску. Коснись области — и она станет цветной.' },
   save: { idle: 'Сохранить', saving: 'Сохраняю…', saved: 'Сохранено', failed: 'Не сохранилось' },
   savedToast: 'Рисунок в альбоме ⭐',
   failedToast: 'Не получилось сохранить. Проверь интернет.',

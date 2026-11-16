@@ -7,6 +7,7 @@ export const ro: Texts = {
   stars: 'Stele',
   level: 'Misiunea',
   locked: 'Mai întâi termină misiunea de dinainte',
+  startHere: 'Începe de aici',
   goal: 'Construiește o mașinărie ca bila să aprindă becul.',
   run: 'Pornește',
   reset: 'Încă o dată',

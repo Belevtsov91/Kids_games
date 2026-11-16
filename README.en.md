@@ -166,7 +166,7 @@ A game gets only the SDK from the shell:
 
 | Field | What it is |
 |---|---|
-| `manifest`, `profile`, `locale` | manifest, the child (or `null`), site language |
+| `manifest`, `profile`, `locale` | manifest, the child (or `null`; `profile.age` is full years, for the starting difficulty: `byAge`, `ageOf`), site language |
 | `api` | requests only to its own prefix `/api/games/<id>` |
 | `storage` | localStorage keyed by game and child, copied to the platform cloud |
 | `cloud` | per-child saves on the platform server (for games without a server), up to 64 KB per key |

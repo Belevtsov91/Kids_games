@@ -17,8 +17,12 @@ export interface GameStorage {
 /** Всё, что оболочка даёт игре. Других способов связаться с платформой у игры нет. */
 export interface GameSdk {
   manifest: GameManifest;
-  /** Профиль ребёнка; null, пока выбора профиля нет. */
-  profile: { id: string; name: string; avatar: string } | null;
+  /**
+   * Профиль ребёнка; null, пока выбора профиля нет.
+   * age — полных лет (из месяца рождения или как указал взрослый); нет — возраст неизвестен.
+   * Под возраст удобно подбирать стартовый уровень: см. byAge из @ig/sdk.
+   */
+  profile: { id: string; name: string; avatar: string; age?: number | null } | null;
   api: GameApi;
   storage: GameStorage;
   /** Язык, выбранный на сайте. Игра берёт его при запуске и показывает интерфейс на нём. */

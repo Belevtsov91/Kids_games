@@ -8,6 +8,7 @@ export default defineGame({
   mount(container, sdk) {
     setLocale(sdk.locale);
     sound.setMuted(sdk.audio.muted);
+    sound.setVoice(sdk.locale, sdk.comfort?.effectsVolume);
     const stopMuteSync = sdk.audio.onMuteChange((muted) => sound.setMuted(muted));
     const root = createRoot(container);
     root.render(<DrawingGame sdk={sdk} />);

@@ -27,6 +27,7 @@ export class RecordMode implements Mode {
   enter() {
     const { ctx } = this;
     ctx.stage.setBubble(null);
+    ctx.say(tr().voice.record);
     const rec = bigButton('ao-rec', tr().record, el('span', { className: 'ao-rec-dot' }));
     const play = bigButton('ao-play', tr().listen, '▶');
     const save = bigButton('ao-save', tr().save, '💾');
@@ -72,6 +73,7 @@ export class RecordMode implements Mode {
     this.ctx.audio.click();
     this.onPlaybackChange();
     this.ctx.toast.show(tr().playNow);
+    this.ctx.say(tr().playNow);
   }
 
   private stop() {
@@ -96,10 +98,12 @@ export class RecordMode implements Mode {
       this.ctx.audio.praise();
       this.ctx.fx.confetti();
       this.ctx.toast.show(tr().saved);
+      this.ctx.say(tr().saved);
       this.ctx.progress.skill('creativity', true);
       this.ctx.progress.sticker('my-melody');
     } catch {
       this.ctx.toast.show(tr().saveFailed);
+      this.ctx.say(tr().saveFailed);
     }
     this.onPlaybackChange();
   }

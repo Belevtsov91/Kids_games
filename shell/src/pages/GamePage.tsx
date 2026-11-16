@@ -74,7 +74,7 @@ export function GamePage() {
         <GameHost
           key={game.id}
           manifest={game}
-          profile={activeChild && { id: activeChild.id, name: activeChild.name, avatar: activeChild.avatar }}
+          profile={activeChild && { id: activeChild.id, name: activeChild.name, avatar: activeChild.avatar, age: activeChild.age }}
           child={activeChild}
           onSticker={(id) => showSticker(game, id)}
           onExit={() => navigate('/dashboard')}

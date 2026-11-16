@@ -4,6 +4,7 @@ import type { Texts } from './ru';
 export const en: Texts = {
   animals: { bear: 'Teddy', cow: 'Cow', frog: 'Froggy', dog: 'Puppy', cat: 'Kitty', elephant: 'Elephant', bird: 'Birdie' },
   modes: { free: 'Play', record: 'Record', repeat: 'Repeat' },
+  voice: { free: 'Tap the animals — they play music!', record: 'Press the red button and play your own tune.' },
   mode: 'Mode',
   sound: 'Sound',
   music: 'Music',

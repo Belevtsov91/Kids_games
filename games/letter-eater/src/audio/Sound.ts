@@ -1,47 +1,18 @@
-// Звуки синтезируются Web Audio на лету (без файлов), слова читает голос браузера на языке игры.
+// Эффекты синтезирует Web Audio на лету (без файлов), слова читает общий голос SDK на языке игры
+// (с записанными клипами, когда у браузера нет такого голоса).
+import { GameSound } from '@ig/sdk/audio';
 import { tr } from '../i18n';
 
-export class Sound {
-  private ctx: AudioContext | null = null;
-  private voice: SpeechSynthesisVoice | null = null;
-  muted: boolean;
-
+export class Sound extends GameSound {
   constructor(muted: boolean) {
-    this.muted = muted;
-    if (typeof speechSynthesis !== 'undefined') {
-      const pick = () => {
-        const lang = tr().speech.slice(0, 2);
-        const voices = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith(lang));
-        this.voice = voices.find((v) => tr().voiceHint.test(v.name)) ?? voices[0] ?? null;
-      };
-      pick();
-      speechSynthesis.addEventListener?.('voiceschanged', pick);
-    }
+    super({ muted, lang: () => tr().speech, rate: 0.85, prefer: tr().voiceHint });
   }
 
   /** AudioContext создаётся по первому касанию: иначе браузер его не запустит. */
-  private audio() {
-    if (this.muted) return null;
-    this.ctx ??= new AudioContext();
-    if (this.ctx.state === 'suspended') void this.ctx.resume();
-    return this.ctx;
-  }
-
-  private tone(freq: number, start: number, duration: number, type: OscillatorType = 'sine', volume = 0.2, slideTo?: number) {
-    const ctx = this.audio();
-    if (!ctx) return;
-    const t = ctx.currentTime + start;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, t);
-    if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, t + duration);
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(volume, t + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(t);
-    osc.stop(t + duration + 0.05);
+  private tone(freq: number, at: number, dur: number, type: OscillatorType = 'sine', gain = 0.2, slideTo?: number) {
+    if (this.isMuted) return;
+    this.unlock();
+    this.play([{ freq, at, dur, type, gain, slideTo }]);
   }
 
   pop() {
@@ -72,29 +43,8 @@ export class Sound {
     this.tone(880, 0, 0.05, 'sine', 0.08);
   }
 
-  say(text: string, rate = 0.85) {
-    if (this.muted || typeof speechSynthesis === 'undefined') return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text.toLowerCase());
-    u.lang = tr().speech;
-    u.rate = rate;
-    u.pitch = 1.15;
-    if (this.voice) u.voice = this.voice;
-    speechSynthesis.speak(u);
-  }
-
-  stopSpeech() {
-    if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
-  }
-
-  setMuted(muted: boolean) {
-    this.muted = muted;
-    if (muted) this.stopSpeech();
-  }
-
-  dispose() {
-    this.stopSpeech();
-    void this.ctx?.close();
-    this.ctx = null;
+  /** Буквы и слоги читаем строчными: так голос не произносит их как аббревиатуру. */
+  override say(text: string, rate?: number) {
+    return super.say(text.toLowerCase(), rate === undefined ? undefined : { rate });
   }
 }

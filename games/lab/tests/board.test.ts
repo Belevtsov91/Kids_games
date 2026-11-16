@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { canPlace, isBlocked, leftOf, machineOf, place, removeAt } from '../src/game/board';
 import { LEVELS } from '../src/game/levels';
 import { nextVariant, partInfo, type Placed } from '../src/game/parts';
-import { isOpen, parseBest, recordBest, starsFor, totalStars } from '../src/game/score';
+import { isOpen, parseBest, recordBest, startLevelForAge, starsFor, totalStars } from '../src/game/score';
 
 const level = LEVELS[0];
 const ramp = (id: number, col: number, row: number): Placed => ({ id, kind: 'ramp', col, row, variant: 0 });
@@ -60,5 +60,16 @@ describe('звёзды', () => {
   it('битое сохранение не ломает игру', () => {
     expect(parseBest(null)).toEqual({});
     expect(parseBest({ ramp: 9, spring: 'x', lever: 2 })).toEqual({ lever: 2 });
+  });
+});
+
+describe('стартовое задание по возрасту', () => {
+  it('старшим открывает первые задания сразу', () => {
+    expect(startLevelForAge(9)).toBe(0);
+    expect(startLevelForAge(null)).toBe(0);
+    expect(startLevelForAge(12)).toBe(2);
+    expect(startLevelForAge(14)).toBe(4);
+    expect(isOpen(LEVELS, {}, 2, startLevelForAge(12))).toBe(true);
+    expect(isOpen(LEVELS, {}, 3, startLevelForAge(12))).toBe(false);
   });
 });

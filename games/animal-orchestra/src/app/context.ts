@@ -21,6 +21,8 @@ export interface OrchestraContext {
   /** Выбранный звук: инструменты или голоса. */
   readonly soundMode: SoundMode;
   setSoundMode(mode: SoundMode): void;
+  /** Прочитать подсказку голосом (общий голос SDK). Малыши ещё не читают. */
+  say(text: string): void;
   /** Звук + анимация + ноты. */
   hit(animal: Animal, sound: SoundMode): void;
 }

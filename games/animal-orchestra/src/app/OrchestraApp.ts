@@ -1,4 +1,5 @@
 import type { GameSdk } from '@ig/sdk';
+import { GameVoice } from '@ig/sdk/audio';
 import { melodiesApi } from '../api/melodies';
 import { OrchestraAudio } from '../audio/OrchestraAudio';
 import { ANIMALS, type Animal } from '../game/animals';
@@ -28,6 +29,7 @@ export class OrchestraApp implements OrchestraContext {
   readonly playback: Playback;
   readonly progress: GameSdk['progress'];
   soundMode: SoundMode = 'instrument';
+  private readonly voice: GameVoice;
 
   private readonly tabs: ModeTabs;
   private readonly shelf: MelodyShelf | null;
@@ -37,6 +39,7 @@ export class OrchestraApp implements OrchestraContext {
 
   constructor(sdk: GameSdk) {
     this.progress = sdk.progress;
+    this.voice = new GameVoice({ lang: sdk.locale, volume: sdk.comfort?.effectsVolume, muted: sdk.audio.muted });
     this.stage = new Stage((animal) => this.mode.onAnimal(animal), () => this.audio.unlock());
     this.playback = new Playback(
       (animal, sound) => this.hit(animal, sound),
@@ -59,7 +62,7 @@ export class OrchestraApp implements OrchestraContext {
     this.root.append(this.tabs.el, this.stage.el, this.panel, sheet, this.fx.canvas, this.toast.el);
 
     this.audio.setMuted(sdk.audio.muted);
-    this.cleanups.push(sdk.audio.onMuteChange((muted) => this.audio.setMuted(muted)));
+    this.cleanups.push(sdk.audio.onMuteChange((muted) => (this.audio.setMuted(muted), this.voice.setMuted(muted))));
     // Первое касание где угодно включает звук (политика автозапуска браузеров).
     this.on(this.root, 'pointerdown', () => this.audio.unlock(), true);
     this.on(window, 'keydown', (e) => this.onKey(e as KeyboardEvent));
@@ -70,6 +73,7 @@ export class OrchestraApp implements OrchestraContext {
   pause() {
     this.playback.stop();
     this.audio.pause();
+    this.voice.cancel();
     syncBeat(this.panel, this.root, this.audio.beating);
     this.mode.pause();
   }
@@ -83,8 +87,13 @@ export class OrchestraApp implements OrchestraContext {
     this.toast.dispose();
     this.cleanups.forEach((fn) => fn());
     this.audio.dispose();
+    this.voice.dispose();
     this.fx.dispose();
     this.root.remove();
+  }
+
+  say(text: string) {
+    this.voice.say(text.replace(/\p{Extended_Pictographic}|\uFE0F/gu, '').trim());
   }
 
   hit(animal: Animal, sound: SoundMode) {

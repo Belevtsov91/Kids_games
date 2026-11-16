@@ -1,7 +1,10 @@
 // Короткие звуки на Web Audio: без файлов и без сети. Молчат, когда звук выключен в оболочке.
+// Подсказки читает общий голос SDK (или записанный клип, если голоса на языке нет).
+import { GameVoice } from '@ig/sdk/audio';
 
 let ctx: AudioContext | null = null;
 let muted = false;
+let voice: GameVoice | null = null;
 
 function tone(freq: number, start: number, duration: number, type: OscillatorType = 'triangle', volume = 0.12) {
   ctx ??= new AudioContext();
@@ -37,8 +40,20 @@ export const sound = {
   },
   setMuted(value: boolean) {
     muted = value;
+    voice?.setMuted(value);
+  },
+  /** Голос подсказок на языке игры; volume — громкость из «Удобства». */
+  setVoice(lang: string, volume = 1) {
+    voice?.dispose();
+    voice = new GameVoice({ lang, volume, muted });
+  },
+  /** Прочитать подсказку вслух (без эмодзи). */
+  say(text: string) {
+    voice?.say(text.replace(/\p{Extended_Pictographic}|\uFE0F/gu, '').trim());
   },
   dispose() {
+    voice?.dispose();
+    voice = null;
     void ctx?.close();
     ctx = null;
   },

@@ -1,4 +1,4 @@
-import type { GameStorage } from '@ig/sdk';
+import { byAge, type GameStorage } from '@ig/sdk';
 import { languages, type Language } from '../i18n';
 import { LIMITS, ROUNDS } from '../game/themes';
 
@@ -14,12 +14,15 @@ export interface Preferences {
 /** Лучшие звёзды по ключу «режим:язык:диапазон:тема». */
 export type Progress = Record<string, number>;
 
-export const defaultPreferences = (): Preferences => ({ language: 'uk', speech: 'uk', limit: 5, theme: 0 });
+/** Стартовый диапазон по возрасту: малышам до 5, с 5 лет до 10, с 7 лет до 20. Потом ребёнок меняет его сам. */
+export const limitForAge = (age: number | null | undefined) => byAge(age, [[5, 10], [7, 20]], 5);
+
+export const defaultPreferences = (age?: number | null): Preferences => ({ language: 'uk', speech: 'uk', limit: limitForAge(age), theme: 0 });
 
 export const progressKey = (mode: string, p: Preferences) => `${mode}:${p.language}:${p.limit}:${p.theme}`;
 
-/** Читает сохранённое; всё некорректное заменяется значениями по умолчанию. `null` — хранилище недоступно. */
-export function loadSaved(storage: GameStorage, key: string): { prefs: Preferences; progress: Progress } | null {
+/** Читает сохранённое (без сохранения — диапазон по возрасту); всё некорректное заменяется значениями по умолчанию. `null` — хранилище недоступно. */
+export function loadSaved(storage: GameStorage, key: string, age?: number | null): { prefs: Preferences; progress: Progress } | null {
   try {
     const saved = storage.load<{ preferences?: Partial<Preferences>; progress?: Progress }>(key);
     const p = saved?.preferences;
@@ -30,7 +33,7 @@ export function loadSaved(storage: GameStorage, key: string): { prefs: Preferenc
           limit: LIMITS.includes(p.limit!) ? p.limit! : 5,
           theme: [0, 1, 2].includes(p.theme!) ? p.theme! : 0,
         }
-      : defaultPreferences();
+      : defaultPreferences(age);
     const progress =
       saved?.progress && typeof saved.progress === 'object'
         ? Object.fromEntries(Object.entries(saved.progress).filter(([, value]) => typeof value === 'number' && value >= 0 && value <= ROUNDS))

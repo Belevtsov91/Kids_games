@@ -53,6 +53,9 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
     if (engineRef.current) engineRef.current.tool = tool;
   }, [tool]);
 
+  // Голосовая подсказка при входе: малыши ещё не читают.
+  useEffect(() => sound.say(tr().voice.hello), []);
+
   useEffect(() => {
     if (engineRef.current) engineRef.current.color = color;
   }, [color]);
@@ -71,10 +74,12 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
     try {
       await api.save(drawingTitle(), await engine.exportPng());
       sound.play('save');
+      sound.say(tr().savedToast);
       flash('saved');
       void rewardSaved(sdk, api, 'drawing');
     } catch (err) {
       setAlbumFull(isAlbumFull(err));
+      sound.say(isAlbumFull(err) ? tr().albumFull : tr().failedToast);
       flash('failed');
     }
   };
@@ -105,6 +110,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
               onClick={() => {
                 setTool(t);
                 sound.play('click');
+                sound.say(tx.tools[t.id]);
               }}
               aria-label={tx.tools[t.id]}
               title={tx.tools[t.id]}
@@ -128,6 +134,7 @@ export default function DrawingGame({ sdk }: { sdk: GameSdk }) {
             onClick={() => {
               engineRef.current?.clear();
               sound.play('clear');
+              sound.say(tx.clear);
             }}
             aria-label={tx.clear}
             title={tx.clearHint}
