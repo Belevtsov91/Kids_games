@@ -59,4 +59,5 @@ export const en: Texts = {
     'flower-city': 'Flower city',
     'ocean-friends': 'Ocean friends',
   },
+  parent: { download: 'Download', print: 'Print', failed: 'The picture did not load' },
 };

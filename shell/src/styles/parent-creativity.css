@@ -1,0 +1,61 @@
+/* Кабинет родителя, «Творчество»: лента работ из разных игр. Тело карточки рисует игра
+   (картинка, мини-сетка бита, зверята мелодии), здесь — только рамка и общие классы is-*. */
+
+.pa-creativity-filters { margin-bottom: 14px; }
+.pa-creations { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+
+.pa-creation {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 3px 0 var(--game), 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+.pa-creation-body { display: grid; gap: 10px; padding: 12px; min-height: 96px; align-content: start; }
+.pa-creation.is-picture .pa-creation-body { padding: 0; gap: 0; }
+.pa-creation figcaption { display: grid; gap: 4px; padding: 10px 12px 12px; margin-top: auto; }
+.pa-creation figcaption strong { font-size: 15px; overflow-wrap: anywhere; }
+.pa-creation-meta { font-size: 13px; color: var(--dash-ink-soft); }
+
+/* Общие кнопки: и оболочки («Удалить»), и те, что кладёт игра. */
+.pa-creation-remove,
+.pa-creation-body button,
+.pa-creation-body a {
+  justify-self: start;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 0;
+  border-radius: 10px;
+  padding: 7px 10px;
+  min-height: 34px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.pa-creation-body button:disabled { opacity: 0.5; cursor: default; }
+.pa-creation-body button:focus-visible, .pa-creation-body a:focus-visible, .pa-creation-remove:focus-visible { outline: 3px solid var(--dash-gold); outline-offset: 2px; }
+.pa-creation-body .is-play { background: var(--game); color: #1b1240; }
+.pa-creation-body .is-play[aria-pressed='true'] { background: var(--dash-gold); }
+
+/* Рисунок. */
+.pa-creation-body .is-picture { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; }
+.pa-creation-body .is-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px 0; font-size: 13px; color: var(--dash-ink-soft); }
+
+/* Мелодия: зверята по порядку нот. */
+.pa-creation-body .is-notes { margin: 0; font-size: 20px; line-height: 1.5; letter-spacing: 1px; overflow-wrap: anywhere; }
+
+/* Бит: мини-сетка 4 ряда × 16 шагов. */
+.pa-creation-body .is-grid { display: grid; grid-template-columns: repeat(var(--steps, 16), 1fr); gap: 2px; }
+.pa-creation-body .is-grid i { aspect-ratio: 1; border-radius: 3px; background: rgba(255, 255, 255, 0.1); }
+.pa-creation-body .is-grid i:nth-child(4n + 1) { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.pa-creation-body .is-grid i.is-now { outline: 2px solid #fff; outline-offset: -1px; }
+.pa-creation-body .is-meta { margin: 0; font-size: 13px; font-weight: 700; color: var(--dash-ink-soft); }
+
+@media (prefers-reduced-motion: reduce) { .pa-creation-body .is-grid i.is-now { outline-style: dotted; } }
+@media print {
+  .pa-creation figcaption button, .pa-creation-body .is-actions, .pa-creativity-filters { display: none; }
+}

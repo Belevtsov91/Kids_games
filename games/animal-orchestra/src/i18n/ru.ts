@@ -32,6 +32,7 @@ export const ru = {
   start: 'Начать',
   stars: 'Звёзды',
   starsN: (n: number) => `Звёзды: ${n}`,
+  parent: { play: 'Послушать', stop: 'Стоп', notes: (n: number) => `Нот: ${n}` },
 };
 
 export type Texts = typeof ru;

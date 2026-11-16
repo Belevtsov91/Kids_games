@@ -5,7 +5,7 @@ export const ro3: ParentTextC = {
   tiles3: {
     skills: ['Ce a învățat', 'Abilități, niveluri și abțibilduri'],
     comfort: ['Confort', 'Sunet, mișcare, modul pentru cei mici'],
-    gallery: ['Desene', 'Tot ce a desenat copilul'],
+    gallery: ['Creații', 'Desene, melodii și ritmuri'],
   },
   skills: {
     lead: 'Socotim după răspunsurile din jocuri. „Îi reușește” — 8 din ultimele 10 răspunsuri sunt corecte.',
@@ -37,15 +37,6 @@ export const ro3: ParentTextC = {
     birth: 'Luna și anul nașterii',
     birthLead: 'Vârsta va crește singură, iar în luna nașterii pe pagina principală apare un tort.',
     birthNone: 'Nespecificat',
-  },
-  gallery: {
-    lead: 'Desene din „Desenăm”. Le poți descărca, tipări sau șterge.',
-    empty: 'Încă nu sunt desene.',
-    download: 'Descarcă',
-    print: 'Tipărește',
-    remove: 'Șterge',
-    removed: 'Desenul a fost șters',
-    confirm: 'Ștergi desenul definitiv?',
   },
   inbox: {
     title: 'Cereri și e-mailuri',

@@ -53,4 +53,5 @@ export const en: Texts = {
     'Keys 1234 / QWER / ASDF / ZXCV are pads too!',
   ],
   cheers: ['Grooving!', 'Fire!', 'What a beat!', 'Cool!', 'Super groove!'],
+  parent: { play: 'Listen', stop: 'Stop', swing: 'swing' },
 };

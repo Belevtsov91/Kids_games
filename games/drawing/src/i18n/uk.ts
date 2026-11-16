@@ -59,4 +59,5 @@ export const uk: Texts = {
     'flower-city': 'Квіткове місто',
     'ocean-friends': 'Океан друзів',
   },
+  parent: { download: 'Завантажити', print: 'Надрукувати', failed: 'Малюнок не завантажився' },
 };

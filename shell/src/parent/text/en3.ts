@@ -5,7 +5,7 @@ export const en3: ParentTextC = {
   tiles3: {
     skills: ['What they learned', 'Skills, levels and stickers'],
     comfort: ['Comfort', 'Sound, motion, toddler mode'],
-    gallery: ['Drawings', 'Everything your child drew'],
+    gallery: ['Creations', 'Drawings, tunes and beats'],
   },
   skills: {
     lead: 'Based on answers in the games. “Got it” means 8 of the last 10 answers were right.',
@@ -37,15 +37,6 @@ export const en3: ParentTextC = {
     birth: 'Month and year of birth',
     birthLead: 'Age then grows by itself, and a cake appears on the home screen in the birthday month.',
     birthNone: 'Not set',
-  },
-  gallery: {
-    lead: 'Drawings from “Drawing”. Download, print or delete them.',
-    empty: 'No drawings yet.',
-    download: 'Download',
-    print: 'Print',
-    remove: 'Delete',
-    removed: 'Drawing deleted',
-    confirm: 'Delete this drawing for good?',
   },
   inbox: {
     title: 'Requests & email',

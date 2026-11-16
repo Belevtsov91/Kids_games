@@ -59,4 +59,5 @@ export const ro: Texts = {
     'flower-city': 'Orașul florilor',
     'ocean-friends': 'Prietenii din ocean',
   },
+  parent: { download: 'Descarcă', print: 'Tipărește', failed: 'Desenul nu s-a încărcat' },
 };

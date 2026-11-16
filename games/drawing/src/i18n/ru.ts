@@ -59,6 +59,7 @@ export const ru = {
     'flower-city': 'Цветочный город',
     'ocean-friends': 'Океан друзей',
   } as Record<string, string>,
+  parent: { download: 'Скачать', print: 'Распечатать', failed: 'Рисунок не загрузился' },
 };
 
 export type Texts = typeof ru;

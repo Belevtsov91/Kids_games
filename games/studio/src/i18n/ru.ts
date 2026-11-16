@@ -46,6 +46,8 @@ export interface Texts {
   tyopa: string;
   tips: string[];
   cheers: string[];
+  /** Кабинет родителя, страница «Творчество». */
+  parent: { play: string; stop: string; swing: string };
 }
 
 export const ru: Texts = {
@@ -100,4 +102,5 @@ export const ru: Texts = {
     'Клавиши 1234 / QWER / ASDF / ZXCV — тоже пэды!',
   ],
   cheers: ['Качает!', 'Огонь!', 'Вот это бит!', 'Класс!', 'Супер грув!'],
+  parent: { play: 'Послушать', stop: 'Стоп', swing: 'свинг' },
 };

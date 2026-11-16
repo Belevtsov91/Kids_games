@@ -34,4 +34,5 @@ export const uk: Texts = {
   start: 'Почати',
   stars: 'Зірки',
   starsN: (n) => `Зірки: ${n}`,
+  parent: { play: 'Послухати', stop: 'Стоп', notes: (n) => `Нот: ${n}` },
 };

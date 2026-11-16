@@ -1,4 +1,4 @@
-import { Route } from 'react-router';
+import { Navigate, Route } from 'react-router';
 import { ParentShell } from './ParentShell';
 import { OverviewPage } from './pages/OverviewPage';
 import { KidsPage } from './pages/KidsPage';
@@ -14,7 +14,7 @@ import { PinPage } from './pages/PinPage';
 import { DataPage } from './pages/DataPage';
 import { ChildSkillsPage } from './pages/ChildSkillsPage';
 import { ChildComfortPage } from './pages/ChildComfortPage';
-import { ChildGalleryPage } from './pages/ChildGalleryPage';
+import { ChildCreativityPage } from './pages/ChildCreativityPage';
 import { InboxPage } from './pages/InboxPage';
 import { FamilyPage } from './pages/FamilyPage';
 
@@ -31,7 +31,9 @@ export const parentRoutes = (
     <Route path="kids/:id/stats" element={<ChildStatsPage />} />
     <Route path="kids/:id/skills" element={<ChildSkillsPage />} />
     <Route path="kids/:id/comfort" element={<ChildComfortPage />} />
-    <Route path="kids/:id/gallery" element={<ChildGalleryPage />} />
+    <Route path="kids/:id/creativity" element={<ChildCreativityPage />} />
+    {/* Старый адрес «Рисунков»: закладки родителей ведут на «Творчество». */}
+    <Route path="kids/:id/gallery" element={<Navigate to="../creativity" relative="path" replace />} />
     <Route path="inbox" element={<InboxPage />} />
     <Route path="family" element={<FamilyPage />} />
     <Route path="account" element={<AccountPage />} />

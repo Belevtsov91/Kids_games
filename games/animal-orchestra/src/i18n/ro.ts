@@ -34,4 +34,5 @@ export const ro: Texts = {
   start: 'Începe',
   stars: 'Stele',
   starsN: (n) => `Stele: ${n}`,
+  parent: { play: 'Ascultă', stop: 'Stop', notes: (n) => `Note: ${n}` },
 };

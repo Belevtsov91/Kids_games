@@ -40,4 +40,15 @@ export const ro4: ParentTextD = {
     only: (names) => `Doar: ${names}`,
   },
   gatePassword: 'PIN-ul nu este setat, iar copilul are deja 7 ani: problema o poate rezolva singur. Introdu parola contului. Ca să intri mai repede, activează PIN-ul în secțiunea „Cont”.',
+  creativity: {
+    title: 'Creații',
+    lead: 'Tot ce a creat copilul în jocuri: desene, melodii, ritmuri. Ritmurile din „Studioul de ritm” apar doar dacă copilul a apăsat singur „Arată părinților”.',
+    empty: (name) => `${name} nu a salvat încă nimic. Desenele, melodiile și ritmurile vor apărea aici singure.`,
+    partial: 'Unele creații nu s-au încărcat. Reîncărcați pagina puțin mai târziu.',
+    filter: 'Ce să arăt',
+    kinds: { all: 'Tot', picture: 'Desene', music: 'Muzică', story: 'Povești', build: 'Construcții' },
+    remove: 'Șterge',
+    removed: 'Creația a fost ștearsă',
+    confirm: 'Ștergeți creația definitiv?',
+  },
 };

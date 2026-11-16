@@ -40,4 +40,15 @@ export const en4: ParentTextD = {
     only: (names) => `Only: ${names}`,
   },
   gatePassword: 'There is no PIN and your child is already 7, so they can solve the puzzle. Enter the account password. To get in faster, turn on a PIN under “Account”.',
+  creativity: {
+    title: 'Creations',
+    lead: 'Everything your child made in the games: drawings, tunes, beats. Beats from “Beat Studio” show up only if your child tapped “Show my parents”.',
+    empty: (name) => `${name} hasn’t saved anything yet. Drawings, tunes and beats will appear here by themselves.`,
+    partial: 'Some creations didn’t load. Refresh the page a little later.',
+    filter: 'What to show',
+    kinds: { all: 'All', picture: 'Drawings', music: 'Music', story: 'Stories', build: 'Builds' },
+    remove: 'Delete',
+    removed: 'Creation deleted',
+    confirm: 'Delete this creation for good?',
+  },
 };

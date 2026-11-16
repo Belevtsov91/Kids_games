@@ -34,4 +34,5 @@ export const en: Texts = {
   start: 'Start',
   stars: 'Stars',
   starsN: (n) => `Stars: ${n}`,
+  parent: { play: 'Listen', stop: 'Stop', notes: (n) => `Notes: ${n}` },
 };

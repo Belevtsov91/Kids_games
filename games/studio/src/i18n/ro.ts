@@ -53,4 +53,5 @@ export const ro: Texts = {
     'Tastele 1234 / QWER / ASDF / ZXCV sunt tot paduri!',
   ],
   cheers: ['Super!', 'Foc!', 'Ce ritm!', 'Grozav!', 'Ce groove!'],
+  parent: { play: 'Ascultă', stop: 'Stop', swing: 'swing' },
 };
