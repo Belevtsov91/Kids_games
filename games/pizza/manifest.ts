@@ -28,4 +28,5 @@ export default defineManifest({
   tagline: 'Режь, клади начинку и пеки пиццу по заказу.',
   taglines: { uk: 'Ріж, клади начинку й печи піцу на замовлення.', ro: 'Taie, pune toppingul și coace pizza la comandă.', en: 'Slice it, top it and bake pizza to order.' },
   color: '#ff9f5a',
+  addedAt: '2026-11-15',
 });

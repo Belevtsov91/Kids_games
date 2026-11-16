@@ -33,4 +33,5 @@ export default defineManifest({
     en: 'Program the robot and deliver parcels to Tyopa and friends.',
   },
   color: '#ffb35c',
+  addedAt: '2026-11-15',
 });

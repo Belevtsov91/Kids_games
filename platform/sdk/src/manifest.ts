@@ -33,6 +33,8 @@ export interface GameManifest {
   taglines?: Partial<Record<Locale, string>>;
   /** Цвет свечения портала игры на дашборде, #rrggbb. */
   color?: string;
+  /** Когда игра появилась на сайте, «YYYY-MM-DD»: первые недели в меню у неё значок «Новое». */
+  addedAt?: string;
 }
 
 export const GAME_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
@@ -62,6 +64,9 @@ export function validateManifest(manifest: unknown, folder: string): string[] {
   }
   if (m.tagline !== undefined && (typeof m.tagline !== 'string' || !m.tagline.trim())) errors.push(`${folder}: tagline должен быть непустой строкой`);
   if (m.color !== undefined && (typeof m.color !== 'string' || !/^#[0-9a-f]{6}$/i.test(m.color))) errors.push(`${folder}: color должен быть вида #rrggbb`);
+  if (m.addedAt !== undefined && (typeof m.addedAt !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(m.addedAt) || Number.isNaN(Date.parse(m.addedAt)))) {
+    errors.push(`${folder}: addedAt должен быть датой вида YYYY-MM-DD`);
+  }
   if (m.together !== undefined && (typeof m.together !== 'string' || !m.together.trim())) errors.push(`${folder}: together должен быть непустой строкой`);
   return errors;
 }

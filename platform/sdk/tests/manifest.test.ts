@@ -17,6 +17,11 @@ describe('validateManifest', () => {
     expect(errors).toHaveLength(2);
   });
 
+  it('проверяет дату addedAt', () => {
+    expect(validateManifest({ ...valid, addedAt: '2026-11-15' }, 'drawing')).toEqual([]);
+    expect(validateManifest({ ...valid, addedAt: '15.11.2026' }, 'drawing')).toEqual([expect.stringContaining('addedAt')]);
+  });
+
   it('не падает на мусоре', () => {
     expect(validateManifest(undefined, 'x')).toHaveLength(1);
   });

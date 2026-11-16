@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { Link } from 'react-router';
 import type { GameManifest } from '@ig/sdk';
 import { covers } from '@/catalog/covers';
+import { isNewGame } from '@/catalog/subjects';
 import { gameTitle, useI18n } from '@/i18n/I18nProvider';
 import { ageRange } from '@/i18n/plural';
 import { tilt } from './tilt';
@@ -11,7 +12,7 @@ const portalStyle = (game: GameManifest, delay = 0) => ({ '--c': worldColor(game
 
 /** Окно в мир: обложка игры без изменений, наклон за курсором, блик, свечение цвета игры и тень на облаках. */
 function PortalArt({ game, eager, children }: { game: GameManifest; eager?: boolean; children?: ReactNode }) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const cover = covers[game.id];
   return (
     <span className="portal-float">
@@ -23,6 +24,7 @@ function PortalArt({ game, eager, children }: { game: GameManifest; eager?: bool
         </span>
         <span className="portal-rim" />
         <span className="portal-badges">
+          {isNewGame(game) && <span className="portal-badge is-new">✨ {t.menu.isNew}</span>}
           <span className="portal-badge is-kind">{game.kind.toUpperCase()}</span>
           <span className="portal-badge">{ageRange(locale, game.ages.min, game.ages.max)}</span>
         </span>

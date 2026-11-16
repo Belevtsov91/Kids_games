@@ -36,4 +36,5 @@ export default defineManifest({
     en: 'Fly with Teddy in a hot-air balloon: flags, capitals and the globe.',
   },
   color: '#5b9dff',
+  addedAt: '2026-11-15',
 });

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BigId, ShowcaseId } from '@/welcome/showcase';
+import type { BigId, SceneId } from '@/welcome/showcase';
 import { WelcomeHero } from '@/welcome/components/WelcomeHero';
 import { WorldShelf } from '@/welcome/components/WorldShelf';
 import { MoreGames } from '@/welcome/components/MoreGames';
@@ -9,7 +9,7 @@ import { SiteTopbar } from '@/info/components/SiteTopbar';
 
 /** Стартовая страница для гостей: 3D-архипелаг игр, полка ярких миров и блок для родителей. */
 export function WelcomePage() {
-  const [focused, setFocused] = useState<ShowcaseId | null>(null);
+  const [focused, setFocused] = useState<SceneId | null>(null);
   const [thumbs, setThumbs] = useState<Partial<Record<BigId, string>>>({});
 
   const pending = useRef<() => void>(() => undefined);

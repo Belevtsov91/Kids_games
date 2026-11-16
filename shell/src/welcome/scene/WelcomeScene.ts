@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { createCinema, type Cinema } from '@/lib/cinema';
 import { disposeThree } from '@/lib/disposeThree';
 import { applyLook } from '@/lib/threeLook';
-import { ALL_IDS, SMALL_IDS, isBig, type BigId, type ShowcaseId } from '../showcase';
+import { ALL_IDS, SMALL_IDS, isBig, type BigId, type SceneId } from '../showcase';
 import { buildArchipelago, labelHeight } from './archipelago';
 import { CameraRig } from './cameraRig';
 import { addSky } from './sky';
@@ -11,10 +11,10 @@ import { renderThumbnails } from './thumbnails';
 
 export interface WelcomeSceneOptions {
   /** Клик по острову или по пустому месту (null). */
-  onPick: (id: ShowcaseId | null) => void;
-  onHover: (id: ShowcaseId | null) => void;
+  onPick: (id: SceneId | null) => void;
+  onHover: (id: SceneId | null) => void;
   /** Подписи над островами; сцена двигает их каждый кадр. */
-  labels: () => Partial<Record<ShowcaseId, HTMLElement | null>>;
+  labels: () => Partial<Record<SceneId, HTMLElement | null>>;
   onThumbnails: (thumbs: Partial<Record<BigId, string>>) => void;
 }
 
@@ -39,8 +39,8 @@ export class WelcomeScene {
   private userYaw = 0;
   private dragV = 0;
   private drag: { x: number; startX: number; at: number } | null = null;
-  private hovered: ShowcaseId | null = null;
-  private focused: ShowcaseId | null = null;
+  private hovered: SceneId | null = null;
+  private focused: SceneId | null = null;
   private canvas: HTMLCanvasElement;
   private host: HTMLElement;
   private opts: WelcomeSceneOptions;
@@ -70,7 +70,7 @@ export class WelcomeScene {
     this.raf = requestAnimationFrame(this.tick);
   }
 
-  setFocus(id: ShowcaseId | null) {
+  setFocus(id: SceneId | null) {
     this.focused = id;
   }
 
@@ -94,16 +94,16 @@ export class WelcomeScene {
     this.rig.resize(this.w, this.h);
   };
 
-  private pick(e: PointerEvent): ShowcaseId | null {
+  private pick(e: PointerEvent): SceneId | null {
     const r = this.canvas.getBoundingClientRect();
     const p = new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     this.ray.setFromCamera(p, this.rig.camera);
     let o: THREE.Object3D | null = this.ray.intersectObjects(this.arch.pickables, true)[0]?.object ?? null;
     while (o && !o.userData.id) o = o.parent;
-    return (o?.userData.id as ShowcaseId | undefined) ?? null;
+    return (o?.userData.id as SceneId | undefined) ?? null;
   }
 
-  private setHover(id: ShowcaseId | null) {
+  private setHover(id: SceneId | null) {
     if (id === this.hovered) return;
     this.hovered = id;
     this.canvas.style.cursor = id ? 'pointer' : 'grab';

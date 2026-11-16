@@ -30,4 +30,5 @@ export default defineManifest({
   tagline: 'Помоги Тёпе зажечь город солнцем и ветром.',
   taglines: { uk: 'Допоможи Тьопі засвітити місто сонцем і вітром.', ro: 'Ajută-l pe Teo să lumineze orașul cu soare și vânt.', en: 'Help Teddy light up the town with sun and wind.' },
   color: '#5be36b',
+  addedAt: '2026-11-15',
 });

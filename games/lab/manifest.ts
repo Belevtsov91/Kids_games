@@ -29,4 +29,5 @@ export default defineManifest({
   tagline: 'Построй машину, и шарик зажжёт лампочку.',
   taglines: { uk: 'Побудуй машину, і кулька запалить лампочку.', ro: 'Construiește mașinăria și bila aprinde becul.', en: 'Build a machine and the ball lights the bulb.' },
   color: '#ffc94d',
+  addedAt: '2026-11-15',
 });

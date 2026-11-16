@@ -30,4 +30,5 @@ export default defineManifest({
   tagline: 'Тёпа за пультом: собери свой бит из 16 пэдов.',
   taglines: { uk: 'Тьопа за пультом: збери свій біт із 16 педів.', ro: 'Tiopa la pupitru: compune-ți ritmul din 16 paduri.', en: 'Tyopa at the decks: build your beat from 16 pads.' },
   color: '#ff5c9a',
+  addedAt: '2026-11-15',
 });

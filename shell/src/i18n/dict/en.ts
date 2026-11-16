@@ -123,7 +123,11 @@ export const en: Dict = {
     mine: 'Your worlds',
     others: 'Worlds beyond the clouds',
     othersText: 'These games are for another age. They sit in a light mist but open just the same.',
-    filter: { label: 'Which worlds to show', all: 'All', '3d': '3D worlds', '2d': 'Pictures & drawing' },
+    filter: {
+      label: 'Which games to show', all: 'All', new: '✨ New', '3d': '🧊 3D worlds',
+      math: '🔢 Numbers', reading: '🔤 Letters', logic: '🧩 Logic', creative: '🎨 Creative', world: '🌿 World around',
+    },
+    isNew: 'New',
     kind: { '3d': '3D world', '2d': 'Pictures' },
     profiles: 'Who is playing?',
   },

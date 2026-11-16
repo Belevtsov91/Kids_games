@@ -7,7 +7,7 @@ Games for children aged 3–15 and a space for grown-ups. The site speaks four l
 ## What the site does
 
 - **Parent sign-in** and password reset by email. A new account goes through a one-minute setup: child, daily time, PIN.
-- **Child profiles.** The child picks themselves, and the dashboard shows games for their age, “Continue”, today’s plan from a grown-up, Teddy the bear, seasonal decorations and a voice greeting from a grown-up.
+- **Child profiles.** The child picks themselves, and the dashboard shows games for their age (by birth month, if set), a subject filter (numbers, letters, logic, creative, world around, 3D), a “New” badge on fresh games (the `addedAt` manifest field), “Continue”, today’s plan from a grown-up, Teddy the bear, seasonal decorations and a voice greeting from a grown-up.
 - **Toddler mode** (under 5, or switched on by a grown-up): no extra buttons, and leaving a game takes a 2-second hold. Switching profiles or opening the parent area needs a grown-up.
 - **Time:** daily limit, quiet hours and breaks. A child can ask for more time, and a grown-up answers in the parent area, from a button in an email, or through a family helper. Two minutes before the end the game is told and wraps up gently.
 - **Progress:** skills (counting, colours, shapes, memory…), levels and stickers. The child sees a sticker album; the grown-up sees each child’s skills.
@@ -34,12 +34,22 @@ There are no paid features yet.
 | Robot Chef | `robot-chef` | 4–8 | 2D | — |
 | Memory Train | `memory-train` | 4–8 | 2D | — |
 | Story Workshop | `story-workshop` | 4–8 | 2D | — |
+| Safe Road | `road` | 4–8 | 2D | — |
 | Little Shop | `little-shop` | 5–8 | 2D | — |
+| What Time Is It | `clock` | 5–8 | 2D | — |
+| Robot Courier | `robot` | 5–10 | 2D | — |
 | 3D Sandbox | `playground3d` | 5–15 | 3D | — |
 | Letter Eater | `letter-eater` | 6–10 | 2D | ✓ |
 | Space Gardener | `space-gardener` | 6–10 | 2D | ✓ |
 | Keepers of Moon Valley | `moon-valley` | 7–15 | 3D | ✓ |
+| Fraction Pizzeria | `pizza` | 8–12 | 2D | — |
+| Traveller | `atlas` | 8–14 | 2D | — |
+| Secret Post | `cipher` | 9–14 | 2D | — |
+| Inventor's Lab | `lab` | 9–15 | 3D | — |
+| Beat Studio | `studio` | 9–15 | 2D | ✓ |
 | Island Builder | `island-builder` | 10–15 | 3D | ✓ |
+| Eco City | `eco` | 10–15 | 2D | — |
+| Star Navigator | `star-navigator` | 10–15 | 2D | — |
 
 Games without their own server keep progress in the platform cloud (`sdk.cloud`). The shell keeps `sdk.storage` per child and copies it to the cloud, so every game’s saves move between devices.
 

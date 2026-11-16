@@ -38,3 +38,9 @@
 @media (prefers-reduced-motion: reduce) {
   .dash *, .dash *::before, .dash *::after { animation: none !important; transition: none !important; }
 }
+
+/* на телефоне кнопок фильтра много: одна строка с прокруткой вбок вместо трёх рядов */
+@media (max-width: 640px) {
+  .dash-filters { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .dash-filters button { flex: none; }
+}

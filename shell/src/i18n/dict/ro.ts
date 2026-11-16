@@ -123,7 +123,11 @@ export const ro: Dict = {
     mine: 'Lumile tale',
     others: 'Lumi dincolo de nori',
     othersText: 'Aceste jocuri sunt pentru altă vârstă. Sunt în ceață ușoară, dar se deschid la fel.',
-    filter: { label: 'Ce lumi să arăt', all: 'Toate', '3d': 'Lumi 3D', '2d': 'Imagini și desene' },
+    filter: {
+      label: 'Ce jocuri să arăt', all: 'Toate', new: '✨ Noi', '3d': '🧊 Lumi 3D',
+      math: '🔢 Socotit', reading: '🔤 Litere', logic: '🧩 Logică', creative: '🎨 Creație', world: '🌿 Lumea din jur',
+    },
+    isNew: 'Nou',
     kind: { '3d': 'Lume 3D', '2d': 'Imagini' },
     profiles: 'Cine se joacă?',
   },

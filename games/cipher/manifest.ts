@@ -30,4 +30,5 @@ export default defineManifest({
   tagline: 'Помоги Тёпе прочитать тайные письма острова.',
   taglines: { uk: 'Допоможи Тьопі прочитати таємні листи острова.', ro: 'Ajută-l pe Tiopa să citească scrisorile secrete ale insulei.', en: 'Help Tyopa read the island’s secret letters.' },
   color: '#6a4fd0',
+  addedAt: '2026-11-15',
 });

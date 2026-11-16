@@ -29,4 +29,5 @@ export default defineManifest({
   tagline: 'Помоги Тёпе перейти дорогу и не потеряться.',
   taglines: { uk: 'Допоможи Тьопі перейти дорогу й не загубитися.', ro: 'Ajută-l pe Teo să traverseze și să nu se piardă.', en: 'Help Teddy cross the road and not get lost.' },
   color: '#3f7bff',
+  addedAt: '2026-11-15',
 });

@@ -32,4 +32,5 @@ export default defineManifest({
   tagline: 'Помоги Тёпе не проспать: ставь стрелки на часах башни.',
   taglines: { uk: 'Допоможи Тьопі не проспати: став стрілки на годиннику вежі.', ro: 'Ajută-l pe Teo să nu întârzie: mută acele ceasului din turn.', en: 'Help Teddy stay on time: set the hands on the tower clock.' },
   color: '#ffc98a',
+  addedAt: '2026-11-15',
 });

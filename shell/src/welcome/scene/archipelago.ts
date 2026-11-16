@@ -1,6 +1,6 @@
 /** Архипелаг: мишка в центре, кольцо больших островов и кольцо игрушек выше. */
 import * as THREE from 'three';
-import { BIG_IDS, SHOWCASE, SMALL_IDS, isBig, type BigId, type ShowcaseId } from '../showcase';
+import { BIG_IDS, SHOWCASE, SMALL_IDS, isBig, type BigId, type SceneId } from '../showcase';
 import { glow, type Built, type Updater } from './kit';
 import { buildHub } from './hub';
 import { buildMoonValley } from './moonValley';
@@ -19,15 +19,15 @@ const BUILDERS: Record<BigId, () => Built> = {
 };
 
 /** Высота подписи над островом. */
-export const labelHeight = (id: ShowcaseId) =>
+export const labelHeight = (id: SceneId) =>
   id === 'moon-valley' ? 4.3 : id === 'space-gardener' ? 3.6 : isBig(id) ? 3 : 0.9;
 
 export interface Archipelago {
   root: THREE.Group;
-  worlds: Record<ShowcaseId, THREE.Group>;
+  worlds: Record<SceneId, THREE.Group>;
   pickables: THREE.Object3D[];
   /** t — время, yaw — поворот всего архипелага, selected — подсвеченные острова. */
-  update: (t: number, yaw: number, selected: (id: ShowcaseId) => boolean) => void;
+  update: (t: number, yaw: number, selected: (id: SceneId) => boolean) => void;
 }
 
 export function buildArchipelago(): Archipelago {
@@ -36,7 +36,7 @@ export function buildArchipelago(): Archipelago {
   const toyRing = new THREE.Group();
   root.add(ring, toyRing);
   const updaters: Updater[] = [];
-  const worlds = {} as Record<ShowcaseId, THREE.Group>;
+  const worlds = {} as Record<SceneId, THREE.Group>;
   const phase = new Map<THREE.Object3D, number>();
 
   const hub = buildHub();

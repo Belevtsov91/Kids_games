@@ -42,9 +42,15 @@ export const BIG_IDS = ['moon-valley', 'island-builder', 'playground3d', 'space-
 /** Маленькие игрушки вокруг островов. */
 export const SMALL_IDS = ['drawing', 'puzzles', 'letter-eater', 'animal-orchestra', 'counting', 'who-lives-where'] as const;
 
+/** Игры осени 2026: в 3D-сцене их нет (там и так тесно), но они в списке «Родителям» и в подборке «Новые». */
+export const NEW_IDS = ['lab', 'eco', 'cipher', 'star-navigator', 'studio', 'pizza', 'atlas', 'robot', 'clock', 'road'] as const;
+
 export type BigId = (typeof BIG_IDS)[number];
 export type SmallId = (typeof SMALL_IDS)[number];
-export type ShowcaseId = BigId | SmallId;
+export type NewId = (typeof NEW_IDS)[number];
+/** Игры, которые стоят в 3D-сцене стартовой страницы. */
+export type SceneId = BigId | SmallId;
+export type ShowcaseId = SceneId | NewId;
 
 export const SHOWCASE: Record<ShowcaseId, ShowcaseBase> = {
   'moon-valley': {
@@ -60,9 +66,24 @@ export const SHOWCASE: Record<ShowcaseId, ShowcaseBase> = {
   'animal-orchestra': { id: 'animal-orchestra', icon: '🎵', kind: '2D', ages: { min: 3, max: 6 }, color: '#a99bff' },
   counting: { id: 'counting', icon: '🔢', kind: '2D', ages: { min: 3, max: 8 }, color: '#7ee7ff' },
   'who-lives-where': { id: 'who-lives-where', icon: '🏡', kind: '2D', ages: { min: 3, max: 6 }, color: '#7ef09a' },
+  lab: { id: 'lab', icon: '🔬', kind: '3D', ages: { min: 9, max: 15 }, color: '#ffc94d' },
+  eco: { id: 'eco', icon: '🌱', kind: '2D', ages: { min: 10, max: 15 }, color: '#5be36b' },
+  cipher: { id: 'cipher', icon: '✉️', kind: '2D', ages: { min: 9, max: 14 }, color: '#6a4fd0' },
+  'star-navigator': { id: 'star-navigator', icon: '🚀', kind: '2D', ages: { min: 10, max: 15 }, color: '#7b6cff' },
+  studio: { id: 'studio', icon: '🎛️', kind: '2D', ages: { min: 9, max: 15 }, color: '#ff5c9a' },
+  pizza: { id: 'pizza', icon: '🍕', kind: '2D', ages: { min: 8, max: 12 }, color: '#ff9f5a' },
+  atlas: { id: 'atlas', icon: '🌍', kind: '2D', ages: { min: 8, max: 14 }, color: '#5b9dff' },
+  robot: { id: 'robot', icon: '📦', kind: '2D', ages: { min: 5, max: 10 }, color: '#ffb35c' },
+  clock: { id: 'clock', icon: '🕰️', kind: '2D', ages: { min: 5, max: 8 }, color: '#ffc98a' },
+  road: { id: 'road', icon: '🚦', kind: '2D', ages: { min: 4, max: 8 }, color: '#3f7bff' },
 };
 
-export const ALL_IDS: ShowcaseId[] = [...BIG_IDS, ...SMALL_IDS];
+/** Игры 3D-сцены: острова и игрушки. */
+export const ALL_IDS: SceneId[] = [...BIG_IDS, ...SMALL_IDS];
+/** Все игры витрины, по возрасту: для списка на странице «Родителям». */
+export const LISTED_IDS: ShowcaseId[] = [...ALL_IDS, ...NEW_IDS].sort(
+  (a, b) => SHOWCASE[a].ages.min - SHOWCASE[b].ages.min || SHOWCASE[a].ages.max - SHOWCASE[b].ages.max,
+);
 export const isBig = (id: ShowcaseId): id is BigId => (BIG_IDS as readonly string[]).includes(id);
 
 /** Карточка игры на нужном языке. */

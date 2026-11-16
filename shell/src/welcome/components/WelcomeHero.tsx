@@ -5,13 +5,13 @@ import { useI18n } from '@/i18n/I18nProvider';
 import { gameCount } from '@/i18n/plural';
 import { games } from '@/catalog/catalog';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
-import { ALL_IDS, isBig, showcaseGame, type BigId, type ShowcaseId } from '../showcase';
+import { ALL_IDS, isBig, showcaseGame, type BigId, type SceneId } from '../showcase';
 import type { WelcomeScene } from '../scene/WelcomeScene';
 import { GamePanel } from './GamePanel';
 
 interface Props {
-  focused: ShowcaseId | null;
-  onFocus: (id: ShowcaseId | null) => void;
+  focused: SceneId | null;
+  onFocus: (id: SceneId | null) => void;
   onThumbnails: (thumbs: Partial<Record<BigId, string>>) => void;
 }
 
@@ -22,8 +22,8 @@ export function WelcomeHero({ focused, onFocus, onThumbnails }: Props) {
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<WelcomeScene | null>(null);
-  const labels = useRef<Partial<Record<ShowcaseId, HTMLButtonElement | null>>>({});
-  const [hovered, setHovered] = useState<ShowcaseId | null>(null);
+  const labels = useRef<Partial<Record<SceneId, HTMLButtonElement | null>>>({});
+  const [hovered, setHovered] = useState<SceneId | null>(null);
   const [no3d, setNo3d] = useState(false);
   // колбэки сцены читают свежие пропсы через ref, чтобы не пересоздавать сцену
   const handlers = useRef({ onFocus, onThumbnails });

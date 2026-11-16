@@ -7,7 +7,7 @@ Jocuri pentru copii de 3–15 ani și un cabinet pentru adulți. Site-ul are pat
 ## Ce face site-ul
 
 - **Autentificarea părintelui** și resetarea parolei prin e-mail. Un cont nou trece prin „configurarea într-un minut”: copilul, timpul pe zi, PIN-ul.
-- **Profilurile copiilor.** Copilul se alege pe sine, iar panoul arată jocurile potrivite vârstei, „Continuă”, planul zilei de la adult, ursulețul Teo, decorul de sezon și salutul vocal al adultului.
+- **Profilurile copiilor.** Copilul se alege pe sine, iar panoul arată jocurile potrivite vârstei (după luna nașterii, dacă e setată), un filtru pe materii (socotit, litere, logică, creație, lumea din jur, 3D), insigna „Nou” la jocurile proaspete (câmpul `addedAt` din manifest), „Continuă”, planul zilei de la adult, ursulețul Teo, decorul de sezon și salutul vocal al adultului.
 - **Modul pentru cei mici** (până la 5 ani sau pornit de adult): fără butoane în plus, iar ieșirea din joc se face ținând butonul apăsat 2 secunde. Fără adult nu se poate schimba profilul sau deschide cabinetul.
 - **Timpul:** limită zilnică, ore de liniște și pauze. Copilul poate cere mai mult timp, iar adultul răspunde în cabinet, din butonul din e-mail sau printr-un ajutor al familiei. Cu 2 minute înainte de final, jocul află și se încheie blând.
 - **Progresul:** abilități (numărat, culori, forme, memorie…), niveluri și abțibilduri. Copilul vede albumul de abțibilduri, adultul vede abilitățile fiecărui copil.
@@ -34,12 +34,22 @@ Funcții plătite încă nu există.
 | Robotul bucătar | `robot-chef` | 4–8 | 2D | — |
 | Trenulețul memoriei | `memory-train` | 4–8 | 2D | — |
 | Atelierul de povești | `story-workshop` | 4–8 | 2D | — |
+| Drumul sigur | `road` | 4–8 | 2D | — |
 | Magazinul mic | `little-shop` | 5–8 | 2D | — |
+| Cât e ceasul | `clock` | 5–8 | 2D | — |
+| Robotul curier | `robot` | 5–10 | 2D | — |
 | Cutia cu nisip 3D | `playground3d` | 5–15 | 3D | — |
 | Mâncătorul de litere | `letter-eater` | 6–10 | 2D | ✓ |
 | Grădinarul spațial | `space-gardener` | 6–10 | 2D | ✓ |
 | Paznicii Văii Lunii | `moon-valley` | 7–15 | 3D | ✓ |
+| Pizzeria fracțiilor | `pizza` | 8–12 | 2D | — |
+| Călătorul | `atlas` | 8–14 | 2D | — |
+| Poșta secretă | `cipher` | 9–14 | 2D | — |
+| Laboratorul inventatorului | `lab` | 9–15 | 3D | — |
+| Studioul de ritm | `studio` | 9–15 | 2D | ✓ |
 | Insula-constructor | `island-builder` | 10–15 | 3D | ✓ |
+| Orașul eco | `eco` | 10–15 | 2D | — |
+| Navigatorul stelar | `star-navigator` | 10–15 | 2D | — |
 
 Jocurile fără server propriu își salvează progresul în cloudul platformei (`sdk.cloud`). `sdk.storage` e păstrat separat pentru fiecare copil și copiat automat în cloud, așa că salvările oricărui joc trec de pe un dispozitiv pe altul.
 

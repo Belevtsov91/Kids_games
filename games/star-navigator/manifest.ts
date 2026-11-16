@@ -30,4 +30,5 @@ export default defineManifest({
   tagline: 'Проложи курс ракеты Тёпы среди планет и звёзд.',
   taglines: { uk: 'Прокладай курс ракети Тьопи серед планет і зір.', ro: 'Trasează drumul rachetei lui Tiopa printre planete și stele.', en: "Plot Tyopa's rocket course among planets and stars." },
   color: '#7b6cff',
+  addedAt: '2026-11-15',
 });
