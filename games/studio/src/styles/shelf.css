@@ -1,0 +1,106 @@
+/* «Мои биты»: окно поверх студии. */
+
+.st-sheet {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(20 10 50 / 0.6);
+  z-index: 4;
+}
+
+.st-sheet[hidden] {
+  display: none;
+}
+
+.st-card {
+  width: min(560px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding: 18px;
+  border-radius: 22px;
+  background: #3a3460;
+  border: 1px solid var(--panel-edge);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.45);
+}
+
+.st-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.st-card h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.st-save {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.st-save label {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 200px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.st-input {
+  min-height: var(--tap);
+  padding: 0 12px;
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+  background: #241f42;
+  user-select: text;
+}
+
+.st-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.07);
+}
+
+.st-item-text {
+  display: grid;
+  min-width: 0;
+}
+
+.st-item-text strong {
+  overflow-wrap: anywhere;
+}
+
+.st-item-text small {
+  color: var(--muted);
+}
+
+.st-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.st-empty {
+  padding: 18px;
+  text-align: center;
+  color: var(--muted);
+}

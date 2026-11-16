@@ -1,0 +1,103 @@
+/* Небо по времени суток, остров, Тёпа с облачком, полоса ответов. */
+.wc-scene {
+  position: absolute;
+  inset: 0;
+  transition: background 1.2s ease;
+}
+.wc-morning { background: linear-gradient(#ffd6a8, #fff3e0); }
+.wc-day { background: linear-gradient(#9fd8ff, #e6f6ff); }
+.wc-evening { background: linear-gradient(#ffab8a, #ffd9b8); }
+.wc-night { background: linear-gradient(#2f3470, #6a5ea8); }
+.wc-sky span { position: absolute; transition: top 1.2s ease, opacity 1.2s ease, left 1.2s ease; }
+.wc-sun {
+  width: 13vmin; height: 13vmin; border-radius: 50%;
+  background: radial-gradient(#ffe680, #ffc93c);
+  box-shadow: 0 0 40px #ffd75e;
+  left: 72%; top: 5%;
+}
+.wc-moon {
+  width: 10vmin; height: 10vmin; border-radius: 50%;
+  box-shadow: -2.6vmin 1.4vmin 0 0 #fff4c2;
+  left: 10%; top: 30%; opacity: 0;
+}
+.wc-morning .wc-sun { left: 8%; top: 18%; }
+.wc-evening .wc-sun { left: 84%; top: 26%; }
+.wc-night .wc-sun { top: 110%; opacity: 0; }
+.wc-night .wc-moon, .wc-evening .wc-moon { opacity: 1; top: 8%; }
+.wc-evening .wc-moon { opacity: 0.4; }
+.wc-cloud {
+  width: 22vmin; height: 7vmin; border-radius: 7vmin;
+  background: rgba(255, 255, 255, 0.85);
+  left: 40%; top: 6%;
+  animation: wc-bob 7s ease-in-out infinite;
+}
+.wc-cloud-2 { left: 82%; top: 50%; width: 16vmin; animation-delay: -3s; }
+.wc-night .wc-cloud { opacity: 0.25; }
+.wc-island {
+  position: absolute;
+  left: 50%; bottom: 12%;
+  width: min(120vmin, 130vw); height: 34vmin;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 30%, #a8e67a, #7ccc56 70%);
+  box-shadow: 0 3vmin 0 #b27d5e, 0 5vmin 0 #8f6046;
+}
+.wc-night .wc-island { filter: brightness(0.7) saturate(0.8); }
+.wc-top {
+  position: absolute; top: 2vmin; left: 3vmin; right: 3vmin;
+  display: flex; justify-content: space-between; align-items: center; z-index: 5;
+}
+.wc-dots { display: flex; gap: 1.4vmin; }
+.wc-dots span {
+  width: 5vmin; height: 5vmin; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  display: grid; place-items: center; font-size: 3.4vmin;
+}
+.wc-side {
+  position: absolute;
+  right: 3vmin; bottom: 22vmin;
+  width: min(44vw, 64vmin);
+  display: flex; flex-direction: column; align-items: center; gap: 2vmin;
+}
+.wc-bear { width: 30vmin; height: 36vmin; animation: wc-bob 3s ease-in-out infinite; }
+.wc-bubble {
+  position: relative;
+  background: #fff; border-radius: 4vmin;
+  padding: 2vmin 3vmin;
+  font-size: var(--wc-font); font-weight: 700; line-height: 1.2;
+  display: flex; align-items: center; gap: 2vmin;
+  box-shadow: 0 6px 16px rgba(59, 42, 74, 0.16);
+}
+.wc-bubble::after {
+  content: ''; position: absolute; bottom: -2.4vmin; left: 50%;
+  border: 1.4vmin solid transparent; border-top: 1.6vmin solid #fff;
+}
+.wc-bubble.is-pop { animation: wc-pop 0.4s ease; }
+.wc-bubble-icon { font-size: 1.6em; }
+.wc-answers {
+  position: absolute; left: 0; right: 0; bottom: 3vmin;
+  display: flex; justify-content: center; align-items: center; gap: 3vmin; z-index: 4;
+}
+.wc-answer {
+  min-width: calc(var(--wc-btn) * 1.8); height: var(--wc-btn);
+  border-radius: 3vmin; background: #fff;
+  font-size: calc(var(--wc-btn) * 0.48); font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 6px 0 #e2cdb8, 0 10px 18px rgba(59, 42, 74, 0.15);
+}
+.wc-answer.is-right { background: #8fe0a0; box-shadow: 0 6px 0 #5cb873; animation: wc-pop 0.4s ease; }
+.wc-answer.is-wrong { opacity: 0.4; animation: wc-shake 0.35s ease; }
+.wc-goal {
+  font-size: calc(var(--wc-btn) * 0.5); font-weight: 800;
+  background: #3b2a4a; color: #8cffb0; border-radius: 2vmin; padding: 1vmin 3vmin;
+  font-variant-numeric: tabular-nums; letter-spacing: 0.05em;
+}
+
+@media (orientation: portrait) {
+  .wc-side { left: 3vw; right: 3vw; width: auto; bottom: calc(var(--wc-btn) + 6vmin); flex-direction: row; align-items: flex-end; }
+  .wc-bear { flex: 0 0 24vmin; height: 30vmin; }
+  .wc-bubble { flex: 1; }
+  .wc-bubble::after { left: auto; right: -2.4vmin; bottom: 3vmin; border: 1.4vmin solid transparent; border-left: 1.6vmin solid #fff; }
+  .wc-side { flex-direction: row-reverse; }
+  .wc-island { bottom: 22%; }
+}

@@ -1,0 +1,26 @@
+.at-globe {
+  display: block;
+  width: min(100%, 460px, 62vh);
+  height: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+.at-globe:active { cursor: grabbing; }
+.at-land path { fill: #8fd36b; stroke: #5fae45; stroke-width: 0.6; stroke-linejoin: round; }
+.at-mark { cursor: pointer; }
+.at-mark-hit { fill: transparent; }
+.at-mark-dot { fill: #fff; stroke: #23304a; stroke-width: 1.2; }
+.at-mark.is-home .at-mark-dot { fill: #ffd447; }
+.at-mark.is-pick .at-mark-dot { fill: #ff7a59; stroke: #fff; stroke-width: 1.4; }
+.at-mark.is-right .at-mark-dot { fill: #3dbb6a; stroke: #fff; stroke-width: 1.4; }
+.at-mark.is-wrong .at-mark-dot { fill: #ff5d5d; stroke: #fff; stroke-width: 1.4; }
+.at-mark.is-right { animation: at-pulse 1.2s ease-in-out infinite; transform-box: fill-box; }
+.at-mark-label { fill: #fff; font-size: 7.5px; font-weight: 800; pointer-events: none; }
+.at-balloon { pointer-events: none; animation: at-float 3s ease-in-out infinite; }
+
+@keyframes at-float { 50% { transform: translateY(-3px); } }
+@keyframes at-pulse { 50% { opacity: 0.75; } }
+.at-zoom { display: flex; gap: 12px; }
+.at-zoom .at-btn { width: var(--at-tap); padding: 0; font-size: 28px; line-height: 1; }
+.at-land path.at-water { fill: #5aa8f0; stroke: #5fae45; }

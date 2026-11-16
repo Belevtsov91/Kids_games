@@ -1,0 +1,136 @@
+/* Сцена: дорога или парк, светофор, машина и Тёпа */
+
+.sr-play {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.sr-back {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  z-index: 5;
+}
+
+.sr-scene {
+  position: relative;
+  flex: none;
+  height: clamp(190px, 40vh, 360px);
+  margin: 0 12px;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: inset 0 -6px 0 rgb(0 0 0 / 0.06), 0 8px 20px rgb(0 0 0 / 0.1);
+  --sr-pos: 0;
+}
+
+.sr-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sr-bear,
+.sr-mama {
+  position: absolute;
+  left: 50%;
+  height: 34%;
+  aspect-ratio: 220 / 250;
+  translate: -50% 0;
+}
+
+.sr-bear {
+  z-index: 3;
+  bottom: calc(18% + var(--sr-pos) * 50%);
+  transition: bottom 0.9s ease-in-out;
+}
+
+.sr-scene-park .sr-bear {
+  bottom: calc(4% + var(--sr-pos) * 50%);
+}
+
+.sr-mama {
+  top: 3%;
+  height: 38%;
+}
+
+.sr-bear svg,
+.sr-mama svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Светофор стоит на дальнем тротуаре, справа от зебры */
+.sr-light {
+  position: absolute;
+  top: 4%;
+  left: 64%;
+  z-index: 2;
+  --sr-lamp: clamp(18px, 4.6vmin, 32px);
+}
+
+.sr-tl,
+.sr-ped {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 12px;
+  background: #2f3447;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.25);
+}
+
+.sr-lamp {
+  display: grid;
+  place-items: center;
+  width: var(--sr-lamp);
+  height: var(--sr-lamp);
+  border-radius: 50%;
+  font-size: calc(var(--sr-lamp) * 0.62);
+  font-style: normal;
+  filter: grayscale(1) brightness(0.45);
+  transition: filter 0.25s, box-shadow 0.25s;
+}
+
+.sr-lamp-red,
+.sr-lamp-stop { background: #ff4d4d; }
+.sr-lamp-yellow { background: #ffd23f; }
+.sr-lamp-green,
+.sr-lamp-walk { background: #39e07a; }
+
+.sr-light[data-light='red'] .sr-lamp-red,
+.sr-light[data-light='yellow'] .sr-lamp-yellow,
+.sr-light[data-light='green'] .sr-lamp-green,
+.sr-light[data-light='walk'] .sr-lamp-walk,
+.sr-light[data-light='stop'] .sr-lamp-stop {
+  filter: none;
+  box-shadow: 0 0 calc(var(--sr-lamp) * 0.6) currentColor;
+}
+
+.sr-lamp-red, .sr-lamp-stop { color: #ff4d4d; }
+.sr-lamp-yellow { color: #ffd23f; }
+.sr-lamp-green, .sr-lamp-walk { color: #39e07a; }
+
+.sr-light[data-light='walk'] .sr-tl,
+.sr-light[data-light='stop'] .sr-tl,
+.sr-light:not([data-light='walk'], [data-light='stop']) .sr-ped {
+  display: none;
+}
+
+/* Машина едет по ближней полосе слева направо (эмодзи смотрит влево — отражаем) */
+.sr-car {
+  position: absolute;
+  top: 50%;
+  left: -22%;
+  z-index: 4;
+  font-size: clamp(40px, 11vmin, 90px);
+  line-height: 1;
+  scale: -1 1;
+}
+
+.sr-car.is-driving {
+  animation: sr-drive 1.5s linear;
+}

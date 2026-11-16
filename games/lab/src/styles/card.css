@@ -1,0 +1,65 @@
+/* Карточка победы и подсказка «шарик укатился». */
+.lab-card,
+.lab-toast {
+  position: absolute;
+  left: 50%;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.25);
+  transform: translateX(-50%);
+}
+.lab-card {
+  top: 50%;
+  width: min(360px, calc(100% - 32px));
+  padding: 20px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+.lab-card h2 {
+  margin: 0;
+}
+.lab-stars {
+  margin: 8px 0;
+  font-size: 44px;
+  color: #ddd;
+}
+.lab-stars .on {
+  color: #ffc21a;
+}
+.lab-card ul {
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  color: #888;
+}
+.lab-card li.ok {
+  color: #1c2a3a;
+  font-weight: 700;
+}
+.lab-card-actions,
+.lab-toast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.lab-card-actions button,
+.lab-toast button {
+  min-height: 48px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 18px;
+  background: #eef1f6;
+  font-weight: 700;
+}
+.lab-card-actions .lab-primary {
+  background: #3fbf6f;
+  color: #fff;
+}
+.lab-toast {
+  top: calc(max(12px, env(safe-area-inset-top)) + 110px);
+  align-items: center;
+  width: min(460px, calc(100% - 32px));
+  padding: 12px 16px;
+}

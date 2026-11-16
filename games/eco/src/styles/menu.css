@@ -1,0 +1,89 @@
+.eco-menu {
+  padding: 16px;
+  gap: 14px;
+  overflow-y: auto;
+}
+.eco-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.eco-title {
+  font-size: clamp(26px, 5vw, 40px);
+  color: #237a3b;
+}
+.eco-menu-intro {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 760px;
+}
+.eco-menu-intro .eco-bear {
+  width: clamp(70px, 12vw, 110px);
+}
+.eco-levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+.eco-level {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 14px;
+  border-radius: var(--eco-radius);
+  background: var(--eco-card);
+  box-shadow: 0 4px 0 rgba(45, 51, 80, 0.12);
+  text-align: left;
+  transition: transform 0.15s;
+}
+.eco-level:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.eco-level.is-locked {
+  opacity: 0.55;
+}
+.eco-level.is-done {
+  background: #f0ffe9;
+}
+.eco-level-num {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #5be36b;
+  color: #fff;
+  font-weight: 800;
+  font-size: 20px;
+}
+.eco-level.is-locked .eco-level-num {
+  background: #d6dbe8;
+}
+.eco-level-name {
+  font-weight: 800;
+}
+.eco-level-tools {
+  display: flex;
+  gap: 4px;
+}
+.eco-level-tool {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: #cfe9ff;
+}
+.eco-level-stars {
+  grid-column: span 2;
+  color: #ffb400;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+.eco-level-stars i,
+.eco-result-stars i {
+  font-style: normal;
+  color: #d9deea;
+}

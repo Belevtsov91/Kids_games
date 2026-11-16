@@ -1,0 +1,52 @@
+/* Анимации */
+
+@keyframes sr-shake {
+  0%, 100% { translate: 0 0; }
+  25% { translate: -8px 0; }
+  50% { translate: 8px 0; }
+  75% { translate: -4px 0; }
+}
+
+@keyframes sr-hop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes sr-pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes sr-drive {
+  from { left: -22%; }
+  to { left: 112%; }
+}
+
+/* Тёпа переходит дорогу по зебре, на той стороне исчезает и снова ждёт у края */
+@keyframes sr-cross {
+  0% { bottom: 18%; opacity: 1; }
+  65% { bottom: 68%; opacity: 1; }
+  80% { bottom: 68%; opacity: 0; }
+  81% { bottom: 18%; opacity: 0; }
+  100% { bottom: 18%; opacity: 1; }
+}
+
+@keyframes sr-startle {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  20% { transform: translateY(6%) rotate(-6deg); }
+  45% { transform: translateY(6%) rotate(6deg); }
+}
+
+.sr-bear.is-hop { animation: sr-hop 0.5s ease-in-out 2; }
+.sr-bear.is-startled { animation: sr-startle 0.6s ease; }
+.sr-bear.is-crossing { animation: sr-cross 2.4s ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-hero,
+  .sr-done-bear,
+  .sr-bear.is-hop,
+  .sr-bear.is-startled,
+  .is-shake {
+    animation: none;
+  }
+}

@@ -1,0 +1,102 @@
+/* Ночь над островом: фиолетовое небо, звёзды, тёплый свет маяка. */
+.cp-root {
+  --ink: #2a1f57;
+  --night: #1d1650;
+  --violet: #6a4fd0;
+  --violet-dark: #4b33a8;
+  --sea: #4fc3a1;
+  --lamp: #ffe066;
+  --red: #ff5c6c;
+  --paper: #fff6e6;
+  --gold: #ffcf4a;
+  --tap: 52px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-family: ui-rounded, 'Segoe UI Rounded', 'Arial Rounded MT Bold', 'Segoe UI', system-ui, sans-serif;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 72% 12%, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 88% 42%, #fff8 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 34% 8%, #fffa 50%, transparent 51%),
+    radial-gradient(2px 2px at 52% 30%, #fff6 50%, transparent 51%),
+    radial-gradient(circle at 80% 110%, #5a3f9e 0, transparent 55%),
+    linear-gradient(170deg, #140f3d 0%, #3a2a7a 60%, #5a3f9e 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.cp-root.is-big { --tap: 64px; }
+.cp-root *, .cp-root *::before, .cp-root *::after { box-sizing: border-box; }
+.cp-root.is-paused *, .cp-root.is-paused *::before, .cp-root.is-paused *::after { animation-play-state: paused !important; }
+
+.cp-screen { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: auto; padding: 12px 16px 16px; gap: 12px; }
+
+.cp-bar { display: flex; align-items: center; gap: 12px; min-height: var(--tap); }
+.cp-title, .cp-bar-title { margin: 0; flex: 1; font-size: clamp(20px, 3.2vw, 30px); font-weight: 800; letter-spacing: .5px; }
+.cp-bar-title { font-size: clamp(16px, 2.4vw, 22px); }
+.cp-total { font-weight: 700; font-size: 18px; background: #ffffff1f; padding: 6px 14px; border-radius: 999px; }
+
+.cp-btn {
+  min-height: var(--tap);
+  padding: 0 22px;
+  border: 0;
+  border-radius: 18px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 4px 0 #0003;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s, background .2s;
+}
+.cp-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.cp-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #0003; }
+.cp-btn:focus-visible, .cp-mode:focus-visible { outline: 4px solid var(--lamp); outline-offset: 3px; }
+.cp-btn:disabled { cursor: default; }
+.cp-primary { background: var(--gold); }
+.cp-ghost { background: #ffffff2a; color: #fff; box-shadow: none; }
+.cp-icon { width: var(--tap); padding: 0; font-size: 22px; background: #ffffff2a; color: #fff; box-shadow: none; flex: none; }
+.cp-round-btn { width: var(--tap); padding: 0; font-size: 26px; border-radius: 50%; }
+
+.cp-bear { font-size: 44px; line-height: 1; filter: drop-shadow(0 3px 0 #0004); flex: none; }
+.cp-bubble {
+  position: relative;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.cp-bubble::before { content: ''; position: absolute; left: -9px; top: 50%; transform: translateY(-50%); border: 9px solid transparent; border-right-color: var(--paper); border-left: 0; }
+.cp-bubble[data-mood='oops'] { background: #ffe1e4; }
+.cp-bubble[data-mood='oops']::before { border-right-color: #ffe1e4; }
+.cp-bubble[data-mood='yay'] { background: #d9fbe9; }
+.cp-bubble[data-mood='yay']::before { border-right-color: #d9fbe9; }
+
+.cp-label { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: .7; }
+.cp-tiles { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.cp-tile {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 26px;
+  font-weight: 800;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 3px 0 #0002;
+}
+.cp-tile.is-cipher { background: var(--violet); color: #fff; }
+.cp-tile.is-plain { background: #e9fff6; }
+.cp-tile.is-slot { background: #ffffff55; color: #fff; }
+.cp-tile.is-slot.is-current { outline: 3px solid var(--lamp); }
+.cp-tile.is-slot.is-filled { background: var(--lamp); color: var(--ink); }

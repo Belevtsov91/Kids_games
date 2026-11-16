@@ -1,0 +1,196 @@
+.eco-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 10px 14px;
+}
+.eco-level-title {
+  font-size: clamp(18px, 2.6vw, 24px);
+  margin-right: auto;
+}
+.eco-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.eco-chip,
+.eco-coins {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--eco-card);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.eco-coins b {
+  font-size: 1.15em;
+}
+.eco-main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 1fr);
+  gap: 12px;
+  padding: 0 14px;
+}
+.eco-world {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 26px;
+  overflow: hidden;
+}
+.eco-sky {
+  --day: 1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    color-mix(in srgb, #4aa3ff calc(var(--day) * 100%), #1b2050),
+    color-mix(in srgb, #e2f6ff calc(var(--day) * 100%), #3a3f7a)
+  );
+  transition: background 0.35s;
+}
+.eco-orb {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border-radius: 50%;
+  transition: left 0.35s linear, top 0.35s linear;
+}
+.eco-orb.is-sun {
+  background: radial-gradient(#fff6b0, #ffc93c 60%);
+  box-shadow: 0 0 40px #ffd75e;
+}
+.eco-orb.is-moon {
+  background: radial-gradient(circle at 35% 35%, #ffffff, #d7dcf5 70%);
+  box-shadow: 0 0 24px rgba(220, 225, 255, 0.6);
+}
+.eco-clock {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.eco-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 6px;
+}
+.eco-talk {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.eco-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 14px 14px;
+}
+.eco-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.eco-run {
+  min-width: 200px;
+  font-size: 1.1em;
+}
+.eco-result {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(27, 32, 80, 0.35);
+  animation: eco-fade 0.3s ease;
+}
+.eco-result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 420px;
+  padding: 22px;
+  border-radius: 26px;
+  background: #fff;
+  text-align: center;
+}
+.eco-bear-win {
+  width: 96px;
+  animation: eco-hop 0.8s ease infinite alternate;
+}
+.eco-result-stars {
+  font-size: 44px;
+  color: #ffb400;
+  letter-spacing: 4px;
+}
+.eco-result-cost {
+  color: var(--eco-soft);
+}
+.eco-result-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+@keyframes eco-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes eco-hop {
+  to {
+    transform: translateY(-8px);
+  }
+}
+@media (max-width: 760px) {
+  .eco-main {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .eco-palette,
+  .eco-actions {
+    flex: 1 1 100%;
+  }
+  .eco-tool {
+    flex: 1;
+    grid-template-columns: 30px minmax(0, 1fr);
+    padding: 4px 6px;
+    min-width: 0;
+    font-size: 0.9em;
+  }
+  .eco-tool-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .eco-tool-art {
+    height: 30px;
+  }
+  .eco-actions .eco-btn {
+    padding: 0 12px;
+  }
+  .eco-world {
+    min-height: 300px;
+  }
+  .eco-side {
+    overflow: visible;
+  }
+  .eco-run {
+    min-width: 0;
+    flex: 1;
+  }
+}
