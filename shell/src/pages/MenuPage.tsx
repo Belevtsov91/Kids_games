@@ -7,6 +7,8 @@ import { gameTitle, useI18n } from '@/i18n/I18nProvider';
 import { LanguageSwitch } from '@/i18n/LanguageSwitch';
 import { DashSky } from '@/dashboard/DashSky';
 import { FeaturedPortal, GamePortal } from '@/dashboard/Portal';
+import { useDashLook } from '@/dashboard/look';
+import { LookSwitch } from '@/dashboard/LookSwitch';
 import { ProfileMenu } from '@/dashboard/ProfileMenu';
 import { lastGame } from '@/dashboard/lastPlayed';
 import { listToday } from '@/family/daily';
@@ -39,6 +41,8 @@ export function MenuPage() {
   const m = t.menu;
   const toddler = isToddler(activeChild);
   const more = useMoreText();
+  // Вид дашборда: с 10 лет спокойный, Тёпу можно спрятать (dashboard/look.ts).
+  const look = useDashLook(activeChild?.id, activeChild?.age);
 
   const { status } = useKidStatus();
   const gameOff = useGameOff();
@@ -62,7 +66,7 @@ export function MenuPage() {
   const playedPlan = plan.filter((g) => played.includes(g.id)).length;
 
   return (
-    <div className="dash">
+    <div className="dash" data-look={look.look}>
       <DashSky />
       <SeasonDecor calm={Boolean(activeChild?.comfort?.reduceMotion)} />
       <header className="dash-top dash-wrap">
@@ -73,6 +77,7 @@ export function MenuPage() {
         {/* Малышу не нужны кнопки, которые выкидывают из сайта: язык и выход — у взрослого в кабинете. */}
         {!toddler && <LanguageSwitch className="dash-lang" />}
         <KidTimer />
+        {!toddler && activeChild && <LookSwitch look={look.look} mascot={look.mascot} update={look.update} />}
         <ProfileMenu logout={!toddler} />
         {!toddler && (
           <button type="button" className="dash-chip dash-logout" onClick={() => void logout()}>
@@ -104,7 +109,7 @@ export function MenuPage() {
 
         {activeChild && (
           <section className="family-row dash-wrap">
-            <Mascot childId={activeChild.id} name={activeChild.name} plan={plan.length} played={playedPlan} note={note} />
+            {look.mascot && <Mascot childId={activeChild.id} name={activeChild.name} plan={plan.length} played={playedPlan} note={note} />}
             <DayPlan plan={plan} played={played} onPlay={play} />
             <DailyQuest games={available} onPlay={play} />
             {last && <OfflineTask childId={activeChild.id} game={last} onDone={setNote} />}

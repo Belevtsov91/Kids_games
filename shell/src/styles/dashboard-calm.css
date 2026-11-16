@@ -1,0 +1,74 @@
+/* Спокойный вид дашборда для 10+ (dashboard/look.ts): тёмное ровное небо вместо заката, плоские кнопки,
+   без плюша, парения и радужного заголовка. Разметка та же — меняются только стили под .dash[data-look='calm']. */
+
+.dash[data-look='calm'] {
+  --dash-night: #10131f;
+  --dash-gold: #f2c75c;
+  --dash-pink: #e98bb0;
+  --dash-sky: #8fc9e6;
+  --dash-ink: #eef1f7;
+  --dash-ink-soft: #a9b1c4;
+  --dash-line: rgba(255, 255, 255, 0.1);
+  --dash-glass: rgba(255, 255, 255, 0.05);
+}
+
+/* Небо: ночь без облаков и солнца, звёзды приглушены. */
+.dash[data-look='calm'] .dash-sky {
+  background: radial-gradient(80% 60% at 70% 0%, rgba(80, 100, 160, 0.22), transparent 70%), linear-gradient(180deg, #151a2c 0%, #10131f 70%);
+}
+.dash[data-look='calm'] .dash-sky::after { display: none; }
+.dash[data-look='calm'] .dash-clouds,
+.dash[data-look='calm'] .dash-sun { display: none; }
+.dash[data-look='calm'] .dash-stars { opacity: 0.35; }
+.dash[data-look='calm'] .season { opacity: 0.35; }
+
+/* Логотип без плюшевого мишки: монограмма. */
+.dash[data-look='calm'] .dash-logo-mark { background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px var(--dash-line); }
+.dash[data-look='calm'] .dash-logo-mark .plush { display: none; }
+.dash[data-look='calm'] .dash-logo-mark::after { content: 'IG'; font-size: 15px; letter-spacing: 0.04em; color: var(--dash-ink); }
+
+/* Заголовок и тексты: одна акцентная строка вместо радуги, без свечения. */
+.dash[data-look='calm'] .dash-hero h1 { font-size: clamp(30px, 4.2vw, 50px); text-shadow: none; }
+.dash[data-look='calm'] .dash-hl { background: none; color: var(--dash-gold); filter: none; }
+.dash[data-look='calm'] .dash-lead,
+.dash[data-look='calm'] .dash-shelf h2,
+.dash[data-look='calm'] .portal-text strong { text-shadow: none; }
+.dash[data-look='calm'] .dash-eyebrow { background: none; box-shadow: none; padding-inline: 0; color: var(--dash-ink-soft); }
+
+/* Кнопки плоские: без «пластилиновой» тени снизу. */
+.dash[data-look='calm'] .dash-btn { border-radius: 12px; min-height: 48px; font-size: 16px; }
+.dash[data-look='calm'] .dash-btn-primary { box-shadow: none; color: #241a00; }
+.dash[data-look='calm'] .dash-btn:active { transform: none; opacity: 0.85; }
+.dash[data-look='calm'] .dash-chip,
+.dash[data-look='calm'] .dash-filters button { backdrop-filter: none; }
+.dash[data-look='calm'] .dash-menu { background: #1a1f31; }
+
+/* Порталы: не парят и не светятся, наклон за курсором остаётся мягким. */
+.dash[data-look='calm'] .portal-float,
+.dash[data-look='calm'] .portal-shadow,
+.dash[data-look='calm'] .portal-play { animation: none; }
+.dash[data-look='calm'] .portal-shadow,
+.dash[data-look='calm'] .portal-glow { display: none; }
+.dash[data-look='calm'] .portal-body,
+.dash[data-look='calm'] .portal-window,
+.dash[data-look='calm'] .portal.is-featured .portal-body,
+.dash[data-look='calm'] .portal.is-featured .portal-window { border-radius: 16px; }
+.dash[data-look='calm'] .portal-body { box-shadow: 0 0 0 1px var(--dash-line), 0 16px 30px -18px rgba(0, 0, 0, 0.7); }
+.dash[data-look='calm'] .portal:hover .portal-body,
+.dash[data-look='calm'] .portal:focus-visible .portal-body { box-shadow: 0 0 0 2px var(--c), 0 18px 34px -18px rgba(0, 0, 0, 0.8); }
+.dash[data-look='calm'] .portal-play { width: 52px; height: 52px; font-size: 20px; box-shadow: none; }
+.dash[data-look='calm'] .portal-badge.is-kind { background: rgba(16, 19, 31, 0.7); color: var(--dash-ink); box-shadow: inset 0 0 0 1px var(--dash-line); }
+.dash[data-look='calm'] .portal-icon { border-radius: 10px; background: rgba(255, 255, 255, 0.06); }
+.dash[data-look='calm'] .dash-mist .portal-window img { filter: saturate(0.4) brightness(0.7); }
+
+/* Карточки семьи (план дня, задание дня): ровные панели. */
+.dash[data-look='calm'] .family-card { border-radius: 16px; background: rgba(255, 255, 255, 0.04); box-shadow: inset 0 0 0 1px var(--dash-line); backdrop-filter: none; }
+
+/* Тёпа в спокойном виде: маленький, не прыгает, реплика в тёмной плашке (спрятать — кнопка «Вид»). */
+.dash[data-look='calm'] .mascot-bear { width: 48px; height: 48px; border-radius: 14px; font-size: 28px; animation: none; background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px var(--dash-line); }
+.dash[data-look='calm'] .mascot-bear.has-voice { box-shadow: inset 0 0 0 2px var(--dash-pink); }
+.dash[data-look='calm'] .mascot-bubble { padding: 8px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); color: var(--dash-ink); font-size: 15px; box-shadow: inset 0 0 0 1px var(--dash-line); }
+.dash[data-look='calm'] .mascot-bubble::before { display: none; }
+
+/* Переключатель вида: на телефоне — только значок. */
+@media (max-width: 640px) { .dash-look-label { display: none; } }
